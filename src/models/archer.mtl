@@ -1,0 +1,82 @@
+# Blender 3.6.0 MTL File: 'archer.blend'
+# www.blender.org
+
+newmtl mat_50
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994E334.dds
+
+newmtl mat_61
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994A074.dds
+
+newmtl mat_63
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994C0B4.dds
+
+newmtl mat_65
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994B734.dds
+
+newmtl mat_66
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994C674.dds
+
+newmtl mat_69
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994F274.dds
+
+newmtl mat_70
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994CE34.dds
+
+newmtl mat_71
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/GRICE_D/AppData/Roaming/Ninja Ripper/2024.01.05_07.03.58_LEGO Island 2.exe_13808/frame_1/1994EE74.dds
