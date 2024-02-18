@@ -49,12 +49,10 @@ class App extends React.Component {
       Front, // positive z
       Back  // negative z
     ]);
-    // scene.background = texture;
-    console.log(texture);
+    scene.background = texture;
 
     const skyboxGeometry = new THREE.BoxGeometry(50, 50, 50);
-    // const skyboxMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
-    const skyboxMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.FrontSide });
+    const skyboxMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     scene.add(skybox);
 
@@ -74,12 +72,12 @@ class App extends React.Component {
     camera.position.z = 10;
 
     const animate = () => {
-      // if (!this.state.modelLoaded) {
-      //   // If the model isn't loaded yet, schedule the next frame.
-      //   requestAnimationFrame(animate);
+      if (!this.state.modelLoaded) {
+        // If the model isn't loaded yet, schedule the next frame.
+        requestAnimationFrame(animate);
         
-      //   return;
-      // }
+        return;
+      }
 
       // Update the scene and schedule the next frame.
       controls.update();
