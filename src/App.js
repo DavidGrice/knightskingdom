@@ -2,13 +2,13 @@ import React from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import Archer from './models/archer.gltf';
-import Right from './background/mountains/right.bmp';
-import Left from './background/mountains/left.bmp';
-import Top from './background/mountains/top.bmp';
-import Bot from './background/mountains/bot.bmp';
-import Front from './background/mountains/front.bmp';
-import Back from './background/mountains/back.bmp';
+// import Archer from './models/archer.gltf';
+// import Right from './background/mountains/right.bmp';
+// import Left from './background/mountains/left.bmp';
+// import Top from './background/mountains/top.bmp';
+// import Bot from './background/mountains/bot.bmp';
+// import Front from './background/mountains/front.bmp';
+// import Back from './background/mountains/back.bmp';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +18,22 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    const createSkyBoxCube = () => {
+      const skyboxGeometry = new THREE.BoxGeometry(50, 50, 50);
+      const l = new THREE.CubeTextureLoader();
+      const texture = l.load([
+        Right, // positive x
+        Left, // negative x
+        Top, // positive y
+        Bot, // negative y
+        Front, // positive z
+        Back  // negative z
+      ]);
+      const skyboxMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
+      const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+      scene.add(skybox);
+    };
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
@@ -40,21 +56,19 @@ class App extends React.Component {
     sphere.position.y = 0.5; // position the sphere above the plane
     scene.add(sphere);
 
-    const backgroundloader = new THREE.CubeTextureLoader();
-    const texture = backgroundloader.load([
-      Right, // positive x
-      Left, // negative x
-      Top, // positive y
-      Bot, // negative y
-      Front, // positive z
-      Back  // negative z
-    ]);
-    scene.background = texture;
+    // const backgroundloader = new THREE.CubeTextureLoader();
+    // const texture2 = backgroundloader.load([
+    //   Right, // positive x
+    //   Left, // negative x
+    //   Top, // positive y
+    //   Bot, // negative y
+    //   Front, // positive z
+    //   Back  // negative z
+    // ]);
+    // scene.background = texture2;
+    createSkyBoxCube();
 
-    const skyboxGeometry = new THREE.BoxGeometry(50, 50, 50);
-    const skyboxMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
-    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-    scene.add(skybox);
+    
 
     const loader = new GLTFLoader();
     loader.load(
