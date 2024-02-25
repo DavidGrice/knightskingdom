@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #sprite {
+            width: 80px;
+            height: 80px;
+            background: url('./src/images/icons/ui-master-bitmap/spritesheet.png') -240px -240px;
+        }
+    </style>
+</head>
+<body>
+    <div id="sprite"></div>
+
+    <script>
+        let sprite = document.getElementById('sprite');
+        let lastX = window.innerWidth / 2;
+        let lastY = window.innerHeight / 2;
+        let isDragging = false;
+        let frameIndex = 0;
+        let frames = [];
+
+        // Define the background positions for each frame
+        for (let row = 0; row < 7; row++) {
+            for (let col = 0; col < 7; col++) {
+                let x = col * 80;
+                let y = row * 80;
+                frames.push(`-${x}px -${y}px`);
+            }
+        }
+
+        document.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            lastX = e.pageX;
+            lastY = e.pageY;
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+
+            let deltaX = e.pageX - lastX;
+            let deltaY = e.pageY - lastY;
+
+            // Calculate the frame index based on the angle of the mouse movement
+            let angle = Math.atan2(deltaY, deltaX);
+            frameIndex = Math.floor((angle + Math.PI) / (2 * Math.PI) * frames.length) % frames.length;
+
+            sprite.style.backgroundPosition = frames[frameIndex];
+
+            lastX = e.pageX;
+            lastY = e.pageY;
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            sprite.style.backgroundPosition = '-240px -240px'; /* Reset to top left of the spritesheet */
+        });
+    </script>
+</body>
+</html>
