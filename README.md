@@ -72,6 +72,17 @@ Consists of LCA (24 or 27 bit wrapper over VCA file format containing model data
 
 The offsets for each subfile such as SHP, PAL, WRLD, etc. are included within this particular file.
 
+### Software and associated items utilized
+
+* [LEGO Creator: Knights Kingdom (2000)](https://archive.org/details/lego-creator-kk)
+* [LEGO Creator: Harry Potter - North American (Windows PC)](https://archive.org/details/lego-creator-harry-potter-pc-game)
+* [Superscape Do3D Evaluation Version 5.10](https://archive.org/details/superscape-do3d-evaluation-version-5.10)
+* [Lego Creator 1998 Lego Group Superscape CD](https://archive.org/details/lego-creator-1998-lego-group-superscape-cd)
+* [Superscape Visualiser](https://archive.org/details/superscape_visualiser_dos)
+* [Superscape Do 3D (1998)](https://archive.org/details/superscape-do-3d)
+* [Superscape VRT v5.60 (1998)](https://archive.org/details/superscape-vrt-v560)
+* [Superscape Viscape Universal v5.61](https://archive.org/details/viscape-universal-561)
+
 # [src](./src/)
 
 Contains the main components which are utilized to recreate and expand upon the game
