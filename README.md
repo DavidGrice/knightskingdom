@@ -1,3 +1,56 @@
+# Overview
+
+This project is to help recreate the old Lego Creator Knight's Kingdom game in a modern framework, with additional game modes. Utilizing web tech such as 3JS + MERN. I believe it is far better and easier to utilize than using local compiled executables with OGL/Unreal/Vulkan/etc. However for extracting the model data, local C-based files would be more ideal.
+
+# [resources](./resources/)
+
+This folder contains the files which I have acquired from original developers at Superscape.
+
+### [Archive](./resources/Archive/)
+
+Contains certain files which were found in older Superscape VRT 5.71, and used to import data.
+
+### [ordinals](./resources/ordinals/)
+
+Python scripts as swell as the MFC42 file which would have been utilized in 2000 to create the game.
+
+### [sdk](./resources/sdk/)
+
+Contains the SDK which was documented and used by Superscape employees, to help them understand what the program does.
+
+### [model_files](./resources/model_files/)
+
+Contains sample model file data, with thumbnail, which you can open in any Hex editor to see the finer details.
+
+### [lca_file](./resources/model_files/workshop_slim_00_l307000.lca)
+
+Consists of LCA (24 or 27 bit wrapper over VCA file format containing model data).
+
+The offsets for each subfile such as SHP, PAL, WRLD, etc. are included within this particular file.
+
+# [src](./src/)
+
+Contains the main components which are utilized to recreate and expand upon the game
+
+### [images](./src/images/)
+
+Contains the upscaled images which I extracted from original bitmaps parsed out to better be utilized later on.
+
+### [models](./src/models/)
+
+Is a model that I extracted from Lego Island 2, to help get a basic grasp for dealing with the engine/app to utilize. Was becoming worn down and wanted to have some progress to boost my mental health.
+
+### [components](./src/components/)
+
+Is where the components for each screen will be, to help make workflow of the game easier to utilize. As of now, just recreating with higher definition files, but later on will change things around to be more graphic-oriented like using shaders instead of photos, or real-time rendered scenes. Once the castle data can be extracted will make it into a dynamic not static welcome screen.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Boilerplate React stuff
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
