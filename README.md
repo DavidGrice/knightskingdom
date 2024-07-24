@@ -2,6 +2,14 @@
 
 This project is to help recreate the old Lego Creator Knight's Kingdom game in a modern framework, with additional game modes. Utilizing web tech such as 3JS + MERN. I believe it is far better and easier to utilize than using local compiled executables with OGL/Unreal/Vulkan/etc. However for extracting the model data, local C-based files would be more ideal.
 
+# Folders
+
+Below you will find the associated folders pertaining to the project and research as to which I have gathered on the subject.
+
+For reverse engineering the model data, [resources](./resources/) is the place to be.
+
+For writing the modern app, [src](./src/) is the place to be.
+
 # [resources](./resources/)
 
 This folder contains the files which I have acquired from original developers at Superscape.
@@ -9,6 +17,10 @@ This folder contains the files which I have acquired from original developers at
 ### [Archive](./resources/Archive/)
 
 Contains certain files which were found in older Superscape VRT 5.71, and used to import data.
+
+### [model_files](./resources/model_files/)
+
+Contains sample model file data, with thumbnail, which you can open in any Hex editor to see the finer details.
 
 ### [ordinals](./resources/ordinals/)
 
@@ -18,9 +30,41 @@ Python scripts as swell as the MFC42 file which would have been utilized in 2000
 
 Contains the SDK which was documented and used by Superscape employees, to help them understand what the program does.
 
-### [model_files](./resources/model_files/)
+### [research](./resources/research/)
 
-Contains sample model file data, with thumbnail, which you can open in any Hex editor to see the finer details.
+Here is the compiled research I, along with help from RE community members, have been able to come up with:
+
+![VRT_file_headers](./resources/research/VRT_file_headers.png)
+
+This is what the VRT file name consists of, and will let you know the offsets of the VCA files.
+
+![shap_offset](./resources/research/shap_offset.png)
+
+This is the Shape data, which you can see follows along with the offsets.
+
+![palette_offset](./resources/research/palette_offset.png)
+
+This is the palette data, which also follows along the offsets.
+
+![wrld_offset](./resources/research/wrld_offset.png)
+
+This is the world data, which follows the offsets.
+
+![basic_brick](./resources/research/basic_brick.png)
+
+This is a basic brick, with the shape offset at top
+
+![point_data](./resources/research/point_data.png)
+
+Here is an example of the point data which VRT uses. The data is split by memory address in geometric, or regular. Also can have facets and line data as well.
+
+![example_script](./resources/research/example_script.png)
+
+This is what an example script looks like when pulling from VRT 5.60. They updated a ton of new information and features with 5.71, though the developers I talked to did not have copies as the company was bought twice, now owned by EA.
+
+![modified_vca](./resources/research/modified_vca.png)
+
+Here is an example of the modified VCA file. I simply added one new point and you can see the difference the HEX file saves it as.
 
 ### [lca_file](./resources/model_files/workshop_slim_00_l307000.lca)
 
