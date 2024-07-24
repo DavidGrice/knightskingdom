@@ -4,6 +4,17 @@ This project is to help recreate the old Lego Creator Knight's Kingdom game in a
 
 ### Software and associated items utilized
 
+#### Reverse Engineering items
+
+* [Ghidra](https://github.com/NationalSecurityAgency/ghidra)
+* [Ida Free](https://hex-rays.com/ida-free/)
+* [IM HEX](https://imhex.werwolv.net/)
+* [HEX workshop](http://www.hexworkshop.com/)
+* [X32 DBG](https://x64dbg.com/)
+* [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer)
+
+#### Superscape items
+
 * [LEGO Creator: Knights Kingdom (2000)](https://archive.org/details/lego-creator-kk)
 * [LEGO Creator: Harry Potter - North American (Windows PC)](https://archive.org/details/lego-creator-harry-potter-pc-game)
 * [Superscape Do3D Evaluation Version 5.10](https://archive.org/details/superscape-do3d-evaluation-version-5.10)
