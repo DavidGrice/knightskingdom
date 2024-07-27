@@ -2,13 +2,13 @@ import React from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import Archer from './models/archer.gltf';
-// import Right from './background/mountains/right.bmp';
-// import Left from './background/mountains/left.bmp';
-// import Top from './background/mountains/top.bmp';
-// import Bot from './background/mountains/bot.bmp';
-// import Front from './background/mountains/front.bmp';
-// import Back from './background/mountains/back.bmp';
+import Archer from './models/archer.gltf';
+import Right from './images/background/mountains/right.bmp';
+import Left from './images/background/mountains/left.bmp';
+import Top from './images/background/mountains/top.bmp';
+import Bot from './images/background/mountains/bot.bmp';
+import Front from './images/background/mountains/front.bmp';
+import Back from './images/background/mountains/back.bmp';
 
 class App extends React.Component {
   constructor(props) {

@@ -1,0 +1,20 @@
+/* ProfileIcon.css */
+.profile-icon {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .profile-image {
+    width: 100%; /* Adjust as needed */
+    height: auto; /* Adjust as needed */
+  }
+  
+  .profile-text {
+    position: absolute;
+    left: 50%; /* Adjust as needed */
+    top: 50%; /* Adjust as needed */
+    transform: translate(-50%, -50%);
+    color: #FFFFC6; /* Adjust text color as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: bold; /* Adjust font weight as needed */
+  }
