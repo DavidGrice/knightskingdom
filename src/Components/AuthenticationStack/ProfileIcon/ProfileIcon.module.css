@@ -1,20 +1,25 @@
 /* ProfileIcon.css */
-.profile-icon {
+.profileIcon {
     position: relative;
     display: inline-block;
   }
   
-  .profile-image {
-    width: 100%; /* Adjust as needed */
-    height: auto; /* Adjust as needed */
+  .profileImage {
+    width: 100%; 
+    height: auto; 
   }
   
-  .profile-text {
+  .profileInput {
+    border: none;
+    background: none;
+    outline: none;
     position: absolute;
-    left: 50%; /* Adjust as needed */
-    top: 50%; /* Adjust as needed */
+    left: 57%; 
+    top: 49%;
+    width: 73%;
     transform: translate(-50%, -50%);
-    color: #FFFFC6; /* Adjust text color as needed */
-    font-size: 16px; /* Adjust font size as needed */
-    font-weight: bold; /* Adjust font weight as needed */
+    color: #FFFFC6;
+    font-size: 24px;
+    font-weight: lighter;
+    font-family: Arial, Helvetica, sans-serif;
   }

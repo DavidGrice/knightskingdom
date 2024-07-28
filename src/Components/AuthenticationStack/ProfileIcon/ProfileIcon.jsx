@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ProfileIcon.module.css'; // Import the CSS file for styling
+import styles from './ProfileIcon.module.css'; // Import the CSS file for styling
 
 const ProfileIcon = ({ initialImage, initialText }) => {
   const [image, setImage] = useState(initialImage);
@@ -11,9 +11,16 @@ const ProfileIcon = ({ initialImage, initialText }) => {
   };
 
   return (
-    <div className="profile-icon">
-      <img src={image} alt="Profile Icon" className="profile-image" />
-      <span className="profile-text">{text}</span>
+    <div className={styles.profileIcon}>
+      <img src={image} alt="Profile Icon" className={styles.profileImage} />
+      <input
+      type="text"
+      className={styles.profileInput}
+      value={text}
+      max={33}
+      onClick={() => setText('')}
+      onChange={(e) => setText(e.target.value)}
+      />
     </div>
   );
 };

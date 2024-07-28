@@ -1,0 +1,6 @@
+export { default as Authentication } from './Authentication/Authentication';
+export { default as ProfileIcon } from './ProfileIcon/ProfileIcon';
+export { default as CommonComponent } from './CommonComponent/CommonComponent';
+// export { default as Register } from './Register';
+// export { default as ForgotPassword } from './ForgotPassword';
+// export { default as ResetPassword } from './ResetPassword';
