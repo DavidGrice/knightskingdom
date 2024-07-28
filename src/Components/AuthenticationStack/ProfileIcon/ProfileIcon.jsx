@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
 import styles from './ProfileIcon.module.css'; // Import the CSS file for styling
+import { ProfileInput } from '..';
 
-const ProfileIcon = ({ initialImage, initialText }) => {
-  const [image, setImage] = useState(initialImage);
-  const [text, setText] = useState(initialText);
-
-  // Function to upgrade the image
-  const upgradeImage = (newImage) => {
-    setImage(newImage);
-  };
+const ProfileIcon = ({ image, setShowEnterNameImage, name, isPopulated, handleAddProfile, setSelectedProfile}) => {
+  const [text, setText] = useState(name);
 
   return (
-    <div className={styles.profileIcon}>
+    <div className={styles.profileIcon} >
       <img src={image} alt="Profile Icon" className={styles.profileImage} />
-      <input
-      type="text"
-      className={styles.profileInput}
-      value={text}
-      max={33}
-      onClick={() => setText('')}
-      onChange={(e) => setText(e.target.value)}
+      <ProfileInput
+        text={text}
+        setText={setText}
+        setShowEnterNameImage={setShowEnterNameImage}
+        isPopulated={isPopulated}
+        handleAddProfile={handleAddProfile}
+        setSelectedProfile={setSelectedProfile}
       />
     </div>
   );

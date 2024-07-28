@@ -11,13 +11,11 @@
 
 .centeredContainer {
   display: flex;
-  position: absolute;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  left: 25%;
-  top: 15%;
-  height: 50%; /* Full viewport height */
-  width: 50%;  /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  width: 100vw;  /* Full viewport width */
 }
 
 .bottomLeftCorner {

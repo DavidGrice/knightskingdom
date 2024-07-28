@@ -1,0 +1,13 @@
+.profileInput {
+    position: fixed;
+    border: none;
+    background: none;
+    outline: none;
+    left: 52%; 
+    width: 20%;
+    transform: translate(-50%, -50%);
+    color: #FFFFC6;
+    font-size: 24px;
+    font-weight: lighter;
+    font-family: Arial, Helvetica, sans-serif;
+  }
