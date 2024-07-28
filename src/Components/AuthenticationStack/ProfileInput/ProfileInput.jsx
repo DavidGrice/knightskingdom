@@ -38,7 +38,7 @@ const ProfileInput = ({ text, setText, setShowEnterNameImage, isPopulated, handl
           type="text"
           value={text}
           maxLength={33}
-          disabled={!!text}
+          disabled={true}
         />
       ) : (
         <input

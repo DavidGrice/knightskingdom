@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Authentication } from './components/AuthenticationStack'; 
+import { Navigate, BrowserRouter as Router, useNavigate } from 'react-router-dom';
 import { fetchData } from './api';
 import styles from './App.module.css';
+import { AuthenticationStack } from './components/AuthenticationStack';
+import { MainMenuStack } from './components/MainMenuStack';
 
 class App extends Component {
   constructor(props) {
@@ -9,6 +11,8 @@ class App extends Component {
     this.state = {
       userData: null,
       loading: true,
+      isAuthenticated: false, // Add authentication state
+      selectedProfile: null,
     };
   }
 
@@ -18,13 +22,36 @@ class App extends Component {
     this.setState({ userData: data, loading: false });
   }
 
+  navigateToMainMenu = (selectedProfile) => {
+    this.setState({ isAuthenticated: true }); // Set authentication status
+    this.setState({ selectedProfile: selectedProfile });
+  };
+
+  navigateToAuthentication = () => {
+    this.setState({ isAuthenticated: false }); // Set authentication status
+    this.setState({ selectedProfile: null });
+  }
+
   render() {
-    const { userData, loading } = this.state;
+    const { userData, loading, isAuthenticated, selectedProfile } = this.state;
 
     return (
-      <div className={styles.mainDiv}>
-        {loading ? <p>Loading...</p> : <Authentication userData={userData} />}
-      </div>
+        <div className={styles.mainDiv}>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            
+            !isAuthenticated ? (
+              <Router>
+                <AuthenticationStack userData={userData} navigateToMainMenu={this.navigateToMainMenu} />
+              </Router>
+            )  : (
+              <Router>
+                <MainMenuStack navigateToAuthentication={this.navigateToAuthentication} selectedProfile={selectedProfile} />
+              </Router>
+            )
+          )}
+        </div>
     );
   }
 }

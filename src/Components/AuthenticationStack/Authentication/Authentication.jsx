@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import styles from './Authentication.module.css';
-import { CommonComponent, ProfileContainer } from '..';
+import { ProfileContainer } from '..';
+import { CommonComponent } from '../../Common';
 import Trashcan1 from '../AuthStackResources/trashcan_1.png';
 import Trashcan4 from '../AuthStackResources/trashcan_4.png';
 import Checkmark1 from '../AuthStackResources/checkmark_1.png';
 import Checkmark4 from '../AuthStackResources/checkmark_4.png';
 
-const Authentication = ({ userData, navigateToNextScreen }) => {
+const Authentication = ({ userData, navigateToMainMenu }) => {
     const [selectedProfile, setSelectedProfile] = useState(null);
+    const [isPopulated, setIsPopulated] = useState(null);
 
     const handleProfileSelect = (profile) => {
         console.log('Selected profile:', profile);
@@ -17,7 +19,7 @@ const Authentication = ({ userData, navigateToNextScreen }) => {
     const handleCheckmarkClick = () => {
         if (selectedProfile) {
             console.log('Selected profile:', selectedProfile);
-            // navigateToNextScreen(selectedProfile);
+            navigateToMainMenu(selectedProfile);
         } else {
             alert('Please select a profile first.');
         }
@@ -36,6 +38,7 @@ const Authentication = ({ userData, navigateToNextScreen }) => {
                         isSelected={false}
                         setSelectedProfile={setSelectedProfile} // Pass setSelected
                         handleProfileSelect={handleProfileSelect} // Pass handleProfileSelect
+                        setIsPopulated={setIsPopulated} // Pass setIsPopulated
                     />
                 )}
                 {userData.map((profile, index) => (
