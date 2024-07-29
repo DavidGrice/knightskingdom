@@ -1,0 +1,17 @@
+@keyframes moveSprite {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -560px 0; /* Adjust based on the width of your sprite sheet */
+    }
+}
+
+.helpComponent {
+    background-image: url('../../MainMenuStack/Options/OptionsResourceStack/richard_placeholder.png'); /* Default placeholder image */
+    background-size: cover;
+    width: 100px; /* Adjust the size as needed */
+    height: 100px; /* Adjust the size as needed */
+    cursor: pointer;
+    animation: moveSprite 1s steps(21) infinite; /* Adjust duration and steps based on your sprite sheet */
+}

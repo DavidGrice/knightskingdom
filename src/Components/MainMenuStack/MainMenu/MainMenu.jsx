@@ -15,6 +15,7 @@ import Quit4 from './MainMenuResources/quit_4.png'
 
 
 const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
+    const navigate = useNavigate();
 
     const handleChangePlayerClick = () => {
         navigateToAuthentication();
@@ -22,6 +23,10 @@ const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
 
     const handleQuitClick = () => {
         navigateToAuthentication();
+    };
+
+    const handleOptionsClick = () => {
+        navigate('/options'); // Replace '/options' with the actual path to your Options component
     };
     
     return (
@@ -39,7 +44,7 @@ const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
                     <CommonComponent initialImage={ChangePlayer2} hoverImage={ChangePlayer4} altText="Change Player" onClick={handleChangePlayerClick} />
                 </div>
                 <div className={styles.divSeparators}>
-                    <CommonComponent initialImage={Options2} hoverImage={Options4} altText="Options" />
+                    <CommonComponent initialImage={Options2} hoverImage={Options4} altText="Options" onClick={handleOptionsClick} />
                 </div>
                 <div className={styles.divSeparators}>
                     <CommonComponent initialImage={Credits2} hoverImage={Credits4} altText="Credits" />
