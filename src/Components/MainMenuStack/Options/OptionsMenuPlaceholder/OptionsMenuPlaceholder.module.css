@@ -1,0 +1,28 @@
+.ring {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    width: 270px;
+    height: 101px;
+}
+
+.topLeft, .topMiddle, .topRight {
+    background-size: cover;
+    background-position: center;
+    width: 78px;
+    height: 72px;
+}
+
+.topMiddle {
+    width: 86px;
+    height: 72px;
+}
+
+.defaultLeft, .defaultRight {
+    background-size: cover;
+    background-position: center;
+    width: 121px;
+    height: 72px;
+}

@@ -3,11 +3,11 @@ import { ProfileIcon, ProfileInput } from '..';
 import EnterNameHereImage from '../AuthStackResources/text-updated.png';
 import styles from './ProfileContainer.module.css'; // Import the CSS file for styling
 
-import Page1 from '../AuthStackResources/page_1.png';
+import Page2 from '../AuthStackResources/page_2.png';
 import Page4 from '../AuthStackResources/page_4.png';
-import Knight1 from '../AuthStackResources/knight_1.png';
+import Knight2 from '../AuthStackResources/knight_2.png';
 import Knight4 from '../AuthStackResources/knight_4.png';
-import Baronet1 from '../AuthStackResources/baronet_1.png';
+import Baronet2 from '../AuthStackResources/baronet_2.png';
 import Baronet4 from '../AuthStackResources/baronet_4.png';
 
 const ProfileContainer = ({ name, level, isSelected, onClick, isPopulated, setIsPopulated, setSelectedProfile, handleProfileSelect }) => {
@@ -27,13 +27,13 @@ const ProfileContainer = ({ name, level, isSelected, onClick, isPopulated, setIs
     const getProfileImage = (imageType, isSelected) => {
       switch (imageType) {
         case 'page':
-          return isSelected ? Page4 : Page1;
+          return isSelected ? Page4 : Page2;
         case 'knight':
-          return isSelected ? Knight4 : Knight1;
+          return isSelected ? Knight4 : Knight2;
         case 'baronet':
-          return isSelected ? Baronet4 : Baronet1;
+          return isSelected ? Baronet4 : Baronet2;
         default:
-          return isSelected ? Page4 : Page1;
+          return isSelected ? Page4 : Page2;
       }
     };
   

@@ -1,0 +1,48 @@
+.backgroundImage {
+    background-image: url('./CreditsResourceStack/main_image.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    z-index: 1;
+  }
+
+.textScrollDiv {
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    top: 15vh;
+    left: 19.5vw;
+    width: 25vw;
+    height: 52vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 20px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 10px;
+  }
+  
+.textScroll {
+    position: relative;
+    bottom: -100%; /* Start from below the visible area */
+    animation: scrollUp 100s linear infinite; /* Adjust duration as needed */
+    color: #FFFFC6;
+}
+
+@keyframes scrollUp {
+    0% {
+        bottom: -100%;
+    }
+    100% {
+        bottom: 100%;
+    }
+}
+
+.bottomLeftCorner {
+    position: absolute;
+    bottom: 10px; /* Adjust as needed */
+    left: 15%; /* Adjust as needed */
+  }

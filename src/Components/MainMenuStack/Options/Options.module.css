@@ -1,10 +1,44 @@
 .backgroundImage {
-    background-image: url('../MainMenu/MainMenuResources/castle.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 100vw;
-    position: fixed;
-    z-index: 1;
-  }
+  background-image: url('../MainMenu/MainMenuResources/castle.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  z-index: 1;
+}
+
+.centeredContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  width: 100vw;  /* Full viewport width */
+  padding-top: 5%; /* Adjust this value to add padding from the top */
+}
+
+.divSeparators {
+  margin-top: 3%;
+  width: 40%;
+  height: 12%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottomRightCorner {
+  position: absolute; /* Ensure it is positioned correctly */
+  bottom: 0; /* Adjust as needed */
+  right: 12.75%; /* Adjust as needed */
+  width: 169px;
+  height: 123px;
+  z-index: 2; /* Ensure it is above the background */
+}
+
+.bottomLeftCorner {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  left: 15%; /* Adjust as needed */
+}

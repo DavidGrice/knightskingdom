@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import styles from './Authentication.module.css';
 import { ProfileContainer } from '..';
 import { CommonComponent } from '../../Common';
-import Trashcan1 from '../AuthStackResources/trashcan_1.png';
+import Trashcan2 from '../AuthStackResources/trashcan_2.png';
 import Trashcan4 from '../AuthStackResources/trashcan_4.png';
-import Checkmark1 from '../AuthStackResources/checkmark_1.png';
+import Checkmark2 from '../AuthStackResources/checkmark_2.png';
 import Checkmark4 from '../AuthStackResources/checkmark_4.png';
 
-const Authentication = ({ userData, navigateToMainMenu }) => {
+const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
     const [selectedProfile, setSelectedProfile] = useState(null);
     const [isPopulated, setIsPopulated] = useState(null);
 
@@ -53,11 +53,11 @@ const Authentication = ({ userData, navigateToMainMenu }) => {
                 ))}
             </div>
             <div className={styles.bottomRightCorner}>
-                <CommonComponent initialImage={Trashcan1} hoverImage={Trashcan4} altText="Trashcan" />
+                <CommonComponent initialImage={Trashcan2} hoverImage={Trashcan4} altText="Trashcan" />
             </div>
             <div className={styles.bottomLeftCorner}>
                 <CommonComponent 
-                    initialImage={Checkmark1} 
+                    initialImage={Checkmark2} 
                     hoverImage={Checkmark4} 
                     altText="Checkmark" 
                     onClick={handleCheckmarkClick} // Add onClick handler

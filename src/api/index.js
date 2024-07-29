@@ -19,6 +19,27 @@ import userData from './data/userData.json';
 // export default fetchData;
 
 
+export async function updateUserData(updatedData) {
+    try {
+      const response = await fetch('/updateUserData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    }
+}
+
 export const fetchData = () => {
     try {
         const response = userData;

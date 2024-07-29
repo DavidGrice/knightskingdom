@@ -28,6 +28,10 @@ const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
     const handleOptionsClick = () => {
         navigate('/options'); // Replace '/options' with the actual path to your Options component
     };
+
+    const handleCreditsClick = () => {
+        navigate('/credits');
+    }
     
     return (
         <div className={styles.backgroundImage}>
@@ -47,7 +51,7 @@ const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
                     <CommonComponent initialImage={Options2} hoverImage={Options4} altText="Options" onClick={handleOptionsClick} />
                 </div>
                 <div className={styles.divSeparators}>
-                    <CommonComponent initialImage={Credits2} hoverImage={Credits4} altText="Credits" />
+                    <CommonComponent initialImage={Credits2} hoverImage={Credits4} altText="Credits" onClick={handleCreditsClick} />
                 </div>
                 <div className={styles.divSeparators}>
                     <CommonComponent initialImage={Quit2} hoverImage={Quit4} altText="Quit" onClick={handleQuitClick} />

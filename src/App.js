@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Navigate, BrowserRouter as Router, useNavigate } from 'react-router-dom';
-import { fetchData } from './api';
+import { fetchData, updateUserData } from './api';
 import styles from './App.module.css';
 import { AuthenticationStack } from './components/AuthenticationStack';
 import { MainMenuStack } from './components/MainMenuStack';
@@ -21,6 +21,17 @@ class App extends Component {
     const data = await fetchData();
     this.setState({ userData: data, loading: false });
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.userData !== this.state.userData) {
+      updateUserData(this.state.userData);
+    }
+  }
+
+    // Function to update userData
+    updateUserData = (newUserData) => {
+      this.setState({ userData: newUserData });
+    };
 
   navigateToMainMenu = (selectedProfile) => {
     this.setState({ isAuthenticated: true }); // Set authentication status
@@ -43,11 +54,16 @@ class App extends Component {
             
             !isAuthenticated ? (
               <Router>
-                <AuthenticationStack userData={userData} navigateToMainMenu={this.navigateToMainMenu} />
+                <AuthenticationStack
+                  userData={userData}
+                  updateUserData={this.updateUserData} // Pass the function as a prop
+                  navigateToMainMenu={this.navigateToMainMenu} />
               </Router>
             )  : (
               <Router>
-                <MainMenuStack navigateToAuthentication={this.navigateToAuthentication} selectedProfile={selectedProfile} />
+                <MainMenuStack
+                  navigateToAuthentication={this.navigateToAuthentication}
+                  selectedProfile={selectedProfile} />
               </Router>
             )
           )}
