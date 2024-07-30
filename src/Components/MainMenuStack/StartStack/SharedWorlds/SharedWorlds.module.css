@@ -1,0 +1,39 @@
+.componentHolder {
+    display: flex;
+    flex-direction: column;
+    width: 660px;
+    height: 587px;
+    position: relative;
+}
+
+.headerHolder {
+    display: flex;
+    flex-direction: row;
+    width: 519px;
+    height: 57px;
+}
+
+.localWorldsHeader {
+    background-image: url('../LocalWorlds/LocalWorldsResources/local_worlds_2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 141px;
+    height: 57px;
+    margin-left: 10%;
+}
+.sharedWorldsHeader {
+    background-image: url('./SharedWorldsResources/shared_worlds_2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 141px;
+    height: 57px;
+    margin-left: 0.5%;
+}
+
+.worldsHolder {
+    background-image: url('./SharedWorldsResources/dark_drop_down.png');
+    height: 530px;
+    width: 519px;
+}
+

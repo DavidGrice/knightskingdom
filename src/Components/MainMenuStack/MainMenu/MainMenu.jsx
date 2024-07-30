@@ -14,8 +14,12 @@ import Quit2 from './MainMenuResources/quit_2.png'
 import Quit4 from './MainMenuResources/quit_4.png'
 
 
-const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
+const MainMenu = ( { navigateToAuthentication, selectedProfile, navigateToStart } ) => {
     const navigate = useNavigate();
+
+    const handleStartClick = () => {
+        navigateToStart();
+    }
 
     const handleChangePlayerClick = () => {
         navigateToAuthentication();
@@ -32,6 +36,8 @@ const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
     const handleCreditsClick = () => {
         navigate('/credits');
     }
+
+
     
     return (
         <div className={styles.backgroundImage}>
@@ -42,7 +48,7 @@ const MainMenu = ( { navigateToAuthentication, selectedProfile } ) => {
                     )}
                 </div>
                 <div className={styles.divSeparators}>
-                    <CommonComponent initialImage={Start2} hoverImage={Start4} altText="Start" />
+                    <CommonComponent initialImage={Start2} hoverImage={Start4} altText="Start" onClick={handleStartClick} />
                 </div>
                 <div className={styles.divSeparators}>
                     <CommonComponent initialImage={ChangePlayer2} hoverImage={ChangePlayer4} altText="Change Player" onClick={handleChangePlayerClick} />

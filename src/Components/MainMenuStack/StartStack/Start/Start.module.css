@@ -1,0 +1,17 @@
+.backgroundImage {
+    background-image: url('./StartResourceStack/background.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    z-index: 1;
+  }
+
+  .centeredContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure the container takes the full height of its parent */
+}

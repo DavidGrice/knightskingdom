@@ -16,17 +16,17 @@ const Credits = ( { navigateToMenu }) => {
                 <div className={styles.textScroll}>
                     <h1>Credits</h1>
                     <h2>Developers</h2>
-                    <p>John Doe</p>
-                    <p>Jane Doe</p>
+                    <p>David Grice</p>
+                    <p>[Jane Doe]</p>
                     <h2>Artists</h2>
-                    <p>John Doe</p>
-                    <p>Jane Doe</p>
+                    <p>[John Doe]</p>
+                    <p>[Jane Doe]</p>
                     <h2>Sound Designers</h2>
-                    <p>John Doe</p>
-                    <p>Jane Doe</p>
+                    <p>[John Doe]</p>
+                    <p>[Jane Doe]</p>
                     <h2>Special Thanks</h2>
-                    <p>John Doe</p>
-                    <p>Jane Doe</p>
+                    <p>[John Doe]</p>
+                    <p>[Jane Doe]</p>
                 </div>
             </div>
             <div className={styles.bottomLeftCorner}>

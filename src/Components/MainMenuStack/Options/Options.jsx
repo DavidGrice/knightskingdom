@@ -7,7 +7,7 @@ import BubbleEnabled2 from './OptionsResourceStack/bubble_enable_2.png';
 import BubbleEnabled4 from './OptionsResourceStack/bubble_enable_4.png';
 import Checkmark2 from './OptionsResourceStack/checkmark_2.png';
 import Checkmark4 from './OptionsResourceStack/checkmark_4.png';
-import DarkHelp2 from './OptionsResourceStack/dark_help_2.png';
+import DarkHelp2 from './OptionsResourceStack/OptionsFrames/dark_help_2.png';
 import HardwareEnabled2 from './OptionsResourceStack/hardware_enable_2.png';
 import HardwareEnabled4 from './OptionsResourceStack/hardware_enable_4.png';
 import HighLevelBrick2 from './OptionsResourceStack/high_level_brick_2.png';
