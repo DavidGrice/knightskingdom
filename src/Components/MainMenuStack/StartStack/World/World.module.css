@@ -1,0 +1,8 @@
+.componentHolder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 660px;
+    height: 587px;
+    position: absolute;
+}

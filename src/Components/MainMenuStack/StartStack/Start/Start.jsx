@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import styles from "./Start.module.css";
-import { LocalWorlds, SharedWorlds } from "..";
+import { World } from "..";
 
 const Start = ({ navigateToMainMenu }) => {
-    const [localWorlds, setLocalWorlds] = useState(true);
-    const [sharedWorlds, setSharedWorlds] = useState(false);
-
-
     return (
         <div className={styles.backgroundImage}>
             <div className={styles.centeredContainer}>
-                {localWorlds ? 
-                    <LocalWorlds /> 
-                    : <SharedWorlds />}
+                <World navigateToMainMenu={navigateToMainMenu} />
             </div>  
         </div>
     );
