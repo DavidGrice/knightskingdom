@@ -2,17 +2,27 @@ import React, { useState } from "react";
 import styles from "./World.module.css";
 import { WorldHeader, WorldBody, LocalWorlds, SharedWorlds } from "..";
 
-const World = ({ navigateToStart }) => {
+const World = ({ navigateToStart, setWorldData }) => {
     const [isLocalWorlds, setIsLocalWorlds] = useState(true);
+    const [isSharedWorlds, setIsSharedWorlds] = useState(false);
+    const [didUpdate, setDidUpdate] = useState(false);
 
     const changeWorld = () => {
-        setIsLocalWorlds(!isLocalWorlds);
+        if (isLocalWorlds) {
+            setIsLocalWorlds(!isLocalWorlds);
+            setIsSharedWorlds(!isSharedWorlds);
+            setDidUpdate(!didUpdate);
+        } else {
+            setIsSharedWorlds(!isSharedWorlds);
+            setIsLocalWorlds(!isLocalWorlds);
+            setDidUpdate(!didUpdate);
+        }
     };
 
     return (
         <div className={styles.componentHolder}>
-            <WorldHeader isLocalWorlds={isLocalWorlds} changeWorld={changeWorld} />
-            <WorldBody isLocalWorlds={isLocalWorlds} />
+            <WorldHeader changeWorld={changeWorld} />
+            <WorldBody isLocalWorlds={isLocalWorlds} didUpdate={didUpdate} setDidUpdate={setDidUpdate} setWorldData={setWorldData} />
         </div>
     );
 }

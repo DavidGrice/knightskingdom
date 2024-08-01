@@ -10,18 +10,23 @@ import Knight4 from '../AuthStackResources/knight_4.png';
 import Baronet2 from '../AuthStackResources/baronet_2.png';
 import Baronet4 from '../AuthStackResources/baronet_4.png';
 
-const ProfileContainer = ({ name, level, isSelected, onClick, isPopulated, setIsPopulated, setSelectedProfile, handleProfileSelect }) => {
+const ProfileContainer = ({ name, level, isSelected, onClick, isPopulated, setIsPopulated, setSelectedProfile, handleProfileSelect, newData, setNewData }) => {
     // const [showEnterNameImage, setShowEnterNameImage] = useState(false);
-    const [profiles, setProfiles] = useState([]);
-    const [text, setText] = useState('');
+    // const [profiles, setProfiles] = useState([]);
     const [showEnterNameImage, setShowEnterNameImage] = useState(false);
     // const [isPopulated, setIsPopulated] = useState(isPopulated);
 
     const handleAddProfile = (newProfile) => {
-        setProfiles([...profiles, newProfile]);
-        setIsPopulated(true); // Set isPopulated to true after adding a profile
-        handleProfileSelect(newProfile);
-      };
+      setNewData([...newData, 
+        {
+          id: newData.length + 1,
+          isPopulated: true,
+          name: newProfile,
+          level: "page",
+        }]);
+      setIsPopulated(true); // Set isPopulated to true after adding a profile
+      handleProfileSelect(newProfile);
+    };
   
     // Function to determine which profile image to display
     const getProfileImage = (imageType, isSelected) => {

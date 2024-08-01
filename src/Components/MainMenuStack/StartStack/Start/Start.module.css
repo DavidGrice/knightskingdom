@@ -15,3 +15,21 @@
     align-items: center;
     height: 100%; /* Ensure the container takes the full height of its parent */
 }
+
+.bottomLeftCorner {
+  position: absolute;
+  bottom: 10px;
+  left: 15%;
+}
+
+.topRightCorner {
+  position: absolute;
+  top: 0%;
+  right: 13%; 
+  height: 87px;
+  width: 80px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}

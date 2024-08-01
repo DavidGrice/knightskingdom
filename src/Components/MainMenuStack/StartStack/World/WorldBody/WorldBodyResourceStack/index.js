@@ -124,6 +124,22 @@ import MyWorld12 from './SharedWorldsFrames/myworld_12.png';
 import MyWorld13 from './SharedWorldsFrames/myworld_13.png';
 //endregion
 
+//region LocalWorldTheme
+import LocalWorldBody from './light_drop_down.png';
+import LocalWorldUpArrowGreen from './light_theme_scroll_up_2.png';
+import LocalWorldUpArrowSolid from './light_theme_scroll_up_5.png';
+import LocalWorldDownArrowGreen from './light_theme_scroll_down_2.png';
+import LocalWorldDownArrowSolid from './light_theme_scroll_down_5.png';
+//endregion
+
+//region SharedWorldTheme
+import SharedWorldBody from './dark_drop_down.png';
+import SharedWorldUpArrowGreen from './dark_theme_scroll_up_2.png';
+import SharedWorldUpArrowSolid from './dark_theme_scroll_up_5.png';
+import SharedWorldDownArrowGreen from './dark_theme_scroll_down_2.png';
+import SharedWorldDownArrowSolid from './dark_theme_scroll_down_5.png';
+//endregion
+
 export const lightFrames = [
     LightHelp2,
     LightHelp3,
@@ -214,6 +230,14 @@ export const localWorldsData = [
     },
     {
         "id": 9,
+        "name": "World 9",
+        "description": "This is the ninth world",
+        "image": Template9,
+        "isLocked": true,
+        "isCompleted": false
+    },
+    {
+        "id": 10,
         "name": "World 9",
         "description": "This is the ninth world",
         "image": Template9,
@@ -334,7 +358,7 @@ export const sharedWorldCopyFrames = [
     Copy3,
     Copy4,
     Copy5,
-    Copy6,
+    // Copy6,
     Copy7,
     Copy8,
     Copy9,
@@ -357,7 +381,7 @@ export const sharedWorldLoadFrames = [
     Load3,
     Load4,
     Load5,
-    Load6,
+    // Load6,
     Load7,
     Load8,
 ];
@@ -367,7 +391,7 @@ export const sharedWorldSaveFrames = [
     Save3,
     Save4,
     Save5,
-    Save6,
+    // Save6,
     Save7,
     Save8,
 ];
@@ -377,7 +401,7 @@ export const sharedWorldTrashFrames = [
     Trash3,
     Trash4,
     Trash5,
-    Trash6,
+    // Trash6,
     Trash7,
     Trash8,
     Trash9,
@@ -413,3 +437,31 @@ export const darkFrames = [
     DarkHelp20,
     DarkHelp21,
 ];
+
+export const localWorldTheme = {
+    body: LocalWorldBody,
+    upArrowGreen: LocalWorldUpArrowGreen,
+    upArrowSolid: LocalWorldUpArrowSolid,
+    downArrowGreen: LocalWorldDownArrowGreen,
+    downArrowSolid: LocalWorldDownArrowSolid,
+    placeholderHelper: LightHelp2,
+    frames: lightFrames,
+};
+
+export const sharedWorldTheme = {
+    body: SharedWorldBody,
+    upArrowGreen: SharedWorldUpArrowGreen,
+    upArrowSolid: SharedWorldUpArrowSolid,
+    downArrowGreen: SharedWorldDownArrowGreen,
+    downArrowSolid: SharedWorldDownArrowSolid,
+    placeholderHelper: DarkHelp2,
+    helperFrames: darkFrames,
+    placeHolderCopy: Copy2,
+    copyFrames: sharedWorldCopyFrames,
+    placeHolderLoad: Load2,
+    loadFrames: sharedWorldLoadFrames,
+    placeHolderSave: Save2,
+    saveFrames: sharedWorldSaveFrames,
+    placeHolderTrash: Trash2,
+    trashFrames: sharedWorldTrashFrames,
+};

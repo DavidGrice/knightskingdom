@@ -10,6 +10,8 @@ import Checkmark4 from '../AuthStackResources/checkmark_4.png';
 const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
     const [selectedProfile, setSelectedProfile] = useState(null);
     const [isPopulated, setIsPopulated] = useState(null);
+    const [newData, setNewData] = useState(userData);
+    console.log('userData:', newData);
 
     const handleProfileSelect = (profile) => {
         console.log('Selected profile:', profile);
@@ -28,7 +30,7 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
     return (
         <div className={styles.backgroundImage}>
             <div className={styles.centeredContainer}>
-                {userData.length < 5 && (
+                {newData.length < 5 && (
                     <ProfileContainer 
                         key="empty-input" 
                         name=""
@@ -39,6 +41,8 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
                         setSelectedProfile={setSelectedProfile} // Pass setSelected
                         handleProfileSelect={handleProfileSelect} // Pass handleProfileSelect
                         setIsPopulated={setIsPopulated} // Pass setIsPopulated
+                        newData={newData} // Pass newData
+                        setNewData={setNewData} // Pass setNewData
                     />
                 )}
                 {userData.map((profile, index) => (

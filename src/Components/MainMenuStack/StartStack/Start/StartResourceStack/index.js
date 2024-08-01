@@ -1,19 +1,19 @@
-import DarkLeave2 from './StartResourceStack/StartFrames/dark_leave_2.png';
-import DarkLeave3 from './StartResourceStack/StartFrames/dark_leave_3.png';
-import DarkLeave4 from './StartResourceStack/StartFrames/dark_leave_4.png';
-import DarkLeave5 from './StartResourceStack/StartFrames/dark_leave_5.png';
-import DarkLeave6 from './StartResourceStack/StartFrames/dark_leave_6.png';
-import DarkLeave7 from './StartResourceStack/StartFrames/dark_leave_7.png';
-import DarkLeave8 from './StartResourceStack/StartFrames/dark_leave_8.png';
-import DarkLeave9 from './StartResourceStack/StartFrames/dark_leave_9.png';
-import DarkLeave10 from './StartResourceStack/StartFrames/dark_leave_10.png';
-import DarkLeave11 from './StartResourceStack/StartFrames/dark_leave_11.png';
-import DarkLeave12 from './StartResourceStack/StartFrames/dark_leave_12.png';
-import DarkLeave13 from './StartResourceStack/StartFrames/dark_leave_13.png';
-import DarkLeave14 from './StartResourceStack/StartFrames/dark_leave_14.png';
-import DarkLeave15 from './StartResourceStack/StartFrames/dark_leave_15.png';
-import DarkLeave16 from './StartResourceStack/StartFrames/dark_leave_16.png';
-import DarkLeave17 from './StartResourceStack/StartFrames/dark_leave_17.png';
+import DarkLeave2 from './StartFrames/dark_leave_2.png';
+import DarkLeave3 from './StartFrames/dark_leave_3.png';
+import DarkLeave4 from './StartFrames/dark_leave_4.png';
+import DarkLeave5 from './StartFrames/dark_leave_5.png';
+import DarkLeave6 from './StartFrames/dark_leave_6.png';
+import DarkLeave7 from './StartFrames/dark_leave_7.png';
+import DarkLeave8 from './StartFrames/dark_leave_8.png';
+import DarkLeave9 from './StartFrames/dark_leave_9.png';
+import DarkLeave10 from './StartFrames/dark_leave_10.png';
+import DarkLeave11 from './StartFrames/dark_leave_11.png';
+import DarkLeave12 from './StartFrames/dark_leave_12.png';
+import DarkLeave13 from './StartFrames/dark_leave_13.png';
+import DarkLeave14 from './StartFrames/dark_leave_14.png';
+import DarkLeave15 from './StartFrames/dark_leave_15.png';
+import DarkLeave16 from './StartFrames/dark_leave_16.png';
+import DarkLeave17 from './StartFrames/dark_leave_17.png';
 
 
 const startFrames = [
@@ -35,4 +35,7 @@ const startFrames = [
     DarkLeave17,
 ];
 
-export default startFrames;
+export const leaveIcon = {
+    startFrames: startFrames,
+    placeholderIcon: DarkLeave2,
+};
