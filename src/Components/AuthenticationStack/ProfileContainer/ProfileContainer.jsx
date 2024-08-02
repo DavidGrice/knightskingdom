@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ProfileIcon, ProfileInput } from '..';
 import EnterNameHereImage from '../AuthStackResources/text-updated.png';
-import styles from './ProfileContainer.module.css'; // Import the CSS file for styling
+import styles from './ProfileContainer.module.css';
 
 import Page2 from '../AuthStackResources/page_2.png';
 import Page4 from '../AuthStackResources/page_4.png';
@@ -10,27 +10,23 @@ import Knight4 from '../AuthStackResources/knight_4.png';
 import Baronet2 from '../AuthStackResources/baronet_2.png';
 import Baronet4 from '../AuthStackResources/baronet_4.png';
 
-const ProfileContainer = ({ name, level, isSelected, onClick, isPopulated, setIsPopulated, setSelectedProfile, handleProfileSelect, newData, setNewData }) => {
-    // const [showEnterNameImage, setShowEnterNameImage] = useState(false);
-    // const [profiles, setProfiles] = useState([]);
+const ProfileContainer = ({ name, level, isSelected, onClick, isNewProfile, setSelectedProfile, handleProfileSelect, newData, setNewData }) => {
     const [showEnterNameImage, setShowEnterNameImage] = useState(false);
-    // const [isPopulated, setIsPopulated] = useState(isPopulated);
+    const [text, setText] = useState(name);
 
-    const handleAddProfile = (newProfile) => {
+    const handleAddProfile = (name) => {
       setNewData([...newData, 
         {
           id: newData.length + 1,
-          isPopulated: true,
-          name: newProfile,
+          name: name,
           level: "page",
         }]);
-      setIsPopulated(true); // Set isPopulated to true after adding a profile
-      handleProfileSelect(newProfile);
+      handleProfileSelect(name);
     };
   
     // Function to determine which profile image to display
-    const getProfileImage = (imageType, isSelected) => {
-      switch (imageType) {
+    const getProfileImage = (level, isSelected) => {
+      switch (level) {
         case 'page':
           return isSelected ? Page4 : Page2;
         case 'knight':
@@ -46,14 +42,21 @@ const ProfileContainer = ({ name, level, isSelected, onClick, isPopulated, setIs
   
     return (
       <div className={styles.profileContainer} onClick={onClick}>
-        <ProfileIcon
-          image={profileImage}
-          setShowEnterNameImage={setShowEnterNameImage}
-          name={name}
-          isPopulated={isPopulated}
-          handleAddProfile={handleAddProfile}
-          setSelectedProfile={setSelectedProfile}
-        />
+        <div className={styles.profileInput}>
+          <ProfileIcon
+            image={profileImage}
+          />
+          {isNewProfile ? (<ProfileInput
+            text={text}
+            setText={setText}
+            setShowEnterNameImage={setShowEnterNameImage}
+            handleAddProfile={handleAddProfile}
+            setSelectedProfile={setSelectedProfile}
+          />
+          ) : (
+            <div className={styles.profileDiv}>{text}</div>
+          )}
+        </div>
         {showEnterNameImage ? (
         <img className={styles.enterNameImage} src= {EnterNameHereImage} alt="Enter Name" />
       ) : null}

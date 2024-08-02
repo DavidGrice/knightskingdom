@@ -2,25 +2,21 @@
     {
         "id": 1,
         "name": "David",
-        "level": "baronet",
-        "isPopulated": true
+        "level": "baronet"
     },
     {
         "id": 2,
         "name": "Alice",
-        "level": "knight",
-        "isPopulated": true
+        "level": "knight"
     },
     {
         "id": 3,
         "name": "John",
-        "level": "page",
-        "isPopulated": true
+        "level": "page"
     },
     {
         "id": 4,
         "name": "Emma",
-        "level": "page",
-        "isPopulated": true
+        "level": "page"
     }
 ]

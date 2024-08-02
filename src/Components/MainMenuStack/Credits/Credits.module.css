@@ -34,10 +34,10 @@
 
 @keyframes scrollUp {
     0% {
-        bottom: -100%;
+        bottom: -105%;
     }
     100% {
-        bottom: 100%;
+        bottom: 400%;
     }
 }
 

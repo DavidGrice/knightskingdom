@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Authentication.module.css';
 import { ProfileContainer } from '..';
 import { CommonComponent } from '../../Common';
@@ -7,11 +7,18 @@ import Trashcan4 from '../AuthStackResources/trashcan_4.png';
 import Checkmark2 from '../AuthStackResources/checkmark_2.png';
 import Checkmark4 from '../AuthStackResources/checkmark_4.png';
 
-const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
+const Authentication = ({ userData, navigateToMainMenu }) => {
     const [selectedProfile, setSelectedProfile] = useState(null);
-    const [isPopulated, setIsPopulated] = useState(null);
     const [newData, setNewData] = useState(userData);
-    console.log('userData:', newData);
+    const [isNewProfile, setIsNewProfile] = useState(false);
+
+    useEffect(() => {
+        if (userData) {
+          setNewData(userData);
+        } else {
+          setNewData([]);
+        }
+      }, [userData]);
 
     const handleProfileSelect = (profile) => {
         console.log('Selected profile:', profile);
@@ -27,6 +34,17 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
         }
     };
 
+    const handleTrashcanClick = () => {
+        if (selectedProfile) {
+            console.log('Deleting profile:', selectedProfile);
+            const updatedData = newData.filter(profile => profile.name !== selectedProfile.name);
+            setNewData(updatedData);
+            setSelectedProfile(null);
+        } else {
+            alert('Please select a profile first.');
+        }
+    }
+
     return (
         <div className={styles.backgroundImage}>
             <div className={styles.centeredContainer}>
@@ -35,29 +53,34 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
                         key="empty-input" 
                         name=""
                         level="page" // Set the default level 
-                        isPopulated={false}
-                        onClick={() => {}} 
+                        onClick={() => {}}
+                        isNewProfile={true} // Set isNewProfile to true
+                        setIsNewProfile={setIsNewProfile} // Pass setIsNewProfile
                         isSelected={false}
                         setSelectedProfile={setSelectedProfile} // Pass setSelected
                         handleProfileSelect={handleProfileSelect} // Pass handleProfileSelect
-                        setIsPopulated={setIsPopulated} // Pass setIsPopulated
                         newData={newData} // Pass newData
                         setNewData={setNewData} // Pass setNewData
                     />
                 )}
-                {userData.map((profile, index) => (
+                {newData.map((profile, index) => (
                     <ProfileContainer 
                         key={index} 
                         name={profile.name}
                         level={profile.level} // Pass the level prop
-                        isPopulated={profile.isPopulated} 
                         onClick={() => handleProfileSelect(profile)} // Add onClick handler
+                        isNewProfile={isNewProfile} // Pass isNewProfile
                         isSelected={selectedProfile && selectedProfile.name === profile.name} // Highlight selected profile
                     />
                 ))}
             </div>
             <div className={styles.bottomRightCorner}>
-                <CommonComponent initialImage={Trashcan2} hoverImage={Trashcan4} altText="Trashcan" />
+                <CommonComponent 
+                    initialImage={Trashcan2}
+                    hoverImage={Trashcan4}
+                    altText="Trashcan"
+                    onClick={handleTrashcanClick}
+                />
             </div>
             <div className={styles.bottomLeftCorner}>
                 <CommonComponent 

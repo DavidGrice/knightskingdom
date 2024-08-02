@@ -12,7 +12,7 @@
     background-position: center;
     width: 141px;
     height: 57px;
-    margin-left: 10%;
+    margin-left: 9.7%;
 }
 .sharedWorldsHeader {
     background-image: url('./WorldHeaderResourceStack/shared_worlds_2.png');
@@ -20,5 +20,5 @@
     background-repeat: no-repeat;
     width: 141px;
     height: 57px;
-    margin-left: 0.5%;
+    /* margin-left: 0.5%; */
 }

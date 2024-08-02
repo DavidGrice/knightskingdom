@@ -12,3 +12,21 @@
     transform: translateX(-50%);
     z-index: 2;
 }
+
+.profileInput {
+  display: flex;
+  align-items: center;
+}
+
+.profileDiv {
+  position: fixed;
+  text-align: left;
+  margin-top: 1.5%;
+  left: 52%; 
+  width: 20%;
+  transform: translate(-50%, -50%);
+  color: #FFFFC6;
+  font-size: 24px;
+  font-weight: lighter;
+  font-family: Arial, Helvetica, sans-serif;
+}
