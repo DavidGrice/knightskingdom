@@ -6,11 +6,12 @@ import { leaveIcon } from "./StartResourceStack/index";
 import Checkmark2 from './StartResourceStack/checkmark_2.png';
 import Checkmark4 from './StartResourceStack/checkmark_4.png';
 
-const Start = ({ navigateToMenu }) => {
+const Start = ({ navigateToMenu, navigateToMainGame }) => {
     const [worldData, setWorldData] = useState(null);
 
     const handleCheckmarkClick = () => {
-        console.log(worldData)
+        navigateToMainGame(worldData);
+        console.log(worldData);
     }
 
     const handleLeaveClick = () => {
@@ -19,9 +20,8 @@ const Start = ({ navigateToMenu }) => {
 
     return (
         <div className={styles.backgroundImage}>
-            <div className={styles.topRightCorner}
-                onClick={handleLeaveClick}>
-                <IconComponent type={'leave'} placeholderImage={leaveIcon.placeholderIcon} frames={leaveIcon.startFrames}  />
+            <div className={styles.topRightCorner} onClick={handleLeaveClick}>
+                <IconComponent type={'leave'} placeholderImage={leaveIcon.placeholderIcon} frames={leaveIcon.startFrames} />
             </div>
             <div className={styles.centeredContainer}>
                 <World navigateToMainMenu={navigateToMenu} setWorldData={setWorldData} />
@@ -36,6 +36,6 @@ const Start = ({ navigateToMenu }) => {
             </div>  
         </div>
     );
-    }
+}
 
 export default Start;

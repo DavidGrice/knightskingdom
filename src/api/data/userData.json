@@ -2,21 +2,45 @@
     {
         "id": 1,
         "name": "David",
-        "level": "baronet"
+        "level": "baronet",
+        "options": {
+            "brickQuality": "high",
+            "renderer": "hardware",
+            "dialogue": "on",
+            "music": "off"
+        }
     },
     {
         "id": 2,
         "name": "Alice",
-        "level": "knight"
+        "level": "knight",
+        "options": {
+            "brickQuality": "medium",
+            "renderer": "software",
+            "dialogue": "off",
+            "music": "on"
+        }
     },
     {
         "id": 3,
         "name": "John",
-        "level": "page"
+        "level": "page",
+        "options": {
+            "brickQuality": "low",
+            "renderer": "hardware",
+            "dialogue": "on",
+            "music": "on"
+        }
     },
     {
         "id": 4,
         "name": "Emma",
-        "level": "page"
+        "level": "page",
+        "options": {
+            "brickQuality": "medium",
+            "renderer": "software",
+            "dialogue": "off",
+            "music": "off"
+        }
     }
 ]

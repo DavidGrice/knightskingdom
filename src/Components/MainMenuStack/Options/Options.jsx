@@ -30,7 +30,7 @@ import SoftwareRender4 from './OptionsResourceStack/software_render_4.png';
 import frames, { OptionsMenuPlaceholder } from './index';
 
 
-const Options = ( { navigateToMenu } ) => {
+const Options = ( { navigateToMenu, selectedProfile } ) => {
     
     const handleCheckmarkClick = () => {
         navigateToMenu();
