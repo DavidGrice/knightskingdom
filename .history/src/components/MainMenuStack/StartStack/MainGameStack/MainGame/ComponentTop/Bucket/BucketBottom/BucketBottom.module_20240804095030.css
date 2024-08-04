@@ -1,0 +1,80 @@
+.bucketBottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 67%;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+}
+
+.upArrowHolder {
+    height: 26px;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2%;
+}
+
+.upArrow {
+    width: 42px;
+    height: 26px;
+    z-index: 10;
+    background-repeat: no-repeat;
+}
+
+.body {
+    display: grid;
+    grid-template-columns: repeat(3, 20px); /* Creates 3 equal columns */
+    grid-template-rows: repeat(2, 20px); /* Creates 3 equal columns */
+    gap: 20px; /* Adjust the gap between items as needed */
+    width: 100%;
+    height: 70%;
+    margin-top: 3%;
+}
+
+.item {
+    position: relative;
+    width: 95px;
+    height: 67px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc; /* Example border */
+    background-color: aqua;
+}
+
+.highlightedImage {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.downArrowHolder {
+    position: absolute;
+    bottom: 20%;
+    right: 47%;
+    width: 42px;
+    height: 26px;
+    z-index: 9;
+}
+
+.downArrow {
+    width: 42px;
+    height: 26px;
+    z-index: 10;
+}
+
+.downArrowGreen {
+    width: 42px;
+    height: 26px;
+    z-index: 10;
+}

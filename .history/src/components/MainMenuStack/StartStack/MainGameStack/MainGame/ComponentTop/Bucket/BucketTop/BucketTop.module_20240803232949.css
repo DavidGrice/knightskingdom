@@ -1,0 +1,10 @@
+.bucketTop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 25%;
+    background-color: aliceblue;
+    z-index: 1;
+    pointer-events: none;
+}

@@ -1,0 +1,14 @@
+.mainDiv {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    background-image: url('./ComponentTopResourceStack/overlay_top.png');
+    background-size: cover;
+}
+
+.saveButton {
+    width: '56px';
+    height: '58px';
+    margin-top: 6px;
+}

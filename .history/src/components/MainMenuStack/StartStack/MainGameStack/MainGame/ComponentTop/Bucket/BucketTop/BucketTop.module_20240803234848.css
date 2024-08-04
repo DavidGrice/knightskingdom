@@ -1,0 +1,33 @@
+.bucketTop {
+    position: absolute;
+    top: 4%;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background-color: aliceblue;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bucketTopRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 55px;
+    background-color: aqua;
+}
+
+.bucketTopRowItem {
+    width: 50px;
+    height: 50px;
+    background-color: blue;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

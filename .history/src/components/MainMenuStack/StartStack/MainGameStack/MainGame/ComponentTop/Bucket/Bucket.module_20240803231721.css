@@ -1,0 +1,12 @@
+.bucketDiv {
+    position: absolute;
+    z-index: 2;
+    width: 229px;
+    height: 441px;
+    background-color: turquoise;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 29.15%;
+    top:5%
+}

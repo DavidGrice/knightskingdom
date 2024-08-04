@@ -1,0 +1,31 @@
+.bucketTop {
+    position: absolute;
+    top: 4%;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bucketTopRow {
+    display: grid;
+    grid-template-columns: 50px 50px 50px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 7px;
+}
+
+.bucketBottomRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 55px;
+}
