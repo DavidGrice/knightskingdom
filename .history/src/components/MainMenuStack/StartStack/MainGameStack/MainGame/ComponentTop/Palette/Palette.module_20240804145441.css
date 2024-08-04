@@ -1,0 +1,32 @@
+.paletteDiv {
+    position: absolute;
+    height: 196px;
+    width: 196px;
+    background-image: url('./PaletteResourceStack/color_mixer_board.png');
+    right: 29.2%;
+    top: 10%;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon {
+    position: absolute;
+    transform-origin: center;
+}
+
+.icon-0 { transform: rotate(330deg) translate(70px) rotate(45deg); }
+.icon-1 { transform: rotate(310deg) translate(70px) rotate(60deg); }
+.icon-2 { transform: rotate(290deg) translate(70px) rotate(75deg); }
+.icon-3 { transform: rotate(270deg) translate(70px) rotate(90deg); }
+.icon-4 { transform: rotate(250deg) translate(70px) rotate(105deg); }
+.icon-5 { transform: rotate(230deg) translate(70px) rotate(120deg); }
+.icon-6 { transform: rotate(210deg) translate(70px) rotate(135deg); }
+.icon-7 { transform: rotate(190deg) translate(70px) rotate(150deg); }
+.icon-8 { transform: rotate(170deg) translate(70px) rotate(165deg); }
+.icon-9 { transform: rotate(150deg) translate(70px) rotate(180deg); }
+.icon-10 { transform: rotate(130deg) translate(70px) rotate(195deg); }
+.icon-11 { transform: rotate(110deg) translate(70px) rotate(210deg); }
+.icon-12 { transform: rotate(90deg) translate(70px) rotate(225deg); }
+.icon-13 { transform: rotate(70deg) translate(70px) rotate(240deg); }

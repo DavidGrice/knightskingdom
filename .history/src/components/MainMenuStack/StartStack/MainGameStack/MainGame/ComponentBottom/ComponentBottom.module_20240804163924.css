@@ -1,0 +1,10 @@
+.componentBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  width: 800px;
+  height: 120px;
+  background-image: url(./ComponentBottomResourceStack/overlay_bottom.png);
+    background-size: cover;
+}

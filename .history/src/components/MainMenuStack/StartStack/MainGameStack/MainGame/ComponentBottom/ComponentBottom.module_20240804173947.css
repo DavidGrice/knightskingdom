@@ -1,0 +1,70 @@
+.componentBottom {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    background-image: url('./ComponentBottomResourceStack/overlay_bottom.png');
+    background-size: cover;
+}
+
+.hammerButton {
+    display: flex;
+    width: 69px;
+    height: 65px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2%;
+    margin-top: 8%;
+}
+
+.snapShotButton {
+    display: flex;
+    width: 80px;
+    height: 65px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7%;
+    margin-left: 2%;
+}
+
+.climateButton {
+    display: flex;
+    width: 55px;
+    height: 63px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7%;
+}
+
+.middleDiv {
+    width: 253px;
+    height: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5.5%;
+    margin-bottom: 10px;
+    background-image: url('./Ball/BallResourceStack/ball_holder.png');
+}
+
+.musicButton {
+    display: flex;
+    width: 62px;
+    height: 67px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 7%;
+    margin-left: 5%;
+}
+
+.bottomRightCorner {
+    display: flex;
+    position: absolute; /* Ensure it is positioned correctly */
+    bottom: 0px; /* Adjust as needed */
+    right: 0%; /* Adjust as needed */
+    width: 100px;
+    height: 100px;
+    z-index: 2; /* Ensure it is above the background */
+    background-size: cover;
+  }

@@ -1,0 +1,24 @@
+.driveDiv {
+    position: absolute;
+    height: 196px;
+    width: 196px;
+    background-image: url('./DriveResourceStack/action_roll_menu.png');
+    background-repeat: no-repeat;
+    right: 28%;
+    top: 9%;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imageHolders {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,19 @@
+.helpComponent {
+    position: relative;
+    width: 169px;
+    height: 123px;
+    background-size: cover;
+    background-position: center;
+    align-items: center;
+    justify-content: center;
+}
+  
+.frameDiv {
+    position: absolute;
+    bottom: 0;
+    left: 9%;
+    width: 120px;
+    height: 103px;
+    background-size: cover;
+    background-position: center;
+}

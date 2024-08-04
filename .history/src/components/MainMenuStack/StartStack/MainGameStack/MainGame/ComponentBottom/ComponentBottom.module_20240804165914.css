@@ -1,0 +1,54 @@
+.componentBottom {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    background-image: url('./ComponentBottomResourceStack/overlay_bottom.png');
+    background-size: cover;
+}
+
+.snapShotButton {
+    width: 80px;
+    height: 65px;
+    margin-top: 8px;
+    margin-left: 2px;
+}
+
+.climateButton {
+    width: 45px;
+    height: 63px;
+    margin-left: 40px;
+    margin-top: 0px;
+}
+
+.climateButton {
+    width: 45px;
+    height: 63px;
+    margin-left: 40px;
+    margin-top: 0px;
+}
+
+.middleDiv {
+    width: 400px;
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: 55px;
+    margin-top: 13px;
+}
+
+.musicButton {
+    width: 63px;
+    height: 65px;
+    margin-left: 40px;
+    margin-top: 5px;
+}
+
+.richardHelp {
+    width: 90px;
+    height: 80px;
+    margin-top: 4px;
+    margin-left: 1px;
+}

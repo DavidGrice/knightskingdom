@@ -1,0 +1,10 @@
+.paletteDiv {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 196px;
+    width: 196px;
+    background-color: #f5f5f5;
+}
