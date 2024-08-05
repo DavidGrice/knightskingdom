@@ -1,0 +1,21 @@
+.climateDiv {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    width: 344px;
+    height: 226px;
+    background-image: url('./ClimateResourceStack/blue_background.png');
+    bottom: 15%;
+    left: 35%;
+}
+
+.bucketTopRow {
+    display: grid;
+    grid-template-columns: 70px 70px 70px 70px 70px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 7px;
+}

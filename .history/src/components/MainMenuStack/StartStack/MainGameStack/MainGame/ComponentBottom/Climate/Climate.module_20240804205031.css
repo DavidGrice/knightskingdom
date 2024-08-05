@@ -1,0 +1,10 @@
+.climateDiv {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    
+    width: 50%;
+    height: 100%;
+    background-color: aqua;
+}

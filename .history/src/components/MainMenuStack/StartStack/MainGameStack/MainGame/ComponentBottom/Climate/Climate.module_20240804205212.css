@@ -1,0 +1,10 @@
+.climateDiv {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    width: 344px;
+    height: 226px;
+    background-image: url('./ClimateResourceStack/blue_background.png');
+    bottom: 10%;
+}
