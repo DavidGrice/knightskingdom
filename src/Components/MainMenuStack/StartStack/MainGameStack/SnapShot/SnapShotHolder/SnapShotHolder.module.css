@@ -1,0 +1,9 @@
+.componentHolder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 516px;
+    height: 541px;
+    position: absolute;
+    background-image: url('./SnapShotHolderResourceStack/snapshot_holder.png');
+}

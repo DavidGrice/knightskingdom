@@ -1,0 +1,17 @@
+.snapShotDiv {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('./SnapShotResourceStack/background.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.bottomLeftCorner {
+    position: absolute;
+    bottom: 10px;
+    left: 15%;
+  }

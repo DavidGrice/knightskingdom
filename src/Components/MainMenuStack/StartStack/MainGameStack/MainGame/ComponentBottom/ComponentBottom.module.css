@@ -60,12 +60,14 @@
 }
 
 .bottomRightCorner {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
     display: flex;
-    position: absolute; /* Ensure it is positioned correctly */
+    flex-direction: row;
     bottom: 0px; /* Adjust as needed */
-    right: 0%; /* Adjust as needed */
-    width: 100px;
-    height: 100px;
+    right: 2%; /* Adjust as needed */
+    width: 140px;
+    height: 99px;
     z-index: 2; /* Ensure it is above the background */
-    background-size: cover;
   }

@@ -31,17 +31,7 @@ import RichardHelp19 from './richard_help_19.png';
 import RichardHelp20 from './richard_help_20.png';
 import RichardHelp21 from './richard_help_21.png';
 
-export const images = {
-    camera: [Camera2, Camera5],
-    climate: [Climate2, Climate5],
-    hammer: [Hammer2, Hammer5],
-    music: [Music2, Music5],
-    mute: Mute,
-    unmute: Unmute,
-    RichardHelp1,
-};
-
-export const frames = [
+const frames = [
         RichardHelp2,
         RichardHelp3,
         RichardHelp4,
@@ -63,3 +53,14 @@ export const frames = [
         RichardHelp20,
         RichardHelp21
 ];
+
+export const images = {
+    camera: [Camera2, Camera5],
+    climate: [Climate2, Climate5],
+    hammer: [Hammer2, Hammer5],
+    music: [Music2, Music5],
+    mute: Mute,
+    unmute: Unmute,
+    frames: frames,
+    placeholderImage: RichardHelp2,
+};

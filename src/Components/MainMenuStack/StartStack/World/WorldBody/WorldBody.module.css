@@ -48,7 +48,6 @@
     align-items: center;
     justify-content: center;
     border: 1px solid #ccc; /* Example border */
-    background-color: aqua;
 }
 
 .highlightedImage {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ComponentBottom.module.css';
 import { BottomIconComponent, Ball } from './index';
-import { images, frames } from './ComponentBottomResourceStack/index';
+import { images } from './ComponentBottomResourceStack/index';
 import { HelpComponent } from "../../../../../Common/index";
 
 const ComponentBottom = ({ handleClimate, handleMusic, activeIcon, setActiveIcon, navigateToWorkshop, navigateToSnapshot }) => {
@@ -62,7 +62,7 @@ const ComponentBottom = ({ handleClimate, handleMusic, activeIcon, setActiveIcon
                     onClick={() => handleIconClick('music')}/>
             </div>
             <div className={styles.bottomRightCorner}>
-                <HelpComponent placeholderImage={frames[0]} frames={frames} />
+                <HelpComponent placeholderImage={images.placeholderImage} frames={images.frames} />
             </div>
         </div>
     );

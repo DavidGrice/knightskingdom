@@ -27,6 +27,12 @@ const IconComponent = ({ type, backgroundImage, placeholderImage, frames }) => {
             setTypeId("#trash-component");
         } else if (type === "leave") {
             setTypeId("#leave-component");
+        } else if (type === "destroy") {
+            setTypeId("#destroy-component");
+        } else if (type === "delete") {
+            setTypeId("#delete-component");
+        } else if (type === "print") {
+            setTypeId("#print-component");
         }
 
         const element = document.getElementById(typeImage);
