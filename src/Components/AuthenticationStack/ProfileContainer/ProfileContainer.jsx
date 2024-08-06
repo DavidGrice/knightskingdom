@@ -10,8 +10,8 @@ import Knight4 from '../AuthStackResources/knight_4.png';
 import Baronet2 from '../AuthStackResources/baronet_2.png';
 import Baronet4 from '../AuthStackResources/baronet_4.png';
 
-const ProfileContainer = ({ name, level, isSelected, onClick, isNewProfile, setSelectedProfile, handleProfileSelect, newData, setNewData }) => {
-    const [showEnterNameImage, setShowEnterNameImage] = useState(false);
+const ProfileContainer = ({ name, level, isSelected, onClick, isNewProfile, setSelectedProfile, handleProfileSelect, newData, setNewData, setShowEnterNameImage, showEnterNameImage }) => {
+    
     const [text, setText] = useState(name);
 
     const handleAddProfile = (name) => {

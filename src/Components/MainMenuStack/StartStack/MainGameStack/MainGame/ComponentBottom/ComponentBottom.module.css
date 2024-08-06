@@ -65,9 +65,9 @@
     align-items: center;
     display: flex;
     flex-direction: row;
-    bottom: 0px; /* Adjust as needed */
-    right: 2%; /* Adjust as needed */
+    bottom: 0px; 
+    right: 2%; 
     width: 140px;
     height: 99px;
-    z-index: 2; /* Ensure it is above the background */
+    z-index: 2; 
   }

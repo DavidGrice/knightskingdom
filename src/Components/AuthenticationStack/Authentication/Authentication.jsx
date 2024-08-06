@@ -11,6 +11,7 @@ const Authentication = ({ userData, navigateToMainMenu }) => {
     const [selectedProfile, setSelectedProfile] = useState(null);
     const [newData, setNewData] = useState(userData);
     const [isNewProfile, setIsNewProfile] = useState(false);
+    const [showEnterNameImage, setShowEnterNameImage] = useState(false);
 
     useEffect(() => {
         if (userData) {
@@ -23,6 +24,7 @@ const Authentication = ({ userData, navigateToMainMenu }) => {
     const handleProfileSelect = (profile) => {
         console.log('Selected profile:', profile);
         setSelectedProfile(profile);
+        setShowEnterNameImage(false);
     };
 
     const handleCheckmarkClick = () => {
@@ -53,7 +55,7 @@ const Authentication = ({ userData, navigateToMainMenu }) => {
                         key="empty-input" 
                         name=""
                         level="page" // Set the default level 
-                        onClick={() => {}}
+                        onClick={() => {setSelectedProfile(null)}}
                         isNewProfile={true} // Set isNewProfile to true
                         setIsNewProfile={setIsNewProfile} // Pass setIsNewProfile
                         isSelected={false}
@@ -61,6 +63,8 @@ const Authentication = ({ userData, navigateToMainMenu }) => {
                         handleProfileSelect={handleProfileSelect} // Pass handleProfileSelect
                         newData={newData} // Pass newData
                         setNewData={setNewData} // Pass setNewData
+                        setShowEnterNameImage={setShowEnterNameImage}
+                        showEnterNameImage={showEnterNameImage}
                     />
                 )}
                 {newData.map((profile, index) => (
