@@ -37,7 +37,6 @@ import Save2 from './save_2.png';
 import Save5 from './save_5.png';
 import Bucket2 from './bucket_2.png';
 import Bucket5 from './bucket_5.png';
-import { exp } from 'three/webgpu';
 //endregion
 
 const icons = {
@@ -53,8 +52,8 @@ const icons = {
     brickRepaintActive: BrickRepaint5,
     savePassive: Save2,
     saveActive: Save5,
-    bucketPassive: Bucket2,
-    bucketActive: Bucket5,
+    bucketPassive: Bucket5,
+    bucketActive: Bucket2,
 };
 
 const leaveFrames = [

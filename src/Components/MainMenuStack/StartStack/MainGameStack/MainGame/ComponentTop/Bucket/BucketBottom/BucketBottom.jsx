@@ -52,6 +52,11 @@ const BucketBottom = ({ activeBucket, didUpdate, setDidUpdate }) => {
         } else {
             setDownArrowImage(images.downArrowSolid);
         }
+        if (currentPage === 1) {
+            setUpArrowImage(images.upArrowSolid);
+        } else {
+            setUpArrowImage(images.upArrowGreen);
+        }
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         setDisplayedItems(items.slice(startIndex, endIndex));

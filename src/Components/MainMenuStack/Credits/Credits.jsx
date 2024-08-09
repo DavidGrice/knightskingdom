@@ -42,7 +42,7 @@ const Credits = ( { navigateToMenu }) => {
                     <p>Rich Hill</p>
                     <p>Paul Grimster</p>
                     <br></br>
-                    <h3>Original Credits</h3>
+                    {/* <h3>Original Credits</h3>
                     <p>LEGO Creator Knights' Kingdom</p>
                     <h2>Contributors</h2>
                     <p>Original Concept and Game Design</p>
@@ -113,7 +113,7 @@ const Credits = ( { navigateToMenu }) => {
                     <p>Stephen Manners</p>
                     <p>Matthew Marriner</p>
                     <p>Powered by</p>
-                    <p>Superscape Technology</p>
+                    <p>Superscape Technology</p> */}
                 </div>
             </div>
             <div className={styles.bottomLeftCorner}>

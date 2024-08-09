@@ -16,7 +16,7 @@ const MainGameStack = ({ navigateToStartMenu, navigateToMainGame, map }) => {
     return (
         <Routes>
             <Route path="/snapshot" element={<SnapShot navigateToMainGame={navigateToMainGame} />} />
-            <Route path="/workshop" element={<WorkShop navigateToStartMenu={navigateToStartMenu} />} />
+            <Route path="/workshop" element={<WorkShop navigateToMainGame={navigateToMainGame} />} />
             <Route path="/game" element={
                 <MainGame 
                     navigateToStartMenu={navigateToStartMenu} 

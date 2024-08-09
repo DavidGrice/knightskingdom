@@ -1,0 +1,13 @@
+.bucketDiv {
+    position: absolute;
+    z-index: 2;
+    width: 238px;
+    height: 556px;
+    background-image: url('./BucketResourceStack/drop_down.png');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    left: 29.15%;
+    top: 6%;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ComponentTopIcon.module.css';
 
-const ComponentTopIcon = ({ passiveIcon, activeIcon, isActive, type, onClick, handlePaintAndDrive }) => {
+const ComponentTopIcon = ({ passiveIcon, activeIcon, isActive, type, onClick, handlePaint }) => {
     const [icon, setIcon] = useState(passiveIcon);
     const [active, setActive] = useState(false);
 
@@ -26,8 +26,8 @@ const ComponentTopIcon = ({ passiveIcon, activeIcon, isActive, type, onClick, ha
         }
     }
 
-    const handlePaintDrive = () => {
-        handlePaintAndDrive && handlePaintAndDrive();
+    const handlePaintCase = () => {
+        handlePaint && handlePaint();
         onClick && onClick();
     }
 
@@ -46,7 +46,7 @@ const ComponentTopIcon = ({ passiveIcon, activeIcon, isActive, type, onClick, ha
             ) : (
                 <div
                     className={styles.mainDiv}
-                    onClick={handlePaintDrive}
+                    onClick={handlePaintCase}
                     // onMouseEnter={handleMouseEnter}
                     // onMouseLeave={handleMouseLeave}
                     style={defaultStyle}
