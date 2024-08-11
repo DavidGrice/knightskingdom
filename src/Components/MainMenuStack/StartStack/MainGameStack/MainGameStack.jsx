@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { MainGame, WorkShop, SnapShot } from './index';
 
-const MainGameStack = ({ navigateToStartMenu, navigateToMainGame, map }) => {
+const MainGameStack = ({ navigateToStartMenu, navigateToMainGame, mapData }) => {
     const navigate = useNavigate();
 
     const navigateToWorkshop = () => {
@@ -22,7 +22,7 @@ const MainGameStack = ({ navigateToStartMenu, navigateToMainGame, map }) => {
                     navigateToStartMenu={navigateToStartMenu} 
                     navigateToWorkshop={navigateToWorkshop} 
                     navigateToSnapshot={navigateToSnapshot} 
-                    map={map} />}
+                    mapData={mapData} />}
                 />
             <Route path="*" element={<Navigate to="/game" />} />
         </Routes>

@@ -20,7 +20,6 @@ import LightHelp19 from './LocalWorldsFrames/light_help_19.png';
 import LightHelp20 from './LocalWorldsFrames/light_help_20.png';
 import LightHelp21 from './LocalWorldsFrames/light_help_21.png';
 
-
 import Template1 from './LocalWorldsFrames/template_01.png';
 import Template2 from './LocalWorldsFrames/template_02.png';
 import Template3 from './LocalWorldsFrames/template_03.png';
@@ -37,7 +36,6 @@ import Copy2 from './SharedWorldsFrames/copy_2.png';
 import Copy3 from './SharedWorldsFrames/copy_3.png';
 import Copy4 from './SharedWorldsFrames/copy_4.png';
 import Copy5 from './SharedWorldsFrames/copy_5.png';
-import Copy6 from './SharedWorldsFrames/copy_6.png';
 import Copy7 from './SharedWorldsFrames/copy_7.png';
 import Copy8 from './SharedWorldsFrames/copy_8.png';
 import Copy9 from './SharedWorldsFrames/copy_9.png';
@@ -58,7 +56,6 @@ import Load2 from './SharedWorldsFrames/load_2.png';
 import Load3 from './SharedWorldsFrames/load_3.png';
 import Load4 from './SharedWorldsFrames/load_4.png';
 import Load5 from './SharedWorldsFrames/load_5.png';
-import Load6 from './SharedWorldsFrames/load_6.png';
 import Load7 from './SharedWorldsFrames/load_7.png';
 import Load8 from './SharedWorldsFrames/load_8.png';
 
@@ -66,7 +63,6 @@ import Save2 from './SharedWorldsFrames/save_2.png';
 import Save3 from './SharedWorldsFrames/save_3.png';
 import Save4 from './SharedWorldsFrames/save_4.png';
 import Save5 from './SharedWorldsFrames/save_5.png';
-import Save6 from './SharedWorldsFrames/save_6.png';
 import Save7 from './SharedWorldsFrames/save_7.png';
 import Save8 from './SharedWorldsFrames/save_8.png';
 
@@ -74,7 +70,6 @@ import Trash2 from './SharedWorldsFrames/trash_2.png';
 import Trash3 from './SharedWorldsFrames/trash_3.png';
 import Trash4 from './SharedWorldsFrames/trash_4.png';
 import Trash5 from './SharedWorldsFrames/trash_5.png';
-import Trash6 from './SharedWorldsFrames/trash_6.png';
 import Trash7 from './SharedWorldsFrames/trash_7.png';
 import Trash8 from './SharedWorldsFrames/trash_8.png';
 import Trash9 from './SharedWorldsFrames/trash_9.png';
@@ -86,7 +81,6 @@ import Trash14 from './SharedWorldsFrames/trash_14.png';
 import Trash15 from './SharedWorldsFrames/trash_15.png';
 import Trash16 from './SharedWorldsFrames/trash_16.png';
 import Trash17 from './SharedWorldsFrames/trash_17.png';
-
 
 import DarkHelp2 from './SharedWorldsFrames/dark_help_2.png';
 import DarkHelp3 from './SharedWorldsFrames/dark_help_3.png';
@@ -140,6 +134,40 @@ import SharedWorldDownArrowGreen from './dark_theme_scroll_down_2.png';
 import SharedWorldDownArrowSolid from './dark_theme_scroll_down_5.png';
 //endregion
 
+//region Skyboxes
+import GrassRight from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/right.png';
+import GrassLeft from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/left.png';
+import GrassTop from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/top.png';
+import GrassBot from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/bot.png';
+import GrassFront from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/front.png';
+import GrassBack from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/back.png';
+
+import MountainsRight from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/mountains/right.png';
+import MountainsLeft from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/mountains/left.png';
+import MountainsTop from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/mountains/top.png';
+import MountainsBot from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/mountains/bot.png';
+import MountainsFront from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/mountains/front.png';
+import MountainsBack from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/mountains/back.png';
+//endregion
+
+//region Maps
+import Map1 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map1/map1.glb';
+// import Map2 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map2/map2.glb';
+// import Map3 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map3/map3.glb';
+// import Map4 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map4/map4.glb';
+// import Map5 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map5/map5.glb';
+// import Map6 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map6/map6.glb';
+// import Map7 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map7/map7.glb';
+// import Map8 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map8/map8.glb';
+// import Map9 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map9/map9.glb';
+//endregion
+
+//region Models
+import Archer from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/models/archer2.gltf';
+//endregion
+
+
+
 export const lightFrames = [
     LightHelp2,
     LightHelp3,
@@ -170,7 +198,62 @@ export const localWorldsData = [
         "description": "This is the first world",
         "image": Template1,
         "isLocked": false,
-        "isCompleted": false
+        "isCompleted": false,
+        filePath: Map1,
+        skyBoxes: [
+            {
+                "id": 1,
+                "name": "right",
+                "description": "This is the right side of skybox",
+                filePath: GrassRight,
+            },
+            {
+                "id": 2,
+                "name": "left",
+                "description": "This is the left side of skybox",
+                filePath: GrassLeft,
+            },
+            {
+                "id": 3,
+                "name": "top",
+                "description": "This is the top side of skybox",
+                filePath: GrassTop,
+            },
+            {
+                "id": 4,
+                "name": "bot",
+                "description": "This is the bot side of skybox",
+                filePath: GrassBot,
+            },
+            {
+                "id": 5,
+                "name": "front",
+                "description": "This is the front side of skybox",
+                filePath: GrassFront,
+            },
+            {
+                "id": 6,
+                "name": "back",
+                "description": "This is the back side of skybox",
+                filePath: GrassBack,
+            },
+        ],
+        models: [
+            {
+                "id": 1,
+                "name": "Archer",
+                "description": "This is the first model",
+                // "image": Archer,
+                "isLocked": false,
+                "isCompleted": false,
+                filePath: Archer,
+                position: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                }
+            }
+        ],
     },
     {
         "id": 2,
@@ -178,7 +261,8 @@ export const localWorldsData = [
         "description": "This is the second world",
         "image": Template2,
         "isLocked": true,
-        "isCompleted": false
+        "isCompleted": false,
+        "filePath": './GameEngineResourceStack/maps/map2.glb'
     },
     {
         "id": 3,

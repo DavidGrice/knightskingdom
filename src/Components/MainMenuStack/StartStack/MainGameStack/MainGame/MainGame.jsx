@@ -8,7 +8,7 @@ import { Climate } from './ComponentBottom/Climate/index';
 import { Music } from './ComponentBottom/Music/index';
 
 
-const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, map }) => {
+const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData }) => {
 
   const [showBucket, setShowBucket] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -137,7 +137,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
         </div>)
       }
       
-      {/* <GameEngine map={map} /> */}
+      <GameEngine mapData={mapData} />
 
       <div className={styles.bottomComponent}>
         <ComponentBottom

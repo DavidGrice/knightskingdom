@@ -1,83 +1,224 @@
-import React, { useEffect, useRef, useState } from 'react';
+// import React, { useEffect, useRef, useState } from 'react';
+// import * as THREE from 'three';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import Archer from './GameEngineResourceStack/models/archer.gltf';
+// import Right from './GameEngineResourceStack/skyboxes/mountains/right.bmp';
+// import Left from './GameEngineResourceStack/skyboxes/mountains/left.bmp';
+// import Top from './GameEngineResourceStack/skyboxes/mountains/top.bmp';
+// import Bot from './GameEngineResourceStack/skyboxes/mountains/bot.bmp';
+// import Front from './GameEngineResourceStack/skyboxes/mountains/front.bmp';
+// import Back from './GameEngineResourceStack/skyboxes/mountains/back.bmp';
+
+// const GameEngine = ({ mapData }) => {
+//   const mountRef = useRef(null);
+//   const [modelLoaded, setModelLoaded] = useState(false);
+
+//   useEffect(() => {
+//     const createSkyBoxCube = () => {
+//       const skyboxGeometry = new THREE.BoxGeometry(50, 50, 50);
+//       const l = new THREE.CubeTextureLoader();
+//       const texture = l.load([
+//         Right, // positive x
+//         Left, // negative x
+//         Top, // positive y
+//         Bot, // negative y
+//         Front, // positive z
+//         Back  // negative z
+//       ]);
+//       const skyboxMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
+//       const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+//       scene.add(skybox);
+//     };
+
+//     const scene = new THREE.Scene();
+//     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+//     const renderer = new THREE.WebGLRenderer();
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+//     mountRef.current.appendChild(renderer.domElement);
+    
+//     const ambientLight = new THREE.AmbientLight(0x404040);
+//     scene.add(ambientLight);
+
+//     const planeGeometry = new THREE.PlaneGeometry(100, 100);
+//     const planeMaterial = new THREE.MeshBasicMaterial({ color: 'lightblue', side: THREE.DoubleSide });
+//     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+//     plane.rotation.x = Math.PI / 2;
+//     scene.add(plane);
+
+//     // Add an emissive sphere
+//     const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+//     const sphereMaterial = new THREE.MeshPhongMaterial({ color: 'white', emissive: 'red' });
+//     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+//     sphere.position.y = 0.5; // position the sphere above the plane
+//     scene.add(sphere);
+
+//     createSkyBoxCube();
+
+//     const loader = new GLTFLoader();
+//     loader.load(
+//       Archer,
+//       (gltf) => {
+//         scene.add(gltf.scene);
+//         setModelLoaded(true);
+//       },
+//       (error) => {
+//         console.log(error);
+//       }
+//     );
+
+//     const controls = new OrbitControls(camera, renderer.domElement);
+//     camera.position.z = 10;
+
+//     const animate = () => {
+//       if (!modelLoaded) {
+//         // If the model isn't loaded yet, schedule the next frame.
+//         requestAnimationFrame(animate);
+//         return;
+//       }
+
+//       // Update the scene and schedule the next frame.
+//       controls.update();
+//       renderer.render(scene, camera);
+//       requestAnimationFrame(animate);
+//     };
+
+//     animate();
+
+//     // Cleanup function
+//     return () => {
+//       mountRef.current.removeChild(renderer.domElement);
+//     };
+//   }, [modelLoaded]);
+
+//   return (
+//     <div ref={mountRef} />
+//   );
+// }
+
+// export default GameEngine;
+
+// src/components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngine.jsx
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import Archer from './GameEngineResourceStack/models/archer.gltf';
-import Right from './GameEngineResourceStack/skyboxes/mountains/right.bmp';
-import Left from './GameEngineResourceStack/skyboxes/mountains/left.bmp';
-import Top from './GameEngineResourceStack/skyboxes/mountains/top.bmp';
-import Bot from './GameEngineResourceStack/skyboxes/mountains/bot.bmp';
-import Front from './GameEngineResourceStack/skyboxes/mountains/front.bmp';
-import Back from './GameEngineResourceStack/skyboxes/mountains/back.bmp';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComponent';
 
-const GameEngine = ({ navigateToStartMenu, map }) => {
+const GameEngine = ({ mapData }) => {
   const mountRef = useRef(null);
   const [modelLoaded, setModelLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const selectedObject = useRef(null);
+  const isDragging = useRef(false);
+  const mouse = new THREE.Vector2();
+  const raycaster = new THREE.Raycaster();
+
+  const createSkyBoxCube = (scene) => {
+    const skyboxGeometry = new THREE.BoxGeometry(600, 600, 600);
+    const texLoader = new THREE.CubeTextureLoader();
+    const texturePaths = mapData.skyBoxes.map((skyBox) => [skyBox.filePath]);
+    const texture = texLoader.load(
+      texturePaths,
+      () => console.log('Skybox textures loaded successfully'),
+      undefined,
+      (error) => console.error('Error loading skybox textures:', error)
+    );
+    const skyboxMaterial = new THREE.MeshBasicMaterial({
+      envMap: texture,
+      side: THREE.BackSide
+    });
+    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+    skybox.position.set(0, 0, 0);
+    scene.add(skybox);
+  };
 
   useEffect(() => {
-    const createSkyBoxCube = () => {
-      const skyboxGeometry = new THREE.BoxGeometry(50, 50, 50);
-      const l = new THREE.CubeTextureLoader();
-      const texture = l.load([
-        Right, // positive x
-        Left, // negative x
-        Top, // positive y
-        Bot, // negative y
-        Front, // positive z
-        Back  // negative z
-      ]);
-      const skyboxMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
-      const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-      scene.add(skybox);
-    };
-
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
-    
+
     const ambientLight = new THREE.AmbientLight(0x404040);
+    ambientLight.intensity = 50;
     scene.add(ambientLight);
-
-    const planeGeometry = new THREE.PlaneGeometry(100, 100);
-    const planeMaterial = new THREE.MeshBasicMaterial({ color: 'lightblue', side: THREE.DoubleSide });
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = Math.PI / 2;
-    scene.add(plane);
-
-    // Add an emissive sphere
-    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-    const sphereMaterial = new THREE.MeshPhongMaterial({ color: 'white', emissive: 'red' });
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    sphere.position.y = 0.5; // position the sphere above the plane
-    scene.add(sphere);
-
-    createSkyBoxCube();
+    createSkyBoxCube(scene);
 
     const loader = new GLTFLoader();
     loader.load(
-      Archer,
+      mapData.filePath,
       (gltf) => {
         scene.add(gltf.scene);
         setModelLoaded(true);
       },
+      undefined,
       (error) => {
-        console.log(error);
+        console.error('An error occurred while loading the map:', error);
+        fetch(mapData.filePath)
+          .then(response => response.text())
+          .then(text => console.log('Map file content:', text))
+          .catch(fetchError => console.error('Error fetching map file:', fetchError));
       }
     );
 
+    mapData.models.forEach((model) => {
+      loader.load(
+        model.filePath,
+        (gltf) => {
+          const modelMesh = gltf.scene;
+          modelMesh.position.set(model.position.x, model.position.y, model.position.z);
+          scene.add(modelMesh);
+        },
+        undefined,
+        (error) => {
+          console.error(`An error occurred while loading the model at ${model.filePath}:`, error);
+        }
+      );
+    });
+
     const controls = new OrbitControls(camera, renderer.domElement);
+    controls.dispose();
     camera.position.z = 10;
+    camera.position.y = 5;
+
+    const onMouseDown = (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(scene.children, true);
+      if (intersects.length > 0) {
+        selectedObject.current = intersects[0].object;
+        isDragging.current = true;
+      }
+    };
+
+    const onMouseMove = (event) => {
+      if (!isDragging.current) return;
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(scene, true);
+      if (intersects.length > 0) {
+        const intersect = intersects[0];
+        selectedObject.current.position.copy(intersect.point);
+      }
+    };
+
+    const onMouseUp = () => {
+      isDragging.current = false;
+      selectedObject.current = null;
+    };
+
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
 
     const animate = () => {
       if (!modelLoaded) {
-        // If the model isn't loaded yet, schedule the next frame.
         requestAnimationFrame(animate);
         return;
       }
-
-      // Update the scene and schedule the next frame.
       controls.update();
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
@@ -85,15 +226,23 @@ const GameEngine = ({ navigateToStartMenu, map }) => {
 
     animate();
 
-    // Cleanup function
     return () => {
-      mountRef.current.removeChild(renderer.domElement);
+      if (mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+      controls.dispose();
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
     };
-  }, [modelLoaded]);
+  }, [mapData, modelLoaded]);
 
   return (
-    <div ref={mountRef} />
+    <>
+      <div ref={mountRef} style={{ display: loading ? 'none' : 'block' }} />
+    </>
   );
-}
+};
 
 export default GameEngine;
