@@ -1,104 +1,3 @@
-// import React, { useEffect, useRef, useState } from 'react';
-// import * as THREE from 'three';
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import Archer from './GameEngineResourceStack/models/archer.gltf';
-// import Right from './GameEngineResourceStack/skyboxes/mountains/right.bmp';
-// import Left from './GameEngineResourceStack/skyboxes/mountains/left.bmp';
-// import Top from './GameEngineResourceStack/skyboxes/mountains/top.bmp';
-// import Bot from './GameEngineResourceStack/skyboxes/mountains/bot.bmp';
-// import Front from './GameEngineResourceStack/skyboxes/mountains/front.bmp';
-// import Back from './GameEngineResourceStack/skyboxes/mountains/back.bmp';
-
-// const GameEngine = ({ mapData }) => {
-//   const mountRef = useRef(null);
-//   const [modelLoaded, setModelLoaded] = useState(false);
-
-//   useEffect(() => {
-//     const createSkyBoxCube = () => {
-//       const skyboxGeometry = new THREE.BoxGeometry(50, 50, 50);
-//       const l = new THREE.CubeTextureLoader();
-//       const texture = l.load([
-//         Right, // positive x
-//         Left, // negative x
-//         Top, // positive y
-//         Bot, // negative y
-//         Front, // positive z
-//         Back  // negative z
-//       ]);
-//       const skyboxMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
-//       const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-//       scene.add(skybox);
-//     };
-
-//     const scene = new THREE.Scene();
-//     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-//     const renderer = new THREE.WebGLRenderer();
-//     renderer.setSize(window.innerWidth, window.innerHeight);
-//     mountRef.current.appendChild(renderer.domElement);
-    
-//     const ambientLight = new THREE.AmbientLight(0x404040);
-//     scene.add(ambientLight);
-
-//     const planeGeometry = new THREE.PlaneGeometry(100, 100);
-//     const planeMaterial = new THREE.MeshBasicMaterial({ color: 'lightblue', side: THREE.DoubleSide });
-//     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-//     plane.rotation.x = Math.PI / 2;
-//     scene.add(plane);
-
-//     // Add an emissive sphere
-//     const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-//     const sphereMaterial = new THREE.MeshPhongMaterial({ color: 'white', emissive: 'red' });
-//     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-//     sphere.position.y = 0.5; // position the sphere above the plane
-//     scene.add(sphere);
-
-//     createSkyBoxCube();
-
-//     const loader = new GLTFLoader();
-//     loader.load(
-//       Archer,
-//       (gltf) => {
-//         scene.add(gltf.scene);
-//         setModelLoaded(true);
-//       },
-//       (error) => {
-//         console.log(error);
-//       }
-//     );
-
-//     const controls = new OrbitControls(camera, renderer.domElement);
-//     camera.position.z = 10;
-
-//     const animate = () => {
-//       if (!modelLoaded) {
-//         // If the model isn't loaded yet, schedule the next frame.
-//         requestAnimationFrame(animate);
-//         return;
-//       }
-
-//       // Update the scene and schedule the next frame.
-//       controls.update();
-//       renderer.render(scene, camera);
-//       requestAnimationFrame(animate);
-//     };
-
-//     animate();
-
-//     // Cleanup function
-//     return () => {
-//       mountRef.current.removeChild(renderer.domElement);
-//     };
-//   }, [modelLoaded]);
-
-//   return (
-//     <div ref={mountRef} />
-//   );
-// }
-
-// export default GameEngine;
-
-// src/components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngine.jsx
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -130,6 +29,7 @@ const GameEngine = ({ mapData }) => {
     });
     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     skybox.position.set(0, 0, 0);
+    skybox.isMovable = false;
     scene.add(skybox);
   };
 
@@ -146,73 +46,133 @@ const GameEngine = ({ mapData }) => {
     createSkyBoxCube(scene);
 
     const loader = new GLTFLoader();
-    loader.load(
-      mapData.filePath,
-      (gltf) => {
-        scene.add(gltf.scene);
-        setModelLoaded(true);
-      },
-      undefined,
-      (error) => {
-        console.error('An error occurred while loading the map:', error);
-        fetch(mapData.filePath)
-          .then(response => response.text())
-          .then(text => console.log('Map file content:', text))
-          .catch(fetchError => console.error('Error fetching map file:', fetchError));
-      }
-    );
+loader.load(
+  mapData.filePath,
+  (gltf) => {
+    const map = gltf.scene;
+    map.isMovable = false;
+    scene.add(map);
+    setModelLoaded(true);
+  },
+  undefined,
+  (error) => {
+    console.error('An error occurred while loading the map:', error);
+    fetch(mapData.filePath)
+      .then(response => response.text())
+      .then(text => console.log('Map file content:', text))
+      .catch(fetchError => console.error('Error fetching map file:', fetchError));
+  }
+);
 
-    mapData.models.forEach((model) => {
-      loader.load(
-        model.filePath,
-        (gltf) => {
-          const modelMesh = gltf.scene;
-          modelMesh.position.set(model.position.x, model.position.y, model.position.z);
-          scene.add(modelMesh);
-        },
-        undefined,
-        (error) => {
-          console.error(`An error occurred while loading the model at ${model.filePath}:`, error);
-        }
+mapData.models.forEach((model) => {
+  
+  loader.load(
+    model.filePath,
+    (gltf) => {
+      const modelGroup = new THREE.Group();
+      modelGroup.add(gltf.scene);
+      modelGroup.name = model.name; // Set the name based on model data
+      modelGroup.isMovable = false; // Set isMovable based on model data
+      // modelGroup.position.set(model.position.x, model.position.y, model.position.z);
+      // const box = new THREE.Box3().setFromObject(modelGroup);
+      // const boxHelper = new THREE.Box3Helper(box, 0xffff00);
+      // boxHelper.isMovable = true;
+      // boxHelper.children.push(modelGroup);
+      // boxHelper.children.isMovable = false;
+      // boxHelper.visible = true;
+      // Create a bounding box for the model
+      const box = new THREE.Box3().setFromObject(modelGroup);
+      const boxSize = new THREE.Vector3();
+      box.getSize(boxSize);
+      // Create a transparent box
+      const boxGeometry = new THREE.BoxGeometry(boxSize.x*2, boxSize.y*2, boxSize.z*2);
+      const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.5, wireframe: true });
+      const transparentBox = new THREE.Mesh(boxGeometry, boxMaterial);
+      transparentBox.children.push(modelGroup);
+      transparentBox.isMovable = true;
+      transparentBox.children.isMovable = false;
+      transparentBox.transparentBox = transparentBox;
+      
+      // Position the transparent box
+      transparentBox.position.set(model.position.x, model.position.y, model.position.z);
+
+      // Add the group to the scene
+      scene.add(transparentBox);
+    },
+    undefined,
+    (error) => {
+      console.error(`An error occurred while loading the model at ${model.filePath}:`, error);
+    }
+  );
+
+});
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableZoom = true;
+controls.enablePan = false;
+controls.enableDamping = false;
+controls.enableRotate = false;
+camera.position.z = 10;
+camera.position.y = 5;
+
+const onMouseDown = (event) => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true);
+  if (intersects.length > 0) {
+    const intersectedObject = intersects[0].object;
+    if (intersectedObject.isMovable) {
+      selectedObject.current = intersectedObject;
+      isDragging.current = true;
+    }
+  }
+};
+
+const onMouseMove = (event) => {
+  if (!isDragging.current) return;
+
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+
+  const intersects = raycaster.intersectObject(scene, true);
+  if (intersects.length > 0) {
+    const intersectedObject = intersects[0].object;
+    if (intersectedObject.isMovable) {
+      const intersectionPoint = intersects[0].point;
+
+      // Update the x and z coordinates, keep the y coordinate unchanged
+      selectedObject.current.position.set(
+        intersectionPoint.x,
+        selectedObject.current.position.y,
+        intersectionPoint.z
       );
-    });
+      selectedObject.current.children[0].position.set(
+        intersectionPoint.x,
+        selectedObject.current.position.y,
+        intersectionPoint.z
+      );
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.dispose();
-    camera.position.z = 10;
-    camera.position.y = 5;
+      // // Update the position of the model relative to the transparent box
+      // selectedObject.current.children[0].position.set(0, 0, 0);
+    }
+  }
+};
 
-    const onMouseDown = (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      if (intersects.length > 0) {
-        selectedObject.current = intersects[0].object;
-        isDragging.current = true;
-      }
-    };
-
-    const onMouseMove = (event) => {
-      if (!isDragging.current) return;
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObject(scene, true);
-      if (intersects.length > 0) {
-        const intersect = intersects[0];
-        selectedObject.current.position.copy(intersect.point);
-      }
-    };
-
-    const onMouseUp = () => {
-      isDragging.current = false;
-      selectedObject.current = null;
-    };
+const onMouseUp = () => {
+  isDragging.current = false;
+  selectedObject.current = null;
+};
 
     window.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
 
     const animate = () => {
       if (!modelLoaded) {
