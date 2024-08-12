@@ -6,11 +6,16 @@ import { leaveIcon } from './ComponentTopResourceStack/index';
 
 const ComponentTop = ({ navigateToStartMenu,
                         handleBucket,
+                        handleMove,
+                        handleRotate,
                         handlePalette,
+                        handleDelete,
                         handleDrive,
                         handleAction,
                         handleSave,
-                        handlePaintAndDrive}) => {
+                        handlePaintAndDrive,
+                        handlePlay
+                        }) => {
     const [activeIcon, setActiveIcon] = useState(null);
 
     const topIconComponents = [
@@ -23,10 +28,28 @@ const ComponentTop = ({ navigateToStartMenu,
     ];
 
     const handleIconClick = (type) => {
-        if (type === 'drive') {
-            handleDrive();
-        } else if (type === 'repaint') {
-            handlePalette();
+        switch (type) {
+            case 'move':
+                handleMove();
+                break;
+            case 'reverse':
+                handleRotate();
+                break;
+            case 'repaint':
+                handlePalette();
+                break;
+            case 'delete':
+                handleDelete();
+                break;
+            case 'action':
+                handleAction();
+                break;
+            case 'drive':
+                handleDrive();
+                break;
+            case 'play':
+                handlePlay();
+                break;
         }
         setActiveIcon(prevActiveIcon => prevActiveIcon === type ? null : type);
     };
@@ -60,7 +83,7 @@ const ComponentTop = ({ navigateToStartMenu,
                 ))}
             </div>
             <div className={styles.driveAction}
-                 onClick={handleAction}>
+                 onClick={handlePlay}>
                 <TopIconComponent passiveIcon={leaveIcon.iconData.playPassive} activeIcon={leaveIcon.iconData.playActive} type='play' />
             </div>
             <div className={styles.goodBye} onClick={navigateToStartMenu}>
