@@ -1,10 +1,17 @@
 // src/components/MainMenuStack/StartStack/MainGameStack/MainGame/ComponentTop/Drive/Drive.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Drive.module.css';
-import { actionCameraImages } from './DriveResourceStack/index'; 
+import { actionCameraImages } from './DriveResourceStack/index';
 
-const Drive = ({ handleCameraSwitch }) => {
+const Drive = ({ handleCameraSwitch, cameraNeedsReset, setCameraNeedsReset }) => {
     const [activeImage, setActiveImage] = useState({ back: 1, front: 0 });
+
+    useEffect(() => {
+        if (cameraNeedsReset) {
+            // Perform any reset logic if needed
+            setCameraNeedsReset(false);
+        }
+    }, [cameraNeedsReset, setCameraNeedsReset]);
 
     const handleImageChange = (type) => {
         if (type === 'back') {

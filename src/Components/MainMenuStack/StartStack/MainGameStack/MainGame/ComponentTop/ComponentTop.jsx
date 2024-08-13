@@ -16,7 +16,7 @@ const ComponentTop = ({ navigateToStartMenu,
                         handlePaintAndDrive,
                         handlePlay,
                         resetModes,
-                        setMode
+                        setCameraNeedsReset
                         }) => {
     const [activeIcon, setActiveIcon] = useState(null);
 
@@ -51,12 +51,14 @@ const ComponentTop = ({ navigateToStartMenu,
                 break;
             case 'drive':
                 handleDrive();
+                setCameraNeedsReset(true);
                 break;
             case 'play':
                 handlePlay();
                 break;
             default:
                 resetModes();
+                // setCameraNeedsReset(false);
                 break;
         }
         setActiveIcon(prevActiveIcon => {

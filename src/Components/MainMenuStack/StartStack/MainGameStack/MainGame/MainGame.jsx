@@ -25,6 +25,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
   const [climateNeedsUpdating, setClimateNeedsUpdating] = useState(false);
   const [activeMusic, setActiveMusic] = useState(0);
   const [activeCamera, setActiveCamera] = useState(null);
+  const [cameraNeedsReset, setCameraNeedsReset] = useState(false);
 
   const resetModes = () => {
     setMode('NONE');
@@ -109,6 +110,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
       break;
     default:
       resetModes();
+      // setCameraNeedsReset(false);
       break;
     }
   }, [mode]);
@@ -155,6 +157,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     if (showBucket) {
       setShowBucket(false);
     }
+    // setCameraNeedsReset(false)
     setSelectedModelMode('NONE');
   }
 
@@ -259,6 +262,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
           handlePlay={handlePlay}
           resetModes={resetModes}
           setMode={setMode}
+          setCameraNeedsReset={setCameraNeedsReset}
         />
       </div>
       {showBucket && (
@@ -277,6 +281,8 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
         <div>
           <Drive
           handleCameraSwitch={handleCameraSwitch}
+          cameraNeedsReset={cameraNeedsReset}
+          setCameraNeedsReset={setCameraNeedsReset}
           />
         </div>
       )}
@@ -311,6 +317,9 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
         selectedClimateMode={selectedClimateMode}
         climateNeedsUpdating={climateNeedsUpdating}
         setClimateNeedsUpdating={setClimateNeedsUpdating}
+        cameraNeedsReset={cameraNeedsReset}
+        setCameraNeedsReset={setCameraNeedsReset}
+        isClimateOpen={isClimateOpen}
       />
       <div className={styles.bottomComponent}>
         <ComponentBottom

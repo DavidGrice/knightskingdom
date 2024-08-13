@@ -5,7 +5,20 @@ import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComp
 import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
 import { Modes } from './GameEngineResourceStack/index';
 
-const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing, addModel, selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating }) => {
+const GameEngine = ({ 
+                      mapData, 
+                      color, 
+                      mode, 
+                      activeCamera, 
+                      isFollowing, 
+                      addModel, 
+                      selectedClimateMode, 
+                      climateNeedsUpdating, 
+                      setClimateNeedsUpdating, 
+                      cameraNeedsReset, 
+                      setCameraNeedsReset,
+                      isClimateOpen 
+                    }) => {
   const mountRef = useRef(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,13 +52,17 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing, addModel,
   const frontCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
   const backCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
   const renderer = useRef(new THREE.WebGLRenderer()).current;
-  const updateClimate = SkyBoxLoader(mapData, scene, selectedClimateMode);
+  // const updateClimate = SkyBoxLoader(mapData, scene, selectedClimateMode);
 
   useEffect(() => {
     if (mountRef.current) {
       mountRef.current.appendChild(renderer.domElement);
       renderer.setSize(window.innerWidth, window.innerHeight);
-  
+      if (!climateLoaded) {
+        SkyBoxLoader(mapData, scene, selectedClimateMode);
+        ClimateLoader(selectedClimateMode, scene);
+        setClimateLoaded(true);
+      } 
       if (!modelsLoaded.current) {
         MapLoader(mapData, scene, () => setModelLoaded(true));
         ModelLoader('preload', null, null, mapData, scene);
@@ -84,16 +101,14 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing, addModel,
   }, [mapData]);
 
   useEffect(() => {
-    if (!isFollowing) {
+    if (cameraNeedsReset) {
       restoreOriginalCamera();
+      setCameraNeedsReset(false);
     }
-    if (!climateLoaded) {
-      ClimateLoader(selectedClimateMode, scene);
-      setClimateLoaded(true);
-    } else if (climateNeedsUpdating) {
+    if (isClimateOpen && climateNeedsUpdating) {
       ClimateLoader(selectedClimateMode, scene, climateNeedsUpdating, currentSystem, setCurrentSystem);
       setClimateNeedsUpdating(false);
-      updateClimate(null, null, selectedClimateMode);
+      SkyBoxLoader(mapData, scene, selectedClimateMode);
     }
     const onMouseOver = (event) => {
       event.preventDefault();
@@ -254,7 +269,7 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing, addModel,
       window.removeEventListener('mouseup', onMouseUp);
       window.removeEventListener('click', onMouseClick);
     };
-  }, [mode, color, mapData, scene, camera, renderer, raycaster, mouse, activeCamera, selectedClimateMode, climateNeedsUpdating, currentSystem]);
+  }, [mode, color, mapData, scene, camera, renderer, raycaster, mouse, activeCamera, selectedClimateMode, climateNeedsUpdating, currentSystem, cameraNeedsReset, isClimateOpen]);
 
   return (
     <div ref={mountRef}>{loading && <LoadingComponent />}</div>
