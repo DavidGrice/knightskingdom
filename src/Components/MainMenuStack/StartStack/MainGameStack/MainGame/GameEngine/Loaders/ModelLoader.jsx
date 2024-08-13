@@ -1,12 +1,29 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import Archer from '../GameEngineResourceStack/models/archer2.gltf';
+import Archer from '../GameEngineResourceStack/models/archer_with_box2.glb';
+import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 
 const SelectedModels = {
     NONE:'NONE',
     ARCHER: Archer,
 };
+
+
+                        // // Function to update camera helpers' positions
+                        // const updateCameraHelpers = () => {
+                        //     const headBack = gltf.scene.getObjectByName("head_back");
+                        //     if (headBack) {
+                        //         gltf.scene.userData.frontCameraHelper.position.set(0, 0, 2).add(headBack.position);
+                        //         gltf.scene.userData.backCameraHelper.position.set(0, 0, -2).add(headBack.position);
+                        //     }
+                        // };
+
+function updateCameraHelpers(model, frontCameraHelper, backCameraHelper) {
+    // Update the camera helpers' rotation to match the model's rotation
+    frontCameraHelper.quaternion.copy(model.quaternion);
+    backCameraHelper.quaternion.copy(model.quaternion);
+}
 
 const ModelLoader = (type, modelData, position, mapData, scene) => {
     const loader = new GLTFLoader();
@@ -16,51 +33,212 @@ const ModelLoader = (type, modelData, position, mapData, scene) => {
                 loader.load(
                     model.filePath,
                     (gltf) => {
-                        gltf.scene.children.forEach((child) => {
+                        // const modelGroup = new THREE.Group();
+                        // gltf.scene.name = model.name;
+                        gltf.scene.name = model.name;
+                        gltf.scene.isMovable = false;
+                        gltf.scene.isDeletable = true;
+
+                        // Traverse the gltf.scene to set properties on the transparentBox and add camera helpers to head_back
+                        gltf.scene.traverse((child) => {
+                            if (child.isMesh && child.name === "transparentBox") {
+                                // Create transparent material for faces
+                                const transparentMaterial = new THREE.MeshBasicMaterial({
+                                    color: 0xffffff,
+                                    opacity: 0.1,
+                                    transparent: true,
+                                });
+                                child.material = transparentMaterial;
+
+                                // Create edges geometry and line material for edges
+                                const edgesGeometry = new EdgesGeometry(child.geometry);
+                                const lineMaterial = new LineBasicMaterial({ color: 0xffffff });
+                                const wireframe = new LineSegments(edgesGeometry, lineMaterial);
+
+                                wireframe.isMovable = true;
+                                wireframe.isRotatable = true;
+                                wireframe.isPaintable = true;
+                                wireframe.isDeletable = true;
+                                wireframe.isDriveable = true;
+                                wireframe.visible = true; // Set wireframe to be initially invisible
+                                wireframe.name = "wireframe";
+
+                                // Add wireframe as a child of the mesh
+                                child.add(wireframe);
+
+                                child.isMovable = true;
+                                child.isRotatable = true;
+                                child.isPaintable = true;
+                                child.isDeletable = true;
+                                child.visible = false; // Set transparentBox to be initially invisible
+                                child.isDriveable = true;
+                                gltf.scene.userData.transparentBox = child;
+                            }
+
+                            if (child.name === "head_back") {
+                                // Add camera helpers to the head_back mesh
+                                const frontCameraHelper = new THREE.Object3D();
+                                frontCameraHelper.position.set(child.position.x, child.position.y, child.position.z); // Adjust position relative to head_back
+                                child.add(frontCameraHelper);
+                                gltf.scene.userData.frontCameraHelper = frontCameraHelper;
+                    
+                                const backCameraHelper = new THREE.Object3D();
+                                backCameraHelper.position.set(child.position.x, child.position.y, child.position.z); // Adjust position relative to head_back
+                                child.add(backCameraHelper);
+                                gltf.scene.userData.backCameraHelper = backCameraHelper;
+                    
+                                // Update camera helpers initially
+                                updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
+                    
+                                // Add an event listener or a loop to update the camera helpers when the model rotates
+                                // This is a simple example using requestAnimationFrame
+                                const animate = () => {
+                                    requestAnimationFrame(animate);
+                                    updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
+                                };
+                                animate();
+                            }
                             child.isPaintable = true;
                         });
-                        const modelGroup = new THREE.Group();
-                        modelGroup.add(gltf.scene);
-                        modelGroup.name = model.name;
-                        modelGroup.isMovable = false;
-                        modelGroup.isDeletable = true;
 
-                        const box = new THREE.Box3().setFromObject(modelGroup);
-                        const boxSize = new THREE.Vector3();
-                        box.getSize(boxSize);
-                        const boxGeometry = new THREE.BoxGeometry(boxSize.x * 2, boxSize.y * 2, boxSize.z * 2);
-                        const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, opacity: 0.5, wireframe: true });
-                        const transparentBox = new THREE.Mesh(boxGeometry, boxMaterial);
+                        gltf.scene.position.set(model.position.x, model.position.y, model.position.z);
+                        scene.add(gltf.scene);
 
-                        transparentBox.isMovable = true;
-                        transparentBox.isRotatable = true;
-                        transparentBox.isPaintable = true;
-                        transparentBox.isDeletable = true;
-                        transparentBox.visible = false; // Set transparentBox to be initially invisible
-                        transparentBox.isDriveable = true;
-                        transparentBox.name = "transparentBox";
-                        modelGroup.userData.transparentBox = transparentBox;
 
-                        modelGroup.add(transparentBox); // Add transparentBox as a child of modelGroup
+                        // // Animation loop to update camera helpers
+                        // const animate = () => {
+                        //     updateCameraHelpers();
+                        //     requestAnimationFrame(animate);
+                        // };
+                        // animate();
+                    }
+                        // gltf.scene.children.forEach((child) => {
+                        //     child.isPaintable = true;
+                        // });
+                        // const modelGroup = new THREE.Group();
+                        // modelGroup.add(gltf.scene);
+                        // modelGroup.name = model.name;
+                        // modelGroup.isMovable = false;
+                        // modelGroup.isDeletable = true;
 
-                        // Add camera helpers
-                        const frontCameraHelper = new THREE.Object3D();
-                        frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2);
-                        modelGroup.add(frontCameraHelper);
-                        modelGroup.userData.frontCameraHelper = frontCameraHelper;
+                        // const box = new THREE.Box3().setFromObject(modelGroup);
+                        // const boxSize = new THREE.Vector3();
+                        // box.getSize(boxSize);
+                        // const boxGeometry = new THREE.BoxGeometry(boxSize.x * 2, boxSize.y * 2, boxSize.z * 2);
+                        // const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, opacity: 0.5, wireframe: true });
+                        // const transparentBox = new THREE.Mesh(boxGeometry, boxMaterial);
 
-                        const backCameraHelper = new THREE.Object3D();
-                        backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2);
-                        modelGroup.add(backCameraHelper);
-                        modelGroup.userData.backCameraHelper = backCameraHelper;
+                        // transparentBox.isMovable = true;
+                        // transparentBox.isRotatable = true;
+                        // transparentBox.isPaintable = true;
+                        // transparentBox.isDeletable = true;
+                        // transparentBox.visible = false; // Set transparentBox to be initially invisible
+                        // transparentBox.isDriveable = true;
+                        // transparentBox.name = "transparentBox";
+                        // modelGroup.userData.transparentBox = transparentBox;
 
-                        modelGroup.position.set(model.position.x, model.position.y, model.position.z);
-                        scene.add(modelGroup);
+                        // modelGroup.add(transparentBox); // Add transparentBox as a child of modelGroup
+
+                        // // Add camera helpers
+                        // const frontCameraHelper = new THREE.Object3D();
+                        // frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2);
+                        // modelGroup.add(frontCameraHelper);
+                        // modelGroup.userData.frontCameraHelper = frontCameraHelper;
+
+                        // const backCameraHelper = new THREE.Object3D();
+                        // backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2);
+                        // modelGroup.add(backCameraHelper);
+                        // modelGroup.userData.backCameraHelper = backCameraHelper;
+
+                        // modelGroup.position.set(model.position.x, model.position.y, model.position.z);
+                        // scene.add(modelGroup);
+
+                        // // Function to update camera helpers' positions
+                        // const updateCameraHelpers = () => {
+                        //     frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2).add(modelGroup.position);
+                        //     backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2).add(modelGroup.position);
+                        // };
+
+                        // // Animation loop to update camera helpers
+                        // const animate = () => {
+                        //     updateCameraHelpers();
+                        //     requestAnimationFrame(animate);
+                        // };
+                        // animate();
+                    // }
+                );
+            });
+            break;
+        case 'add':
+            loader.load(
+                SelectedModels[modelData],
+                (gltf) => {
+                    // gltf.scene.add(gltf.scene);
+                        gltf.scene.name = modelData.name;
+                        gltf.scene.isMovable = false;
+                        gltf.scene.isDeletable = true;
+
+                        // Traverse the gltf.scene to set properties on the transparentBox and add camera helpers to head_back
+                        gltf.scene.traverse((child) => {
+                            if (child.isMesh && child.name === "transparentBox") {
+                                // Create transparent material for faces
+                                const transparentMaterial = new THREE.MeshBasicMaterial({
+                                    color: 0xffffff,
+                                    opacity: 0.1,
+                                    transparent: true,
+                                });
+                                child.material = transparentMaterial;
+
+                                // Create edges geometry and line material for edges
+                                const edgesGeometry = new EdgesGeometry(child.geometry);
+                                const lineMaterial = new LineBasicMaterial({ color: 0xffffff });
+                                const wireframe = new LineSegments(edgesGeometry, lineMaterial);
+
+                                wireframe.isMovable = true;
+                                wireframe.isRotatable = true;
+                                wireframe.isPaintable = true;
+                                wireframe.isDeletable = true;
+                                wireframe.isDriveable = true;
+                                wireframe.visible = true; // Set wireframe to be initially invisible
+                                wireframe.name = "wireframe";
+
+                                // Add wireframe as a child of the mesh
+                                child.add(wireframe);
+
+                                child.isMovable = true;
+                                child.isRotatable = true;
+                                child.isPaintable = true;
+                                child.isDeletable = true;
+                                child.visible = false; // Set transparentBox to be initially invisible
+                                child.isDriveable = true;
+                                gltf.scene.userData.transparentBox = child;
+                            }
+
+                            if (child.isMesh && child.name === "head_back") {
+                                // Add camera helpers to the head_back mesh
+                                const frontCameraHelper = new THREE.Object3D();
+                                frontCameraHelper.position.copy(child.position.x, child.position.y, child.position.z + 2); // Adjust position relative to head_back
+                                child.add(frontCameraHelper);
+                                gltf.scene.userData.frontCameraHelper = frontCameraHelper;
+
+                                const backCameraHelper = new THREE.Object3D();
+                                backCameraHelper.position.set(child.position.x, child.position.y, child.position.z - 2); // Adjust position relative to head_back
+                                child.add(backCameraHelper);
+                                gltf.scene.userData.backCameraHelper = backCameraHelper;
+                            }
+                            child.isPaintable = true;
+                        });
+
+                        gltf.scene.position.copy(position);
+                        scene.add(gltf.scene);
 
                         // Function to update camera helpers' positions
                         const updateCameraHelpers = () => {
-                            frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2).add(modelGroup.position);
-                            backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2).add(modelGroup.position);
+                            const headBack = gltf.scene.getObjectByName("head_back");
+                            if (headBack) {
+                                gltf.scene.userData.frontCameraHelper.position.set(0, 0, 2).add(headBack.position);
+                                gltf.scene.userData.backCameraHelper.position.set(0, 0, -2).add(headBack.position);
+                            }
                         };
 
                         // Animation loop to update camera helpers
@@ -69,68 +247,60 @@ const ModelLoader = (type, modelData, position, mapData, scene) => {
                             requestAnimationFrame(animate);
                         };
                         animate();
-                    }
-                );
-            });
-            break;
-        case 'add':
-            loader.load(
-                SelectedModels[modelData],
-                (gltf) => {
-                    gltf.scene.children.forEach((child) => {
-                        child.isPaintable = true;
-                    });
-                    const modelGroup = new THREE.Group();
-                    modelGroup.add(gltf.scene);
-                    modelGroup.name = modelData.name;
-                    modelGroup.isMovable = false;
-                    modelGroup.isDeletable = true;
+                    },
+                    // gltf.scene.children.forEach((child) => {
+                    //     child.isPaintable = true;
+                    // });
+                    // const modelGroup = new THREE.Group();
+                    // modelGroup.add(gltf.scene);
+                    // modelGroup.name = modelData.name;
+                    // modelGroup.isMovable = false;
+                    // modelGroup.isDeletable = true;
 
-                    const box = new THREE.Box3().setFromObject(modelGroup);
-                    const boxSize = new THREE.Vector3();
-                    box.getSize(boxSize);
-                    const boxGeometry = new THREE.BoxGeometry(boxSize.x * 2, boxSize.y * 2, boxSize.z * 2);
-                    const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, opacity: 0.5, wireframe: true });
-                    const transparentBox = new THREE.Mesh(boxGeometry, boxMaterial);
+                    // const box = new THREE.Box3().setFromObject(modelGroup);
+                    // const boxSize = new THREE.Vector3();
+                    // box.getSize(boxSize);
+                    // const boxGeometry = new THREE.BoxGeometry(boxSize.x * 2, boxSize.y * 2, boxSize.z * 2);
+                    // const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, opacity: 0.5, wireframe: true });
+                    // const transparentBox = new THREE.Mesh(boxGeometry, boxMaterial);
 
-                    transparentBox.isMovable = true;
-                    transparentBox.isRotatable = true;
-                    transparentBox.isPaintable = true;
-                    transparentBox.isDeletable = true;
-                    transparentBox.visible = false; // Set transparentBox to be initially invisible
-                    transparentBox.isDriveable = true;
-                    modelGroup.userData.transparentBox = transparentBox;
-                    transparentBox.name = "transparentBox";
+                    // transparentBox.isMovable = true;
+                    // transparentBox.isRotatable = true;
+                    // transparentBox.isPaintable = true;
+                    // transparentBox.isDeletable = true;
+                    // transparentBox.visible = false; // Set transparentBox to be initially invisible
+                    // transparentBox.isDriveable = true;
+                    // modelGroup.userData.transparentBox = transparentBox;
+                    // transparentBox.name = "transparentBox";
 
-                    modelGroup.add(transparentBox); // Add transparentBox as a child of modelGroup
+                    // modelGroup.add(transparentBox); // Add transparentBox as a child of modelGroup
 
-                    // Add camera helpers
-                    const frontCameraHelper = new THREE.Object3D();
-                    frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2);
-                    modelGroup.add(frontCameraHelper);
-                    modelGroup.userData.frontCameraHelper = frontCameraHelper;
+                    // // Add camera helpers
+                    // const frontCameraHelper = new THREE.Object3D();
+                    // frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2);
+                    // modelGroup.add(frontCameraHelper);
+                    // modelGroup.userData.frontCameraHelper = frontCameraHelper;
 
-                    const backCameraHelper = new THREE.Object3D();
-                    backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2);
-                    modelGroup.add(backCameraHelper);
-                    modelGroup.userData.backCameraHelper = backCameraHelper;
+                    // const backCameraHelper = new THREE.Object3D();
+                    // backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2);
+                    // modelGroup.add(backCameraHelper);
+                    // modelGroup.userData.backCameraHelper = backCameraHelper;
 
-                    modelGroup.position.copy(position);
-                    scene.add(modelGroup);
+                    // modelGroup.position.copy(position);
+                    // scene.add(modelGroup);
 
-                    // Function to update camera helpers' positions
-                    const updateCameraHelpers = () => {
-                        frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2).add(modelGroup.position);
-                        backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2).add(modelGroup.position);
-                    };
+                    // // Function to update camera helpers' positions
+                    // const updateCameraHelpers = () => {
+                    //     frontCameraHelper.position.set(0, boxSize.y / 2, boxSize.z * 2).add(modelGroup.position);
+                    //     backCameraHelper.position.set(0, boxSize.y / 2, -boxSize.z * 2).add(modelGroup.position);
+                    // };
 
-                    // Animation loop to update camera helpers
-                    const animate = () => {
-                        updateCameraHelpers();
-                        requestAnimationFrame(animate);
-                    };
-                    animate();
-                },
+                    // // Animation loop to update camera helpers
+                    // const animate = () => {
+                    //     updateCameraHelpers();
+                    //     requestAnimationFrame(animate);
+                    // };
+                    // animate();
                 undefined,
                 (error) => {
                     console.error('An error happened', error);

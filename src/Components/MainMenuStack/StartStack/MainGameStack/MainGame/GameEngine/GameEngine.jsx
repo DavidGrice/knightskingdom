@@ -131,13 +131,27 @@ const GameEngine = ({
             if (addModel === 'NONE') {
               return;
             }
-            console.log(intersect, 'add');
+            // console.log(intersect, 'add');
             const position = intersect.point;
             ModelLoader('add', addModel, position, null, scene);
             break;
           default:
             break;
         }
+      }
+    };
+
+    const hideWireframe = (object) => {
+      const wireframe = object.getObjectByName("wireframe");
+      if (wireframe) {
+        wireframe.visible = false;
+      }
+    };
+    
+    const showWireframe = (object) => {
+      const wireframe = object.getObjectByName("wireframe");
+      if (wireframe) {
+        wireframe.visible = true;
       }
     };
 
@@ -148,8 +162,8 @@ const GameEngine = ({
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(scene.children, true);
       if (intersects.length > 0) {
-        console.log(intersects[0].object, 'down');
-        const intersectedObject = intersects[0].object;
+        console.log(intersects[0].object.parent, 'down');
+        const intersectedObject = intersects[0].object.parent;
         const setCameraViews = (intersectedObject, activeCamera) => {
           const frontCameraHelper = intersectedObject.parent.userData.frontCameraHelper;
           const backCameraHelper = intersectedObject.parent.userData.backCameraHelper;
@@ -163,8 +177,9 @@ const GameEngine = ({
         };
         switch (mode) {
           case Modes.MOVING:
-            console.log(intersectedObject, 'move');
+            // console.log(intersectedObject, 'move');
             if (intersectedObject.isMovable) {
+              // hideWireframe(intersectedObject);
               selectedObject.current = intersectedObject;
               isDragging.current = true;
               intersectedObject.visible = true;
@@ -172,28 +187,42 @@ const GameEngine = ({
             break;
           case Modes.ROTATING:
             if (intersectedObject.isRotatable) {
-              console.log(intersectedObject, 'rotate');
+              // console.log(intersectedObject, 'rotate');
+              hideWireframe(intersectedObject);
               selectedObject.current = intersectedObject;
               const angle = Math.PI / 2;
               intersectedObject.parent.rotateY(angle);
+              showWireframe(intersectedObject);
             }
             break;
           case Modes.PAINTING:
-            if (intersectedObject.name === "transparentBox") {
-              const filteredIntersects = intersects.filter(intersect => intersect.object.name !== "transparentBox");
+            const filteredIntersects = intersects.filter(intersect => intersect.object.name !== "transparentBox" && intersect.object.name !== "wireframe");
+              console.log(intersectedObject, 'paint');
               if (filteredIntersects.length > 0) {
                 const fileteredIntersectedObject = filteredIntersects[0].object;
                 if (fileteredIntersectedObject.isPaintable) {
+                  hideWireframe(fileteredIntersectedObject);
                   selectedObject.current = fileteredIntersectedObject;
                   const newColor = new THREE.Color(parseInt(color, 16));
                   fileteredIntersectedObject.material.color.set(newColor);
+                  showWireframe(fileteredIntersectedObject);
                 }
               }
-            }
+            // if (intersectedObject.name === "transparentBox") {
+            //   const filteredIntersects = intersects.filter(intersect => intersect.object.name !== "transparentBox");
+            //   if (filteredIntersects.length > 0) {
+            //     const fileteredIntersectedObject = filteredIntersects[0].object;
+            //     if (fileteredIntersectedObject.isPaintable) {
+            //       selectedObject.current = fileteredIntersectedObject;
+            //       const newColor = new THREE.Color(parseInt(color, 16));
+            //       fileteredIntersectedObject.material.color.set(newColor);
+            //     }
+            //   }
+            // }
             break;
           case Modes.DELETING:
             if (intersectedObject.isDeletable) {
-              console.log(intersectedObject, 'delete');
+              // console.log(intersectedObject, 'delete');
               scene.remove(intersectedObject.parent);
               intersectedObject.traverse((child) => {
                 if (child.geometry) child.geometry.dispose();
@@ -208,7 +237,7 @@ const GameEngine = ({
             }
             break;
           case Modes.ACTION:
-            console.log(intersectedObject, 'action');
+            // console.log(intersectedObject, 'action');
             break;
           case Modes.DRIVING:
             if (intersectedObject.isDriveable) {
@@ -234,12 +263,15 @@ const GameEngine = ({
           mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
           raycaster.setFromCamera(mouse, camera);
           const intersects = raycaster.intersectObjects(scene.children, true);
+          // console.log(intersects, 'move');
           if (intersects.length > 0) {
             const intersectionPoint = intersects[0].point;
             selectedObject.current.parent.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
-            if (selectedObject.current.children.length > 0) {
-              selectedObject.current.children.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
-            }
+            selectedObject.current.parent.userData.frontCameraHelper.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
+            selectedObject.current.parent.userData.backCameraHelper.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
+            // if (selectedObject.current.children.length > 0) {
+            //   selectedObject.current.parent.children.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
+            // }
           }
           break;
         default:

@@ -163,7 +163,7 @@ import Map1 from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceS
 //endregion
 
 //region Models
-import Archer from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/models/archer2.gltf';
+import Archer from '../../../MainGameStack/MainGame/GameEngine/GameEngineResourceStack/models/archer_with_box2.glb';
 //endregion
 
 
