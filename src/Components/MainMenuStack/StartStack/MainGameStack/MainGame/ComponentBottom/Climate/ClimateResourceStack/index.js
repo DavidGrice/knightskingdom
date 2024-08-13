@@ -22,16 +22,16 @@ import GoCheckmark2 from './go_checkmark_2.png';
 import GoCheckmark5 from './go_checkmark_5.png';
 
 export const images = [
-    { passive: ClearWeather2, active: ClearWeather5 },
-    { passive: WindyWeather2, active: WindyWeather5 },
-    { passive: FoggyWeather2, active: FoggyWeather5 },
-    { passive: DrizzlyWeather2, active: DrizzlyWeather5 },
-    { passive: ThunderstormWeather2, active: ThunderstormWeather5 },
-    { passive: DarkClearWeather2, active: DarkClearWeather5 },
-    { passive: DarkWindyWeather2, active: DarkWindyWeather5 },
-    { passive: DarkFoggyWeather2, active: DarkFoggyWeather5 },
-    { passive: DarkDrizzlyWeather2, active: DarkDrizzlyWeather5 },
-    { passive: DarkThunderstormWeather2, active: DarkThunderstormWeather5 },
+    { passive: ClearWeather2, active: ClearWeather5, mode: 'SUNNY' },
+    { passive: WindyWeather2, active: WindyWeather5, mode: 'WINDY' },
+    { passive: FoggyWeather2, active: FoggyWeather5, mode: 'FOGGY' },
+    { passive: DrizzlyWeather2, active: DrizzlyWeather5, mode: 'RAIN' },
+    { passive: ThunderstormWeather2, active: ThunderstormWeather5, mode: 'SNOW' },
+    { passive: DarkClearWeather2, active: DarkClearWeather5, mode: 'DARK_SUNNY' },
+    { passive: DarkWindyWeather2, active: DarkWindyWeather5, mode: 'DARK_WINDY' },
+    { passive: DarkFoggyWeather2, active: DarkFoggyWeather5, mode: 'DARK_FOGGY' },
+    { passive: DarkDrizzlyWeather2, active: DarkDrizzlyWeather5, mode: 'DARK_DRIZZLY' },
+    { passive: DarkThunderstormWeather2, active: DarkThunderstormWeather5, mode: 'DARK_THUNDERSTORM' },
 ];
 
 export const checkmarks = { 

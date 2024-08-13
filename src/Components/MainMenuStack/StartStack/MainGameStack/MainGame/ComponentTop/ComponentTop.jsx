@@ -14,7 +14,9 @@ const ComponentTop = ({ navigateToStartMenu,
                         handleAction,
                         handleSave,
                         handlePaintAndDrive,
-                        handlePlay
+                        handlePlay,
+                        resetModes,
+                        setMode
                         }) => {
     const [activeIcon, setActiveIcon] = useState(null);
 
@@ -29,6 +31,9 @@ const ComponentTop = ({ navigateToStartMenu,
 
     const handleIconClick = (type) => {
         switch (type) {
+            case 'bucket':
+                handleBucket();
+                break;
             case 'move':
                 handleMove();
                 break;
@@ -50,8 +55,18 @@ const ComponentTop = ({ navigateToStartMenu,
             case 'play':
                 handlePlay();
                 break;
+            default:
+                resetModes();
+                break;
         }
-        setActiveIcon(prevActiveIcon => prevActiveIcon === type ? null : type);
+        setActiveIcon(prevActiveIcon => {
+            if (prevActiveIcon === type) {
+                resetModes();
+                return null;
+            } else {
+                return type;
+            }
+        });
     };
 
     
@@ -59,12 +74,23 @@ const ComponentTop = ({ navigateToStartMenu,
         <div className={styles.mainDiv}>
             <div className={styles.saveButton}
             onClick={handleSave}>
-                <TopIconComponent passiveIcon={leaveIcon.iconData.savePassive} activeIcon={leaveIcon.iconData.saveActive} type='save' />
+                <TopIconComponent 
+                    passiveIcon={leaveIcon.iconData.savePassive}
+                    activeIcon={leaveIcon.iconData.saveActive}
+                    type='save'
+                    
+                />
             </div>
             <div
                 className={styles.bucketButton}
-                onClick={handleBucket}>
-                <TopIconComponent passiveIcon={leaveIcon.iconData.bucketPassive} activeIcon={leaveIcon.iconData.bucketActive} type='bucket' />
+                onClick={() => handleIconClick('bucket')}>
+                <TopIconComponent 
+                    passiveIcon={leaveIcon.iconData.bucketPassive} 
+                    activeIcon={leaveIcon.iconData.bucketActive} 
+                    type='bucket' 
+                    isActive={activeIcon === 'bucket'} 
+                    
+                />
             </div>
             <div className={styles.middleDiv}>
                 {topIconComponents.map((icon, index) => (
@@ -78,16 +104,27 @@ const ComponentTop = ({ navigateToStartMenu,
                             type={icon.type}
                             isActive={activeIcon === icon.type}
                             handlePaintAndDrive={handlePaintAndDrive}
+                            resetModes={resetModes}
+                            
                         />
                     </div>
                 ))}
             </div>
             <div className={styles.driveAction}
                  onClick={handlePlay}>
-                <TopIconComponent passiveIcon={leaveIcon.iconData.playPassive} activeIcon={leaveIcon.iconData.playActive} type='play' />
+                <TopIconComponent
+                passiveIcon={leaveIcon.iconData.playPassive}
+                activeIcon={leaveIcon.iconData.playActive}
+                type='play'
+                
+                />
             </div>
             <div className={styles.goodBye} onClick={navigateToStartMenu}>
-                <IconComponent type={'leave'} placeholderImage={leaveIcon.placeHolder} frames={leaveIcon.leaveFrames} />
+                <IconComponent type={'leave'}
+                placeholderImage={leaveIcon.placeHolder}
+                frames={leaveIcon.leaveFrames}
+                
+                />
             </div>
         </div>
     );

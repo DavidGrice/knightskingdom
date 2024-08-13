@@ -2,21 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComponent';
-import { MapLoader, ModelLoader, SkyBoxLoader } from './Loaders/index';
-import { type } from '@testing-library/user-event/dist/type';
+import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
+import { Modes } from './GameEngineResourceStack/index';
 
-const Modes = {
-  NONE: 'NONE',
-  MOVING: 'MOVING',
-  ROTATING: 'ROTATING',
-  PAINTING: 'PAINTING',
-  DELETING: 'DELETING',
-  ACTION: 'ACTION',
-  DRIVING: 'DRIVING',
-  PLAYING: 'PLAYING',
-};
-
-const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
+const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing, addModel, selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating }) => {
   const mountRef = useRef(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,6 +16,8 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
   const modelsLoaded = useRef(false); // Track if models are loaded
   const [originalCameraPosition, setOriginalCameraPosition] = useState(null);
   const [originalCameraQuaternion, setOriginalCameraQuaternion] = useState(null);
+  const [climateLoaded, setClimateLoaded] = useState(false);
+  const [currentSystem, setCurrentSystem] = useState(null);
 
   const saveOriginalCamera = () => {
     if (!originalCameraPosition && !originalCameraQuaternion) {
@@ -41,7 +32,6 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
       camera.quaternion.copy(originalCameraQuaternion);
     }
   };
-  
 
   // Initialize scene, camera, and renderer
   const scene = useRef(new THREE.Scene()).current;
@@ -49,20 +39,16 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
   const frontCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
   const backCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
   const renderer = useRef(new THREE.WebGLRenderer()).current;
+  const updateClimate = SkyBoxLoader(mapData, scene, selectedClimateMode);
 
   useEffect(() => {
     if (mountRef.current) {
       mountRef.current.appendChild(renderer.domElement);
       renderer.setSize(window.innerWidth, window.innerHeight);
-
-      const ambientLight = new THREE.AmbientLight(0x404040);
-      ambientLight.intensity = 50;
-      scene.add(ambientLight);
-
+  
       if (!modelsLoaded.current) {
-        SkyBoxLoader(mapData, scene);
         MapLoader(mapData, scene, () => setModelLoaded(true));
-        ModelLoader(mapData, scene);
+        ModelLoader('preload', null, null, mapData, scene);
         modelsLoaded.current = true; // Mark models as loaded
       }
       const controls = new OrbitControls(camera, renderer.domElement);
@@ -72,22 +58,22 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
       controls.enableRotate = false;
       camera.position.z = 10;
       camera.position.y = 5;
-
+  
       const animate = () => {
         controls.update();
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
       };
       animate();
-
+  
       const handleResize = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       };
-
+  
       window.addEventListener('resize', handleResize);
-
+  
       return () => {
         if (mountRef.current) {
           mountRef.current.removeChild(renderer.domElement);
@@ -97,11 +83,17 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
     }
   }, [mapData]);
 
-  // Handle hover functionality
-  // Handle different modes
   useEffect(() => {
     if (!isFollowing) {
       restoreOriginalCamera();
+    }
+    if (!climateLoaded) {
+      ClimateLoader(selectedClimateMode, scene);
+      setClimateLoaded(true);
+    } else if (climateNeedsUpdating) {
+      ClimateLoader(selectedClimateMode, scene, climateNeedsUpdating, currentSystem, setCurrentSystem);
+      setClimateNeedsUpdating(false);
+      updateClimate(null, null, selectedClimateMode);
     }
     const onMouseOver = (event) => {
       event.preventDefault();
@@ -109,26 +101,40 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
+    };
+
+    const onMouseClick = (event) => {
+      event.preventDefault();
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(scene.children, true);
       if (intersects.length > 0) {
-        const intersectedObject = intersects[0].object;
-        selectedObject.current = intersectedObject;
-      } else {
-        selectedObject.current = null;
+        const intersect = intersects[0];
+        switch (mode) {
+          case Modes.ADDING:
+            if (addModel === 'NONE') {
+              return;
+            }
+            console.log(intersect, 'add');
+            const position = intersect.point;
+            ModelLoader('add', addModel, position, null, scene);
+            break;
+          default:
+            break;
+        }
       }
     };
-  
+
     const onMouseDown = (event) => {
       event.preventDefault();
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(scene.children, true);
-      const transparentBox = scene.userData.transparentBox;
-      const filteredIntersects = intersects.filter(intersect => intersect.object !== transparentBox);
       if (intersects.length > 0) {
+        console.log(intersects[0].object, 'down');
         const intersectedObject = intersects[0].object;
-        const fileteredIntersectedObject = filteredIntersects[0].object;
         const setCameraViews = (intersectedObject, activeCamera) => {
           const frontCameraHelper = intersectedObject.parent.userData.frontCameraHelper;
           const backCameraHelper = intersectedObject.parent.userData.backCameraHelper;
@@ -158,50 +164,55 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
             }
             break;
           case Modes.PAINTING:
-            if (fileteredIntersectedObject.isPaintable) {
-              selectedObject.current = fileteredIntersectedObject;
-              const newColor = new THREE.Color(parseInt(color, 16));
-              fileteredIntersectedObject.material.color.set(newColor);
+            if (intersectedObject.name === "transparentBox") {
+              const filteredIntersects = intersects.filter(intersect => intersect.object.name !== "transparentBox");
+              if (filteredIntersects.length > 0) {
+                const fileteredIntersectedObject = filteredIntersects[0].object;
+                if (fileteredIntersectedObject.isPaintable) {
+                  selectedObject.current = fileteredIntersectedObject;
+                  const newColor = new THREE.Color(parseInt(color, 16));
+                  fileteredIntersectedObject.material.color.set(newColor);
+                }
+              }
             }
             break;
-            case Modes.DELETING:
-              if (intersectedObject.isDeletable) {
-                console.log(intersectedObject, 'delete');
-                scene.remove(intersectedObject.parent);
-                intersectedObject.traverse((child) => {
-                  if (child.geometry) child.geometry.dispose();
-                  if (child.material) {
-                    if (Array.isArray(child.material)) {
-                      child.material.forEach((material) => material.dispose());
-                    } else {
-                      child.material.dispose();
-                    }
+          case Modes.DELETING:
+            if (intersectedObject.isDeletable) {
+              console.log(intersectedObject, 'delete');
+              scene.remove(intersectedObject.parent);
+              intersectedObject.traverse((child) => {
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) {
+                  if (Array.isArray(child.material)) {
+                    child.material.forEach((material) => material.dispose());
+                  } else {
+                    child.material.dispose();
                   }
-                });
-              }
-              break;
-            case Modes.ACTION:
-              console.log(intersectedObject, 'action');
-              break;
-            case Modes.DRIVING:
-              // Position the front and back cameras relative to the selected object
-              if (intersectedObject.isDriveable) {
-                console.log(intersectedObject.parent.userData.frontCameraHelper, 'drive');
-                saveOriginalCamera();
-                setCameraViews(intersectedObject, activeCamera);
-              }
-              break;
+                }
+              });
+            }
+            break;
+          case Modes.ACTION:
+            console.log(intersectedObject, 'action');
+            break;
+          case Modes.DRIVING:
+            if (intersectedObject.isDriveable) {
+              console.log(intersectedObject.parent.userData.frontCameraHelper, 'drive');
+              saveOriginalCamera();
+              setCameraViews(intersectedObject, activeCamera);
+            }
+            break;
           default:
             break;
         }
       }
     };
-  
+
     const onMouseMove = (event) => {
       event.preventDefault();
       if (mode === Modes.NONE || mode === Modes.PAINTING) return;
       if (!isDragging.current) return;
-  
+
       switch (mode) {
         case Modes.MOVING:
           mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -220,7 +231,7 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
           break;
       }
     };
-  
+
     const onMouseUp = (event) => {
       event.preventDefault();
       if (selectedObject.current && selectedObject.current.isMovable) {
@@ -229,24 +240,25 @@ const GameEngine = ({ mapData, color, mode, activeCamera, isFollowing }) => {
         selectedObject.current = null;
       }
     };
-  
+
     window.addEventListener('mouseover', onMouseOver);
     window.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
-  
+    window.addEventListener('click', onMouseClick, false);
+
     return () => {
       window.removeEventListener('mouseover', onMouseOver);
       window.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('click', onMouseClick);
     };
-  }, [mode, color, mapData, scene, camera, renderer, raycaster, mouse, activeCamera]);
-  
+  }, [mode, color, mapData, scene, camera, renderer, raycaster, mouse, activeCamera, selectedClimateMode, climateNeedsUpdating, currentSystem]);
+
   return (
-  <div ref={mountRef}>{loading && <LoadingComponent />}
-  </div>
-  )
+    <div ref={mountRef}>{loading && <LoadingComponent />}</div>
+  );
 };
 
 export default GameEngine;

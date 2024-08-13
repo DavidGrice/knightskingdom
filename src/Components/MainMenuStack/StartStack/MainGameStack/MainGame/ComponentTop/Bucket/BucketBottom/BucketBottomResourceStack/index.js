@@ -102,6 +102,7 @@ import MinifigureAnimals36 from './minifigures_animals/minifigskeleton00.png';
 import MinifigureAnimals37 from './minifigures_animals/minifigweezil00.png';
 import MinifigureAnimals38 from './minifigures_animals/minifigweezil01.png';
 import MinifigureAnimals39 from './minifigures_animals/oc6095b3.png';
+import Archer from './minifigures_animals/archer2.gltf';
 //endregion minifigures_animals
 
 //region scenery
@@ -443,7 +444,9 @@ export const minifigureAnimalsData = [
     {
         name: 'MinifigureAnimals12',
         image: MinifigureAnimals12,
-        modelPath: './minifigures_animals/minifigcedricbull00.glb',
+        modelPath: './GameEngineResourceStack/models/archer2.gltf',
+        SelectedModel: 'ARCHER',
+        // modelPath: './minifigures_animals/minifigcedricbull00.glb',
     },
     {
         name: 'MinifigureAnimals13',

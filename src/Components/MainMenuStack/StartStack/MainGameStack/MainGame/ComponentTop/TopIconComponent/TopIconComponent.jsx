@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TopIconComponent.module.css';
 
-const TopIconComponent = ({ passiveIcon, activeIcon, isActive, type, onClick, handlePaintAndDrive }) => {
+const TopIconComponent = ({ passiveIcon, activeIcon, isActive, type, onClick, handlePaintAndDrive, resetModes }) => {
     const [icon, setIcon] = useState(passiveIcon);
     const [active, setActive] = useState(false);
 
@@ -22,6 +22,8 @@ const TopIconComponent = ({ passiveIcon, activeIcon, isActive, type, onClick, ha
         if (active) {
             setIcon(passiveIcon);
             setActive(false);
+            resetModes && resetModes();
+            // onDeselect && onDeselect();
         } else {
             setIcon(activeIcon);
             setActive(true);
@@ -31,13 +33,22 @@ const TopIconComponent = ({ passiveIcon, activeIcon, isActive, type, onClick, ha
     const handlePaintDrive = () => {
         handlePaintAndDrive && handlePaintAndDrive();
         onClick && onClick();
+        if (active) {
+            setIcon(passiveIcon);
+            setActive(false);
+            resetModes && resetModes();
+            // onDeselect && onDeselect();
+        } else {
+            setIcon(activeIcon);
+            setActive(true);
+        }
     }
 
     const defaultStyle = sizeMapping[type] || { width: '50px', height: '50px' };
 
     return (
         <>
-            {type === 'bucket' || type === 'play' || type ==='save' ? (
+            {type === 'play' || type ==='save' ? (
                 <div
                     className={styles.mainDiv}
                     onClick={handleOnClick}
@@ -49,8 +60,6 @@ const TopIconComponent = ({ passiveIcon, activeIcon, isActive, type, onClick, ha
                 <div
                     className={styles.mainDiv}
                     onClick={handlePaintDrive}
-                    // onMouseEnter={handleMouseEnter}
-                    // onMouseLeave={handleMouseLeave}
                     style={defaultStyle}
                 >
                     <img src={isActive ? activeIcon : passiveIcon} alt='Icon' style={defaultStyle} />

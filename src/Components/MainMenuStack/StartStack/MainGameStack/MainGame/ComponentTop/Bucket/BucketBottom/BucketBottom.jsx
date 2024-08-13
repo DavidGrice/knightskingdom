@@ -3,7 +3,7 @@ import styles from './BucketBottom.module.css';
 import { images, buildingsData, challengesData, explosivesData, minifigureAnimalsData, sceneryData, vehiclesData } from './BucketBottomResourceStack/index';
 import selectedImage from './BucketBottomResourceStack/wh_selection.png';
 
-const BucketBottom = ({ activeBucket, didUpdate, setDidUpdate }) => {
+const BucketBottom = ({ activeBucket, didUpdate, setDidUpdate, handleLoadModel }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [downArrowImage, setDownArrowImage] = useState(images.downArrowSolid);
     const [upArrowImage, setUpArrowImage] = useState(images.upArrowSolid);
@@ -30,7 +30,6 @@ const BucketBottom = ({ activeBucket, didUpdate, setDidUpdate }) => {
     const items = setActiveTab(activeBucket);
     const itemsPerPage = 6;
     const totalPages = Math.ceil(items.length / itemsPerPage);
-    console.log('items', items);
 
     useEffect(() => {
         setBucket();
@@ -88,7 +87,9 @@ const BucketBottom = ({ activeBucket, didUpdate, setDidUpdate }) => {
 
     const handleItemClick = (item) => {
         setSelectedItem(item);
-    };
+        handleLoadModel(item.SelectedModel);
+        console.log(item.SelectedModel)
+    }
 
 
 

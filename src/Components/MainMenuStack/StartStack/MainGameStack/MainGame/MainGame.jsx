@@ -8,9 +8,9 @@ import { Climate } from './ComponentBottom/Climate/index';
 import { Music } from './ComponentBottom/Music/index';
 
 const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData }) => {
-  
 
   const [mode, setMode] = useState('NONE');
+  const [selectedModelMode, setSelectedModelMode] = useState('NONE');
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [showBucket, setShowBucket] = useState(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
@@ -21,28 +21,47 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
   const [isMusicOpen, setIsMusicOpen] = useState(false);
   const [activeIcon, setActiveIcon] = useState(null);
   const [activeWeather, setActiveWeather] = useState(0);
+  const [selectedClimateMode, setSelectedClimateMode] = useState('SUNNY');
+  const [climateNeedsUpdating, setClimateNeedsUpdating] = useState(false);
   const [activeMusic, setActiveMusic] = useState(0);
   const [activeCamera, setActiveCamera] = useState(null);
 
+  const resetModes = () => {
+    setMode('NONE');
+    setSelectedModelMode('NONE');
+  }
+
   const handleSave = () => {
     setIsSaveOpen(!isSaveOpen);
+    resetModes();
   }
 
   const handleBucket = () => {
     setShowBucket(!showBucket);
+    if (showBucket === false) {
+      resetModes();
+    }
+  }
+
+  const handleLoadModel = (model) => {
+    setSelectedModelMode(model);
+    setMode('ADDING');
   }
 
   const handleMove = () => {
     setMode('MOVING');
     console.log('Mode set to MOVING');
+    setSelectedModelMode('NONE');
   }
 
   const handleRotate = () => {
     setMode('ROTATING');
+    setSelectedModelMode('NONE');
   }
 
   const handlePalette = () => {
     setMode('PAINTING');
+    setSelectedModelMode('NONE');
     if (isFollowing) {
       setIsFollowing(false);
     }
@@ -51,10 +70,15 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
 
   const handleColor = (color) => {
     setColor(color);
+    setSelectedModelMode('NONE');
   }
 
   useEffect(() => {
     switch (mode) {
+    case 'ADDING':
+      console.log('Mode set to ADDING');
+      console.log(mode);
+      break;
     case 'MOVING':
       console.log('Mode set to MOVING');
       console.log(mode);
@@ -84,25 +108,32 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
       console.log(mode);
       break;
     default:
+      resetModes();
       break;
     }
   }, [mode]);
 
   const handleDelete = () => {
     setMode('DELETING');
+    setSelectedModelMode('NONE');
   };
 
   const handleAction = () => {
     setIsActionOpen(!isActionOpen);
     setMode('ACTION');
+    setSelectedModelMode('NONE');
   }
 
   const handleDrive = () => {
     if (isPaletteOpen) {
       setIsPaletteOpen(false);
     }
+    if (showBucket) {
+      setShowBucket(false);
+    }
     setMode('DRIVING');
     setIsFollowing(!isFollowing);
+    setSelectedModelMode('NONE');
   }
 
   const handleCameraSwitch = (type) => {
@@ -111,6 +142,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     } else if (type === 'front') {
       setActiveCamera('front');
     };
+    setSelectedModelMode('NONE');
   }
 
   const handlePaintAndDrive = () => {
@@ -120,10 +152,15 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     if (isFollowing) {
       setIsFollowing(false);
     }
+    if (showBucket) {
+      setShowBucket(false);
+    }
+    setSelectedModelMode('NONE');
   }
 
   const handlePlay = () => {
     setMode('PLAYING');
+    setSelectedModelMode('NONE');
   }
 
   const handleClimate = () => {
@@ -131,6 +168,57 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
       setIsMusicOpen(false);
     }
     setIsClimateOpen(!isClimateOpen);
+    setSelectedModelMode('NONE');
+  }
+
+  const handleWeatherChange = (index) => {
+    switch (index) {
+      case 0:
+        setActiveWeather(0);
+        setSelectedClimateMode('SUNNY');
+        break;
+      case 1:
+        setActiveWeather(1);
+        setSelectedClimateMode('WINDY');
+        break;
+      case 2:
+        setActiveWeather(2);
+        setSelectedClimateMode('FOGGY');
+        break;
+      case 3:
+        setActiveWeather(3);
+        setSelectedClimateMode('RAIN');
+        break;
+      case 4:
+        setActiveWeather(4);
+        setSelectedClimateMode('SNOW');
+        break;
+      case 5:
+        setActiveWeather(5);
+        setSelectedClimateMode('DARK_SUNNY');
+        break;
+      case 6:
+        setActiveWeather(6);
+        setSelectedClimateMode('DARK_WINDY');
+        break;
+      case 7:
+        setActiveWeather(7);
+        setSelectedClimateMode('DARK_FOGGY');
+        break;
+      case 8:
+        setActiveWeather(8);
+        setSelectedClimateMode('DARK_DRIZZLY');
+        break;
+      case 9:
+        setActiveWeather(9);
+        setSelectedClimateMode('DARK_THUNDERSTORM');
+        break;
+      default:
+        setActiveWeather(0);
+        setSelectedClimateMode('SUNNY');
+        break;
+    }
+    setClimateNeedsUpdating(true);
   }
 
   const handleMusic = () => {
@@ -138,16 +226,19 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
       setIsClimateOpen(false);
     }
     setIsMusicOpen(!isMusicOpen);
+    setSelectedModelMode('NONE');
   }
 
   const closeClimate = () => {
     setIsClimateOpen(false);
     setActiveIcon(null);
+    setSelectedModelMode('NONE');
   }
 
   const closeMusic = () => {
     setIsMusicOpen(false);
     setActiveIcon(null);
+    setSelectedModelMode('NONE');
   }
 
   return (
@@ -166,11 +257,15 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
           handleDrive={handleDrive}
           handlePaintAndDrive={handlePaintAndDrive}
           handlePlay={handlePlay}
+          resetModes={resetModes}
+          setMode={setMode}
         />
       </div>
       {showBucket && (
         <div>
-          <Bucket />
+          <Bucket
+          handleLoadModel={handleLoadModel}
+          />
         </div>
       )}
       {isPaletteOpen && (
@@ -191,6 +286,9 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
             closeClimate={closeClimate}
             activeWeather={activeWeather}
             setActiveWeather={setActiveWeather}
+            selectedClimateMode={selectedClimateMode}
+            setSelectedClimateMode={setSelectedClimateMode}
+            handleWeatherChange={handleWeatherChange}
           />
         </div>
       )}
@@ -209,6 +307,10 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
         mode={mode}
         activeCamera={activeCamera}
         isFollowing={isFollowing}
+        addModel={selectedModelMode}
+        selectedClimateMode={selectedClimateMode}
+        climateNeedsUpdating={climateNeedsUpdating}
+        setClimateNeedsUpdating={setClimateNeedsUpdating}
       />
       <div className={styles.bottomComponent}>
         <ComponentBottom

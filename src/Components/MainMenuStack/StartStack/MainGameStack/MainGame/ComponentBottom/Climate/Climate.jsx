@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Climate.module.css';
 import { ClimateIcon } from './index';
 import { images, checkmarks } from './ClimateResourceStack/index';
 
-const Climate = ({ closeClimate, activeWeather, setActiveWeather}) => {
+const Climate = ({ closeClimate, activeWeather, handleWeatherChange }) => {
     const [activeIcon, setActiveIcon] = useState(activeWeather);
 
+    // useEffect(() => {
+    //     // Update the active icon based on selectedClimateMode
+    //     setActiveIcon(selectedClimateMode);
+    // }, [selectedClimateMode]);
+
     const handleIconClick = (icon) => {
-        setActiveWeather(icon);
-        setActiveIcon(icon);
+        handleWeatherChange(icon);
     };
 
     return (
