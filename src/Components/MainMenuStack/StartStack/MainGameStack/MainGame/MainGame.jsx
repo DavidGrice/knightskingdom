@@ -6,6 +6,7 @@ import { Palette } from './ComponentTop/Palette/index';
 import { Drive } from './ComponentTop/Drive/index';
 import { Climate } from './ComponentBottom/Climate/index';
 import { Music } from './ComponentBottom/Music/index';
+import { musicTracks } from './MainGameResourceStack/index';
 
 const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData }) => {
 
@@ -24,8 +25,11 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
   const [selectedClimateMode, setSelectedClimateMode] = useState('SUNNY');
   const [climateNeedsUpdating, setClimateNeedsUpdating] = useState(false);
   const [activeMusic, setActiveMusic] = useState(0);
+  const [selectedMusic, setSelectedMusic] = useState('NONE');
+  const [audio, setAudio] = useState(null);
   const [activeCamera, setActiveCamera] = useState(null);
   const [cameraNeedsReset, setCameraNeedsReset] = useState(false);
+  const [intermediateMapData, setIntermediateMapData] = useState(null);
 
   const resetModes = () => {
     setMode('NONE');
@@ -224,6 +228,51 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     setClimateNeedsUpdating(true);
   }
 
+  const handleMusicChange = (index) => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    let newAudio = null;
+    switch (index) {
+      case 0:
+        setActiveMusic(0);
+        setSelectedMusic('NONE');
+        break;
+      case 1:
+        setActiveMusic(1);
+        setSelectedMusic('GOOD');
+        newAudio = new Audio(musicTracks.GOOD);
+        break;
+      case 2:
+        setActiveMusic(2);
+        setSelectedMusic('VERYGOOD');
+        newAudio = new Audio(musicTracks.VERYGOOD);
+        break;
+      case 3:
+        setActiveMusic(3);
+        setSelectedMusic('BAD');
+        newAudio = new Audio(musicTracks.BAD);
+        break;
+      case 4:
+        setActiveMusic(4);
+        setSelectedMusic('VERYBAD');
+        newAudio = new Audio(musicTracks.VERYBAD);
+        break;
+      default:
+        setActiveMusic(0);
+        setSelectedMusic('NONE');
+        break;
+    }
+
+    if (newAudio) {
+      newAudio.loop = true;
+      newAudio.play();
+      setAudio(newAudio);
+    }
+  };
+
   const handleMusic = () => {
     if (isClimateOpen) {
       setIsClimateOpen(false);
@@ -263,6 +312,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
           resetModes={resetModes}
           setMode={setMode}
           setCameraNeedsReset={setCameraNeedsReset}
+          handleMusicChange={handleMusicChange}
         />
       </div>
       {showBucket && (
@@ -304,6 +354,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
             closeMusic={closeMusic}
             activeMusic={activeMusic}
             setActiveMusic={setActiveMusic}
+            handleMusicChange={handleMusicChange}
           />
         </div>
       )}
@@ -329,6 +380,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
           setActiveIcon={setActiveIcon}
           navigateToWorkshop={navigateToWorkshop}
           navigateToSnapshot={navigateToSnapshot}
+          handleMusicChange={handleMusicChange}
         />
       </div>
     </div>

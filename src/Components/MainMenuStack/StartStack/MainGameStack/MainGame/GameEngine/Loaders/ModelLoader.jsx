@@ -10,19 +10,23 @@ const SelectedModels = {
 };
 
 
-                        // // Function to update camera helpers' positions
-                        // const updateCameraHelpers = () => {
-                        //     const headBack = gltf.scene.getObjectByName("head_back");
-                        //     if (headBack) {
-                        //         gltf.scene.userData.frontCameraHelper.position.set(0, 0, 2).add(headBack.position);
-                        //         gltf.scene.userData.backCameraHelper.position.set(0, 0, -2).add(headBack.position);
-                        //     }
-                        // };
+// // Function to update camera helpers' positions
+// const updateCameraHelpers = () => {
+//     const headBack = gltf.scene.getObjectByName("head_back");
+//     if (headBack) {
+//         gltf.scene.userData.frontCameraHelper.position.set(0, 0, 2).add(headBack.position);
+//         gltf.scene.userData.backCameraHelper.position.set(0, 0, -2).add(headBack.position);
+//     }
+// };
 
 function updateCameraHelpers(model, frontCameraHelper, backCameraHelper) {
     // Update the camera helpers' rotation to match the model's rotation
     frontCameraHelper.quaternion.copy(model.quaternion);
+    frontCameraHelper.position.copy(model.position);
+    frontCameraHelper.position.set(frontCameraHelper.position.x, frontCameraHelper.position.y, frontCameraHelper.position.z + 2);
     backCameraHelper.quaternion.copy(model.quaternion);
+    backCameraHelper.position.copy(model.position);
+    backCameraHelper.position.set(backCameraHelper.position.x, backCameraHelper.position.y, backCameraHelper.position.z - 2);
 }
 
 const ModelLoader = (type, modelData, position, mapData, scene) => {

@@ -4,13 +4,15 @@ import { BottomIconComponent, Ball } from './index';
 import { images } from './ComponentBottomResourceStack/index';
 import { HelpComponent } from "../../../../../Common/index";
 
-const ComponentBottom = ({ handleClimate, handleMusic, activeIcon, setActiveIcon, navigateToWorkshop, navigateToSnapshot }) => {
+const ComponentBottom = ({ handleClimate, handleMusic, activeIcon, setActiveIcon, navigateToWorkshop, navigateToSnapshot, handleMusicChange }) => {
 
     const handleIconClick = (type) => {
         if (type === 'hammer') {
+            handleMusicChange(0);
             navigateToWorkshop();
         }
         if (type === 'camera') {
+            handleMusicChange(0);
             navigateToSnapshot();
         }
         if (type === 'climate') {

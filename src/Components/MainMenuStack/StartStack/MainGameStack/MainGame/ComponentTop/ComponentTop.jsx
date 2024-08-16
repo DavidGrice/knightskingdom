@@ -16,7 +16,8 @@ const ComponentTop = ({ navigateToStartMenu,
                         handlePaintAndDrive,
                         handlePlay,
                         resetModes,
-                        setCameraNeedsReset
+                        setCameraNeedsReset,
+                        handleMusicChange
                         }) => {
     const [activeIcon, setActiveIcon] = useState(null);
 
@@ -71,6 +72,11 @@ const ComponentTop = ({ navigateToStartMenu,
         });
     };
 
+    const handleLeave = () => {
+        handleMusicChange(0);
+        navigateToStartMenu();
+    }
+
     
     return (
         <div className={styles.mainDiv}>
@@ -121,7 +127,7 @@ const ComponentTop = ({ navigateToStartMenu,
                 
                 />
             </div>
-            <div className={styles.goodBye} onClick={navigateToStartMenu}>
+            <div className={styles.goodBye} onClick={handleLeave}>
                 <IconComponent type={'leave'}
                 placeholderImage={leaveIcon.placeHolder}
                 frames={leaveIcon.leaveFrames}

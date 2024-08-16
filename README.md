@@ -12,6 +12,7 @@ This project is to help recreate the old Lego Creator Knight's Kingdom game in a
 * [HEX workshop](http://www.hexworkshop.com/)
 * [X32 DBG](https://x64dbg.com/)
 * [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer)
+* [Music Producer DX9.0](https://archive.org/details/DirectMusicProducer-DX9.0)
 
 #### Superscape items
 

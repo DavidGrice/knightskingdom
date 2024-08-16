@@ -3,12 +3,13 @@ import styles from './Music.module.css';
 import { MusicIcon } from './index';
 import { images, checkMarkImages } from './MusicResourceStack/index';
 
-const Music = ({ closeMusic, activeMusic, setActiveMusic }) => {
+const Music = ({ closeMusic, activeMusic, setActiveMusic, handleMusicChange }) => {
     const [activeIcon, setActiveIcon] = useState(activeMusic);
 
     const handleIconClick = (icon) => {
         setActiveMusic(icon);
         setActiveIcon(icon);
+        handleMusicChange(icon);
     };
 
     return (
