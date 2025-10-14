@@ -7,7 +7,7 @@ This is an ongoing project which covers two-fold:
 
 ### Software and associated items utilized
 
-#### Reverse Engineering items
+#### Reverse Engineering
 
 * [Ghidra](https://github.com/NationalSecurityAgency/ghidra)
 * [Ida Free](https://hex-rays.com/ida-free/)
@@ -17,7 +17,7 @@ This is an ongoing project which covers two-fold:
 * [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer)
 * [Music Producer DX9.0](https://archive.org/details/DirectMusicProducer-DX9.0)
 
-#### Superscape items
+#### Superscape
 
 * [Superscape VRT 5.71 SDK](https://archive.org/details/sdk571)
 * [LEGO Creator: Knights Kingdom (2000)](https://archive.org/details/lego-creator-kk)
@@ -28,6 +28,12 @@ This is an ongoing project which covers two-fold:
 * [Superscape Do 3D (1998)](https://archive.org/details/superscape-do-3d)
 * [Superscape VRT v5.60 (1998)](https://archive.org/details/superscape-vrt-v560)
 * [Superscape Viscape Universal v5.61](https://archive.org/details/viscape-universal-561)
+
+#### Misc
+
+* [Lego Creator Forms 2000 via LugNet](https://news.lugnet.com/games/lego/creator/?n=25)
+* [Lego Rock Raiders Forum](https://rockraidersunited.com/topic/9215-installing-lego-creator-knights-kingdom-on-windows-10/)
+* [Lego Assets Ripped](https://rockraidersunited.com/topic/9415-lego-creator-knights-kingdom-assets/)
 
 # Folders
 
