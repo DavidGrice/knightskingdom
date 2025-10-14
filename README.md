@@ -1,6 +1,7 @@
 # Overview
 
 This is an ongoing project which covers two-fold:
+
 • Reverse Engineering Lego Creator Knight's Kingdom
 • Modernize the game (using same or similar assets) while expanding functionality
 
