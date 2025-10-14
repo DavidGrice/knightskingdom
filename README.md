@@ -1,6 +1,8 @@
 # Overview
 
-This project is to help recreate the old Lego Creator Knight's Kingdom game in a modern framework, with additional game modes. Utilizing web tech such as 3JS + MERN. I believe it is far better and easier to utilize than using local compiled executables with OGL/Unreal/Vulkan/etc. However for extracting the model data, local C-based files would be more ideal.
+This is an ongoing project which covers two-fold:
+• Reverse Engineering Lego Creator Knight's Kingdom
+• Modernize the game (using same or similar assets) while expanding functionality
 
 ### Software and associated items utilized
 
