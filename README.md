@@ -5,7 +5,7 @@ This is an ongoing project which covers two-fold:
 * Reverse Engineering Lego Creator Knight's Kingdom
 * Modernize the game (using same or similar assets) while expanding functionality
 
-# Current Progress
+# Current Progress (right click + open in new tab)
 
 [![Watch the video](https://img.youtube.com/vi/7e8UlNaXLN0/maxresdefault.jpg)](https://youtu.be/7e8UlNaXLN0)
 
