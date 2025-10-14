@@ -16,6 +16,7 @@ This project is to help recreate the old Lego Creator Knight's Kingdom game in a
 
 #### Superscape items
 
+* [Superscape VRT 5.71 SDK](https://archive.org/details/sdk571)
 * [LEGO Creator: Knights Kingdom (2000)](https://archive.org/details/lego-creator-kk)
 * [LEGO Creator: Harry Potter - North American (Windows PC)](https://archive.org/details/lego-creator-harry-potter-pc-game)
 * [Superscape Do3D Evaluation Version 5.10](https://archive.org/details/superscape-do3d-evaluation-version-5.10)
