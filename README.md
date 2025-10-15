@@ -9,6 +9,10 @@ This is an ongoing project which covers two-fold:
 
 [![Watch the video](https://img.youtube.com/vi/7e8UlNaXLN0/maxresdefault.jpg)](https://youtu.be/7e8UlNaXLN0)
 
+# Video Overview (right click + open in new tab)
+
+[![Watch the video](https://img.youtube.com/vi/7Tek4hDv4kk/maxresdefault.jpg)](https://youtu.be/7Tek4hDv4kk)
+
 ### Software and associated items utilized
 
 #### Reverse Engineering
