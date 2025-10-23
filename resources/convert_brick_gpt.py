@@ -13,6 +13,11 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 logger = logging.getLogger(__name__)
 base = os.path.dirname(os.path.abspath(__file__))
 
+# Track which chunk diagnostics we've already written this run to avoid spamming
+# the debug_facets directory with repeated duplicate dumps for the same chunk.
+_dumped_incomplete_header_chunks = set()
+_dumped_incomplete_line_idx_chunks = set()
+
 # Heuristics: toggle these to try different interpretations of indices/fields
 # Some SHAP variants use 0-based indices; some store geometric point indices as unsigned
 ZERO_BASE_INDICES = True
@@ -338,10 +343,56 @@ def parse_facets_chunk(data, start_pos, chunk_length):
         logger.warning("Unreasonable num_facets, skipping")
         return [], chunk_end
     facets = []
-    for _ in range(num_facets):
+    for fi in range(num_facets):
         if pos + 4 > chunk_end:
             logger.warning("Incomplete facet header")
-            break
+            # Dump diagnostic slice for post-mortem
+            try:
+                dbg_dir = os.path.join(base, 'model_files', 'debug_facets')
+                os.makedirs(dbg_dir, exist_ok=True)
+                dump_path = os.path.join(dbg_dir, f'facets_chunk_{start_pos}_incomplete_header.txt')
+                # Create the diagnostic file only if it does not already exist to avoid duplicates
+                if not os.path.exists(dump_path):
+                    with open(dump_path, 'w') as df:
+                        df.write(f"INCOMPLETE FACET HEADER at chunk_start={start_pos} facet_index={fi} pos={pos} chunk_end={chunk_end}\n")
+                        df.write(data[pos:chunk_end].hex() + "\n")
+            except Exception:
+                logger.exception('Failed to write facet header diagnostic')
+            # attempt conservative resynchronization: look ahead for next plausible
+            # chunk header or 0xFFFF terminator within a small window and jump there
+            try:
+                found = None
+                reason = None
+                max_scan = min(len(data) - 4, pos + 512)
+                for k in range(pos, max_scan):
+                    try:
+                        raw1 = struct.unpack_from('<H', data, k)[0]
+                        raw2 = struct.unpack_from('<H', data, k+2)[0]
+                    except struct.error:
+                        continue
+                    if raw1 == 0xFFFF:
+                        found = k
+                        reason = 'terminator'
+                        break
+                    chk = raw1 & 0x3FFF
+                    length_m = raw2 & 0x3FFF
+                    # prefer known chunk types and plausible lengths
+                    if length_m >= 4 and k + length_m <= len(data) and chk in (0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,0x000A):
+                        found = k
+                        reason = f'chunk_0x{chk:04X}'
+                        break
+                if found is not None:
+                    logger.warning(f"Resync: jumping from bad facet at {pos} to candidate header at {found} ({reason})")
+                    pos = found
+                    chunk_end = found
+                    # continue outer loop; we'll return pos at end
+                    break
+                else:
+                    # nothing plausible found; advance to chunk_end to avoid stalling
+                    pos = chunk_end
+                    break
+            except Exception:
+                break
         try:
             num_sides = struct.unpack_from('<B', data, pos)[0]
             pos += 1
@@ -367,7 +418,50 @@ def parse_facets_chunk(data, start_pos, chunk_length):
         for __ in range(num_sides):
             if pos + 2 > chunk_end:
                 logger.warning("Incomplete line idx in facet")
-                break
+                # Dump current facet partial data for inspection
+                try:
+                    dbg_dir = os.path.join(base, 'model_files', 'debug_facets')
+                    os.makedirs(dbg_dir, exist_ok=True)
+                    dump_path = os.path.join(dbg_dir, f'facets_chunk_{start_pos}_incomplete_line_idx.txt')
+                    # Create the diagnostic file only if it does not already exist to avoid duplicates
+                    if not os.path.exists(dump_path):
+                        with open(dump_path, 'w') as df:
+                            df.write(f"INCOMPLETE LINE IDX at chunk_start={start_pos} facet_index={fi} expected_sides={num_sides} got_so_far={len(facet_lines)} pos={pos} chunk_end={chunk_end}\n")
+                            df.write('partial_lines: ' + ','.join(str(x) for x in facet_lines) + "\n")
+                            df.write(data[pos:chunk_end].hex() + "\n")
+                except Exception:
+                    logger.exception('Failed to write facet line idx diagnostic')
+                # try the same conservative resync as for header failures
+                try:
+                    found = None
+                    reason = None
+                    max_scan = min(len(data) - 4, pos + 512)
+                    for k in range(pos, max_scan):
+                        try:
+                            raw1 = struct.unpack_from('<H', data, k)[0]
+                            raw2 = struct.unpack_from('<H', data, k+2)[0]
+                        except struct.error:
+                            continue
+                        if raw1 == 0xFFFF:
+                            found = k
+                            reason = 'terminator'
+                            break
+                        chk = raw1 & 0x3FFF
+                        length_m = raw2 & 0x3FFF
+                        if length_m >= 4 and k + length_m <= len(data) and chk in (0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,0x000A):
+                            found = k
+                            reason = f'chunk_0x{chk:04X}'
+                            break
+                    if found is not None:
+                        logger.warning(f"Resync: jumping from bad facet line at {pos} to candidate header at {found} ({reason})")
+                        pos = found
+                        chunk_end = found
+                        break
+                    else:
+                        pos = chunk_end
+                        break
+                except Exception:
+                    break
             try:
                 idx_raw = struct.unpack_from('<H', data, pos)[0]
                 pos += 2
@@ -379,11 +473,16 @@ def parse_facets_chunk(data, start_pos, chunk_length):
             # clear origin/dynamic flags and keep sign bit
             idx = (idx_raw & 0x3FFF) * sign
             facet_lines.append(idx)
+        # Accept partial facets when at least 3 line indices were collected.
         if len(facet_lines) >= 3:
             logger.debug(f"Parsed facet lines: {facet_lines}")
             facets.append(facet_lines)
         else:
-            logger.debug(f"Skipping facet with insufficient lines: {facet_lines}")
+            # If truncated but provided some indices, log and skip; otherwise silent skip
+            if len(facet_lines) > 0:
+                logger.debug(f"Skipping truncated facet with insufficient lines: {facet_lines}")
+            else:
+                logger.debug(f"Skipping facet with insufficient lines: {facet_lines}")
     if pos < chunk_end:
         logger.debug(f"Padding {chunk_end - pos} bytes in facets")
     pos = chunk_end
@@ -1031,8 +1130,11 @@ def main(hex_str, obj_file=os.path.join(base, 'model_files', 'workshop_slim_00_l
             if raw_chk_type & ~0x3FFF or raw_length & ~0x3FFF:
                 logger.debug(f"Masked high-bit flags in chunk header: raw_type=0x{raw_chk_type:04X} raw_len=0x{raw_length:04X} -> type=0x{chk_type:04X} len={length}")
             if length < 4:
-                logger.warning(f"Invalid chunk length {length} for type 0x{chk_type:04X}, skipping")
-                continue
+                # Malformed chunk length (should be at least 4 for header). Force a
+                # minimum length of 4 so we treat it as a zero-payload chunk and
+                # advance correctly instead of repeatedly re-reading the same bytes.
+                logger.warning(f"Invalid chunk length {length} for type 0x{chk_type:04X}, forcing minimum 4")
+                length = 4
             if inner_pos + (length - 4) > len(data):
                 logger.warning(f"Chunk overruns file: raw_type=0x{raw_chk_type:04X} raw_length={raw_length}. Truncating to available bytes.")
                 # clamp to file end using masked length
@@ -1136,7 +1238,10 @@ if __name__ == "__main__":
                 if raw_chk_type & ~0x3FFF or raw_length & ~0x3FFF:
                     logger.debug(f"Masked high-bit flags in chunk header (collect_pass): raw_type=0x{raw_chk_type:04X} raw_len=0x{raw_length:04X} -> type=0x{chk_type:04X} len={length}")
                 if length < 4:
-                    continue
+                    # Malformed chunk length in collect_pass: force minimum to avoid
+                    # stalling the inner loop while remaining defensive.
+                    logger.debug(f"collect_pass: invalid chunk length {length} for type 0x{chk_type:04X}, forcing minimum 4")
+                    length = 4
                 if inner_pos + (length - 4) > len(data):
                     length = 4 + max(0, len(data) - inner_pos)
                 if chk_type == 0x0006:
@@ -1266,7 +1371,10 @@ if __name__ == "__main__":
                             if raw_chk_type & ~0x3FFF or raw_length & ~0x3FFF:
                                 logger.debug(f"Masked high-bit flags in chunk header (gather): raw_type=0x{raw_chk_type:04X} raw_len=0x{raw_length:04X} -> type=0x{chk_type:04X} len={length}")
                             if length < 4:
-                                continue
+                                # Malformed chunk length in gather: force minimum and continue
+                                # processing as a zero-payload chunk so parsing resynchronizes.
+                                logger.debug(f"gather: invalid chunk length {length} for type 0x{chk_type:04X}, forcing minimum 4")
+                                length = 4
                             if inner_pos + (length - 4) > len(data):
                                 length = 4 + max(0, len(data) - inner_pos)
                             if chk_type == 0x0006:
