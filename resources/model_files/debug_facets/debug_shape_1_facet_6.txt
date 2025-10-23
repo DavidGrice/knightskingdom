@@ -1,0 +1,80 @@
+Debug facet 6 for shape 1
+Original facet lines: [-4, 4, 4, 31, -11, -30, 32, 4, 16, -28, 33, 34, -32, 4, 17, -33, 1, -25, 35, 4, 18, 36, 37, 38, 39, 6, 19, 40, -39, 41]
+Directed edges (u->v) and multiplicity:
+  14 -> 15  mul=1
+  15 -> 14  mul=5
+  26 -> 19  mul=1
+  19 -> 20  mul=1
+  20 -> 25  mul=1
+  25 -> 26  mul=1
+  21 -> 13  mul=1
+  25 -> 10  mul=1
+  10 -> 27  mul=1
+  27 -> 26  mul=1
+  26 -> 25  mul=1
+  9 -> 16  mul=1
+  27 -> 10  mul=1
+  10 -> 11  mul=1
+  11 -> 24  mul=1
+  24 -> 27  mul=1
+  16 -> 18  mul=1
+  28 -> 31  mul=1
+  31 -> 30  mul=1
+  30 -> 29  mul=1
+  29 -> 28  mul=1
+  12 -> 11  mul=1
+  18 -> 21  mul=1
+  16 -> 28  mul=1
+  28 -> 29  mul=1
+  29 -> 24  mul=1
+
+Outgoing candidates and angles (deg) per vertex:
+ vertex 9:
+    -> 16  angle=90.00
+ vertex 10:
+    -> 27  angle=-179.95
+    -> 11  angle=-90.00
+ vertex 11:
+    -> 24  angle=90.00
+ vertex 12:
+    -> 11  angle=-0.00
+ vertex 14:
+    -> 15  angle=0.24
+ vertex 15:
+    -> 14  angle=-179.76
+    -> 14  angle=-179.76
+    -> 14  angle=-179.76
+    -> 14  angle=-179.76
+    -> 14  angle=-179.76
+ vertex 16:
+    -> 18  angle=-45.50
+    -> 28  angle=45.00
+ vertex 18:
+    -> 21  angle=90.00
+ vertex 19:
+    -> 20  angle=90.00
+ vertex 20:
+    -> 25  angle=0.00
+ vertex 21:
+    -> 13  angle=90.00
+ vertex 24:
+    -> 27  angle=139.54
+ vertex 25:
+    -> 26  angle=-90.00
+    -> 10  angle=-41.19
+ vertex 26:
+    -> 19  angle=180.00
+    -> 25  angle=90.00
+ vertex 27:
+    -> 26  angle=134.86
+    -> 10  angle=0.05
+ vertex 28:
+    -> 31  angle=90.00
+    -> 29  angle=0.00
+ vertex 29:
+    -> 28  angle=180.00
+    -> 24  angle=-0.00
+ vertex 30:
+    -> 29  angle=-90.00
+ vertex 31:
+    -> 30  angle=0.00

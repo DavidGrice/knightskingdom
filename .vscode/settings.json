@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "APP_LIB.C": "cpp",
-        "APP_TYPE.H": "cpp"
+        "APP_TYPE.H": "cpp",
+        "APP_API.H": "cpp"
     }
 }

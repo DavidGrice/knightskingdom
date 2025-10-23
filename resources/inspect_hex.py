@@ -120,7 +120,9 @@ if off + 4 <= len(data):
                     y = struct.unpack_from('<h', data, ppos+4)[0]
                     print(f'      rel x={x} y={y}')
                 ppos += 6
-
-print('\nDone inspect')
+    except Exception as e:
+        print('  direct inspect error', e)
+    except Exception as e:
+        print('  points header unpack error', e)
 
 print('\nDone')

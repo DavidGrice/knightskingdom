@@ -1,0 +1,35 @@
+Debug facet 3 for shape 1
+Original facet lines: [3, 2, 14, -10, 8, 3, 3, -9, 15, 16, 4, 5]
+Directed edges (u->v) and multiplicity:
+  12 -> 15  mul=3
+  13 -> 12  mul=1
+  14 -> 20  mul=1
+  20 -> 8  mul=1
+  8 -> 14  mul=1
+  13 -> 9  mul=1
+  9 -> 21  mul=1
+  21 -> 13  mul=1
+  15 -> 14  mul=1
+  14 -> 13  mul=1
+
+Outgoing candidates and angles (deg) per vertex:
+ vertex 8:
+    -> 14  angle=90.00
+ vertex 9:
+    -> 21  angle=-42.21
+ vertex 12:
+    -> 15  angle=90.98
+    -> 15  angle=90.98
+    -> 15  angle=90.98
+ vertex 13:
+    -> 12  angle=0.00
+    -> 9  angle=-173.62
+ vertex 14:
+    -> 20  angle=90.00
+    -> 13  angle=-90.00
+ vertex 15:
+    -> 14  angle=-179.76
+ vertex 20:
+    -> 8  angle=-90.00
+ vertex 21:
+    -> 13  angle=90.00

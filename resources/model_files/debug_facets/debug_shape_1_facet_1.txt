@@ -1,0 +1,14 @@
+Debug facet 1 for shape 1
+Original facet lines: [7, 6, -1]
+Directed edges (u->v) and multiplicity:
+  10 -> 15  mul=1
+  12 -> 11  mul=1
+  11 -> 10  mul=1
+
+Outgoing candidates and angles (deg) per vertex:
+ vertex 10:
+    -> 15  angle=0.13
+ vertex 11:
+    -> 10  angle=0.00
+ vertex 12:
+    -> 11  angle=-178.47

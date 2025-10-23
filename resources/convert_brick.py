@@ -4,6 +4,8 @@ import os
 
 from collections import defaultdict
 
+from matplotlib import lines
+
 # Set up logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -80,7 +82,7 @@ def parse_points_chunk(data, start_pos, chunk_length, size_x, size_y, size_z):
                 pos += 2
                 p2 = struct.unpack_from('<h', data, pos)[0] & 0x7FFF
                 pos += 2
-                num = struct.unpack_from('<h' , data, pos)[0]
+                num = struct.unpack_from('<h', data, pos)[0]
                 pos += 2
                 frac = num / den
                 px1, py1, pz1 = points[p1]
@@ -88,6 +90,7 @@ def parse_points_chunk(data, start_pos, chunk_length, size_x, size_y, size_z):
                 x = px1 + (px2 - px1) * frac
                 y = py1 + (py2 - py1) * frac
                 z = pz1 + (pz2 - pz1) * frac
+                points.append((x, y, z))
             except struct.error:
                 logger.warning("Struct error in geometric static")
                 break
@@ -104,68 +107,62 @@ def parse_points_chunk(data, start_pos, chunk_length, size_x, size_y, size_z):
                 pos += 2
                 z = struct.unpack_from('<h', data, pos)[0] / 16384.0
                 pos += 2
+                points.append((x, y, z))
             except struct.error:
                 logger.warning("Struct error in relative static")
                 break
-            points.append((x, y, z))
     # Parse dynamic points
     for _ in range(num_dyn):
-        if pos + 2 > chunk_end:
-            logger.warning("Incomplete dynamic point")
-            break
-        try:
-            word = struct.unpack_from('<h', data, pos)[0]
-        except struct.error:
-            logger.warning("Struct error in dynamic word")
-            break
-        pos += 2
-        bytes_per_pos = 8 if word & 0x8000 else 6
-        if word & 0x8000:
-            if pos + 6 > chunk_end:
-                logger.warning("Incomplete geometric dynamic")
+        for __ in range(num_cels):
+            if pos + 2 > chunk_end:
+                logger.warning("Incomplete dynamic point")
                 break
             try:
-                log_den = word & 0x001F
-                den = 1 << log_den
-                p1 = struct.unpack_from('<h', data, pos)[0] & 0x7FFF
-                pos += 2
-                p2 = struct.unpack_from('<h', data, pos)[0] & 0x7FFF
-                pos += 2
-                num = struct.unpack_from('<h', data, pos)[0]
-                pos += 2
-                frac = num / den
-                px1, py1, pz1 = points[p1]
-                px2, py2, pz2 = points[p2]
-                x = px1 + (px2 - px1) * frac
-                y = py1 + (py2 - py1) * frac
-                z = pz1 + (pz2 - pz1) * frac
-                points.append((x, y, z))
+                word = struct.unpack_from('<h', data, pos)[0]
             except struct.error:
-                logger.warning("Struct error in geometric dynamic")
+                logger.warning("Struct error in dynamic word")
                 break
-            except IndexError:
-                logger.warning("Index error in geometric dynamic points access")
-                break
-        else:
-            if pos + 4 > chunk_end:
-                logger.warning("Incomplete relative dynamic")
-                break
-            try:
-                x = word / 16384.0
-                y = struct.unpack_from('<h', data, pos)[0] / 16384.0
-                pos += 2
-                z = struct.unpack_from('<h', data, pos)[0] / 16384.0
-                pos += 2
-                points.append((x, y, z))
-            except struct.error:
-                logger.warning("Struct error in relative dynamic")
-                break
-        skip_bytes = (num_cels - 1) * bytes_per_pos
-        if pos + skip_bytes > chunk_end:
-            logger.warning("Skip would overrun, adjusting")
-            pos = chunk_end
-        else:
-            pos += skip_bytes
+            pos += 2
+            if word & 0x8000:
+                if pos + 6 > chunk_end:
+                    logger.warning("Incomplete geometric dynamic")
+                    break
+                try:
+                    log_den = word & 0x001F
+                    den = 1 << log_den
+                    p1 = struct.unpack_from('<h', data, pos)[0] & 0x7FFF
+                    pos += 2
+                    p2 = struct.unpack_from('<h', data, pos)[0] & 0x7FFF
+                    pos += 2
+                    num = struct.unpack_from('<h', data, pos)[0]
+                    pos += 2
+                    frac = num / den
+                    px1, py1, pz1 = points[p1]
+                    px2, py2, pz2 = points[p2]
+                    x = px1 + (px2 - px1) * frac
+                    y = py1 + (py2 - py1) * frac
+                    z = pz1 + (pz2 - pz1) * frac
+                    points.append((x, y, z))
+                except struct.error:
+                    logger.warning("Struct error in geometric dynamic")
+                    break
+                except IndexError:
+                    logger.warning("Index error in geometric dynamic points access")
+                    break
+            else:
+                if pos + 4 > chunk_end:
+                    logger.warning("Incomplete relative dynamic")
+                    break
+                try:
+                    x = word / 16384.0
+                    y = struct.unpack_from('<h', data, pos)[0] / 16384.0
+                    pos += 2
+                    z = struct.unpack_from('<h', data, pos)[0] / 16384.0
+                    pos += 2
+                    points.append((x, y, z))
+                except struct.error:
+                    logger.warning("Struct error in relative dynamic")
+                    break
     scaled = [(x * size_x, y * size_y, z * size_z) for x, y, z in points]
     if pos < chunk_end:
         logger.debug(f"Padding {chunk_end - pos} bytes in points")
@@ -210,33 +207,32 @@ def parse_facets_chunk(data, start_pos, chunk_length):
         return [], chunk_end
     facets = []
     for _ in range(num_facets):
-        if pos + 2 > chunk_end:
-            logger.warning("Incomplete num_sides")
+        if pos + 4 > chunk_end:
+            logger.warning("Incomplete facet header")
             break
-        try:
-            num_sides = struct.unpack_from('<H', data, pos)[0]
-            pos += 2
-        except struct.error:
-            logger.warning("Struct error in num_sides")
-            break
-        if num_sides > 200:
-            logger.warning("Unreasonable num_sides, skipping facet")
-            pos += 2 * num_sides if pos + 2 * num_sides <= chunk_end else chunk_end - pos
+        num_lines = data[pos]
+        pos += 1
+        fac_att = data[pos]
+        pos += 1
+        number = struct.unpack_from('<H', data, pos)[0]
+        pos += 2
+        if num_lines > 200 or num_lines < 3:
+            logger.warning(f"Unreasonable num_lines {num_lines}, skipping facet")
+            pos += 2 * num_lines if pos + 2 * num_lines <= chunk_end else chunk_end - pos
             continue
         facet_lines = []
-        for __ in range(num_sides):
+        for __ in range(num_lines):
             if pos + 2 > chunk_end:
                 logger.warning("Incomplete line idx")
                 break
             try:
-                idx = struct.unpack_from('<H', data, pos)[0]
+                idx = struct.unpack_from('<h', data, pos)[0]
                 pos += 2
             except struct.error:
                 logger.warning("Struct error in line idx")
                 break
-            line_num = idx & 0x7FFF
-            if line_num == 0 or line_num > 32766:
-                logger.warning(f"Ignoring invalid line num {line_num}")
+            if abs(idx) > len(lines) or idx == 0:
+                logger.warning(f"Ignoring invalid line idx {idx}")
                 continue
             facet_lines.append(idx)
         if len(facet_lines) >= 3:
@@ -292,11 +288,15 @@ def lines_to_vertices(facets, lines, points):
             continue
         valid_facet = []
         for idx in facet:
-            line_num = idx & 0x7FFF
-            if line_num == 0 or line_num > len(lines):
-                logger.warning(f"Invalid line num {line_num} for facet {facet_idx}")
-                continue
-            valid_facet.append(idx)
+            l = abs(idx) - 1
+            if 0 <= l < len(lines):
+                p1, p2 = lines[l]
+                if 0 <= p1 < len(points) and 0 <= p2 < len(points) and p1 != p2:
+                    valid_facet.append(idx)
+                else:
+                    logger.warning(f"Invalid points in line {l}: {p1}, {p2} for facet {facet_idx}")
+            else:
+                logger.warning(f"Invalid line index {idx} for facet {facet_idx}")
         if len(valid_facet) < 3:
             logger.warning(f"Facet {facet_idx} has too few valid lines, skipping")
             continue
@@ -304,8 +304,8 @@ def lines_to_vertices(facets, lines, points):
         # Convert to directed edges
         directed_edges = []
         for idx in valid_facet:
-            dir_sign = -1 if idx & 0x8000 else 1
-            l = idx & 0x7FFF - 1  # 0-based
+            dir_sign = 1 if idx > 0 else -1
+            l = abs(idx) - 1
             p1, p2 = lines[l]
             if dir_sign < 0:
                 p1, p2 = p2, p1

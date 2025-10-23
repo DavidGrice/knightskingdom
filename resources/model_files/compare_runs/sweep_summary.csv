@@ -1,0 +1,13 @@
+run,cluster_frac,top_k,verts,total_faces,tri_faces,poly_faces,obj_path
+run_cf0.01_tk4,0.01,4,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf1_tk4.obj
+run_cf0.01_tk6,0.01,6,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf1_tk6.obj
+run_cf0.01_tk8,0.01,8,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf1_tk8.obj
+run_cf0.02_tk4,0.02,4,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf2_tk4.obj
+run_cf0.02_tk6,0.02,6,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf2_tk6.obj
+run_cf0.02_tk8,0.02,8,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf2_tk8.obj
+run_cf0.03_tk4,0.03,4,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf3_tk4.obj
+run_cf0.03_tk6,0.03,6,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf3_tk6.obj
+run_cf0.03_tk8,0.03,8,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf3_tk8.obj
+run_cf0.05_tk4,0.05,4,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf5_tk4.obj
+run_cf0.05_tk6,0.05,6,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf5_tk6.obj
+run_cf0.05_tk8,0.05,8,32,21,16,5,c:\Users\GRICE_D\Documents\PROJECTS\PROGRAMMING\THREEJS\LEGO\knights-kingdom\resources\model_files\compare_runs\obj_cf5_tk8.obj
