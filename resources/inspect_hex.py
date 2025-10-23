@@ -121,8 +121,6 @@ if off + 4 <= len(data):
                     print(f'      rel x={x} y={y}')
                 ppos += 6
     except Exception as e:
-        print('  direct inspect error', e)
-    except Exception as e:
         print('  points header unpack error', e)
 
 print('\nDone')

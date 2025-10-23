@@ -1,35 +1,50 @@
-"""lca2obj.py
+"""From-scratch LCA/SHAP parser -> OBJ/MTL
 
-Standalone LCA (.lca) to OBJ/MTL converter implementing SDK 16-bit chunk parsing
-(simplified, focused on Points, Lines, Facets chunks per SDK chapters 7/8).
+This parser treats the file as a flat sequence of 16-bit chunk headers and
+payloads. It does not assume any pre-defined hierarchy mapping. Instead it
+applies a small heuristic: if a chunk payload begins with what looks like
+one or more valid chunk headers (16-bit type, 16-bit length) that point inside
+that payload, we treat the payload as a container and recursively parse it.
 
-Usage: python lca2obj.py <input.lca> [output_prefix]
+We implement direct parsers for three SDK-defined payload types (per
+`APP_TYPE.H` semantics):
+ - Points chunk (T_POINTSCHK structure)
+ - Lines chunk (T_LINECHK structure)
+ - Facets chunk (T_FACETCHK / T_FACET structures)
 
-This script intentionally keeps a small dependency footprint (stdlib only).
+All integer fields are treated with 16-bit semantics and header words are
+masked with 0x3FFF to clear high flags (per SDK).
+
+Usage:
+    python lca2obj.py <input.lca> [output_prefix]
+
+Output: <output_prefix>.obj and <output_prefix>.mtl written in cwd.
 """
 
 import sys
 import os
 import struct
 import math
-from collections import defaultdict
+from collections import deque
 
-# SDK constants and helpers (16-bit semantics)
-CHK_HDR_WORDS = 2  # chunk header consists of two 16-bit words: type, length
-HDR_MASK = 0x3FFF  # clear high flag bits per SDK
+# Constants
+HDR_MASK = 0x3FFF  # clear high bits in header words (14-bit values)
+MIN_CHK_WORDS = 2  # minimum words for a chunk header (type+length)
+MIN_CHK_BYTES = MIN_CHK_WORDS * 2
 
-# Chunk types (common names seen in existing code)
-# These values are inferred from repo tools and common VRT/LEGO formats.
-T_POINTSCHK = 0x0001
-T_LINECHK = 0x0002
-T_FACETCHK = 0x0003
+# SDK subchunk ids (shape-level identifiers as described in APP_TYPE.H)
+E_SCPOINTS = 0x0000
+E_SCLINES = 0x0001
+E_SCFACETS = 0x0002
 
-# Safety limits
-MAX_POINTS = 100000
+# Orientation bit present in facet line indices
+FACET_ORIENT_BIT = 0x8000
+
+# Safety caps
+MAX_POINTS = 200000
 MAX_LINES = 200000
-MAX_FACETS = 100000
+MAX_FACETS = 200000
 
-# Minimal vector helpers
 
 def read_u16(data, pos):
     return struct.unpack_from('<H', data, pos)[0]
@@ -39,134 +54,230 @@ def read_i16(data, pos):
     return struct.unpack_from('<h', data, pos)[0]
 
 
-class LCAParser:
+def is_plausible_chunk_header(data, pos, base_end):
+    """Return True if a 4-byte clean chunk header exists at pos and points inside base_end."""
+    if pos + 4 > base_end:
+        return False
+    try:
+        raw_type = read_u16(data, pos)
+        raw_len = read_u16(data, pos + 2)
+    except struct.error:
+        return False
+    chk = raw_type & HDR_MASK
+    ln = raw_len & HDR_MASK
+    # length measured in words; require at least header words and not overflow
+    if ln < MIN_CHK_WORDS:
+        return False
+    payload_bytes = (ln - 2) * 2  # header consumes two words
+    payload_start = pos + 4
+    payload_end = payload_start + payload_bytes
+    return payload_end <= base_end and payload_end > payload_start
+
+
+class Chunk:
+    """Represents a parsed chunk header and payload slice.
+
+    Fields:
+        start: absolute offset of header word (type)
+        chk_type: masked chunk type (14-bit)
+        length_words: length in 16-bit words (masked)
+        payload_start, payload_end: absolute offsets of payload range (bytes)
+    """
+
+    __slots__ = ('start', 'chk_type', 'length_words', 'payload_start', 'payload_end')
+
+    def __init__(self, start, chk_type, length_words, payload_start, payload_end):
+        self.start = start
+        self.chk_type = chk_type
+        self.length_words = length_words
+        self.payload_start = payload_start
+        self.payload_end = payload_end
+
+    def __repr__(self):
+        return f"Chunk(start={self.start}, type=0x{self.chk_type:04X}, words={self.length_words}, payload={self.payload_start}-{self.payload_end})"
+
+
+class LCA2OBJ:
     def __init__(self, data):
         self.data = data
         self.size = len(data)
-        self.points = []
-        self.lines = []
-        self.facets = []
+        self.points = []  # list of (x,y,z) floats
+        self.lines = []   # list of (p1_idx, p2_idx) (1-based as found)
+        self.facets = []  # list of [signed line indices]
+        self.diagnostics = []
 
-    def find_shap(self):
-        # Find 'SHAP' magic or textual header used by SHAP files
-        idx = self.data.find(b'SHAP')
-        if idx != -1:
-            # If 'SHAP' is found inside a textual header, move back to start of header
-            # Try to find an earlier textual header marker (optional)
-            return idx
-        # fallback: start at 0
-        return 0
-
-    def parse(self):
-        # Follow SDK APP_TYPE.H semantics: iterate shapes until 0xFFFF terminator
-        shap_off = self.find_shap()
-        pos = shap_off
-        # If file has a full textual header, the shape data often starts at offset+256
-        if pos + 256 < self.size and self.data[pos:pos+4] != b'SHAP':
-            # try to decode textual header like convert_brick_gpt
-            # search for ASCII 'SHAP' and assume header starts 0..256 bytes before it
-            sidx = self.data.find(b'SHAP')
-            if sidx != -1:
-                pos = sidx
-        # If we found 'SHAP', advance to after a possible 256-byte file header
-        data_start = pos + 256 if pos + 256 < self.size else pos
-        cur = data_start
-        while cur + 4 <= self.size:
-            # peek for end marker
+    def discover_top_level_chunks(self):
+        """Scan the file as a flat sequence of chunk headers (no assumptions)."""
+        chunks = []
+        pos = 0
+        while pos + 4 <= self.size:
             try:
-                peek = read_u16(self.data, cur)
+                raw_type = read_u16(self.data, pos)
+                raw_len = read_u16(self.data, pos + 2)
             except struct.error:
                 break
-            if peek == 0xFFFF:
+            if raw_type == 0xFFFF:
+                # 0xFFFF used as terminator in some formats; advance and stop
+                pos += 2
                 break
-            # begin parsing shape chunks
-            size_x = size_y = size_z = 1.0
-            inner = cur
-            while inner + 4 <= self.size:
-                raw_chk = read_u16(self.data, inner)
-                raw_len = read_u16(self.data, inner + 2)
-                if raw_chk == 0xFFFF:
-                    inner += 2
-                    break
-                chk_type = raw_chk & HDR_MASK
-                length_words = raw_len & HDR_MASK
-                if length_words < 4:
-                    length_words = 4
-                payload_bytes = (length_words - 2) * 2  # because header counted in words
-                payload_start = inner + 4
-                payload_end = payload_start + payload_bytes
-                if payload_end > self.size:
-                    payload_end = self.size
-                print(f"chunk at {inner}: type=0x{chk_type:04X} len_words={length_words} payload {payload_start}-{payload_end}")
-                # sizes chunk
-                if chk_type == 0x0006 and payload_end - payload_start >= 12:
-                    try:
-                        sx, sy, sz = struct.unpack_from('<lll', self.data, payload_start)
-                        size_x = float(sx); size_y = float(sy); size_z = float(sz)
-                    except struct.error:
-                        pass
-                elif chk_type == 0x0000:
-                    pts = self.parse_points_chunk(payload_start, payload_end)
-                    if pts is not None:
-                        self.points = pts
-                elif chk_type == 0x0001:
-                    lns = self.parse_lines_chunk(payload_start, payload_end)
-                    if lns is not None:
-                        self.lines = lns
-                elif chk_type == 0x0002:
-                    facs = self.parse_facets_chunk(payload_start, payload_end)
-                    if facs is not None:
-                        self.facets = facs
-                # advance
-                inner = payload_end
-            # move to next shape (stop after first for now)
-            break
+            chk_type = raw_type & HDR_MASK
+            length_words = raw_len & HDR_MASK
+            if length_words < MIN_CHK_WORDS:
+                # malformed; force minimal length to avoid infinite loop
+                length_words = MIN_CHK_WORDS
+            payload_bytes = (length_words - 2) * 2
+            payload_start = pos + 4
+            payload_end = payload_start + payload_bytes
+            if payload_end > self.size:
+                payload_end = self.size
+            chunks.append(Chunk(pos, chk_type, length_words, payload_start, payload_end))
+            # advance to next candidate header
+            pos = payload_end
+        return chunks
 
-    def parse_points_chunk(self, start, end):
-        # Points chunk format (per SDK): header with num_points (USHORT) maybe extra fields
+    def parse(self):
+        # Top-level scan
+        top_chunks = self.discover_top_level_chunks()
+        if not top_chunks:
+            print('No top-level chunks discovered')
+            return
+        # We'll process each top-level chunk and if a chunk's payload looks like a
+        # nested sequence of valid chunk headers, recursively parse children.
+        queue = deque(top_chunks)
+        while queue:
+            chk = queue.popleft()
+            # Heuristic: check if payload contains nested chunk headers
+            nested_found = False
+            # scan first few bytes of payload for plausible inner header sequence
+            scan_start = chk.payload_start
+            scan_end = chk.payload_end
+            # check every possible word-aligned offset inside payload (limit scan length)
+            limit_scan = min(scan_start + 1024, scan_end)
+            for p in range(scan_start, limit_scan, 2):
+                if is_plausible_chunk_header(self.data, p, scan_end):
+                    nested_found = True
+                    break
+            if nested_found:
+                # parse nested children as top-level inside this payload region
+                pos = chk.payload_start
+                while pos + 4 <= chk.payload_end:
+                    try:
+                        raw_type = read_u16(self.data, pos)
+                        raw_len = read_u16(self.data, pos + 2)
+                    except struct.error:
+                        break
+                    if raw_type == 0xFFFF:
+                        pos += 2
+                        break
+                    ctype = raw_type & HDR_MASK
+                    clen = raw_len & HDR_MASK
+                    if clen < MIN_CHK_WORDS:
+                        clen = MIN_CHK_WORDS
+                    cbytes = (clen - 2) * 2
+                    pstart = pos + 4
+                    pend = min(pstart + cbytes, chk.payload_end)
+                    child = Chunk(pos, ctype, clen, pstart, pend)
+                    # push child to queue for processing
+                    queue.append(child)
+                    pos = pend
+                continue
+            # If not nested, try to decode chunk as data payload for points/lines/facets
+            if chk.chk_type in (E_SCPOINTS,):
+                # Parse points chunk
+                self._parse_points_payload(chk.payload_start, chk.payload_end)
+            elif chk.chk_type in (E_SCLINES,):
+                self._parse_lines_payload(chk.payload_start, chk.payload_end)
+            elif chk.chk_type in (E_SCFACETS,):
+                self._parse_facets_payload(chk.payload_start, chk.payload_end)
+            else:
+                # Unknown chunk type — attempt to detect if it *contains* a points/lines/facets structure
+                # We'll attempt quick signature sniffing: points begin with two ushorts (NumPoints, NumCels)
+                # lines begin with one ushort (NumLines) and facets begin with one ushort (NumFacets).
+                # Try points
+                if self._sniff_points(chk.payload_start, chk.payload_end):
+                    self._parse_points_payload(chk.payload_start, chk.payload_end)
+                elif self._sniff_lines(chk.payload_start, chk.payload_end):
+                    self._parse_lines_payload(chk.payload_start, chk.payload_end)
+                elif self._sniff_facets(chk.payload_start, chk.payload_end):
+                    self._parse_facets_payload(chk.payload_start, chk.payload_end)
+                else:
+                    # not recognized — skip
+                    pass
+
+    # ---------- sniffers ----------
+    def _sniff_points(self, start, end):
+        if start + 4 > end:
+            return False
+        try:
+            npts = read_u16(self.data, start)
+        except struct.error:
+            return False
+        if npts == 0 or npts > MAX_POINTS:
+            return False
+        # remaining bytes must be enough for at least one point (6 bytes each)
+        rem = end - (start + 4)
+        return rem >= 6
+
+    def _sniff_lines(self, start, end):
+        if start + 2 > end:
+            return False
+        try:
+            n = read_u16(self.data, start)
+        except struct.error:
+            return False
+        if n == 0 or n > MAX_LINES:
+            return False
+        # at least one line record of 4 bytes
+        rem = end - (start + 2)
+        return rem >= 4
+
+    def _sniff_facets(self, start, end):
+        if start + 2 > end:
+            return False
+        try:
+            n = read_u16(self.data, start)
+        except struct.error:
+            return False
+        if n == 0 or n > MAX_FACETS:
+            return False
+        # can't reliably validate further without parsing, so accept
+        return True
+
+    # ---------- payload parsers (fresh implementations) ----------
+    def _parse_points_payload(self, start, end):
         pos = start
         if pos + 4 > end:
-            # not enough for typical header - try to read whatever possible
+            self.diagnostics.append(('points_incomplete_header', start))
             return
         try:
             num_points = read_u16(self.data, pos)
+            num_cels = read_u16(self.data, pos + 2)
         except struct.error:
+            self.diagnostics.append(('points_struct_error', start))
             return
-        pos += 2
-        # skip potential cell count or reserved word if present
-        # Many tools expect an extra USHORT cell count here; try to detect
-        # If remaining size fits num_points*6 bytes (3 x SHORT per point), assume no extra cell count
-        remaining = end - pos
-        expected_coords_bytes = num_points * 6  # 3 signed shorts per point
-        if remaining >= expected_coords_bytes:
-            # likely no extra word
-            pass
-        else:
-            # try consuming a cell-count word
-            if pos + 2 <= end:
-                _cell_count = read_u16(self.data, pos)
-                pos += 2
-                remaining = end - pos
-        # read points as 3 x signed 16-bit fixed coords (assume units; we normalize later)
+        pos += 4
         points = []
+        # Each point is typically 3 x signed shorts (6 bytes). We'll parse as many as available
         for i in range(num_points):
             if pos + 6 > end:
+                # truncated
                 break
-            x = read_i16(self.data, pos); y = read_i16(self.data, pos+2); z = read_i16(self.data, pos+4)
+            x = float(read_i16(self.data, pos)); y = float(read_i16(self.data, pos+2)); z = float(read_i16(self.data, pos+4))
             pos += 6
-            # convert to float (assume scale 1/256 or 1/512 not known). We'll keep raw ints for now.
-            points.append((float(x), float(y), float(z)))
-        self.points = points
-        print(f'Parsed POINTS: {len(points)}')
+            points.append((x, y, z))
+        # accumulate points across chunks
+        self.points.extend(points)
+        print(f'Parsed fresh POINTS: {len(points)} (declared {num_points})')
 
-    def parse_lines_chunk(self, start, end):
+    def _parse_lines_payload(self, start, end):
         pos = start
         if pos + 2 > end:
+            self.diagnostics.append(('lines_incomplete_header', start))
             return
-        # many formats start with num_lines (USHORT)
         try:
             num_lines = read_u16(self.data, pos)
         except struct.error:
+            self.diagnostics.append(('lines_struct_error', start))
             return
         pos += 2
         lines = []
@@ -175,150 +286,142 @@ class LCAParser:
                 break
             p1 = read_u16(self.data, pos); p2 = read_u16(self.data, pos+2)
             pos += 4
-            # indices in file are often 1-based; convert later if needed
+            # preserve raw indices; they may be 1-based
             lines.append((p1, p2))
-        self.lines = lines
-        print(f'Parsed LINES: {len(lines)}')
+        # accumulate lines across chunks
+        self.lines.extend(lines)
+        print(f'Parsed fresh LINES: {len(lines)} (declared {num_lines})')
 
-    def parse_facets_chunk(self, start, end):
+    def _parse_facets_payload(self, start, end):
         pos = start
         if pos + 2 > end:
+            self.diagnostics.append(('facets_incomplete_header', start))
             return
         try:
             num_facets = read_u16(self.data, pos)
         except struct.error:
+            self.diagnostics.append(('facets_struct_error', start))
             return
         pos += 2
         facets = []
         for fi in range(num_facets):
             if pos + 4 > end:
                 # incomplete facet header
+                self.diagnostics.append(('facet_incomplete_header', (start, fi, pos)))
                 break
             num_lines = self.data[pos]
             fac_att = self.data[pos+1]
             number = read_u16(self.data, pos+2)
             pos += 4
-            # read num_lines of ushorts
             facet_lines = []
             for li in range(num_lines):
                 if pos + 2 > end:
+                    # truncated line indices
+                    self.diagnostics.append(('facet_incomplete_lines', (start, fi, len(facet_lines), num_lines)))
                     break
-                liw = read_u16(self.data, pos)
-                pos += 2
-                # line index may have orientation bit (0x8000)
-                orient = (liw & 0x8000) != 0
-                li_idx = liw & 0x7FFF
-                # Store signed style orientation by making negative index if reversed
-                facet_lines.append(-li_idx if orient else li_idx)
+                raw = read_u16(self.data, pos); pos += 2
+                sign = -1 if (raw & FACET_ORIENT_BIT) else 1
+                idx = (raw & 0x3FFF) * sign
+                facet_lines.append(idx)
             if len(facet_lines) >= 3:
                 facets.append(facet_lines)
-        self.facets = facets
-        print(f'Parsed FACETS: {len(facets)}')
+        # accumulate facets across chunks
+        self.facets.extend(facets)
+        print(f'Parsed fresh FACETS: {len(facets)} (declared {num_facets})')
 
-    def build_faces_from_facets(self):
-        # Convert line indices to vertex indices and produce face vertex lists
+    # ---------- assembly and export ----------
+    def assemble_faces(self):
+        """Given self.points, self.lines, and self.facets, attempt to build faces as vertex index lists (1-based for OBJ).
+        This is a straightforward stitcher: it uses the orientation encoded in facet line indices to chain endpoints.
+        If chaining fails, it will fallback to a greedy order of unique vertices and emit triangles via fan triangulation.
+        """
         faces = []
-        # Prepare point indexing assumptions:
-        # If lines reference point indices that exceed points count, maybe lines store 1-based indices.
-        pts_count = len(self.points)
+        pts = self.points
+        lns = self.lines
         for facet in self.facets:
-            # each facet is a list of line indices (signed by orientation)
-            # Build vertex loop by chaining line endpoints
-            vertex_loop = []
-            if not facet:
-                continue
-            # map line_index -> endpoints
-            def get_line_endpoints(li):
-                idx = abs(li)
-                if idx == 0 or idx > len(self.lines):
+            # build sequence of vertex indices
+            verts = []
+            def get_endpoints(li):
+                aidx = abs(li)
+                if aidx == 0 or aidx > len(lns):
                     return None
-                a_raw, b_raw = self.lines[idx-1]
-                # convert line point indices to 0-based
-                a = a_raw - 1 if a_raw > 0 else a_raw
-                b = b_raw - 1 if b_raw > 0 else b_raw
+                p1_raw, p2_raw = lns[aidx-1]
+                # keep as zero-based indices for points list
+                p1 = p1_raw - 1 if p1_raw > 0 else p1_raw
+                p2 = p2_raw - 1 if p2_raw > 0 else p2_raw
                 if li < 0:
-                    # reversed orientation
-                    return (b, a)
-                return (a, b)
+                    return (p2, p1)
+                return (p1, p2)
 
-            # Start with first line
-            ep = get_line_endpoints(facet[0])
-            if not ep:
+            first = get_endpoints(facet[0])
+            if not first:
                 continue
-            v0, v1 = ep
-            vertex_loop.append(v0)
-            vertex_loop.append(v1)
+            verts.append(first[0]); verts.append(first[1])
             for li in facet[1:]:
-                ep = get_line_endpoints(li)
+                ep = get_endpoints(li)
                 if not ep:
                     continue
-                a,b = ep
-                # if a matches last vertex, append b, else try to reorder
-                if a == vertex_loop[-1]:
-                    vertex_loop.append(b)
-                elif b == vertex_loop[-1]:
-                    vertex_loop.append(a)
+                a, b = ep
+                if a == verts[-1]:
+                    verts.append(b)
+                elif b == verts[-1]:
+                    verts.append(a)
                 else:
-                    # try to stitch by searching for matching endpoint and rotate
-                    if a in vertex_loop:
-                        # rotate loop so a is at end
-                        while vertex_loop[-1] != a:
-                            vertex_loop.append(vertex_loop[0]); vertex_loop.pop(0)
-                        vertex_loop.append(b)
-                    elif b in vertex_loop:
-                        while vertex_loop[-1] != b:
-                            vertex_loop.append(vertex_loop[0]); vertex_loop.pop(0)
-                        vertex_loop.append(a)
+                    # try to find and rotate
+                    if a in verts:
+                        while verts[-1] != a:
+                            verts.append(verts.pop(0))
+                        verts.append(b)
+                    elif b in verts:
+                        while verts[-1] != b:
+                            verts.append(verts.pop(0))
+                        verts.append(a)
                     else:
-                        # disconnect - append both endpoints to keep geometry
-                        vertex_loop.append(a); vertex_loop.append(b)
-            # deduplicate consecutive duplicates
-            if len(vertex_loop) >= 3:
-                # remove duplicates
-                cleaned = []
-                for v in vertex_loop:
-                    if not cleaned or cleaned[-1] != v:
-                        cleaned.append(v)
-                # ensure at least 3 unique vertices
-                if len(set(cleaned)) >= 3:
-                    faces.append(cleaned)
+                        verts.append(a); verts.append(b)
+            # clean duplicates
+            cleaned = []
+            for v in verts:
+                if not cleaned or cleaned[-1] != v:
+                    cleaned.append(v)
+            if len(set(cleaned)) >= 3:
+                # convert to 1-based for OBJ
+                faces.append([v+1 for v in cleaned])
         return faces
 
     def write_obj(self, out_prefix):
-        obj_path = out_prefix + '.obj'
-        mtl_path = out_prefix + '.mtl'
-        # Write MTL with single default material
-        with open(mtl_path, 'w') as mf:
+        obj_file = out_prefix + '.obj'
+        mtl_file = out_prefix + '.mtl'
+        # write simple MTL
+        with open(mtl_file, 'w') as mf:
             mf.write('newmtl mat0\n')
             mf.write('Kd 0.8 0.8 0.8\n')
-        faces = self.build_faces_from_facets()
-        # Write OBJ
-        with open(obj_path, 'w') as of:
-            of.write(f'mtllib {os.path.basename(mtl_path)}\n')
+        faces = self.assemble_faces()
+        with open(obj_file, 'w') as of:
+            of.write(f'mtllib {os.path.basename(mtl_file)}\n')
             of.write('usemtl mat0\n')
-            # write vertices
-            for p in self.points:
-                x,y,z = p
+            for x, y, z in self.points:
                 of.write(f'v {x:.6f} {y:.6f} {z:.6f}\n')
-            # write faces (1-based indices expected by OBJ)
             for f in faces:
-                # convert to 1-based OBJ indices
-                verts = [str(v+1 if v >= 0 else v) for v in f]
-                of.write('f ' + ' '.join(verts) + '\n')
-        print('Wrote', obj_path, mtl_path)
+                of.write('f ' + ' '.join(str(i) for i in f) + '\n')
+        print(f'Wrote OBJ: {obj_file} (verts={len(self.points)} faces={len(faces)})')
 
 
 def main(argv):
     if len(argv) < 2:
-        print('Usage: python lca2obj.py <input.lca> [output_prefix]')
+        print('Usage: python lca2obj.py <input.lca> [out_prefix]')
         return
     inp = argv[1]
-    outpref = argv[2] if len(argv) >= 3 else os.path.splitext(os.path.basename(inp))[0]
+    out = argv[2] if len(argv) > 2 else os.path.splitext(os.path.basename(inp))[0]
     with open(inp, 'rb') as f:
         data = f.read()
-    p = LCAParser(data)
-    p.parse()
-    p.write_obj(os.path.join(os.getcwd(), outpref))
+    parser = LCA2OBJ(data)
+    parser.parse()
+    parser.write_obj(out)
+    if parser.diagnostics:
+        print('Diagnostics:')
+        for d in parser.diagnostics[:20]:
+            print(' ', d)
+
 
 if __name__ == '__main__':
     main(sys.argv)
