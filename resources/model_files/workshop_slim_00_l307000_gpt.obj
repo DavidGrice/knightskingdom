@@ -1,0 +1,205 @@
+o Shape_1
+v 0.000000 0.000000 0.000000
+v 0.000000 0.000000 1.000000
+v 0.000000 1.000000 0.000000
+v 0.000000 1.000000 1.000000
+v 1.000000 0.000000 0.000000
+v 1.000000 0.000000 1.000000
+v 1.000000 1.000000 0.000000
+v 1.000000 1.000000 1.000000
+v 0.000000 0.226791 0.000000
+v 0.000000 0.000000 0.000000
+v 2.265625 0.226791 0.000000
+v 2.265625 0.000000 0.000000
+v 0.241211 0.000000 0.000000
+v 0.000000 0.000000 0.000000
+v 0.000000 0.226807 0.000000
+v 0.237305 0.227783 0.000000
+v 0.000000 0.000000 0.000000
+v 0.000000 0.226562 0.000000
+v 0.000000 0.000000 0.000000
+v 0.000000 2.000000 0.000000
+v 0.000000 2.003662 0.000000
+v 0.000000 0.000000 0.000000
+v 0.235352 0.000000 0.000000
+v 0.243164 0.000000 0.000000
+v 2.265625 0.000000 0.000000
+v 0.235352 2.003662 0.000000
+v 0.235352 2.000000 0.000000
+v 2.000000 0.226562 0.000000
+v 0.000000 0.000000 0.000000
+v 0.000000 0.000000 0.000000
+v 0.000000 0.000000 0.000000
+v 0.000000 0.000000 0.000000
+usemtl color_Shape_1_0
+f 11 12 14
+usemtl color_Shape_1_1
+f 11 14 13
+usemtl color_Shape_1_2
+f 11 13 16
+usemtl color_Shape_1_3
+f 11 16 15
+usemtl color_Shape_1_4
+f 13 12 15
+usemtl color_Shape_1_5
+f 13 15 14
+usemtl color_Shape_1_6
+f 13 14 9
+usemtl color_Shape_1_7
+f 13 9 10
+usemtl color_Shape_1_8
+f 13 16 9
+usemtl color_Shape_1_9
+f 13 9 15
+usemtl color_Shape_1_10
+f 13 15 11
+usemtl color_Shape_1_11
+f 14 13 11
+usemtl color_Shape_1_12
+f 14 11 12
+usemtl color_Shape_1_13
+f 14 12 18
+usemtl color_Shape_1_14
+f 14 18 9
+usemtl color_Shape_1_15
+f 14 9 10
+usemtl color_Shape_1_16
+f 14 10 16
+usemtl color_Shape_1_17
+f 14 16 15
+usemtl color_Shape_1_18
+f 14 15 21
+usemtl color_Shape_1_19
+f 14 21 22
+usemtl color_Shape_1_20
+f 10 17 19
+usemtl color_Shape_1_21
+f 10 19 13
+usemtl color_Shape_1_22
+f 10 13 16
+usemtl color_Shape_1_23
+f 10 16 11
+usemtl color_Shape_1_24
+f 10 11 18
+usemtl color_Shape_1_25
+f 10 18 20
+usemtl color_Shape_1_26
+f 10 20 22
+usemtl color_Shape_1_27
+f 10 22 14
+usemtl color_Shape_1_28
+f 10 14 15
+usemtl color_Shape_1_29
+f 10 15 23
+usemtl color_Shape_1_30
+f 10 23 9
+usemtl color_Shape_1_31
+f 10 9 21
+usemtl color_Shape_1_32
+f 23 24 25
+usemtl color_Shape_1_33
+f 23 25 13
+usemtl color_Shape_1_34
+f 23 13 16
+usemtl color_Shape_1_35
+f 23 16 21
+usemtl color_Shape_1_36
+f 23 21 20
+usemtl color_Shape_1_37
+f 23 20 12
+usemtl color_Shape_1_38
+f 23 12 19
+usemtl color_Shape_1_39
+f 23 19 17
+usemtl color_Shape_1_40
+f 23 17 22
+usemtl color_Shape_1_41
+f 23 22 18
+usemtl color_Shape_1_42
+f 23 18 10
+usemtl color_Shape_1_43
+f 23 10 11
+usemtl color_Shape_1_44
+f 23 11 14
+usemtl color_Shape_1_45
+f 23 14 9
+usemtl color_Shape_1_46
+f 23 9 26
+usemtl color_Shape_1_47
+f 23 26 15
+usemtl color_Shape_1_48
+f 16 13 26
+usemtl color_Shape_1_49
+f 16 26 21
+usemtl color_Shape_1_50
+f 16 21 9
+usemtl color_Shape_1_51
+f 16 9 27
+usemtl color_Shape_1_52
+f 16 27 20
+usemtl color_Shape_1_53
+f 16 20 10
+usemtl color_Shape_1_54
+f 16 10 22
+usemtl color_Shape_1_55
+f 16 22 24
+usemtl color_Shape_1_56
+f 16 24 19
+usemtl color_Shape_1_57
+f 16 19 11
+usemtl color_Shape_1_58
+f 16 11 28
+usemtl color_Shape_1_59
+f 16 28 14
+usemtl color_Shape_1_60
+f 16 14 25
+usemtl color_Shape_1_61
+f 16 25 17
+usemtl color_Shape_1_62
+f 16 17 29
+usemtl color_Shape_1_63
+f 16 29 32
+usemtl color_Shape_1_64
+f 16 32 31
+usemtl color_Shape_1_65
+f 16 31 30
+usemtl color_Shape_1_66
+f 16 30 15
+usemtl color_Shape_1_67
+f 17 10 13
+usemtl color_Shape_1_68
+f 17 13 16
+usemtl color_Shape_1_69
+f 17 16 19
+usemtl color_Shape_1_70
+f 17 19 22
+usemtl color_Shape_1_71
+f 17 22 29
+usemtl color_Shape_1_72
+f 17 29 31
+usemtl color_Shape_1_73
+f 17 31 32
+usemtl color_Shape_1_74
+f 17 32 30
+usemtl color_Shape_1_75
+f 17 30 25
+usemtl color_Shape_1_76
+f 17 25 27
+usemtl color_Shape_1_77
+f 17 27 28
+usemtl color_Shape_1_78
+f 17 28 15
+usemtl color_Shape_1_79
+f 17 15 14
+usemtl color_Shape_1_80
+f 17 14 18
+usemtl color_Shape_1_81
+f 17 18 20
+usemtl color_Shape_1_82
+f 17 20 21
+usemtl color_Shape_1_83
+f 17 21 26
+usemtl color_Shape_1_84
+f 17 26 11
+usemtl color_Shape_1_85
+f 17 11 23

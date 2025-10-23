@@ -105,6 +105,7 @@ const SkyBoxLoader = (mapData, scene, selectedClimateMode) => {
     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     skybox.position.set(0, 0, 0);
     skybox.isMovable = false;
+    skybox.name = "SkyBox";
     scene.add(skybox);
 
     // Function to update the climate mode

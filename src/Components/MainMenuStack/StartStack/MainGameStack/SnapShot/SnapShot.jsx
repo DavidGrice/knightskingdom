@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './SnapShot.module.css';
 import { SnapShotHolder } from './index';
 import { checkmarks } from './SnapShotResourceStack/index';

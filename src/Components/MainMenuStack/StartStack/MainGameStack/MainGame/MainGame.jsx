@@ -8,7 +8,7 @@ import { Climate } from './ComponentBottom/Climate/index';
 import { Music } from './ComponentBottom/Music/index';
 import { musicTracks } from './MainGameResourceStack/index';
 
-const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData }) => {
+const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData, setWorldData }) => {
 
   const [mode, setMode] = useState('NONE');
   const [selectedModelMode, setSelectedModelMode] = useState('NONE');
@@ -79,6 +79,10 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
   }
 
   useEffect(() => {
+    // if (moveToScreen && intermediateMapData) {
+    //   console.log("intermediateMapData MainGame", intermediateMapData);
+    //   navigateToSnapshot(intermediateMapData);
+    // }
     switch (mode) {
     case 'ADDING':
       console.log('Mode set to ADDING');
@@ -293,6 +297,15 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     setSelectedModelMode('NONE');
   }
 
+  const handleNavigateToSnapShot = () => {
+    if (intermediateMapData === null) {
+      return;
+    } else {
+      setWorldData(intermediateMapData);
+      navigateToSnapshot();
+    }
+  }
+
   return (
     <div className={styles.mainDiv}>
       <div className={styles.topComponent}>
@@ -371,6 +384,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
         cameraNeedsReset={cameraNeedsReset}
         setCameraNeedsReset={setCameraNeedsReset}
         isClimateOpen={isClimateOpen}
+        setIntermediateMapData={setIntermediateMapData}
       />
       <div className={styles.bottomComponent}>
         <ComponentBottom
@@ -379,7 +393,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
           activeIcon={activeIcon}
           setActiveIcon={setActiveIcon}
           navigateToWorkshop={navigateToWorkshop}
-          navigateToSnapshot={navigateToSnapshot}
+          handleNavigateToSnapShot={handleNavigateToSnapShot}
           handleMusicChange={handleMusicChange}
         />
       </div>

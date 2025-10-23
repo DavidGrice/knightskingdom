@@ -6,7 +6,7 @@ import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 
 const SelectedModels = {
     NONE:'NONE',
-    ARCHER: Archer,
+    ARCHER: {model: Archer, name: 'Archer', isMovable: true, isDeletable: true, isDriveable: true, isPaintable: true, isRotatable: true, isModel: true},
 };
 
 
@@ -42,6 +42,7 @@ const ModelLoader = (type, modelData, position, mapData, scene) => {
                         gltf.scene.name = model.name;
                         gltf.scene.isMovable = false;
                         gltf.scene.isDeletable = true;
+                        gltf.scene.isModel = true;
 
                         // Traverse the gltf.scene to set properties on the transparentBox and add camera helpers to head_back
                         gltf.scene.traverse((child) => {
@@ -175,12 +176,13 @@ const ModelLoader = (type, modelData, position, mapData, scene) => {
             break;
         case 'add':
             loader.load(
-                SelectedModels[modelData],
+                SelectedModels[modelData]['model'],
                 (gltf) => {
                     // gltf.scene.add(gltf.scene);
-                        gltf.scene.name = modelData.name;
+                        gltf.scene.name = SelectedModels[modelData]['name'];
                         gltf.scene.isMovable = false;
                         gltf.scene.isDeletable = true;
+                        gltf.scene.isModel = SelectedModels[modelData]['isModel'];
 
                         // Traverse the gltf.scene to set properties on the transparentBox and add camera helpers to head_back
                         gltf.scene.traverse((child) => {

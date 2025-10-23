@@ -6,18 +6,9 @@ import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/i
 import { Modes } from './GameEngineResourceStack/index';
 
 const GameEngine = ({ 
-                      mapData, 
-                      color, 
-                      mode, 
-                      activeCamera, 
-                      isFollowing, 
-                      addModel, 
-                      selectedClimateMode, 
-                      climateNeedsUpdating, 
-                      setClimateNeedsUpdating, 
-                      cameraNeedsReset, 
-                      setCameraNeedsReset,
-                      isClimateOpen 
+                      mapData, color, mode, activeCamera, isFollowing, addModel, 
+                      selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating, 
+                      cameraNeedsReset, setCameraNeedsReset, isClimateOpen, setIntermediateMapData
                     }) => {
   const mountRef = useRef(null);
   const [modelLoaded, setModelLoaded] = useState(false);
@@ -111,6 +102,27 @@ const GameEngine = ({
   
 
   useEffect(() => {
+    const updateIntermediateMapData = () => {
+      const newIntermediateMapData = [];
+
+      scene.children.forEach((child) => {
+        newIntermediateMapData.push({ child: child });
+      });
+
+      const cameraData = {
+        position: camera.position,
+        quaternion: camera.quaternion,
+        rotation: camera.rotation,
+        far: camera.far,
+        near: camera.near,
+        scale: camera.scale,
+        zoom: camera.zoom,
+      };
+
+      newIntermediateMapData.push({ camera: cameraData });
+      setIntermediateMapData(newIntermediateMapData);
+    };
+
     //region Event Listeners
     const onMouseOver = (event) => {
       if (event.target !== canvasRef.current) {
@@ -143,6 +155,7 @@ const GameEngine = ({
                   }
                   const position = intersect.point;
                   ModelLoader('add', addModel, position, null, scene);
+                  updateIntermediateMapData();
                   break;
               default:
                   break;
@@ -229,6 +242,7 @@ const GameEngine = ({
                   break;
           }
       }
+      updateIntermediateMapData();
     };
 
     const onMouseMove = (event) => {
@@ -266,6 +280,7 @@ const GameEngine = ({
           isDragging.current = false;
           selectedObject.current.visible = false;
           selectedObject.current = null;
+          updateIntermediateMapData();
       }
     };
 
@@ -303,6 +318,7 @@ const GameEngine = ({
       ClimateLoader(selectedClimateMode, scene, climateNeedsUpdating, currentSystem, setCurrentSystem);
       setClimateNeedsUpdating(false);
       SkyBoxLoader(mapData, scene, selectedClimateMode);
+      updateIntermediateMapData();
     }
     // Add necessary event listeners based on the current mode
     switch (mode) {
@@ -365,7 +381,7 @@ const GameEngine = ({
   }, [
     mode, color, mapData, scene, camera, renderer, raycaster, mouse, activeCamera, 
     selectedClimateMode, climateNeedsUpdating, currentSystem, cameraNeedsReset, 
-    isClimateOpen, setCameraNeedsReset, setClimateNeedsUpdating
+    isClimateOpen, setCameraNeedsReset, setClimateNeedsUpdating, setIntermediateMapData
   ]);
 
   return (
