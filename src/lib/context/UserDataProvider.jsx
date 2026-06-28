@@ -17,6 +17,7 @@ import {
   readSessionAuth,
   writeSessionAuth,
 } from '@/services/userService';
+import { beginNavigationLoading } from '@/lib/gameLoadingBus';
 import { ROUTES } from '../routes';
 
 const UserDataContext = createContext(null);
@@ -54,6 +55,7 @@ export const UserDataProvider = ({ children }) => {
       setIsAuthenticated(true);
       setSelectedProfile(profile);
       writeSessionAuth(profile);
+      beginNavigationLoading();
       router.push(ROUTES.mainMenu);
     },
     [router]
@@ -63,6 +65,7 @@ export const UserDataProvider = ({ children }) => {
     setIsAuthenticated(false);
     setSelectedProfile(null);
     writeSessionAuth(null);
+    beginNavigationLoading();
     router.push(ROUTES.authentication);
   }, [router]);
 

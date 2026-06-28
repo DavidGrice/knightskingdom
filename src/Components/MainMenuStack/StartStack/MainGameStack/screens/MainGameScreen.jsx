@@ -19,6 +19,7 @@ const MainGameScreen = ({
 
   useEffect(() => {
     if (!mapData) {
+      stopLoading('world-assets');
       stopLoading('navigation');
     }
   }, [mapData, stopLoading]);

@@ -1,5 +1,5 @@
 import './globals.css';
-import { UserDataProvider } from '@/lib/context/UserDataProvider';
+import AppProviders from '@/lib/AppProviders';
 
 export const metadata = {
   title: 'Knights Kingdom',
@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <UserDataProvider>{children}</UserDataProvider>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

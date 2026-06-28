@@ -5,6 +5,7 @@ import Options from '@/Components/MainMenuStack/Options/Options';
 import { useUserData } from '@/lib/context/UserDataProvider';
 import { useScreenReady } from '@/lib/context/GameLoadingProvider';
 import { updateProfileOptions } from '@/api/worldSave';
+import { beginNavigationLoading } from '@/lib/gameLoadingBus';
 import { ROUTES } from '@/lib/routes';
 
 export default function OptionsPage() {
@@ -25,7 +26,10 @@ export default function OptionsPage() {
 
   return (
     <Options
-      navigateToMenu={() => router.push(ROUTES.mainMenu)}
+      navigateToMenu={() => {
+        beginNavigationLoading();
+        router.push(ROUTES.mainMenu);
+      }}
       selectedProfile={currentProfile}
       onUpdateOptions={handleUpdateOptions}
     />

@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import { beginNavigationLoading } from '@/lib/gameLoadingBus';
 import { ROUTES } from '../routes';
 import { useUserData } from './UserDataProvider';
 import {
@@ -30,6 +31,7 @@ export const WorldSessionProvider = ({ children }) => {
   );
 
   const navigateToStartMenu = useCallback(() => {
+    beginNavigationLoading();
     router.push(ROUTES.startStack.start);
   }, [router]);
 
@@ -38,6 +40,7 @@ export const WorldSessionProvider = ({ children }) => {
       if (mapData) {
         setWorldData(mapData);
       }
+      beginNavigationLoading(['world-assets']);
       router.push(ROUTES.startStack.mainGame);
     },
     [router]
@@ -48,6 +51,7 @@ export const WorldSessionProvider = ({ children }) => {
       if (updatedWorldData) {
         setWorldData(updatedWorldData);
       }
+      beginNavigationLoading();
       router.push(ROUTES.startStack.workshop);
     },
     [router]
@@ -65,12 +69,14 @@ export const WorldSessionProvider = ({ children }) => {
           ],
         }));
       }
+      beginNavigationLoading();
       router.push(ROUTES.startStack.snapshot);
     },
     [router]
   );
 
   const navigateToMyModels = useCallback(() => {
+    beginNavigationLoading();
     router.push(ROUTES.startStack.myModels);
   }, [router]);
 

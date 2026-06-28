@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import MainMenu from '@/Components/MainMenuStack/MainMenu/MainMenu';
 import { useUserData } from '@/lib/context/UserDataProvider';
 import { useScreenReady } from '@/lib/context/GameLoadingProvider';
+import { beginNavigationLoading } from '@/lib/gameLoadingBus';
 import { ROUTES } from '@/lib/routes';
 
 export default function MainMenuPage() {
@@ -17,7 +18,10 @@ export default function MainMenuPage() {
     <MainMenu
       selectedProfile={currentProfile}
       navigateToAuthentication={navigateToAuthentication}
-      navigateToStart={() => router.push(ROUTES.startStack.start)}
+      navigateToStart={() => {
+        beginNavigationLoading();
+        router.push(ROUTES.startStack.start);
+      }}
     />
   );
 }

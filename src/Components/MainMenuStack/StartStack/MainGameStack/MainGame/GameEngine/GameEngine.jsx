@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef, startTransition } from 'react';
 import * as THREE from 'three';
-import { useGameLoading, useManagedLoading } from '@/lib/context/GameLoadingProvider';
+import { useGameLoading } from '@/lib/context/GameLoadingProvider';
 import { ModelLoader } from './Loaders/index';
 import { Modes } from './GameEngineResourceStack/index';
 import { serializeSceneFromThree } from '../../context/sceneSchema';
@@ -52,10 +52,9 @@ const GameEngine = forwardRef(({
 
   const { stopLoading } = useGameLoading();
 
-  useManagedLoading('world-assets', Boolean(mapData && !assetsReady));
-
   useEffect(() => {
     if (assetsReady) {
+      stopLoading('world-assets');
       stopLoading('navigation');
     }
   }, [assetsReady, stopLoading]);

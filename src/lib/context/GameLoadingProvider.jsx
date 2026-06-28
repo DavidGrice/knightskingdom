@@ -5,12 +5,18 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import { usePathname } from 'next/navigation';
 import LoadingModal from '@/Components/Common/LoadingModal/LoadingModal';
+import {
+  consumeNavigationPending,
+  registerGameLoadingApi,
+  unregisterGameLoadingApi,
+} from '@/lib/gameLoadingBus';
 
 const GameLoadingContext = createContext(null);
 
@@ -42,11 +48,18 @@ export const GameLoadingProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (previousPathname.current === pathname) {
-      return;
+    registerGameLoadingApi({ startLoading, stopLoading });
+    return () => unregisterGameLoadingApi();
+  }, [startLoading, stopLoading]);
+
+  useEffect(() => {
+    const pathChanged = previousPathname.current !== pathname;
+    const pendingNavigation = consumeNavigationPending();
+
+    if (pathChanged || pendingNavigation) {
+      previousPathname.current = pathname;
+      startLoading('navigation');
     }
-    previousPathname.current = pathname;
-    startLoading('navigation');
   }, [pathname, startLoading]);
 
   const isLoading = sources.size > 0;
@@ -76,11 +89,11 @@ export const useGameLoading = () => {
   return context;
 };
 
-/** Call when a screen has mounted and is ready to dismiss route-transition loading. */
+/** Dismiss route-transition loading once the screen has committed. */
 export const useScreenReady = () => {
   const { stopLoading } = useGameLoading();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     stopLoading('navigation');
   }, [stopLoading]);
 };
@@ -104,7 +117,7 @@ export const useManagedLoading = (key, active) => {
 export const DynamicImportLoading = () => {
   const { startLoading, stopLoading } = useGameLoading();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     startLoading('dynamic-import');
     return () => stopLoading('dynamic-import');
   }, [startLoading, stopLoading]);

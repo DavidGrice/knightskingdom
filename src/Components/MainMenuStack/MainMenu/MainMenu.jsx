@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './MainMenu.module.css';
 import { useRouter } from 'next/navigation';
+import { beginNavigationLoading } from '@/lib/gameLoadingBus';
 import { ROUTES } from '@/lib/routes';
 import { CommonComponent, MenuScreenLayout } from '../../Common';
 import castleBackground from './MainMenuResources/castle.png';
@@ -39,7 +40,10 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
           initialImage={Options2}
           hoverImage={Options4}
           altText="Options"
-          onClick={() => router.push(ROUTES.options)}
+          onClick={() => {
+            beginNavigationLoading();
+            router.push(ROUTES.options);
+          }}
         />
       </div>
       <div className={styles.divSeparators}>
@@ -47,7 +51,10 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
           initialImage={Credits2}
           hoverImage={Credits4}
           altText="Credits"
-          onClick={() => router.push(ROUTES.credits)}
+          onClick={() => {
+            beginNavigationLoading();
+            router.push(ROUTES.credits);
+          }}
         />
       </div>
       <div className={styles.divSeparators}>
