@@ -1,5 +1,6 @@
+/* Layout pattern matches SnapShotBody / WorldBody: fixed grid root + absolute overlays */
 .modelsBody {
-    height: 100%;
+    height: 530px;
     width: 229px;
     display: flex;
     flex-direction: column;
@@ -13,7 +14,8 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 2%;
+    margin-top: 3%;
+    cursor: pointer;
 }
 
 .upArrow {
@@ -21,7 +23,6 @@
     height: 26px;
     z-index: 10;
     background-repeat: no-repeat;
-    cursor: pointer;
 }
 
 .body {
@@ -39,6 +40,7 @@
     position: relative;
     width: 95px;
     height: 67px;
+    overflow: hidden;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -62,7 +64,7 @@
 
 .downArrowHolder {
     position: absolute;
-    bottom: 0;
+    bottom: 21%;
     left: 50%;
     transform: translateX(-50%);
     width: 42px;
@@ -79,33 +81,41 @@
 }
 
 .lowerContent {
+    width: 80%;
+    height: 13%;
+    position: absolute;
+    bottom: 9%;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-top: 8px;
+    gap: 24px;
 }
 
 .iconComponentHolder {
-    width: 62px;
-    height: 62px;
-    display: flex;
+    height: 66px;
+    width: 66px;
     justify-content: center;
     align-items: center;
+    display: flex;
+    flex-direction: row;
+    margin-top: 3%;
     cursor: pointer;
 }
 
 .helpComponentHolder {
-    position: absolute;
-    bottom: 5px;
-    right: 2%;
     width: 140px;
-    height: 99px;
-    display: flex;
+    height: 103px;
+    position: absolute;
     justify-content: center;
     align-items: center;
-    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    bottom: 13%;
+    right: 1%;
+    z-index: 10;
 }
 
 .emptyMessage {

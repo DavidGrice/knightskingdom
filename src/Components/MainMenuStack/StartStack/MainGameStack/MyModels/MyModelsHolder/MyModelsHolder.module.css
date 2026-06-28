@@ -1,14 +1,15 @@
+/* Frame holder — same role as SnapShotHolder.componentHolder */
 .componentHolder {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     width: 229px;
     height: 441px;
     position: absolute;
     left: 29.15%;
     top: 6%;
     z-index: 2;
+    overflow: visible;
     background-image: url('../MyModelsResourceStack/drop_down.png');
     background-size: contain;
     background-repeat: no-repeat;

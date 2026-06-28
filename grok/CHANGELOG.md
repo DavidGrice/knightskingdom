@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — MyModels: align overlay layout with SnapShot / WorldBody
+
+| File | Change |
+|------|--------|
+| `MyModelsBody.module.css` | SnapShot-style absolute overlays: down arrow `bottom: 21%`, footer `bottom: 9%`, help `bottom: 13%` / `z-index: 10`, 530px grid root |
+| `MyModelsHolder.module.css` | Match SnapShot holder pattern (`overflow: visible`, no flex center squash) |
+
+Copy/delete icons and Richard help now anchor to the purple frame like screenshot/world selectors.
+
+---
+
 ## 2026-06-28 — MyModels save menu polish
 
 | File | Change |
