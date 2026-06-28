@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef, startTransition } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComponent';
-import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
+import { ModelLoader } from './Loaders/index';
 import { Modes } from './GameEngineResourceStack/index';
-import { applySavedSceneToThree, serializeSceneFromThree } from '../../context/sceneSchema';
+import { serializeSceneFromThree } from '../../context/sceneSchema';
+import { GameEngineCore } from './GameEngineCore';
+import { disposeObject3D } from './sceneDispose';
 
 const GameEngine = forwardRef(({
   mapData, hydrationScene, color, mode, activeCamera, isFollowing, addModel,
@@ -12,123 +13,98 @@ const GameEngine = forwardRef(({
   cameraNeedsReset, setCameraNeedsReset, isClimateOpen, onSceneChange,
 }, ref) => {
   const mountRef = useRef(null);
-  const [assetsReady, setAssetsReady] = useState(false);
+  const coreRef = useRef(null);
+  const canvasRef = useRef(null);
   const hasHydratedRef = useRef(false);
-  const [loading, setLoading] = useState(false);
+  const [assetsReady, setAssetsReady] = useState(false);
+  const [loading] = useState(false);
   const selectedObject = useRef(null);
   const isDragging = useRef(false);
-  const mouse = new THREE.Vector2();
-  const raycaster = new THREE.Raycaster();
-  const loadedMapIdRef = useRef(null);
-  const [originalCameraPosition, setOriginalCameraPosition] = useState(null);
-  const [originalCameraQuaternion, setOriginalCameraQuaternion] = useState(null);
-  const [climateLoaded, setClimateLoaded] = useState(false);
-  const [currentSystem, setCurrentSystem] = useState(null);
-  const canvasRef = useRef(null);
-
-  const saveOriginalCamera = () => {
-    if (!originalCameraPosition && !originalCameraQuaternion) {
-      setOriginalCameraPosition(camera.position.clone());
-      setOriginalCameraQuaternion(camera.quaternion.clone());
-    }
-  };
-
-  const restoreOriginalCamera = () => {
-    if (originalCameraPosition && originalCameraQuaternion) {
-      camera.position.copy(originalCameraPosition);
-      camera.quaternion.copy(originalCameraQuaternion);
-    }
-  };
-
-  // Initialize scene, camera, and renderer
-  const scene = useRef(new THREE.Scene()).current;
-  const camera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
-  const frontCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
-  const backCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
-  const renderer = useRef(new THREE.WebGLRenderer()).current;
+  const mouse = useRef(new THREE.Vector2());
+  const raycaster = useRef(new THREE.Raycaster());
+  const originalCameraPosition = useRef(null);
+  const originalCameraQuaternion = useRef(null);
 
   useImperativeHandle(ref, () => ({
-    captureFrame: () => renderer.domElement.toDataURL('image/png'),
-    getSceneState: () => serializeSceneFromThree(scene, camera, selectedClimateMode),
-  }), [renderer, scene, camera, selectedClimateMode]);
-
-  useEffect(() => {
-    hasHydratedRef.current = false;
-    setAssetsReady(false);
-  }, [mapData?.id]);
+    captureFrame: () => coreRef.current?.captureFrame() ?? null,
+    getSceneState: () => coreRef.current?.getSceneState(),
+  }), []);
 
   useEffect(() => {
     const mountNode = mountRef.current;
-  
-    if (mountNode) {
-      mountNode.appendChild(renderer.domElement);
-      canvasRef.current = renderer.domElement;
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      if (!climateLoaded) {
-        SkyBoxLoader(mapData, scene, selectedClimateMode);
-        ClimateLoader(selectedClimateMode, scene);
-        setClimateLoaded(true);
-      }
-      if (loadedMapIdRef.current !== mapData?.id) {
-        MapLoader(mapData, scene, () => {
-          ModelLoader('preload', null, null, mapData, scene, () => {
-            setAssetsReady(true);
-          });
-        });
-        loadedMapIdRef.current = mapData?.id ?? null;
-      } else {
-        setAssetsReady(true);
-      }
-      const controls = new OrbitControls(camera, renderer.domElement);
-      controls.enableZoom = true;
-      controls.enablePan = false;
-      controls.enableDamping = false;
-      controls.enableRotate = false;
-      camera.position.z = 10;
-      camera.position.y = 5;
-  
-      const animate = () => {
-        controls.update();
-        renderer.render(scene, camera);
-        requestAnimationFrame(animate);
-      };
-      animate();
-  
-      const handleResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      };
-  
-      window.addEventListener('resize', handleResize);
-  
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        mountNode.removeChild(renderer.domElement);
-      };
+    if (!mountNode) {
+      return undefined;
     }
-    }, [camera, climateLoaded, mapData, renderer, scene, selectedClimateMode]);
+
+    const core = new GameEngineCore();
+    coreRef.current = core;
+    canvasRef.current = core.mount(mountNode);
+
+    return () => {
+      core.dispose();
+      coreRef.current = null;
+      canvasRef.current = null;
+      setAssetsReady(false);
+      hasHydratedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
-    if (!assetsReady || !hydrationScene || hasHydratedRef.current) {
+    const core = coreRef.current;
+    if (!core || !mapData) {
       return;
     }
 
-    applySavedSceneToThree(scene, camera, hydrationScene, {
-      restorePlayable: (entry) => {
-        ModelLoader('restore', entry.modelId, entry, null, scene);
-      },
+    hasHydratedRef.current = false;
+    setAssetsReady(false);
+    core.setClimate(mapData, selectedClimateMode);
+    core.loadWorld(mapData, {
+      onReady: () => setAssetsReady(true),
     });
-
-    if (hydrationScene.climate) {
-      SkyBoxLoader(mapData, scene, hydrationScene.climate);
-      ClimateLoader(hydrationScene.climate, scene);
-    }
-
-    hasHydratedRef.current = true;
-  }, [assetsReady, hydrationScene, scene, camera, mapData, selectedClimateMode]);
+  }, [mapData?.id]);
 
   useEffect(() => {
+    const core = coreRef.current;
+    if (!core || !mapData || !climateNeedsUpdating) {
+      return;
+    }
+
+    core.setClimate(mapData, selectedClimateMode, { force: true });
+    startTransition(() => {
+      setClimateNeedsUpdating(false);
+    });
+
+    if (onSceneChange) {
+      startTransition(() => {
+        onSceneChange(core.getSceneState());
+      });
+    }
+  }, [
+    climateNeedsUpdating,
+    selectedClimateMode,
+    mapData,
+    setClimateNeedsUpdating,
+    onSceneChange,
+  ]);
+
+  useEffect(() => {
+    const core = coreRef.current;
+    if (!core || !assetsReady || !hydrationScene || hasHydratedRef.current) {
+      return;
+    }
+
+    core.hydrateFromSaved(hydrationScene, mapData);
+    hasHydratedRef.current = true;
+  }, [assetsReady, hydrationScene, mapData]);
+
+  useEffect(() => {
+    const core = coreRef.current;
+    if (!core) {
+      return undefined;
+    }
+
+    const { scene, camera, frontCamera, backCamera } = core;
+
     const updateSceneState = () => {
       if (!onSceneChange) {
         return;
@@ -145,256 +121,210 @@ const GameEngine = forwardRef(({
       });
     };
 
-    const clearClimateUpdate = () => {
-      startTransition(() => {
-        setClimateNeedsUpdating(false);
-      });
+    const saveOriginalCamera = () => {
+      if (!originalCameraPosition.current && !originalCameraQuaternion.current) {
+        originalCameraPosition.current = camera.position.clone();
+        originalCameraQuaternion.current = camera.quaternion.clone();
+      }
     };
 
-    //region Event Listeners
-    const onMouseOver = (event) => {
-      if (event.target !== canvasRef.current) {
-        return;
-    }
-      event.preventDefault();
-      if (mode === Modes.NONE || mode === Modes.MOVING) return;
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        raycaster.setFromCamera(mouse, camera);
-        console.log(mouse, 'over');
+    const restoreOriginalCamera = () => {
+      if (originalCameraPosition.current && originalCameraQuaternion.current) {
+        camera.position.copy(originalCameraPosition.current);
+        camera.quaternion.copy(originalCameraQuaternion.current);
+      }
+    };
+
+    const hideWireframe = (object) => {
+      const wireframe = object.getObjectByName('wireframe');
+      if (wireframe) {
+        wireframe.visible = false;
+      }
+    };
+
+    const showWireframe = (object) => {
+      const wireframe = object.getObjectByName('wireframe');
+      if (wireframe) {
+        wireframe.visible = true;
+      }
     };
 
     const onMouseClick = (event) => {
       if (event.target !== canvasRef.current) {
-          return;
+        return;
       }
 
       event.preventDefault();
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      if (intersects.length > 0) {
-          const intersect = intersects[0];
-          switch (mode) {
-              case Modes.ADDING:
-                  if (addModel === 'NONE') {
-                      return;
-                  }
-                  const position = intersect.point;
-                  ModelLoader('add', addModel, position, null, scene);
-                  updateSceneState();
-                  break;
-              default:
-                  break;
-          }
+      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.current.setFromCamera(mouse.current, camera);
+      const intersects = raycaster.current.intersectObjects(scene.children, true);
+      if (intersects.length > 0 && mode === Modes.ADDING) {
+        if (addModel === 'NONE') {
+          return;
+        }
+        ModelLoader(
+          'add',
+          addModel,
+          intersects[0].point,
+          null,
+          scene,
+          null,
+          core.registerFrameCallback.bind(core),
+        );
+        updateSceneState();
       }
     };
 
     const onMouseDown = (event) => {
       if (event.target !== canvasRef.current) {
         return;
-    }
-      event.preventDefault();
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      if (intersects.length > 0) {
-          const intersectedObject = intersects[0].object.parent;
-          const setCameraViews = (intersectedObject, activeCamera) => {
-              const frontCameraHelper = intersectedObject.parent.userData.frontCameraHelper;
-              const backCameraHelper = intersectedObject.parent.userData.backCameraHelper;
-              if (activeCamera === 'back') {
-                  camera.position.copy(frontCameraHelper.getWorldPosition(new THREE.Vector3()));
-                  backCamera.position.copy(backCameraHelper.getWorldPosition(new THREE.Vector3()));
-              } else {
-                  camera.position.copy(backCameraHelper.getWorldPosition(new THREE.Vector3()));
-                  backCamera.position.copy(frontCameraHelper.getWorldPosition(new THREE.Vector3()));
-              }
-          };
-          switch (mode) {
-              case Modes.MOVING:
-                  if (intersectedObject.isMovable) {
-                      selectedObject.current = intersectedObject;
-                      isDragging.current = true;
-                      intersectedObject.visible = true;
-                  }
-                  break;
-              case Modes.ROTATING:
-                  if (intersectedObject.isRotatable) {
-                      hideWireframe(intersectedObject);
-                      selectedObject.current = intersectedObject;
-                      const angle = Math.PI / 2;
-                      intersectedObject.parent.rotateY(angle);
-                      showWireframe(intersectedObject);
-                  }
-                  break;
-              case Modes.PAINTING:
-                  const filteredIntersects = intersects.filter(intersect => intersect.object.name !== "transparentBox" && intersect.object.name !== "wireframe");
-                  if (filteredIntersects.length > 0) {
-                      const fileteredIntersectedObject = filteredIntersects[0].object;
-                      if (fileteredIntersectedObject.isPaintable) {
-                          hideWireframe(fileteredIntersectedObject);
-                          selectedObject.current = fileteredIntersectedObject;
-                          const newColor = new THREE.Color(parseInt(color, 16));
-                          fileteredIntersectedObject.material.color.set(newColor);
-                          showWireframe(fileteredIntersectedObject);
-                      }
-                  }
-                  break;
-              case Modes.DELETING:
-                  if (intersectedObject.isDeletable) {
-                      scene.remove(intersectedObject.parent);
-                      intersectedObject.traverse((child) => {
-                          if (child.geometry) child.geometry.dispose();
-                          if (child.material) {
-                              if (Array.isArray(child.material)) {
-                                  child.material.forEach((material) => material.dispose());
-                              } else {
-                                  child.material.dispose();
-                              }
-                          }
-                      });
-                  }
-                  break;
-              case Modes.ACTION:
-                  break;
-              case Modes.DRIVING:
-                  if (intersectedObject.isDriveable) {
-                      saveOriginalCamera();
-                      setCameraViews(intersectedObject, activeCamera);
-                  }
-                  break;
-              default:
-                  break;
-          }
       }
+
+      event.preventDefault();
+      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.current.setFromCamera(mouse.current, camera);
+      const intersects = raycaster.current.intersectObjects(scene.children, true);
+      if (intersects.length === 0) {
+        return;
+      }
+
+      const intersectedObject = intersects[0].object.parent;
+      const setCameraViews = (driveObject, cameraType) => {
+        const frontCameraHelper = driveObject.parent.userData.frontCameraHelper;
+        const backCameraHelper = driveObject.parent.userData.backCameraHelper;
+        if (cameraType === 'back') {
+          camera.position.copy(frontCameraHelper.getWorldPosition(new THREE.Vector3()));
+          backCamera.position.copy(backCameraHelper.getWorldPosition(new THREE.Vector3()));
+        } else {
+          camera.position.copy(backCameraHelper.getWorldPosition(new THREE.Vector3()));
+          backCamera.position.copy(frontCameraHelper.getWorldPosition(new THREE.Vector3()));
+        }
+      };
+
+      switch (mode) {
+        case Modes.MOVING:
+          if (intersectedObject.isMovable) {
+            selectedObject.current = intersectedObject;
+            isDragging.current = true;
+            intersectedObject.visible = true;
+          }
+          break;
+        case Modes.ROTATING:
+          if (intersectedObject.isRotatable) {
+            hideWireframe(intersectedObject);
+            selectedObject.current = intersectedObject;
+            intersectedObject.parent.rotateY(Math.PI / 2);
+            showWireframe(intersectedObject);
+          }
+          break;
+        case Modes.PAINTING: {
+          const filteredIntersects = intersects.filter(
+            (intersect) => intersect.object.name !== 'transparentBox' && intersect.object.name !== 'wireframe',
+          );
+          if (filteredIntersects.length > 0) {
+            const paintObject = filteredIntersects[0].object;
+            if (paintObject.isPaintable) {
+              hideWireframe(paintObject);
+              selectedObject.current = paintObject;
+              paintObject.material.color.set(new THREE.Color(parseInt(color, 16)));
+              showWireframe(paintObject);
+            }
+          }
+          break;
+        }
+        case Modes.DELETING:
+          if (intersectedObject.isDeletable) {
+            scene.remove(intersectedObject.parent);
+            disposeObject3D(intersectedObject.parent);
+          }
+          break;
+        case Modes.DRIVING:
+          if (intersectedObject.isDriveable) {
+            saveOriginalCamera();
+            setCameraViews(intersectedObject, activeCamera);
+          }
+          break;
+        default:
+          break;
+      }
+
       updateSceneState();
     };
 
     const onMouseMove = (event) => {
-      if (event.target !== canvasRef.current) {
+      if (event.target !== canvasRef.current || mode !== Modes.MOVING || !isDragging.current) {
         return;
-    }
-      event.preventDefault();
-      if (mode === Modes.NONE || mode === Modes.PAINTING) return;
-      if (!isDragging.current) return;
+      }
 
-      switch (mode) {
-          case Modes.MOVING:
-              mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-              mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-              raycaster.setFromCamera(mouse, camera);
-              const intersects = raycaster.intersectObjects(scene.children, true);
-              if (intersects.length > 0) {
-                  const intersectionPoint = intersects[0].point;
-                  selectedObject.current.parent.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
-                  selectedObject.current.parent.userData.frontCameraHelper.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
-                  selectedObject.current.parent.userData.backCameraHelper.position.set(intersectionPoint.x, selectedObject.current.position.y, intersectionPoint.z);
-              }
-              break;
-          default:
-              break;
+      event.preventDefault();
+      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.current.setFromCamera(mouse.current, camera);
+      const intersects = raycaster.current.intersectObjects(scene.children, true);
+      if (intersects.length > 0 && selectedObject.current) {
+        const intersectionPoint = intersects[0].point;
+        selectedObject.current.parent.position.set(
+          intersectionPoint.x,
+          selectedObject.current.position.y,
+          intersectionPoint.z,
+        );
+        selectedObject.current.parent.userData.frontCameraHelper.position.set(
+          intersectionPoint.x,
+          selectedObject.current.position.y,
+          intersectionPoint.z,
+        );
+        selectedObject.current.parent.userData.backCameraHelper.position.set(
+          intersectionPoint.x,
+          selectedObject.current.position.y,
+          intersectionPoint.z,
+        );
       }
     };
 
     const onMouseUp = (event) => {
       if (event.target !== canvasRef.current) {
         return;
-    }
+      }
+
       event.preventDefault();
-      if (selectedObject.current && selectedObject.current.isMovable) {
-          isDragging.current = false;
-          selectedObject.current.visible = false;
-          selectedObject.current = null;
-          updateSceneState();
+      if (selectedObject.current?.isMovable) {
+        isDragging.current = false;
+        selectedObject.current.visible = false;
+        selectedObject.current = null;
+        updateSceneState();
       }
     };
 
     const removeAllEventListeners = () => {
-      window.removeEventListener('mouseover', onMouseOver);
       window.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
       window.removeEventListener('click', onMouseClick);
-  };
-    //endregion
+    };
 
-    //region Helper Functions
-    const hideWireframe = (object) => {
-      const wireframe = object.getObjectByName("wireframe");
-      if (wireframe) {
-        wireframe.visible = false;
-      }
-    };
-    
-    const showWireframe = (object) => {
-      const wireframe = object.getObjectByName("wireframe");
-      if (wireframe) {
-        wireframe.visible = true;
-      }
-    };
-    //endregion
     removeAllEventListeners();
-  
+
     if (cameraNeedsReset) {
       restoreOriginalCamera();
       clearCameraReset();
     }
-    if (isClimateOpen && climateNeedsUpdating) {
-      ClimateLoader(selectedClimateMode, scene, climateNeedsUpdating, currentSystem, setCurrentSystem);
-      clearClimateUpdate();
-      SkyBoxLoader(mapData, scene, selectedClimateMode);
-      updateSceneState();
-    }
-    // Add necessary event listeners based on the current mode
+
     switch (mode) {
-      case Modes.NONE:
-        break;
       case Modes.ADDING:
         window.addEventListener('click', onMouseClick, false);
-        if (cameraNeedsReset) {
-          restoreOriginalCamera();
-          clearCameraReset();
-        }
         break;
       case Modes.MOVING:
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
-        if (cameraNeedsReset) {
-          restoreOriginalCamera();
-          clearCameraReset();
-        }
         break;
       case Modes.ROTATING:
-        window.addEventListener('mousedown', onMouseDown);
-        if (cameraNeedsReset) {
-          restoreOriginalCamera();
-          clearCameraReset();
-        }
-        break;
       case Modes.PAINTING:
-        window.addEventListener('mousedown', onMouseDown);
-        if (cameraNeedsReset) {
-          restoreOriginalCamera();
-          clearCameraReset();
-        }
-        break;
       case Modes.DELETING:
-        window.addEventListener('mousedown', onMouseDown);
-        if (cameraNeedsReset) {
-          restoreOriginalCamera();
-          clearCameraReset();
-        }
-        break;
       case Modes.ACTION:
         window.addEventListener('mousedown', onMouseDown);
-        if (cameraNeedsReset) {
-          restoreOriginalCamera();
-          clearCameraReset();
-        }
         break;
       case Modes.DRIVING:
         window.addEventListener('mousedown', onMouseDown);
@@ -402,14 +332,19 @@ const GameEngine = forwardRef(({
       default:
         break;
     }
-  
+
     return () => {
       removeAllEventListeners();
     };
   }, [
-    mode, color, mapData, scene, camera, renderer, raycaster, mouse, activeCamera, 
-    selectedClimateMode, climateNeedsUpdating, currentSystem, cameraNeedsReset, 
-    isClimateOpen, setCameraNeedsReset, setClimateNeedsUpdating, onSceneChange, selectedClimateMode
+    mode,
+    color,
+    addModel,
+    activeCamera,
+    cameraNeedsReset,
+    selectedClimateMode,
+    setCameraNeedsReset,
+    onSceneChange,
   ]);
 
   return (

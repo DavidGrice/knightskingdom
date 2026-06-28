@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { removeSceneObjectByName } from '../sceneDispose';
 
 const climateModeToInt = {
   SUNNY: 0,
@@ -21,6 +22,8 @@ const resolveClimateMode = (climateMode) => {
 };
 
 const SkyBoxLoader = (mapData, scene, selectedClimateMode) => {
+  removeSceneObjectByName(scene, 'SkyBox');
+
   const climateModeInt = resolveClimateMode(selectedClimateMode);
     const skyboxGeometry = new THREE.BoxGeometry(600, 600, 600);
     const texLoader = new THREE.CubeTextureLoader();

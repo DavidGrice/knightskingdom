@@ -108,7 +108,22 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color }) =
     }
 };
 
-const ModelLoader = (type, modelData, position, mapData, scene, onComplete) => {
+const registerCameraHelperUpdates = (child, frontCameraHelper, backCameraHelper, registerFrameCallback) => {
+    updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
+
+    if (typeof registerFrameCallback === 'function') {
+        registerFrameCallback(() => updateCameraHelpers(child, frontCameraHelper, backCameraHelper));
+        return;
+    }
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
+    };
+    animate();
+};
+
+const ModelLoader = (type, modelData, position, mapData, scene, onComplete, registerFrameCallback) => {
     const loader = new GLTFLoader();
     switch (type) {
         case 'preload': {
@@ -179,16 +194,12 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete) => {
                                 child.add(backCameraHelper);
                                 gltf.scene.userData.backCameraHelper = backCameraHelper;
                     
-                                // Update camera helpers initially
-                                updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
-                    
-                                // Add an event listener or a loop to update the camera helpers when the model rotates
-                                // This is a simple example using requestAnimationFrame
-                                const animate = () => {
-                                    requestAnimationFrame(animate);
-                                    updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
-                                };
-                                animate();
+                                registerCameraHelperUpdates(
+                                    child,
+                                    frontCameraHelper,
+                                    backCameraHelper,
+                                    registerFrameCallback,
+                                );
                             }
                             child.isPaintable = true;
                         });
@@ -273,19 +284,15 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete) => {
                     setupPlayableGltfScene(gltf, modelData, position || {});
                     scene.add(gltf.scene);
 
-                    const updateCameraHelpers = () => {
-                        const headBack = gltf.scene.getObjectByName('head_back');
-                        if (headBack) {
-                            gltf.scene.userData.frontCameraHelper.position.set(0, 0, 2).add(headBack.position);
-                            gltf.scene.userData.backCameraHelper.position.set(0, 0, -2).add(headBack.position);
-                        }
-                    };
-
-                    const animate = () => {
-                        updateCameraHelpers();
-                        requestAnimationFrame(animate);
-                    };
-                    animate();
+                    const headBack = gltf.scene.getObjectByName('head_back');
+                    if (headBack && gltf.scene.userData.frontCameraHelper && gltf.scene.userData.backCameraHelper) {
+                        registerCameraHelperUpdates(
+                            headBack,
+                            gltf.scene.userData.frontCameraHelper,
+                            gltf.scene.userData.backCameraHelper,
+                            registerFrameCallback,
+                        );
+                    }
                 },
                 undefined,
                 (error) => {
@@ -300,21 +307,15 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete) => {
                         setupPlayableGltfScene(gltf, modelData, { position });
                         scene.add(gltf.scene);
 
-                        // Function to update camera helpers' positions
-                        const updateCameraHelpers = () => {
-                            const headBack = gltf.scene.getObjectByName("head_back");
-                            if (headBack) {
-                                gltf.scene.userData.frontCameraHelper.position.set(0, 0, 2).add(headBack.position);
-                                gltf.scene.userData.backCameraHelper.position.set(0, 0, -2).add(headBack.position);
-                            }
-                        };
-
-                        // Animation loop to update camera helpers
-                        const animate = () => {
-                            updateCameraHelpers();
-                            requestAnimationFrame(animate);
-                        };
-                        animate();
+                        const headBack = gltf.scene.getObjectByName('head_back');
+                        if (headBack && gltf.scene.userData.frontCameraHelper && gltf.scene.userData.backCameraHelper) {
+                            registerCameraHelperUpdates(
+                                headBack,
+                                gltf.scene.userData.frontCameraHelper,
+                                gltf.scene.userData.backCameraHelper,
+                                registerFrameCallback,
+                            );
+                        }
                     },
                     // gltf.scene.children.forEach((child) => {
                     //     child.isPaintable = true;
