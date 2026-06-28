@@ -30,16 +30,7 @@ export const isValidSnapshotImage = (src) => {
 
   if (src.startsWith('data:image/')) {
     const base64 = src.split('base64,')[1];
-    if (!base64 || base64.length < 100) {
-      return false;
-    }
-    try {
-      atob(base64.slice(-4).padEnd(4, '='));
-      atob(base64.slice(0, 32));
-    } catch {
-      return false;
-    }
-    return true;
+    return Boolean(base64 && base64.length >= 100);
   }
 
   return src.startsWith('/') || src.startsWith('http') || src.includes('.png') || src.includes('.jpg');

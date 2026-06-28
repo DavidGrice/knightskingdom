@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 const GridThumbnail = ({ src, className, style }) => {
   const [failed, setFailed] = useState(false);
 
-  if (!src || failed) {
+  if (!src) {
+    return null;
+  }
+
+  if (failed) {
     return null;
   }
 
