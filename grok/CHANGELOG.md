@@ -4,6 +4,19 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — MyModels save menu styling
+
+Restored original CRA layout for the save game screen (had been incorrectly copied from SnapShot).
+
+| File | Change |
+|------|--------|
+| `MyModels.module.css` | Full-viewport background; checkmark corner |
+| `MyModelsHolder.module.css` | Holder at `left: 29.15%`, `top: 6%` on background frame |
+| `MyModelsBody.module.css` | Original grid gap/spacing, flow-based footer, arrow positions |
+| `MyModelsBody.jsx` | Use `myModelsData.selectedOverlay` instead of SnapShot overlay |
+
+---
+
 ## 2026-06-28 — Phase 0: Branch Setup
 
 - Created `grok-dev` branch from `main` (local, VS Code repo + Grok worktree)
@@ -355,4 +368,4 @@ All changes made on branch `grok-dev` via Grok sessions.
 - `npm run build` — **passes** (no ESLint warnings)
 - 14 App Router pages; main-game route ~107 kB First Load JS
 - **Phases 0–10 complete**
-- **User backlog:** save game menu styling
+- **User backlog:** screenshot menu, workshop menu

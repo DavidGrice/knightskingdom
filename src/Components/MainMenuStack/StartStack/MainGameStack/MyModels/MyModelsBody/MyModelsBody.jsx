@@ -3,7 +3,6 @@ import styles from './MyModelsBody.module.css';
 import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../Common';
 import { getSavedWorldsList } from '../../../../../../api/worldSave';
 import { myModelsData } from '../MyModelsResourceStack';
-import selectedImage from '../../SnapShot/SnapShotHolder/SnapShotBody/SnapShotBodyResourceStack/selected.png';
 
 const paginatedStyles = {
   gridRoot: styles.modelsBody,
@@ -101,7 +100,7 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
       upArrowImage={upArrowImage}
       downArrowImage={downArrowImage}
       selectedItem={selectedItem}
-      selectionOverlay={selectedImage}
+      selectionOverlay={myModelsData.selectedOverlay}
       onUpArrowClick={handleUpArrowClick}
       onDownArrowClick={handleDownArrowClick}
       onItemClick={handleItemClick}

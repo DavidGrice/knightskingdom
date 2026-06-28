@@ -109,7 +109,7 @@ MainGameStack/
     ComponentTop/            ← Drive (game-only)
   WorkShop/                  ← Thin wrapper; receives mapData (Phase 9)
   SnapShot/                  ← Real capture gallery (Phase 9)
-  MyModels/                  ← Saved worlds list (styling TBD)
+  MyModels/                  ← Saved worlds list
 ```
 
 MainGame vs WorkShop duplication **merged** into `shared/` with `mode` config.
@@ -191,10 +191,10 @@ handleNavigateToSnapShot()
 - Print opens selected capture; delete calls `removeWorldSnapshot`
 - Preview panel shows selected thumbnail
 
-### MyModels (Phase 4 ✅, styling pending)
+### MyModels (Phase 4 ✅)
 - Lists `getSavedWorldsList(profile)` with thumbnails
 - Delete removes saved world slot
-- **Open:** save game menu styling polish (user backlog)
+
 
 ---
 

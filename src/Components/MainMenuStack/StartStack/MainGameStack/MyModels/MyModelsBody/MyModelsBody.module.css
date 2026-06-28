@@ -1,6 +1,5 @@
 .modelsBody {
-    position: relative;
-    height: 441px;
+    height: 530px;
     width: 229px;
     display: flex;
     flex-direction: column;
@@ -13,8 +12,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 3%;
-    cursor: pointer;
+    margin-top: 2%;
 }
 
 .upArrow {
@@ -22,16 +20,18 @@
     height: 26px;
     z-index: 10;
     background-repeat: no-repeat;
+    cursor: pointer;
 }
 
 .body {
     display: grid;
     grid-template-columns: repeat(2, 95px);
     grid-template-rows: repeat(3, 67px);
-    gap: 18px 12px;
-    width: 202px;
-    margin-top: 3%;
-    margin-left: 13%;
+    gap: 40px;
+    width: 100%;
+    height: 80%;
+    margin-top: 14%;
+    margin-left: 8%;
 }
 
 .item {
@@ -62,8 +62,7 @@
 
 .downArrowHolder {
     position: absolute;
-    bottom: 23.5%;
-    right: 46%;
+    bottom: 0;
     width: 42px;
     height: 26px;
     z-index: 9;
@@ -78,40 +77,35 @@
 }
 
 .lowerContent {
-    width: 75%;
-    height: 13%;
-    position: absolute;
-    bottom: 9%;
-    left: 0.5%;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 37px;
+    gap: 12px;
+    margin-top: 8px;
 }
 
 .iconComponentHolder {
-    height: 72px;
-    width: 71px;
+    height: 62px;
+    width: 62px;
     justify-content: center;
     align-items: center;
     display: flex;
     flex-direction: row;
-    margin-top: 3%;
     cursor: pointer;
 }
 
 .helpComponentHolder {
     width: 140px;
-    height: 103px;
+    height: 99px;
     position: absolute;
     justify-content: center;
     align-items: center;
     display: flex;
     flex-direction: row;
-    bottom: 13%;
-    right: 1%;
-    z-index: 10;
+    bottom: 5px;
+    right: 2%;
+    z-index: 2;
 }
 
 .emptyMessage {

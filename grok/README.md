@@ -38,7 +38,7 @@ npm run build
 |------|-------|
 | **Phases 0–10** | ✅ Complete |
 | **Working on** | User backlog + optional polish (see below) |
-| **User backlog** | Fix save game menu styling (MyModels CSS) |
+| **User backlog** | Fix screenshot menu (SnapShot), workshop menu (WorkShop) |
 
 **Recent commits:**
 ```
@@ -96,7 +96,7 @@ src/Components/
         ├── MainGame/GameEngine/  ← GameEngineCore + loaders
         ├── WorkShop/
         ├── SnapShot/
-        └── MyModels/             ← save game list (styling TBD)
+        └── MyModels/             ← save game list
 ```
 
 ### Navigation flow
@@ -158,7 +158,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 - [x] **Lego Clock loading modal** — global overlay via `GameLoadingProvider` (navigation, lazy chunks, world assets)
 - [ ] **Fix screenshot menu** — SnapShot gallery UI/layout polish
 - [ ] **Fix workshop menu** — WorkShop toolbar/panel UI/layout polish
-- [ ] Fix save game menu styling (MyModels / save screen layout)
+- [x] Fix save game menu styling (MyModels / save screen layout)
 
 ### Deferred
 
@@ -174,7 +174,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 |------|-------|
 | SnapShot / screenshot menu | Gallery layout and styling need polish (backlog) |
 | WorkShop / workshop menu | Toolbar and panel layout need polish (backlog) |
-| MyModels / save UI | Layout/styling needs polish (backlog) |
+| MyModels / save UI | ✅ Layout restored from original CRA styles |
 | Shared worlds | No `filePath` / engine assets |
 | Worlds 2–10 | Reuse `map1` GLB until unique maps added |
 | ESLint | Minor unused-vars in some components (non-blocking) |
