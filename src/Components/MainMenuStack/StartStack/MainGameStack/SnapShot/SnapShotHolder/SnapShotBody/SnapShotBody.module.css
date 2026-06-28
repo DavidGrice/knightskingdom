@@ -31,11 +31,11 @@
 
 .body {
     display: grid;
-    grid-template-columns: repeat(3, 109px);
-    grid-template-rows: repeat(3, 80px);
-    gap: 24px 36px;
-    width: 411px;
-    height: 312px;
+    grid-template-columns: repeat(3, 42px);
+    grid-template-rows: repeat(3, 19px);
+    gap: 90px;
+    width: 446px;
+    height: 350px;
     margin-top: 3%;
     margin-left: 13%;
 }
@@ -48,6 +48,10 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    cursor: default;
+}
+
+.itemInteractive {
     cursor: pointer;
 }
 

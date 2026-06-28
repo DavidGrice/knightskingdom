@@ -7,18 +7,13 @@ import selectedImage from './SnapShotBodyResourceStack/selected.png';
 
 const ITEMS_PER_PAGE = 9;
 
-const createEmptySlot = (page, index) => ({
-  id: `empty-slot-${page}-${index}`,
-  image: null,
-  isEmptySlot: true,
-});
-
 const paginatedStyles = {
   gridRoot: styles.snapshotBody,
   upArrowHolder: styles.upArrowHolder,
   upArrow: styles.upArrow,
   body: styles.body,
   item: styles.item,
+  itemInteractive: styles.itemInteractive,
   highlightedImage: styles.highlightedImage,
   downArrowHolder: styles.downArrowHolder,
   downArrow: styles.downArrow,
@@ -46,7 +41,6 @@ const SnapShotBody = ({
   }, [selectedProfile, mapData?.id, mapData?.snapshots, mapData?.sceneSnapshot]);
 
   const {
-    currentPage,
     displayedItems,
     upArrowImage,
     downArrowImage,
@@ -80,19 +74,8 @@ const SnapShotBody = ({
     }
   }, [snapshotItems, selectedItem, onSelectSnapshot, setSelectedItem]);
 
-  const gridItems = useMemo(() => {
-    if (displayedItems.length >= ITEMS_PER_PAGE) {
-      return displayedItems;
-    }
-    const padding = ITEMS_PER_PAGE - displayedItems.length;
-    return [
-      ...displayedItems,
-      ...Array.from({ length: padding }, (_, index) => createEmptySlot(currentPage, index)),
-    ];
-  }, [displayedItems, currentPage]);
-
   const handleItemClick = (item) => {
-    if (item.isEmptySlot) {
+    if (!item?.image) {
       return;
     }
     setSelectedItem(item);
@@ -174,7 +157,7 @@ const SnapShotBody = ({
   return (
     <PaginatedGrid
       styles={paginatedStyles}
-      displayedItems={gridItems}
+      displayedItems={displayedItems}
       upArrowImage={upArrowImage}
       downArrowImage={downArrowImage}
       selectedItem={selectedItem}
@@ -182,7 +165,7 @@ const SnapShotBody = ({
       onUpArrowClick={handleUpArrowClick}
       onDownArrowClick={handleDownArrowClick}
       onItemClick={handleItemClick}
-      isItemDisabled={(item) => item.isEmptySlot}
+      isItemInteractive={(item) => Boolean(item?.image)}
       getItemKey={(item) => item.id}
       footer={footer}
       helpCorner={helpCorner}

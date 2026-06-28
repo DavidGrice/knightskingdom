@@ -6,6 +6,18 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot grid alignment and cursor on filled cells only
+
+| File | Change |
+|------|--------|
+| `SnapShotBody.module.css` | Restore original CRA 3×3 grid (`42×19` tracks, `90px` gap, `109×80` thumbnails); default cursor on empty cells |
+| `SnapShotBody.jsx` | Drop padded empty slots; only render real snapshots |
+| `PaginatedGrid.jsx` | `isItemInteractive` prop; pointer cursor and clicks only when item has an image |
+
+Fixes thumbnails landing in oversized misaligned squares and empty yellow cells showing a clickable pointer.
+
+---
+
 ## 2026-06-28 — Help/Icon hover frame animation (FrameAnimator)
 
 | File | Change |

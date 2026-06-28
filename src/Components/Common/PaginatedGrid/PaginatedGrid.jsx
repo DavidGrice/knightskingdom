@@ -15,6 +15,7 @@ const PaginatedGrid = ({
   onItemClick,
   getItemKey = (item, index) => index,
   isItemDisabled = () => false,
+  isItemInteractive = (item) => Boolean(item?.image),
   renderItemOverlay = null,
   footer = null,
   helpCorner = null,
@@ -27,15 +28,25 @@ const PaginatedGrid = ({
       />
     </div>
     <div className={styles.body}>
-      {displayedItems.map((item, index) => (
+      {displayedItems.map((item, index) => {
+        const interactive = isItemInteractive(item) && !isItemDisabled(item);
+        const itemClassName = [
+          styles.item,
+          interactive && styles.itemInteractive,
+        ].filter(Boolean).join(' ');
+
+        return (
         <div
           key={getItemKey(item, index)}
-          className={styles.item}
-          style={item.image ? {
-            backgroundImage: `url(${JSON.stringify(item.image)})`,
-          } : undefined}
+          className={itemClassName}
+          style={{
+            ...(item.image ? {
+              backgroundImage: `url(${JSON.stringify(item.image)})`,
+            } : {}),
+            pointerEvents: interactive ? 'auto' : 'none',
+          }}
           onClick={() => {
-            if (!isItemDisabled(item)) {
+            if (interactive) {
               onItemClick(item);
             }
           }}
@@ -53,7 +64,8 @@ const PaginatedGrid = ({
           ) : null}
           {renderItemOverlay ? renderItemOverlay(item) : null}
         </div>
-      ))}
+        );
+      })}
     </div>
     <div className={styles.downArrowHolder} onClick={onDownArrowClick}>
       <div
