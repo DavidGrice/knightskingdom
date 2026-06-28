@@ -6,6 +6,19 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot gallery: fix empty legacy thumbnails
+
+| File | Change |
+|------|--------|
+| `worldSave.js` | `resolveSnapshotImage`, `normalizeSnapshotEntry`; prune corrupt snapshots on append |
+| `SnapShotBody.jsx` | Support legacy `image` field; pad grid to 9 slots; skip empty cells |
+| `GridThumbnail.jsx` | Hide broken/truncated image src on load error |
+| `SnapShot.jsx` | Preview uses normalized image resolver |
+
+Old snapshots saved as black frames or truncated localStorage data are filtered out; re-capture to refill gallery.
+
+---
+
 ## 2026-06-28 — SnapShot capture: fix black frames and gallery sync
 
 | File | Change |

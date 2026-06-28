@@ -5,6 +5,58 @@ export const ensureProfileSaveSlots = (profile) => ({
 
 const worldKey = (worldId) => String(worldId);
 
+/** Resolve thumbnail src from any snapshot shape (legacy `image` or `imageDataUrl`). */
+export const resolveSnapshotImage = (entry) => {
+  if (!entry) {
+    return null;
+  }
+  if (typeof entry.imageDataUrl === 'string' && entry.imageDataUrl.length > 0) {
+    return entry.imageDataUrl;
+  }
+  if (typeof entry.image === 'string' && entry.image.length > 0) {
+    return entry.image;
+  }
+  if (typeof entry.thumbnail === 'string' && entry.thumbnail.length > 0) {
+    return entry.thumbnail;
+  }
+  return null;
+};
+
+/** Reject truncated data URLs and other corrupt snapshot payloads. */
+export const isValidSnapshotImage = (src) => {
+  if (!src || typeof src !== 'string') {
+    return false;
+  }
+
+  if (src.startsWith('data:image/')) {
+    const base64 = src.split('base64,')[1];
+    if (!base64 || base64.length < 100) {
+      return false;
+    }
+    try {
+      atob(base64.slice(-4).padEnd(4, '='));
+      atob(base64.slice(0, 32));
+    } catch {
+      return false;
+    }
+    return true;
+  }
+
+  return src.startsWith('/') || src.startsWith('http') || src.includes('.png') || src.includes('.jpg');
+};
+
+export const normalizeSnapshotEntry = (entry) => {
+  const image = resolveSnapshotImage(entry);
+  if (!isValidSnapshotImage(image)) {
+    return null;
+  }
+  return {
+    ...entry,
+    image,
+    imageDataUrl: entry.imageDataUrl || (image.startsWith('data:') ? image : entry.imageDataUrl),
+  };
+};
+
 export const saveWorldProgress = (userData, profileId, worldId, payload) =>
   userData.map((profile) => {
     if (profile.id !== profileId) {
@@ -39,7 +91,15 @@ export const appendWorldSnapshot = (userData, profileId, worldId, snapshotEntry)
     const key = worldKey(worldId);
     const withSlots = ensureProfileSaveSlots(profile);
     const existing = withSlots.savedWorlds[key] || { snapshots: [] };
-    const snapshots = [...(existing.snapshots || []), snapshotEntry];
+    const normalizedEntry = normalizeSnapshotEntry(snapshotEntry);
+    if (!normalizedEntry) {
+      return withSlots;
+    }
+
+    const cleanedExisting = (existing.snapshots || [])
+      .map((entry) => normalizeSnapshotEntry(entry))
+      .filter(Boolean);
+    const snapshots = [...cleanedExisting, normalizedEntry];
 
     return {
       ...withSlots,

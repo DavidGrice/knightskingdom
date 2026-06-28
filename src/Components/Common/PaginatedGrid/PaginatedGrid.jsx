@@ -1,4 +1,5 @@
 import React from 'react';
+import GridThumbnail from './GridThumbnail';
 
 const PaginatedGrid = ({
   styles,
@@ -37,9 +38,8 @@ const PaginatedGrid = ({
           }}
         >
           {item.image ? (
-            <img
+            <GridThumbnail
               src={item.image}
-              alt=""
               className={styles.itemThumbnail}
               style={{
                 width: '100%',

@@ -1,9 +1,17 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './SnapShotBody.module.css';
 import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../../Common';
-import { mergeSnapshotLists } from '@/api/worldSave';
+import { mergeSnapshotLists, normalizeSnapshotEntry, resolveSnapshotImage } from '@/api/worldSave';
 import { snapshotData } from './SnapShotBodyResourceStack/index';
 import selectedImage from './SnapShotBodyResourceStack/selected.png';
+
+const ITEMS_PER_PAGE = 9;
+
+const createEmptySlot = (page, index) => ({
+  id: `empty-slot-${page}-${index}`,
+  image: null,
+  isEmptySlot: true,
+});
 
 const paginatedStyles = {
   gridRoot: styles.snapshotBody,
@@ -33,14 +41,12 @@ const SnapShotBody = ({
     );
 
     return merged
-      .filter((entry) => entry.imageDataUrl)
-      .map((entry) => ({
-        ...entry,
-        image: entry.imageDataUrl,
-      }));
+      .map((entry) => normalizeSnapshotEntry(entry))
+      .filter(Boolean);
   }, [selectedProfile, mapData?.id, mapData?.snapshots, mapData?.sceneSnapshot]);
 
   const {
+    currentPage,
     displayedItems,
     upArrowImage,
     downArrowImage,
@@ -50,7 +56,7 @@ const SnapShotBody = ({
     handleUpArrowClick,
   } = usePaginatedGrid({
     items: snapshotItems,
-    itemsPerPage: 9,
+    itemsPerPage: ITEMS_PER_PAGE,
     arrows: {
       upSolid: snapshotData.upArrowGold,
       upGreen: snapshotData.upArrowGreen,
@@ -74,7 +80,21 @@ const SnapShotBody = ({
     }
   }, [snapshotItems, selectedItem, onSelectSnapshot, setSelectedItem]);
 
+  const gridItems = useMemo(() => {
+    if (displayedItems.length >= ITEMS_PER_PAGE) {
+      return displayedItems;
+    }
+    const padding = ITEMS_PER_PAGE - displayedItems.length;
+    return [
+      ...displayedItems,
+      ...Array.from({ length: padding }, (_, index) => createEmptySlot(currentPage, index)),
+    ];
+  }, [displayedItems, currentPage]);
+
   const handleItemClick = (item) => {
+    if (item.isEmptySlot) {
+      return;
+    }
     setSelectedItem(item);
     onSelectSnapshot?.(item);
   };
@@ -89,7 +109,8 @@ const SnapShotBody = ({
   };
 
   const handlePrint = () => {
-    if (!selectedItem?.imageDataUrl) {
+    const imageSrc = resolveSnapshotImage(selectedItem);
+    if (!imageSrc) {
       return;
     }
     const printWindow = window.open('', '_blank');
@@ -98,7 +119,7 @@ const SnapShotBody = ({
     }
     printWindow.document.write(
       `<html><head><title>Snapshot</title></head><body style="margin:0">`
-      + `<img src="${selectedItem.imageDataUrl}" style="width:100%" onload="window.print();window.close()" />`
+      + `<img src="${imageSrc}" style="width:100%" onload="window.print();window.close()" />`
       + `</body></html>`,
     );
     printWindow.document.close();
@@ -153,7 +174,7 @@ const SnapShotBody = ({
   return (
     <PaginatedGrid
       styles={paginatedStyles}
-      displayedItems={displayedItems}
+      displayedItems={gridItems}
       upArrowImage={upArrowImage}
       downArrowImage={downArrowImage}
       selectedItem={selectedItem}
@@ -161,6 +182,7 @@ const SnapShotBody = ({
       onUpArrowClick={handleUpArrowClick}
       onDownArrowClick={handleDownArrowClick}
       onItemClick={handleItemClick}
+      isItemDisabled={(item) => item.isEmptySlot}
       getItemKey={(item) => item.id}
       footer={footer}
       helpCorner={helpCorner}

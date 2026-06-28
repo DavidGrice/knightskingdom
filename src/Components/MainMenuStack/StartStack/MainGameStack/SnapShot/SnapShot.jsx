@@ -3,6 +3,7 @@ import styles from './SnapShot.module.css';
 import { SnapShotHolder } from './index';
 import { checkmarks } from './SnapShotResourceStack/index';
 import { CommonComponent } from '../../../../Common';
+import { isValidSnapshotImage, resolveSnapshotImage } from '@/api/worldSave';
 
 const SnapShot = ({
   navigateToMainGame,
@@ -10,17 +11,24 @@ const SnapShot = ({
   selectedProfile,
   onRemoveSnapshot,
 }) => {
+  const pickPreviewSnapshot = (snapshot) => {
+    const image = resolveSnapshotImage(snapshot);
+    return isValidSnapshotImage(image) ? snapshot : null;
+  };
+
   const [previewSnapshot, setPreviewSnapshot] = useState(() => {
-    if (mapData?.sceneSnapshot?.imageDataUrl) {
-      return mapData.sceneSnapshot;
+    const fromScene = pickPreviewSnapshot(mapData?.sceneSnapshot);
+    if (fromScene) {
+      return fromScene;
     }
     const saved = mapData?.snapshots || [];
-    return saved.find((entry) => entry.imageDataUrl) || mapData?.sceneSnapshot || null;
+    return saved.map(pickPreviewSnapshot).find(Boolean) || null;
   });
 
   useEffect(() => {
-    if (mapData?.sceneSnapshot?.imageDataUrl) {
-      setPreviewSnapshot(mapData.sceneSnapshot);
+    const fromScene = pickPreviewSnapshot(mapData?.sceneSnapshot);
+    if (fromScene) {
+      setPreviewSnapshot(fromScene);
     }
   }, [mapData?.sceneSnapshot]);
 
@@ -28,7 +36,7 @@ const SnapShot = ({
     navigateToMainGame(mapData);
   };
 
-  const previewImage = previewSnapshot?.imageDataUrl;
+  const previewImage = resolveSnapshotImage(previewSnapshot);
 
   return (
     <div className={styles.snapShotDiv}>
