@@ -55,6 +55,11 @@
     cursor: pointer;
 }
 
+.itemSelected {
+    outline: 3px solid #00e8ff;
+    outline-offset: 0;
+}
+
 .itemThumbnail {
     position: absolute;
     inset: 0;
@@ -62,21 +67,6 @@
     height: 100%;
     object-fit: cover;
     z-index: 1;
-}
-
-.highlightedImage {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    pointer-events: none;
-}
-
-.highlightedImage img {
-    display: block;
-    width: 109px;
-    height: 80px;
 }
 
 .downArrowHolder {

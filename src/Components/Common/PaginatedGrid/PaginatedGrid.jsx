@@ -30,9 +30,13 @@ const PaginatedGrid = ({
     <div className={styles.body}>
       {displayedItems.map((item, index) => {
         const interactive = isItemInteractive(item) && !isItemDisabled(item);
+        const isSelected = selectedItem != null
+          && getItemKey(selectedItem, index) === getItemKey(item, index);
+        const useThumbnail = Boolean(styles.itemThumbnail);
         const itemClassName = [
           styles.item,
           interactive && styles.itemInteractive,
+          isSelected && styles.itemSelected,
         ].filter(Boolean).join(' ');
 
         return (
@@ -40,7 +44,7 @@ const PaginatedGrid = ({
           key={getItemKey(item, index)}
           className={itemClassName}
           style={{
-            ...(item.image ? {
+            ...(!useThumbnail && item.image ? {
               backgroundImage: `url(${JSON.stringify(item.image)})`,
             } : {}),
             pointerEvents: interactive ? 'auto' : 'none',
@@ -51,13 +55,13 @@ const PaginatedGrid = ({
             }
           }}
         >
-          {item.image ? (
+          {item.image && useThumbnail ? (
             <GridThumbnail
               src={item.image}
               className={styles.itemThumbnail}
             />
           ) : null}
-          {selectedItem === item && selectionOverlay ? (
+          {isSelected && selectionOverlay ? (
             <div className={styles.highlightedImage}>
               <img src={selectionOverlay} alt="Selected" />
             </div>

@@ -3,7 +3,6 @@ import styles from './SnapShotBody.module.css';
 import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../../Common';
 import { mergeSnapshotLists, normalizeSnapshotEntry, resolveSnapshotImage } from '@/api/worldSave';
 import { snapshotData } from './SnapShotBodyResourceStack/index';
-import selectedImage from './SnapShotBodyResourceStack/selected.png';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -14,7 +13,7 @@ const paginatedStyles = {
   body: styles.body,
   item: styles.item,
   itemInteractive: styles.itemInteractive,
-  highlightedImage: styles.highlightedImage,
+  itemSelected: styles.itemSelected,
   downArrowHolder: styles.downArrowHolder,
   downArrow: styles.downArrow,
 };
@@ -155,7 +154,6 @@ const SnapShotBody = ({
       upArrowImage={upArrowImage}
       downArrowImage={downArrowImage}
       selectedItem={selectedItem}
-      selectionOverlay={selectedImage}
       onUpArrowClick={handleUpArrowClick}
       onDownArrowClick={handleDownArrowClick}
       onItemClick={handleItemClick}

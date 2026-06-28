@@ -6,6 +6,18 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot: show thumbnails in grid (fix cyan overlay)
+
+| File | Change |
+|------|--------|
+| `SnapShotBody.jsx` | Drop opaque `selected.png` overlay that hid captures |
+| `SnapShotBody.module.css` | Cyan `outline` on selected cell only; screenshot stays visible |
+| `PaginatedGrid.jsx` | `itemSelected` class; id-based selection; thumbnails when `itemThumbnail` style exists |
+
+`selected.png` is a solid fill — it was drawn on top of data-URL captures. Selection now uses a transparent CSS outline like a map frame border.
+
+---
+
 ## 2026-06-28 — SnapShot: grid-only preview and map-style selection frame
 
 | File | Change |
