@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot: use selected.png frame (match map selector)
+
+| File | Change |
+|------|--------|
+| `SnapShotBody.jsx` | Restore `selectionOverlay={selectedImage}` like WorldBody |
+| `SnapShotBody.module.css` | `highlightedImage` frame overlay; thumbnails via `background-image` (same stack as maps) |
+
+Replaces custom CSS `::after` border with the original `selected.png` asset for visual consistency.
+
+---
+
 ## 2026-06-28 — SnapShot: show thumbnails in grid (fix cyan overlay)
 
 | File | Change |
