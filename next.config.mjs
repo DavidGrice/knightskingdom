@@ -12,7 +12,7 @@ const nextConfig = {
         type: 'asset/resource',
       },
       {
-        test: /\.(mp3|wav|ogg|mpe?g)$/i,
+        test: /\.(mp3|wav|ogg|mpe?g|mp4|webm)$/i,
         type: 'asset/resource',
       },
       {
