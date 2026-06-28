@@ -66,17 +66,17 @@
 
 .highlightedImage {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 2;
     pointer-events: none;
-    border: 3px solid #00e8ff;
-    box-sizing: border-box;
-    background: transparent;
-    box-shadow: inset 0 0 0 1px rgba(0, 232, 255, 0.45);
 }
 
 .highlightedImage img {
-    display: none;
+    display: block;
+    width: 109px;
+    height: 80px;
 }
 
 .downArrowHolder {

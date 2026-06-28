@@ -6,14 +6,12 @@ const SnapShotHolder = ({
   selectedProfile,
   mapData,
   onRemoveSnapshot,
-  onSelectSnapshot,
 }) => (
   <div className={styles.componentHolder}>
     <SnapShotBody
       selectedProfile={selectedProfile}
       mapData={mapData}
       onRemoveSnapshot={onRemoveSnapshot}
-      onSelectSnapshot={onSelectSnapshot}
     />
   </div>
 );

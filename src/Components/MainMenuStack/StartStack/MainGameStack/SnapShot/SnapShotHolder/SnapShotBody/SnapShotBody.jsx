@@ -23,7 +23,6 @@ const SnapShotBody = ({
   selectedProfile,
   mapData,
   onRemoveSnapshot,
-  onSelectSnapshot,
 }) => {
   const snapshotItems = useMemo(() => {
     const profileSnapshots = selectedProfile?.savedWorlds?.[String(mapData?.id)]?.snapshots || [];
@@ -62,24 +61,20 @@ const SnapShotBody = ({
   useEffect(() => {
     if (snapshotItems.length === 0) {
       setSelectedItem(null);
-      onSelectSnapshot?.(null);
       return;
     }
     const stillValid = selectedItem
       && snapshotItems.some((entry) => entry.id === selectedItem.id);
     if (!stillValid) {
-      const initial = snapshotItems[0];
-      setSelectedItem(initial);
-      onSelectSnapshot?.(initial);
+      setSelectedItem(snapshotItems[0]);
     }
-  }, [snapshotItems, selectedItem, onSelectSnapshot, setSelectedItem]);
+  }, [snapshotItems, selectedItem, setSelectedItem]);
 
   const handleItemClick = (item) => {
     if (!item?.image) {
       return;
     }
     setSelectedItem(item);
-    onSelectSnapshot?.(item);
   };
 
   const handleDelete = () => {
@@ -88,7 +83,6 @@ const SnapShotBody = ({
     }
     onRemoveSnapshot(mapData.id, selectedItem.id);
     setSelectedItem(null);
-    onSelectSnapshot?.(null);
   };
 
   const handlePrint = () => {

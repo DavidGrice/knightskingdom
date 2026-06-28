@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot: grid-only preview and map-style selection frame
+
+| File | Change |
+|------|--------|
+| `SnapShot.jsx` | Remove right-side `capturePreview` panel; screenshots live only in the yellow grid |
+| `SnapShot.module.css` | Drop `capturePreview` styles |
+| `SnapShotBody.module.css` | Restore `selected.png` frame overlay (WorldBody pattern) instead of full-cell CSS border |
+| `SnapShotBody.jsx` / `SnapShotHolder.jsx` | Remove unused `onSelectSnapshot` preview wiring |
+
+---
+
 ## 2026-06-28 — SnapShot grid alignment and cursor on filled cells only
 
 | File | Change |
