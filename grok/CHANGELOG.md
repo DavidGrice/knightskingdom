@@ -6,6 +6,19 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — MyModels save menu polish
+
+| File | Change |
+|------|--------|
+| `MyModelsBody.module.css` | Restore CRA layout; `wh_selection` frame at z-index 2; center down arrow; body fits holder |
+| `MyModelsResourceStack/index.js` | Fix `selectedOverlay` — was `load_2.png` icon, now `wh_selection.png` (95×67) |
+| `MyModelsHolder.module.css` | `background-size: contain` on dropdown frame |
+| `MyModelsBody.jsx` | Thumbnail from first snapshot when save has no `thumbnail`; auto-select first slot |
+
+Reverts accidental SnapShot CSS border hack on MyModels; selection frame matches workshop bucket cells.
+
+---
+
 ## 2026-06-28 — SnapShot: use selected.png frame (match map selector)
 
 | File | Change |

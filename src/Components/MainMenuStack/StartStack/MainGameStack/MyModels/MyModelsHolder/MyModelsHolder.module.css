@@ -10,4 +10,7 @@
     top: 6%;
     z-index: 2;
     background-image: url('../MyModelsResourceStack/drop_down.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }

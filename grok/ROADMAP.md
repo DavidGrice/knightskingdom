@@ -56,7 +56,7 @@ flowchart LR
 | Lego Clock loading modal | ✅ Done | `GameLoadingProvider` + portal modal across `(game)` routes |
 | Screenshot menu (SnapShot) | ✅ Done | Restored original CRA grid layout (90px gap, holder frame) |
 | Workshop menu (WorkShop) | ⬜ Pending | Toolbar/panel UI/layout polish |
-| Save game menu styling (MyModels) | ⬜ Pending | Further my-models layout polish (initial CRA restore done) |
+| Save game menu styling (MyModels) | ✅ Done | `wh_selection` frame, holder fit, snapshot thumbnails |
 | R3F migration | ⬜ Deferred | Plain Three.js retained; `GameEngineCore` instead |
 | Unique GLB per world 2–10 | ⬜ Deferred | All worlds use `map1` placeholder for now |
 | Shared worlds playability | ⬜ Deferred | No `filePath` on shared catalog yet |

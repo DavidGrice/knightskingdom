@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './MyModelsBody.module.css';
 import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../Common';
-import { getSavedWorldsList } from '../../../../../../api/worldSave';
+import { getSavedWorldsList, resolveSnapshotImage } from '../../../../../../api/worldSave';
 import { myModelsData } from '../MyModelsResourceStack';
 
 const paginatedStyles = {
@@ -18,10 +18,14 @@ const paginatedStyles = {
 const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
   const savedItems = useMemo(() => {
     const entries = getSavedWorldsList(selectedProfile);
-    return entries.map((entry, index) => ({
-      ...entry,
-      image: entry.image || myModelsData.loadPlaceholders[index % myModelsData.loadPlaceholders.length],
-    }));
+    return entries.map((entry, index) => {
+      const snapshotThumb = resolveSnapshotImage(entry.snapshots?.[0]);
+      return {
+        ...entry,
+        image: entry.image || snapshotThumb
+          || myModelsData.loadPlaceholders[index % myModelsData.loadPlaceholders.length],
+      };
+    });
   }, [selectedProfile]);
 
   const {
@@ -42,6 +46,18 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
       downGreen: myModelsData.downArrowGreen,
     },
   });
+
+  useEffect(() => {
+    if (savedItems.length === 0) {
+      setSelectedItem(null);
+      return;
+    }
+    const stillValid = selectedItem
+      && savedItems.some((entry) => entry.id === selectedItem.id);
+    if (!stillValid) {
+      setSelectedItem(savedItems[0]);
+    }
+  }, [savedItems, selectedItem, setSelectedItem]);
 
   const handleItemClick = (item) => {
     setSelectedItem(item);

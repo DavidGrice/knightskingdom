@@ -44,7 +44,7 @@ npm run build
 |------|-------|
 | **Phases 0–10** | ✅ Complete |
 | **Working on** | User backlog + optional polish (see below) |
-| **User backlog** | MyModels further polish, workshop menu (WorkShop) |
+| **User backlog** | Workshop menu (WorkShop) |
 
 **Recent commits:**
 ```
