@@ -22,6 +22,7 @@
 
 .topComponent[data-mode="workshop"] {
     height: 103px;
+    transform: translateX(calc(-50% + var(--wsl-bar-offset-x, 0px)));
 }
 
 .bottomComponent {
@@ -39,4 +40,5 @@
 
 .bottomComponent[data-mode="workshop"] {
     height: 126px;
+    transform: translateX(calc(-50% + var(--wsl-bar-offset-x, 0px)));
 }

@@ -31,7 +31,7 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
   const showWorldTitle = worldTitle.visible && mapData?.name;
 
   return (
-    <div className={styles.workshopRoot}>
+    <div className={styles.workshopRoot} style={stageStyle}>
       <GameShell
         mode="workshop"
         top={(
@@ -52,7 +52,7 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
           />
         )}
       >
-        <div className={styles.stage} style={stageStyle}>
+        <div className={styles.stage}>
           {showWorldTitle && (
             <div
               className={styles.worldLabel}
