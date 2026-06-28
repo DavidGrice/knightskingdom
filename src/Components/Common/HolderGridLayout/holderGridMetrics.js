@@ -54,7 +54,7 @@ export const HOLDER_VARIANTS = {
     bodyHeight: 587,
     gridLeft: 76,
     gridTop: 113,
-    upArrow: { x: 260, y: 58 },
+    upArrow: { x: 260, y: 76 },
     downArrow: { x: 260, y: 442 },
     help: { x: 449, y: 479 },
     footer: { left: 90, top: 484, width: 260, height: 72, gap: 37 },
