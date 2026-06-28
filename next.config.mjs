@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  devIndicators: false,
   // Use CRA-style URL imports for images instead of next/image static analysis.
   images: {
     disableStaticImages: true,
