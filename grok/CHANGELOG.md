@@ -6,6 +6,18 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — Help/Icon hover frame animation (FrameAnimator)
+
+| File | Change |
+|------|--------|
+| `FrameAnimator/` | Preload all frames; stacked `<img>` opacity swap for seamless hover GIF |
+| `HelpComponent.jsx` | Uses FrameAnimator (Richard help, etc.) |
+| `IconComponent.jsx` | Uses FrameAnimator (print, delete, trash, copy, etc.) |
+
+Fixes invisible frames on hover (background-image swap before load) and film-strip stutter until cached.
+
+---
+
 ## 2026-06-28 — SnapShot gallery: fix empty legacy thumbnails
 
 | File | Change |
