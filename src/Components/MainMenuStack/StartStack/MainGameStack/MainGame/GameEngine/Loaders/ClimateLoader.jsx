@@ -3,6 +3,58 @@ import { disposeObject3D, removeSceneObjectByName } from '../sceneDispose';
 
 const WEATHER_SYSTEM_NAMES = ['SNOW', 'RAIN', 'FOGGY', 'WINDY'];
 
+const FOG_LAYER_SHADER = {
+  vertexShader: `
+    varying vec2 vUv;
+    varying vec3 vWorldPos;
+    void main() {
+      vUv = uv;
+      vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+      vWorldPos = worldPosition.xyz;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform vec3 fogColor;
+    uniform float opacity;
+    uniform float time;
+    uniform float layerOffset;
+    varying vec2 vUv;
+    varying vec3 vWorldPos;
+
+    float hash(vec2 p) {
+      return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+    }
+
+    float noise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(
+        mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+        mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+        u.y
+      );
+    }
+
+    void main() {
+      vec2 uv = vWorldPos.xz * 0.012 + layerOffset;
+      float n = noise(uv + vec2(time * 0.04, time * 0.025));
+      float n2 = noise(uv * 2.2 - vec2(time * 0.02, time * 0.035));
+      float mist = smoothstep(0.2, 0.82, n * 0.55 + n2 * 0.45);
+      float alpha = mist * opacity;
+      if (alpha < 0.01) {
+        discard;
+      }
+      gl_FragColor = vec4(fogColor, alpha);
+    }
+  `,
+};
+
+const clearSceneFog = (scene) => {
+  scene.fog = null;
+};
+
 const removeCurrentWeatherSystem = (scene, currentSystem, climateNeedsUpdating) => {
   if (!climateNeedsUpdating || !currentSystem) {
     return;
@@ -26,11 +78,13 @@ const updateAmbientLight = (scene, color, intensity) => {
 };
 
 const createSunnySystem = (scene) => {
+  clearSceneFog(scene);
   updateAmbientLight(scene, 0x404040, 35);
   return null;
 };
 
 const createSnowParticleSystem = (scene) => {
+  clearSceneFog(scene);
   updateAmbientLight(scene, 0xffffff, 5);
   const snowGeometry = new THREE.BufferGeometry();
   const snowVertices = [];
@@ -59,6 +113,7 @@ const createSnowParticleSystem = (scene) => {
 };
 
 const createRainParticleSystem = (scene) => {
+  clearSceneFog(scene);
   updateAmbientLight(scene, 0x000080, 50);
   const rainGeometry = new THREE.BufferGeometry();
   const rainVertices = [];
@@ -84,35 +139,61 @@ const createRainParticleSystem = (scene) => {
   return rain;
 };
 
-const createFogSystem = (scene) => {
-  updateAmbientLight(scene, 0xffffff, 20);
-  const fogGeometry = new THREE.BufferGeometry();
-  const fogVertices = [];
-
-  for (let i = 0; i < 10000; i += 1) {
-    fogVertices.push(
-      Math.random() * 1000 - 500,
-      Math.random() * 500,
-      Math.random() * 1000 - 500,
-    );
-  }
-
-  const fogPositions = new THREE.Float32BufferAttribute(fogVertices, 3);
-  fogPositions.setUsage(THREE.DynamicDrawUsage);
-  fogGeometry.setAttribute('position', fogPositions);
-  const fogMaterial = new THREE.PointsMaterial({
-    color: 0xaaaaaa,
-    size: 0.5,
+const createFogLayer = (y, opacity, size, fogColor, layerOffset) => {
+  const geometry = new THREE.PlaneGeometry(size, size, 1, 1);
+  geometry.rotateX(-Math.PI / 2);
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      fogColor: { value: new THREE.Color(fogColor) },
+      opacity: { value: opacity },
+      time: { value: 0 },
+      layerOffset: { value: layerOffset },
+    },
+    vertexShader: FOG_LAYER_SHADER.vertexShader,
+    fragmentShader: FOG_LAYER_SHADER.fragmentShader,
     transparent: true,
-    opacity: 0.5,
+    depthWrite: false,
+    side: THREE.DoubleSide,
   });
-  const fog = new THREE.Points(fogGeometry, fogMaterial);
-  fog.name = 'FOGGY';
-  scene.add(fog);
-  return fog;
+  const layer = new THREE.Mesh(geometry, material);
+  layer.position.y = y;
+  layer.renderOrder = 2;
+  return layer;
+};
+
+const createFogSystem = (scene, { dark = false } = {}) => {
+  updateAmbientLight(scene, dark ? 0x888888 : 0xc8ccd4, dark ? 12 : 18);
+  const fogColor = dark ? 0x6a6e78 : 0xd4d8e0;
+  const atmosphericColor = dark ? 0x5a5e68 : 0xb8bcc8;
+  scene.fog = new THREE.FogExp2(atmosphericColor, dark ? 0.022 : 0.014);
+
+  const fogGroup = new THREE.Group();
+  fogGroup.name = 'FOGGY';
+
+  const layers = [
+    { y: 0.6, opacity: dark ? 0.55 : 0.62 },
+    { y: 2.0, opacity: dark ? 0.42 : 0.48 },
+    { y: 4.5, opacity: dark ? 0.3 : 0.34 },
+    { y: 7.5, opacity: dark ? 0.2 : 0.22 },
+    { y: 11.0, opacity: dark ? 0.12 : 0.14 },
+  ];
+
+  layers.forEach((layer, index) => {
+    fogGroup.add(createFogLayer(
+      layer.y,
+      layer.opacity,
+      560,
+      fogColor,
+      index * 17.3,
+    ));
+  });
+
+  scene.add(fogGroup);
+  return fogGroup;
 };
 
 const createWindySystem = (scene) => {
+  clearSceneFog(scene);
   updateAmbientLight(scene, 0xffffff, 0.2);
   const particleCount = 1000;
   const particles = new Float32Array(particleCount * 3);
@@ -138,6 +219,15 @@ const createWindySystem = (scene) => {
 };
 
 const updateWeatherSystem = (system) => {
+  if (system.name === 'FOGGY') {
+    system.traverse((child) => {
+      if (child.material?.uniforms?.time) {
+        child.material.uniforms.time.value += 0.01;
+      }
+    });
+    return;
+  }
+
   const positionAttribute = system?.geometry?.attributes?.position;
   if (!positionAttribute?.array) {
     return;
@@ -167,16 +257,6 @@ const updateWeatherSystem = (system) => {
       positions[i + 2] += Math.random() * 0.1 - 0.05;
     }
     positionAttribute.needsUpdate = true;
-    return;
-  }
-
-  if (system.name === 'FOGGY') {
-    for (let i = 0; i < positions.length; i += 3) {
-      positions[i] += Math.random() * 0.04 - 0.02;
-      positions[i + 1] += Math.random() * 0.02 - 0.01;
-      positions[i + 2] += Math.random() * 0.04 - 0.02;
-    }
-    positionAttribute.needsUpdate = true;
   }
 };
 
@@ -198,6 +278,7 @@ const ClimateLoader = (
 ) => {
   removeCurrentWeatherSystem(scene, currentSystem, climateNeedsUpdating);
   WEATHER_SYSTEM_NAMES.forEach((name) => removeSceneObjectByName(scene, name));
+  clearSceneFog(scene);
 
   let system = null;
   switch (climate) {
@@ -212,6 +293,9 @@ const ClimateLoader = (
       break;
     case 'FOGGY':
       system = createFogSystem(scene);
+      break;
+    case 'DARK_FOGGY':
+      system = createFogSystem(scene, { dark: true });
       break;
     case 'WINDY':
       system = createWindySystem(scene);
