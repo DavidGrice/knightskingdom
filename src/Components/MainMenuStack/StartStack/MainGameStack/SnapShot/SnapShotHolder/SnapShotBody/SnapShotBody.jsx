@@ -24,13 +24,21 @@ const SnapShotBody = ({
 }) => {
   const snapshotItems = useMemo(() => {
     const profileSnapshots = selectedProfile?.savedWorlds?.[String(mapData?.id)]?.snapshots || [];
-    const merged = mergeSnapshotLists(profileSnapshots, mapData?.snapshots || []);
+    const sessionSnapshots = mapData?.snapshots || [];
+    const latestSnapshot = mapData?.sceneSnapshot ? [mapData.sceneSnapshot] : [];
+    const merged = mergeSnapshotLists(
+      profileSnapshots,
+      sessionSnapshots,
+      latestSnapshot,
+    );
 
-    return merged.map((entry) => ({
-      ...entry,
-      image: entry.imageDataUrl || null,
-    }));
-  }, [selectedProfile, mapData?.id, mapData?.snapshots]);
+    return merged
+      .filter((entry) => entry.imageDataUrl)
+      .map((entry) => ({
+        ...entry,
+        image: entry.imageDataUrl,
+      }));
+  }, [selectedProfile, mapData?.id, mapData?.snapshots, mapData?.sceneSnapshot]);
 
   const {
     displayedItems,

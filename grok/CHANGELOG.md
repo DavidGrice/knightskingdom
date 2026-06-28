@@ -6,6 +6,19 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot capture: fix black frames and gallery sync
+
+| File | Change |
+|------|--------|
+| `GameEngineCore.js` | `preserveDrawingBuffer: true`; force render before `toDataURL` |
+| `GameContext.jsx` | Capture on `requestAnimationFrame` so buffer has latest frame |
+| `WorldSessionProvider.jsx` | Safer `navigateToSnapshot` world state merge |
+| `SnapShotBody.jsx` | Merge `sceneSnapshot` into gallery list; only show entries with images |
+| `SnapShot.jsx` | Sync large preview when `sceneSnapshot` updates |
+| `worldSave.js` | Dedup snapshots by id, not identical `imageDataUrl` strings |
+
+---
+
 ## 2026-06-28 — Git workflow: push after commit
 
 | File | Change |

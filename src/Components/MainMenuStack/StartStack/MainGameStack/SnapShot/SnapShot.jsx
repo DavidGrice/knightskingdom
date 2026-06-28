@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './SnapShot.module.css';
 import { SnapShotHolder } from './index';
 import { checkmarks } from './SnapShotResourceStack/index';
@@ -17,6 +17,12 @@ const SnapShot = ({
     const saved = mapData?.snapshots || [];
     return saved.find((entry) => entry.imageDataUrl) || mapData?.sceneSnapshot || null;
   });
+
+  useEffect(() => {
+    if (mapData?.sceneSnapshot?.imageDataUrl) {
+      setPreviewSnapshot(mapData.sceneSnapshot);
+    }
+  }, [mapData?.sceneSnapshot]);
 
   const handleCheckmarkClick = () => {
     navigateToMainGame(mapData);

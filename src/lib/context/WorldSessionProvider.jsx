@@ -60,14 +60,21 @@ export const WorldSessionProvider = ({ children }) => {
   const navigateToSnapshot = useCallback(
     (snapshotData) => {
       if (snapshotData) {
-        setWorldData((prevData) => ({
-          ...prevData,
-          sceneSnapshot: snapshotData,
-          snapshots: [
-            ...(prevData?.snapshots || []),
-            ...(snapshotData.imageDataUrl ? [snapshotData] : []),
-          ],
-        }));
+        setWorldData((prevData) => {
+          const base = prevData || {};
+          const existing = base.snapshots || [];
+          const alreadyStored = snapshotData.id != null
+            && existing.some((entry) => entry.id === snapshotData.id);
+          const snapshots = snapshotData.imageDataUrl && !alreadyStored
+            ? [...existing, snapshotData]
+            : existing;
+
+          return {
+            ...base,
+            sceneSnapshot: snapshotData,
+            snapshots,
+          };
+        });
       }
       beginNavigationLoading();
       router.push(ROUTES.startStack.snapshot);

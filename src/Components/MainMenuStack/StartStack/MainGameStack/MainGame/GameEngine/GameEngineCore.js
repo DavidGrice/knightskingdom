@@ -11,7 +11,10 @@ export class GameEngineCore {
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.frontCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.backCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new THREE.WebGLRenderer({
+      preserveDrawingBuffer: true,
+      alpha: false,
+    });
     this.controls = null;
     this.mountNode = null;
     this.animationFrameId = null;
@@ -142,7 +145,17 @@ export class GameEngineCore {
   }
 
   captureFrame() {
-    return this.renderer.domElement.toDataURL('image/png');
+    if (!this.mountNode) {
+      return null;
+    }
+    this.renderer.render(this.scene, this.camera);
+    try {
+      const dataUrl = this.renderer.domElement.toDataURL('image/png');
+      return dataUrl && dataUrl.length > 100 ? dataUrl : null;
+    } catch (error) {
+      console.error('captureFrame failed:', error);
+      return null;
+    }
   }
 
   getSceneState() {

@@ -269,21 +269,27 @@ export const GameProvider = ({
 
   const handleNavigateToSnapShot = useCallback(() => {
     const scene = captureCurrentScene();
-    const imageDataUrl = gameEngineRef.current?.captureFrame?.();
 
-    if (!scene && !imageDataUrl) {
-      return;
-    }
+    const persistAndNavigate = (imageDataUrl) => {
+      if (!scene && !imageDataUrl) {
+        return;
+      }
 
-    const snapshotEntry = imageDataUrl
-      ? createSnapshotEntry(imageDataUrl, scene)
-      : { scene };
+      const snapshotEntry = imageDataUrl
+        ? createSnapshotEntry(imageDataUrl, scene)
+        : { scene };
 
-    if (selectedProfile?.id && mapData?.id && onAppendSnapshot) {
-      onAppendSnapshot(selectedProfile.id, mapData.id, snapshotEntry);
-    }
+      if (selectedProfile?.id && mapData?.id && onAppendSnapshot) {
+        onAppendSnapshot(selectedProfile.id, mapData.id, snapshotEntry);
+      }
 
-    navigateToSnapshot(snapshotEntry);
+      navigateToSnapshot(snapshotEntry);
+    };
+
+    requestAnimationFrame(() => {
+      const imageDataUrl = gameEngineRef.current?.captureFrame?.();
+      persistAndNavigate(imageDataUrl);
+    });
   }, [captureCurrentScene, selectedProfile, mapData, onAppendSnapshot, navigateToSnapshot]);
 
   const handleSceneChange = useCallback((sceneState) => {

@@ -76,7 +76,13 @@ export const mergeSnapshotLists = (...lists) => {
     if (!entry) {
       return;
     }
-    const key = entry.id ?? entry.createdAt ?? entry.imageDataUrl;
+    const key = entry.id != null
+      ? `id:${entry.id}`
+      : entry.createdAt
+        ? `at:${entry.createdAt}`
+        : entry.imageDataUrl
+          ? `img:${entry.imageDataUrl.slice(0, 64)}`
+          : null;
     if (!key || seen.has(key)) {
       return;
     }
