@@ -1,7 +1,7 @@
 .modelsBody {
     position: relative;
-    height: 441px;
-    width: 229px;
+    height: 530px;
+    width: 519px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,18 +26,19 @@
 
 .body {
     display: grid;
-    grid-template-columns: repeat(2, 95px);
-    grid-template-rows: repeat(3, 67px);
-    gap: 18px 12px;
-    width: 202px;
+    grid-template-columns: repeat(3, 42px);
+    grid-template-rows: repeat(3, 19px);
+    gap: 90px;
+    width: 446px;
+    height: 350px;
     margin-top: 3%;
     margin-left: 13%;
 }
 
 .item {
     position: relative;
-    width: 95px;
-    height: 67px;
+    width: 109px;
+    height: 80px;
     overflow: hidden;
     background-size: cover;
     background-position: center;
@@ -56,8 +57,8 @@
 
 .highlightedImage img {
     display: block;
-    width: 95px;
-    height: 67px;
+    width: 109px;
+    height: 80px;
 }
 
 .downArrowHolder {
@@ -122,6 +123,6 @@
     color: #fff;
     font-size: 13px;
     text-align: center;
-    width: 80%;
+    width: 70%;
     z-index: 1;
 }

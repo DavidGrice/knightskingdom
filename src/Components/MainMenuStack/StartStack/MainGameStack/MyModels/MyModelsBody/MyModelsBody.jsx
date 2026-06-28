@@ -38,7 +38,7 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
     handleUpArrowClick,
   } = usePaginatedGrid({
     items: savedItems,
-    itemsPerPage: 6,
+    itemsPerPage: 9,
     arrows: {
       upSolid: myModelsData.upArrowGold,
       upGreen: myModelsData.upArrowGreen,

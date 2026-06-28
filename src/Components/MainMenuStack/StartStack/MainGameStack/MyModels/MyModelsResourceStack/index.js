@@ -12,7 +12,7 @@ import ArrowUp2 from './purple_arrow_up_2.png';
 import ArrowUp6 from './purple_arrow_up_6.png';
 import ArrowDown2 from './purple_arrow_down_2.png';
 import ArrowDown6 from './purple_arrow_down_6.png';
-import SelectedOverlay from '../../MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/wh_selection.png';
+import SelectedOverlay from '../../../World/WorldBody/WorldBodyResourceStack/selected.png';
 
 import PurpleHelp2 from './purple_richard_help_2.png';
 import PurpleHelp3 from './purple_richard_help_3.png';
