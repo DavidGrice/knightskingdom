@@ -153,7 +153,40 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — Phase 4: Game State
+
+### New: `MainGameStack/context/`
+
+| File | Purpose |
+|------|---------|
+| `sceneSchema.js` | Serializable `{ models, camera, climate }`; `serializeSceneFromThree` |
+| `gameReducer.js` | Consolidated game UI state + actions |
+| `GameContext.jsx` | Provider with handlers, music ref, `gameEngineRef` |
+| `index.js` | Barrel exports |
+
+### New: `src/api/worldSave.js`
+
+- `saveWorldProgress`, `appendWorldSnapshot`, `updateProfileOptions`
+- Profile `savedWorlds[worldId]` slots with scene + thumbnail + snapshots
+
+### Refactored
+
+| File | Changes |
+|------|---------|
+| `MainGame/MainGame.jsx` | Thin shell; all state in `useGameContext` |
+| `MainGame/GameEngine/GameEngine.jsx` | `forwardRef` + `captureFrame` / `getSceneState`; `onSceneChange` |
+| `MainGameStack.jsx` | `GameProvider` wrapper; save/snapshot callbacks |
+| `StartStack.jsx` | Threads `selectedProfile`, `userData`, `updateUserData` |
+| `MainMenuStack.jsx` | Options persistence; profile lookup from `userData` |
+| `App.js` | Passes `userData` + `updateUserData` to main menu |
+| `Options/Options.jsx` | Controlled toggles bound to `profile.options` |
+| `Options/OptionsMenuPlaceholder.jsx` | Controlled `activeSide` + `onSelect` |
+| `SnapShot/SnapShot.jsx` | Shows latest `imageDataUrl` capture preview |
+| `MyModels/MyModels.jsx` | Lists saved worlds from profile |
+
+---
+
 ## Build Status
 
 - `npm run build` — **passes** (warnings only, pre-existing ESLint)
-- Bundle ~3.19 MB gzipped main chunk (unchanged order of magnitude)
+- Bundle ~3.18 MB gzipped main chunk (unchanged order of magnitude)

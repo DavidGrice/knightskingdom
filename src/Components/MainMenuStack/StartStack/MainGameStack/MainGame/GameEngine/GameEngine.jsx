@@ -1,15 +1,16 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComponent';
 import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
 import { Modes } from './GameEngineResourceStack/index';
+import { serializeSceneFromThree } from '../../context/sceneSchema';
 
-const GameEngine = ({ 
-                      mapData, color, mode, activeCamera, isFollowing, addModel, 
-                      selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating, 
-                      cameraNeedsReset, setCameraNeedsReset, isClimateOpen, setIntermediateMapData
-                    }) => {
+const GameEngine = forwardRef(({
+  mapData, color, mode, activeCamera, isFollowing, addModel,
+  selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating,
+  cameraNeedsReset, setCameraNeedsReset, isClimateOpen, onSceneChange,
+}, ref) => {
   const mountRef = useRef(null);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -44,7 +45,12 @@ const GameEngine = ({
   const frontCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
   const backCamera = useRef(new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)).current;
   const renderer = useRef(new THREE.WebGLRenderer()).current;
-  // const updateClimate = SkyBoxLoader(mapData, scene, selectedClimateMode);
+
+  useImperativeHandle(ref, () => ({
+    captureFrame: () => renderer.domElement.toDataURL('image/png'),
+    getSceneState: () => serializeSceneFromThree(scene, camera, selectedClimateMode),
+  }), [renderer, scene, camera, selectedClimateMode]);
+
   canvasRef.current = renderer.domElement;
   // Apply styles to the canvas
   // if (canvasRef.current) {
@@ -102,25 +108,10 @@ const GameEngine = ({
   
 
   useEffect(() => {
-    const updateIntermediateMapData = () => {
-      const newIntermediateMapData = [];
-
-      scene.children.forEach((child) => {
-        newIntermediateMapData.push({ child: child });
-      });
-
-      const cameraData = {
-        position: camera.position,
-        quaternion: camera.quaternion,
-        rotation: camera.rotation,
-        far: camera.far,
-        near: camera.near,
-        scale: camera.scale,
-        zoom: camera.zoom,
-      };
-
-      newIntermediateMapData.push({ camera: cameraData });
-      setIntermediateMapData(newIntermediateMapData);
+    const updateSceneState = () => {
+      if (onSceneChange) {
+        onSceneChange(serializeSceneFromThree(scene, camera, selectedClimateMode));
+      }
     };
 
     //region Event Listeners
@@ -155,7 +146,7 @@ const GameEngine = ({
                   }
                   const position = intersect.point;
                   ModelLoader('add', addModel, position, null, scene);
-                  updateIntermediateMapData();
+                  updateSceneState();
                   break;
               default:
                   break;
@@ -242,7 +233,7 @@ const GameEngine = ({
                   break;
           }
       }
-      updateIntermediateMapData();
+      updateSceneState();
     };
 
     const onMouseMove = (event) => {
@@ -280,7 +271,7 @@ const GameEngine = ({
           isDragging.current = false;
           selectedObject.current.visible = false;
           selectedObject.current = null;
-          updateIntermediateMapData();
+          updateSceneState();
       }
     };
 
@@ -318,7 +309,7 @@ const GameEngine = ({
       ClimateLoader(selectedClimateMode, scene, climateNeedsUpdating, currentSystem, setCurrentSystem);
       setClimateNeedsUpdating(false);
       SkyBoxLoader(mapData, scene, selectedClimateMode);
-      updateIntermediateMapData();
+      updateSceneState();
     }
     // Add necessary event listeners based on the current mode
     switch (mode) {
@@ -381,7 +372,7 @@ const GameEngine = ({
   }, [
     mode, color, mapData, scene, camera, renderer, raycaster, mouse, activeCamera, 
     selectedClimateMode, climateNeedsUpdating, currentSystem, cameraNeedsReset, 
-    isClimateOpen, setCameraNeedsReset, setClimateNeedsUpdating, setIntermediateMapData
+    isClimateOpen, setCameraNeedsReset, setClimateNeedsUpdating, onSceneChange, selectedClimateMode
   ]);
 
   return (
@@ -389,6 +380,6 @@ const GameEngine = ({
       {loading && <LoadingComponent />}
     </div>
   );
-};
+});
 
 export default GameEngine;

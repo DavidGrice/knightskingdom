@@ -60,6 +60,8 @@ class App extends Component {
             <MainMenuStack
               navigateToAuthentication={this.navigateToAuthentication}
               selectedProfile={selectedProfile}
+              userData={userData}
+              updateUserData={this.updateUserData}
             />
           </Router>
         )}

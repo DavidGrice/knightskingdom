@@ -10,6 +10,13 @@ const defaultProfileOptions = {
 };
 
 export { defaultProfileOptions };
+export {
+  saveWorldProgress,
+  appendWorldSnapshot,
+  updateProfileOptions,
+  getSavedWorld,
+  ensureProfileSaveSlots,
+} from './worldSave';
 
 export const fetchData = () => {
   try {

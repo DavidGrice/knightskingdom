@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Start, MainGameStack } from './index';
 
-const StartStack = ({ navigateToMenu }) => {
+const StartStack = ({ navigateToMenu, selectedProfile, userData, updateUserData }) => {
     const [selectedMap, setSelectedMap] = useState(null);
     const navigate = useNavigate();
 
@@ -18,7 +18,19 @@ const StartStack = ({ navigateToMenu }) => {
     return (
         <Routes>
             <Route path="/start" element={<Start navigateToMenu={navigateToMenu} navigateToMainGame={navigateToMainGame} />} />
-            <Route path="/main-game/*" element={<MainGameStack navigateToStartMenu={navigateToStartMenu} navigateToMainGame={navigateToMainGame} mapData={selectedMap}  />} />
+            <Route
+              path="/main-game/*"
+              element={
+                <MainGameStack
+                  navigateToStartMenu={navigateToStartMenu}
+                  navigateToMainGame={navigateToMainGame}
+                  mapData={selectedMap}
+                  selectedProfile={selectedProfile}
+                  userData={userData}
+                  updateUserData={updateUserData}
+                />
+              }
+            />
             <Route path="*" element={<Navigate to="/start" />} />
         </Routes>
     );

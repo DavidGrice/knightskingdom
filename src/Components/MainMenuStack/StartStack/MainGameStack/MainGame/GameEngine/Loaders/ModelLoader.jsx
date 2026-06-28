@@ -183,6 +183,8 @@ const ModelLoader = (type, modelData, position, mapData, scene) => {
                         gltf.scene.isMovable = false;
                         gltf.scene.isDeletable = true;
                         gltf.scene.isModel = SelectedModels[modelData]['isModel'];
+                        gltf.scene.userData.modelId = modelData;
+                        gltf.scene.userData.isPlayableModel = true;
 
                         // Traverse the gltf.scene to set properties on the transparentBox and add camera helpers to head_back
                         gltf.scene.traverse((child) => {

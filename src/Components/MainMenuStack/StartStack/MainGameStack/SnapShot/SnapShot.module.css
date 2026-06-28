@@ -14,4 +14,21 @@
     position: absolute;
     bottom: 10px;
     left: 15%;
-  }
+}
+
+.capturePreview {
+    position: absolute;
+    right: 8%;
+    top: 15%;
+    z-index: 2;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 200px;
+}
+
+.capturePreview img {
+    display: block;
+    width: 100%;
+    height: auto;
+}

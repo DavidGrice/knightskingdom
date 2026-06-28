@@ -35,8 +35,8 @@ flowchart LR
 | 1 | ✅ Done | Minimal | Bugs, dead code, data flow fixes |
 | 2 | ✅ Done | Moderate | Common layout, PaginatedGrid, world data |
 | 3 | ✅ Done | Moderate | Merge MainGame/WorkShop UI trees |
-| 4 | ⬜ Next | Moderate | GameContext, serializable saves |
-| 5 | ⬜ Planned | Ambitious | React Three Fiber migration |
+| 4 | ✅ Done | Moderate | GameContext, serializable saves |
+| 5 | ⬜ Next | Ambitious | React Three Fiber migration |
 | 6 | ⬜ Planned | Infrastructure | API service, bundle splitting |
 
 ---
@@ -188,20 +188,17 @@ MainGameStack/
 
 ---
 
-## Phase 4 — Game State ⬜
+## Phase 4 — Game State ✅
 
 **Goal:** Single source of truth; enable real save/load.
 
-- [ ] `GameContext` or Zustand in `MainGameStack/context/`
-- [ ] Replace 20+ `useState` in `MainGame.jsx`
-- [ ] Serializable scene schema:
-  ```js
-  { models: [{id, position, rotation, color}], camera, climate }
-  ```
-- [ ] SnapShot: `renderer.domElement.toDataURL()` → `worldData.snapshots[]`
-- [ ] Implement `MyModels` route or delete folder
-- [ ] Wire `handleSave` / `isSaveOpen` to persistence
-- [ ] Options → `selectedProfile.options` persistence
+- [x] `GameContext` + `useReducer` in `MainGameStack/context/`
+- [x] Replace 20+ `useState` in `MainGame.jsx` (now thin shell via `useGameContext`)
+- [x] Serializable scene schema in `context/sceneSchema.js`
+- [x] SnapShot: `renderer.domElement.toDataURL()` → profile `savedWorlds[id].snapshots[]`
+- [x] `MyModels` minimal list UI (saved worlds from profile)
+- [x] Wire `handleSave` → `saveWorldProgress()` → localStorage via App
+- [x] Options → `selectedProfile.options` persistence (controlled `OptionsMenuPlaceholder`)
 
 ---
 

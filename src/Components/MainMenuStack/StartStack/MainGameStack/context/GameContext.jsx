@@ -1,0 +1,332 @@
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
+import { Modes } from '../MainGame/GameEngine/GameEngineResourceStack/index';
+import { musicTracks } from '../MainGame/MainGameResourceStack/index';
+import { createSnapshotEntry } from './sceneSchema';
+import { gameReducer, initialGameState } from './gameReducer';
+
+const GameContext = createContext(null);
+
+const CLIMATE_BY_INDEX = [
+  'SUNNY', 'WINDY', 'FOGGY', 'RAIN', 'SNOW',
+  'DARK_SUNNY', 'DARK_WINDY', 'DARK_FOGGY', 'DARK_DRIZZLY', 'DARK_THUNDERSTORM',
+];
+
+const MUSIC_BY_INDEX = ['NONE', 'GOOD', 'VERYGOOD', 'BAD', 'VERYBAD'];
+
+export const GameProvider = ({
+  children,
+  mapData,
+  selectedProfile,
+  onSaveWorldProgress,
+  onAppendSnapshot,
+  navigateToWorkshop,
+  navigateToSnapshot,
+}) => {
+  const [state, dispatch] = useReducer(gameReducer, initialGameState);
+  const gameEngineRef = useRef(null);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const saved = selectedProfile?.savedWorlds?.[mapData?.id];
+    if (saved?.scene) {
+      dispatch({
+        type: 'HYDRATE_SCENE',
+        payload: { scene: saved.scene, climate: saved.scene.climate },
+      });
+    }
+  }, [mapData?.id, selectedProfile]);
+
+  const resetModes = useCallback(() => {
+    dispatch({ type: 'RESET_MODES' });
+  }, []);
+
+  const captureCurrentScene = useCallback(() => {
+    if (gameEngineRef.current?.getSceneState) {
+      return gameEngineRef.current.getSceneState();
+    }
+    return state.sceneState;
+  }, [state.sceneState]);
+
+  const handleSave = useCallback(() => {
+    if (!selectedProfile?.id || !mapData?.id || !onSaveWorldProgress) {
+      dispatch({ type: 'SET_SAVE_MESSAGE', payload: 'No profile or world selected.' });
+      resetModes();
+      return;
+    }
+
+    const scene = captureCurrentScene();
+    const thumbnail = gameEngineRef.current?.captureFrame?.() || null;
+
+    onSaveWorldProgress(selectedProfile.id, mapData.id, {
+      scene,
+      thumbnail,
+      worldName: mapData.name,
+    });
+
+    dispatch({ type: 'SET_SAVE_MESSAGE', payload: `Saved ${mapData.name}` });
+    resetModes();
+  }, [selectedProfile, mapData, onSaveWorldProgress, captureCurrentScene, resetModes]);
+
+  const handleBucket = useCallback(() => {
+    const next = !state.showBucket;
+    dispatch({ type: 'TOGGLE_BUCKET', payload: next });
+    if (!state.showBucket) {
+      resetModes();
+    }
+  }, [state.showBucket, resetModes]);
+
+  const handleLoadModel = useCallback((model) => {
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: model });
+    dispatch({ type: 'SET_MODE', payload: Modes.ADDING });
+  }, []);
+
+  const handleMove = useCallback(() => {
+    dispatch({ type: 'SET_MODE', payload: Modes.MOVING });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, []);
+
+  const handleRotate = useCallback(() => {
+    dispatch({ type: 'SET_MODE', payload: Modes.ROTATING });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, []);
+
+  const handlePalette = useCallback(() => {
+    dispatch({ type: 'SET_MODE', payload: Modes.PAINTING });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+    if (state.isFollowing) {
+      dispatch({ type: 'SET_FOLLOWING', payload: false });
+    }
+    dispatch({ type: 'TOGGLE_PALETTE', payload: !state.isPaletteOpen });
+  }, [state.isFollowing, state.isPaletteOpen]);
+
+  const handleColor = useCallback((color) => {
+    dispatch({ type: 'SET_COLOR', payload: color });
+  }, []);
+
+  const handleDelete = useCallback(() => {
+    dispatch({ type: 'SET_MODE', payload: Modes.DELETING });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, []);
+
+  const handleAction = useCallback(() => {
+    dispatch({ type: 'SET_ACTION_OPEN', payload: !state.isActionOpen });
+    dispatch({ type: 'SET_MODE', payload: Modes.ACTION });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, [state.isActionOpen]);
+
+  const handleDrive = useCallback(() => {
+    if (state.isPaletteOpen) {
+      dispatch({ type: 'TOGGLE_PALETTE', payload: false });
+    }
+    if (state.showBucket) {
+      dispatch({ type: 'TOGGLE_BUCKET', payload: false });
+    }
+    dispatch({ type: 'SET_MODE', payload: Modes.DRIVING });
+    dispatch({ type: 'SET_FOLLOWING', payload: !state.isFollowing });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);
+
+  const handleCameraSwitch = useCallback((type) => {
+    dispatch({ type: 'SET_ACTIVE_CAMERA', payload: type });
+  }, []);
+
+  const handlePaintAndDrive = useCallback(() => {
+    if (state.isPaletteOpen) {
+      dispatch({ type: 'TOGGLE_PALETTE', payload: false });
+    }
+    if (state.isFollowing) {
+      dispatch({ type: 'SET_FOLLOWING', payload: false });
+    }
+    if (state.showBucket) {
+      dispatch({ type: 'TOGGLE_BUCKET', payload: false });
+    }
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);
+
+  const handlePlay = useCallback(() => {
+    dispatch({ type: 'SET_MODE', payload: Modes.PLAYING });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, []);
+
+  const handleClimate = useCallback(() => {
+    if (state.isMusicOpen) {
+      dispatch({ type: 'TOGGLE_MUSIC', payload: false });
+    }
+    dispatch({ type: 'TOGGLE_CLIMATE', payload: !state.isClimateOpen });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, [state.isClimateOpen, state.isMusicOpen]);
+
+  const handleWeatherChange = useCallback((index) => {
+    dispatch({
+      type: 'SET_WEATHER',
+      payload: { index, climate: CLIMATE_BY_INDEX[index] || 'SUNNY' },
+    });
+  }, []);
+
+  const handleMusicChange = useCallback((index) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    const track = MUSIC_BY_INDEX[index] || 'NONE';
+    let newAudio = null;
+
+    if (track === 'GOOD') {
+      newAudio = new Audio(musicTracks.GOOD);
+    } else if (track === 'VERYGOOD') {
+      newAudio = new Audio(musicTracks.VERYGOOD);
+    } else if (track === 'BAD') {
+      newAudio = new Audio(musicTracks.BAD);
+    } else if (track === 'VERYBAD') {
+      newAudio = new Audio(musicTracks.VERYBAD);
+    }
+
+    if (newAudio) {
+      newAudio.loop = true;
+      newAudio.play();
+      audioRef.current = newAudio;
+    } else {
+      audioRef.current = null;
+    }
+
+    dispatch({ type: 'SET_ACTIVE_MUSIC', payload: { index, track } });
+  }, []);
+
+  const handleMusic = useCallback(() => {
+    if (state.isClimateOpen) {
+      dispatch({ type: 'TOGGLE_CLIMATE', payload: false });
+    }
+    dispatch({ type: 'TOGGLE_MUSIC', payload: !state.isMusicOpen });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, [state.isClimateOpen, state.isMusicOpen]);
+
+  const closeClimate = useCallback(() => {
+    dispatch({ type: 'TOGGLE_CLIMATE', payload: false });
+    dispatch({ type: 'SET_ACTIVE_ICON', payload: null });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, []);
+
+  const closeMusic = useCallback(() => {
+    dispatch({ type: 'TOGGLE_MUSIC', payload: false });
+    dispatch({ type: 'SET_ACTIVE_ICON', payload: null });
+    dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
+  }, []);
+
+  const setActiveIcon = useCallback((value) => {
+    dispatch({ type: 'SET_ACTIVE_ICON', payload: value });
+  }, []);
+
+  const handleNavigateToWorkshop = useCallback(() => {
+    const scene = captureCurrentScene();
+    navigateToWorkshop({
+      ...mapData,
+      sceneSnapshot: scene,
+    });
+  }, [captureCurrentScene, mapData, navigateToWorkshop]);
+
+  const handleNavigateToSnapShot = useCallback(() => {
+    const scene = captureCurrentScene();
+    const imageDataUrl = gameEngineRef.current?.captureFrame?.();
+
+    if (!scene && !imageDataUrl) {
+      return;
+    }
+
+    const snapshotEntry = imageDataUrl
+      ? createSnapshotEntry(imageDataUrl, scene)
+      : { scene };
+
+    if (selectedProfile?.id && mapData?.id && onAppendSnapshot) {
+      onAppendSnapshot(selectedProfile.id, mapData.id, snapshotEntry);
+    }
+
+    navigateToSnapshot(snapshotEntry);
+  }, [captureCurrentScene, selectedProfile, mapData, onAppendSnapshot, navigateToSnapshot]);
+
+  const handleSceneChange = useCallback((sceneState) => {
+    dispatch({ type: 'SET_SCENE_STATE', payload: sceneState });
+  }, []);
+
+  const value = useMemo(() => ({
+    state,
+    gameEngineRef,
+    resetModes,
+    handleSave,
+    handleBucket,
+    handleLoadModel,
+    handleMove,
+    handleRotate,
+    handlePalette,
+    handleColor,
+    handleDelete,
+    handleAction,
+    handleDrive,
+    handleCameraSwitch,
+    handlePaintAndDrive,
+    handlePlay,
+    handleClimate,
+    handleWeatherChange,
+    handleMusicChange,
+    handleMusic,
+    closeClimate,
+    closeMusic,
+    setActiveIcon,
+    handleNavigateToWorkshop,
+    handleNavigateToSnapShot,
+    handleSceneChange,
+    setClimateNeedsUpdating: (payload) => dispatch({ type: 'SET_CLIMATE_NEEDS_UPDATING', payload }),
+    setCameraNeedsReset: (payload) => dispatch({ type: 'SET_CAMERA_NEEDS_RESET', payload }),
+    setActiveWeather: (index) => handleWeatherChange(index),
+    setSelectedClimateMode: (climate) => {
+      const index = CLIMATE_BY_INDEX.indexOf(climate);
+      dispatch({
+        type: 'SET_WEATHER',
+        payload: { index: index >= 0 ? index : 0, climate: climate || 'SUNNY' },
+      });
+    },
+    setActiveMusic: (index) => handleMusicChange(index),
+  }), [
+    state,
+    resetModes,
+    handleSave,
+    handleBucket,
+    handleLoadModel,
+    handleMove,
+    handleRotate,
+    handlePalette,
+    handleColor,
+    handleDelete,
+    handleAction,
+    handleDrive,
+    handleCameraSwitch,
+    handlePaintAndDrive,
+    handlePlay,
+    handleClimate,
+    handleWeatherChange,
+    handleMusicChange,
+    handleMusic,
+    closeClimate,
+    closeMusic,
+    setActiveIcon,
+    handleNavigateToWorkshop,
+    handleNavigateToSnapShot,
+    handleSceneChange,
+  ]);
+
+  return (
+    <GameContext.Provider value={value}>
+      {children}
+    </GameContext.Provider>
+  );
+};
+
+export const useGameContext = () => {
+  const context = useContext(GameContext);
+  if (!context) {
+    throw new Error('useGameContext must be used within GameProvider');
+  }
+  return context;
+};
+
+export default GameContext;
