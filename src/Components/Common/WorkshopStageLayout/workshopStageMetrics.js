@@ -2,6 +2,11 @@
  * Pixel anchors on the 800×600 workshop canvas (background.png).
  * All floating panels and toolbar slots are measured from the top-left of this stage.
  *
+ * Measured landmarks (see grok/analyze-workshop-images.mjs):
+ *   - background red panel: x≈16, width≈234 (drop_down 238px sits here)
+ *   - black viewport: x≈250–800 (3D area; top overlay slot is over this region)
+ *   - legacy bucket left 29.15% (=233px) aligned to red panel RIGHT edge — wrong
+ *
  * @typedef {{ x: number, y: number, width: number, height: number }} Rect
  */
 
@@ -11,17 +16,18 @@ export const WORKSHOP_STAGE_METRICS = {
   canvas: WORKSHOP_CANVAS,
   topBar: { height: 103 },
   bottomBar: { height: 126 },
-  /** Nudge both toolbars right (+) or left (-) relative to the centered 800px stage */
+  /** Nudge both toolbars right (+) or left (-) vs centered 800px stage (overlay art vs background) */
   barOffsetX: 32,
-  /** Toolbar slots on overlay_top (783×103 stretched to 800px) */
+  /** Toolbar slots on overlay_top (783×103 stretched to 800px) — left grid panel region */
   toolbar: {
     bucketButton: { x: 35, y: 5, width: 45, height: 63 },
     saveButton: { x: 130, y: 13, width: 56, height: 58 },
     middleTools: { x: 366, y: 19, width: 310, height: 65 },
     leaveButton: { x: 691, y: 5, width: 91, height: 72 },
   },
-  /** Brick bucket holder — left edge on the background art slot */
-  bucketPanel: { x: 8, y: 103, width: 238, height: 556 },
+  /** Brick bucket holder — anchored to background red panel (not toolbar button) */
+  bucketPanel: { x: 16, y: 103, width: 238, height: 556 },
+  /** color_mixer_board 196×196; legacy right 29.2% → x=370 on 800px canvas */
   palettePanel: { x: 370, y: 60, width: 196, height: 196 },
   /** Optional world name plaque on the background art — hidden until positioned */
   worldTitle: { x: 400, y: 88, visible: false },

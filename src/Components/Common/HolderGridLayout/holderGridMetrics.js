@@ -61,7 +61,11 @@ export const HOLDER_VARIANTS = {
     ...CELL,
     ...GRID_GAP,
   },
-  /** Workshop brick bucket — 238×556 drop_down.png, 2×3 grid */
+  /**
+   * Workshop brick bucket — 238×556 drop_down.png, 2×3 grid.
+   * Measured: arrows ~(119,200) and ~(110,519); grid 24+95+24+95=238;
+   * recess uses uniform dark-red (not black slots); gridTop≈303 from legacy %.
+   */
   WORKSHOP_BUCKET: {
     className: 'variantWorkshopBucket',
     bodyWidth: 238,
@@ -70,8 +74,8 @@ export const HOLDER_VARIANTS = {
     gridRows: 3,
     gridLeft: 24,
     gridTop: 303,
-    upArrow: { x: 119, y: 248 },
-    downArrow: { x: 119, y: 518 },
+    upArrow: { x: 119, y: 200 },
+    downArrow: { x: 110, y: 519 },
     help: null,
     footer: null,
     width: 95,
