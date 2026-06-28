@@ -13,7 +13,7 @@ RE work (`resources/`, `tools/`) is out of scope unless requested.
 1. **Stack-first organization** — keep `*Stack` folder structure; improve internals.
 2. **Incremental phases** — each phase leaves `npm run build` working.
 3. **Minimal → Moderate → Ambitious** — prefer small wins before large refactors.
-4. **Commit per phase** — commit on `grok-dev` after each completed phase.
+4. **Commit per phase** — commit on `grok-dev` after each completed phase, then **`git push origin grok-dev`** (see `grok/WORKFLOW.md`).
 
 ---
 

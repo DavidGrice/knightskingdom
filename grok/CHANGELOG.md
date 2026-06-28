@@ -2,6 +2,20 @@
 
 All changes made on branch `grok-dev` via Grok sessions.
 
+**Sync:** Grok pushes to `origin/grok-dev` after commits — see `grok/WORKFLOW.md`.
+
+---
+
+## 2026-06-28 — Git workflow: push after commit
+
+| File | Change |
+|------|--------|
+| `grok/WORKFLOW.md` | New — Grok must `git push origin grok-dev` after every commit |
+| `grok/README.md` | Quick-start and sync instructions updated |
+| `grok/ROADMAP.md` | Guiding principle: push after commit |
+
+User preference: no more local-only commits; VS Code repo pulls from `origin/grok-dev`.
+
 ---
 
 ## 2026-06-28 — SnapShot thumbnail and selection overlay fix
@@ -45,7 +59,7 @@ Restored original CRA layout for the save game screen (had been incorrectly copi
 ## 2026-06-28 — Phase 0: Branch Setup
 
 - Created `grok-dev` branch from `main` (local, VS Code repo + Grok worktree)
-- User preference: local only initially (no `git push` yet)
+- User preference: local only initially (superseded 2026-06-28 — see `grok/WORKFLOW.md`, push after commit)
 
 ---
 

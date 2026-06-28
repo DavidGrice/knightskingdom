@@ -8,7 +8,7 @@ Use this folder to resume work on **LEGO Creator: Knight's Kingdom** modernizati
 
 **Grok sandbox worktree:** `C:\Users\david\.grok\worktrees\knightskingdom-knightskingdom\knightskingdom`
 
-> Grok edits land in the sandbox first. User merges manually into the VS Code repo.
+> Grok edits in the sandbox worktree, **pushes to `origin/grok-dev`**, then user pulls in VS Code. See **`grok/WORKFLOW.md`** for the full git flow.
 
 ---
 
@@ -16,7 +16,13 @@ Use this folder to resume work on **LEGO Creator: Knight's Kingdom** modernizati
 
 Tell Grok:
 
-> Read `grok/README.md` and `grok/ROADMAP.md`. We are on branch `grok-dev`. Phases 0–10 complete; continue from user backlog or new features.
+> Read `grok/README.md`, `grok/ROADMAP.md`, and `grok/WORKFLOW.md`. We are on branch `grok-dev`. Phases 0–10 complete; continue from user backlog or new features. **Push to `origin/grok-dev` after every commit.**
+
+**Grok must push after committing** (user syncs via `git pull` in VS Code):
+
+```powershell
+git push origin grok-dev
+```
 
 **Run the app:**
 ```powershell
