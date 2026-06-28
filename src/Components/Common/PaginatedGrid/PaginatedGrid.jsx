@@ -30,7 +30,7 @@ const PaginatedGrid = ({
         <div
           key={getItemKey(item, index)}
           className={styles.item}
-          style={{ backgroundImage: `url(${item.image})` }}
+          style={item.image ? { backgroundImage: `url(${item.image})` } : undefined}
           onClick={() => {
             if (!isItemDisabled(item)) {
               onItemClick(item);

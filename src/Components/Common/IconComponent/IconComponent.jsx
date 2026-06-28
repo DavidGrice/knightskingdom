@@ -1,63 +1,52 @@
-import React, { useState, useEffect } from "react";
-import styles from "./IconComponent.module.css";
+import React, { useState, useEffect } from 'react';
+import styles from './IconComponent.module.css';
 
-const IconComponent = ({ type, backgroundImage, placeholderImage, frames }) => {
-    const [currentFrame, setCurrentFrame] = useState(0);
-    const [typeImage, setTypeImage] = useState(type);
-    const [typeId, setTypeId] = useState(null);
-    useEffect(() => {
-        let timer;
-        const handleMouseEnter = () => {
-            timer = setInterval(() => {
-                setCurrentFrame((prevFrame) => (prevFrame + 1) % frames.length);
-            }, 50);
-        };
-        const handleMouseLeave = () => {
-            clearInterval(timer);
-            setCurrentFrame(0);
-        };
+const bgStyle = (image) => (image ? { backgroundImage: `url(${image})` } : undefined);
 
-        if (type === "save") {
-            setTypeId("#save-component");
-        } else if (type === "load") {
-            setTypeId("#load-component");
-        } else if (type === "copy") {
-            setTypeId("#copy-component");
-        } else if (type === "trash") {
-            setTypeId("#trash-component");
-        } else if (type === "leave") {
-            setTypeId("#leave-component");
-        } else if (type === "destroy") {
-            setTypeId("#destroy-component");
-        } else if (type === "delete") {
-            setTypeId("#delete-component");
-        } else if (type === "print") {
-            setTypeId("#print-component");
-        }
+const IconComponent = ({ type, backgroundImage, placeholderImage, frames = [] }) => {
+  const [currentFrame, setCurrentFrame] = useState(0);
+  const frameImage =
+    currentFrame === 0 ? placeholderImage : frames[currentFrame] || placeholderImage;
 
-        const element = document.getElementById(typeImage);
-        element.addEventListener('mouseenter', handleMouseEnter);
-        element.addEventListener('mouseleave', handleMouseLeave);
-        return () => {
-            element.removeEventListener('mouseenter', handleMouseEnter);
-            element.removeEventListener('mouseleave', handleMouseLeave);
-            clearInterval(timer);
-        };
-    }, []);
+  useEffect(() => {
+    let timer;
+    const element = document.getElementById(type);
+    if (!element) {
+      return undefined;
+    }
 
-    return (
-        <div
-            className={styles.iconComponent}
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
-            <div
-            id={typeImage}
-            className={styles.frameDiv}
-            style={{ backgroundImage: `url(${currentFrame === 0 ? placeholderImage : frames[currentFrame]})` }}
-            />
-        </div>
-        
-    );
-}
+    const handleMouseEnter = () => {
+      if (frames.length < 2) {
+        return;
+      }
+      timer = setInterval(() => {
+        setCurrentFrame((prevFrame) => (prevFrame + 1) % frames.length);
+      }, 50);
+    };
+
+    const handleMouseLeave = () => {
+      clearInterval(timer);
+      setCurrentFrame(0);
+    };
+
+    element.addEventListener('mouseenter', handleMouseEnter);
+    element.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      element.removeEventListener('mouseenter', handleMouseEnter);
+      element.removeEventListener('mouseleave', handleMouseLeave);
+      clearInterval(timer);
+    };
+  }, [type, frames.length]);
+
+  return (
+    <div className={styles.iconComponent} style={bgStyle(backgroundImage)}>
+      <div
+        id={type}
+        className={styles.frameDiv}
+        style={bgStyle(frameImage)}
+      />
+    </div>
+  );
+};
 
 export default IconComponent;
