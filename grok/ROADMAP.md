@@ -53,6 +53,7 @@ flowchart LR
 
 | Item | Status | Notes |
 |------|--------|-------|
+| Lego Clock loading modal | ⬜ Pending | Modal overlay while game/components finish loading |
 | Save game menu styling | ⬜ Pending | User will adjust MyModels / save UI CSS |
 | R3F migration | ⬜ Deferred | Plain Three.js retained; `GameEngineCore` instead |
 | Unique GLB per world 2–10 | ⬜ Deferred | All worlds use `map1` placeholder for now |
