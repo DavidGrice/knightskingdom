@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './SnapShotBody.module.css';
 import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../../Common';
 import { mergeSnapshotLists } from '@/api/worldSave';
@@ -50,6 +50,21 @@ const SnapShotBody = ({
       downGreen: snapshotData.downArrowGreen,
     },
   });
+
+  useEffect(() => {
+    if (snapshotItems.length === 0) {
+      setSelectedItem(null);
+      onSelectSnapshot?.(null);
+      return;
+    }
+    const stillValid = selectedItem
+      && snapshotItems.some((entry) => entry.id === selectedItem.id);
+    if (!stillValid) {
+      const initial = snapshotItems[0];
+      setSelectedItem(initial);
+      onSelectSnapshot?.(initial);
+    }
+  }, [snapshotItems, selectedItem, onSelectSnapshot, setSelectedItem]);
 
   const handleItemClick = (item) => {
     setSelectedItem(item);

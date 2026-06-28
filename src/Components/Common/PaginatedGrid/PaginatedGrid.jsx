@@ -30,13 +30,27 @@ const PaginatedGrid = ({
         <div
           key={getItemKey(item, index)}
           className={styles.item}
-          style={item.image ? { backgroundImage: `url(${item.image})` } : undefined}
           onClick={() => {
             if (!isItemDisabled(item)) {
               onItemClick(item);
             }
           }}
         >
+          {item.image ? (
+            <img
+              src={item.image}
+              alt=""
+              className={styles.itemThumbnail}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
+                position: 'absolute',
+                inset: 0,
+              }}
+            />
+          ) : null}
           {selectedItem === item && selectionOverlay ? (
             <div className={styles.highlightedImage}>
               <img src={selectionOverlay} alt="Selected" />

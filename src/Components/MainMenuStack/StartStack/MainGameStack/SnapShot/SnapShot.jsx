@@ -10,7 +10,13 @@ const SnapShot = ({
   selectedProfile,
   onRemoveSnapshot,
 }) => {
-  const [previewSnapshot, setPreviewSnapshot] = useState(mapData?.sceneSnapshot || null);
+  const [previewSnapshot, setPreviewSnapshot] = useState(() => {
+    if (mapData?.sceneSnapshot?.imageDataUrl) {
+      return mapData.sceneSnapshot;
+    }
+    const saved = mapData?.snapshots || [];
+    return saved.find((entry) => entry.imageDataUrl) || mapData?.sceneSnapshot || null;
+  });
 
   const handleCheckmarkClick = () => {
     navigateToMainGame(mapData);

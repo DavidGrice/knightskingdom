@@ -21,14 +21,17 @@
     right: 8%;
     top: 15%;
     z-index: 2;
+    width: 200px;
+    height: 150px;
     border: 2px solid #fff9;
     border-radius: 4px;
     overflow: hidden;
-    max-width: 200px;
+    background-color: #000;
 }
 
 .capturePreview img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 }

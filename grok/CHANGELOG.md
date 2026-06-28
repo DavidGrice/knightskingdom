@@ -4,6 +4,18 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot thumbnail and selection overlay fix
+
+| File | Change |
+|------|--------|
+| `PaginatedGrid.jsx` | Render thumbnails via `<img>` (fixes `data:` URL captures broken in CSS `url()`) |
+| `SnapShotBody.module.css` | Full-bleed selection overlay (`inset: 0`); grid margins match WorldBody |
+| `SnapShotBody.jsx` | Auto-select first snapshot for preview on load |
+| `SnapShot.jsx` | Initial preview from first saved capture with `imageDataUrl` |
+| `SnapShot.module.css` | Fixed-size preview pane with `object-fit: cover` |
+
+---
+
 ## 2026-06-28 — SnapShot screenshot menu styling
 
 Restored original CRA grid layout for the screenshot gallery.
