@@ -57,8 +57,6 @@
 
 .downArrowHolder {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     justify-content: center;
     bottom: 0%;
     width: 42px;

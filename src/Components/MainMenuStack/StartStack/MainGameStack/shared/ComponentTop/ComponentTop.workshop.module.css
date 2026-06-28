@@ -22,7 +22,7 @@
 }
 
 .middleDiv {
-    width: 350px;
+    /* Legacy used invalid `width: 350` (ignored) — fixed width squeezes icons on 800px bar */
     height: 65px;
     display: flex;
     flex-direction: row;

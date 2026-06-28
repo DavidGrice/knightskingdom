@@ -50,16 +50,10 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
           />
         )}
       >
-        {showBucket && (
-          <div>
-            <Bucket dataSource="bricks" />
-          </div>
-        )}
-        {isPaletteOpen && (
-          <div>
-            <Palette variant="workshop" />
-          </div>
-        )}
+        <div className={styles.stage}>
+          {showBucket && <Bucket dataSource="bricks" />}
+          {isPaletteOpen && <Palette variant="workshop" />}
+        </div>
       </GameShell>
     </div>
   );

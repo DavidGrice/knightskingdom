@@ -8,6 +8,21 @@
     background-position: center;
 }
 
+/* 800px-wide anchor so bucket/palette % positions match the background art */
+.stage {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    width: 800px;
+    height: 100%;
+    pointer-events: none;
+}
+
+.stage > * {
+    pointer-events: auto;
+}
+
 .worldLabel {
     position: absolute;
     top: 108px;
