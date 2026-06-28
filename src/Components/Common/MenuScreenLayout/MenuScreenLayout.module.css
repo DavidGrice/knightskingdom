@@ -1,0 +1,44 @@
+.screen {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+}
+
+.bottomLeftCorner {
+  position: absolute;
+  bottom: 10px;
+  left: 15%;
+  z-index: 3;
+}
+
+.bottomRightCorner {
+  position: absolute;
+  bottom: 0;
+  right: 12.75%;
+  width: 169px;
+  height: 123px;
+  z-index: 3;
+}
+
+.topRightCorner {
+  position: absolute;
+  top: 0;
+  right: 13%;
+  height: 87px;
+  width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}

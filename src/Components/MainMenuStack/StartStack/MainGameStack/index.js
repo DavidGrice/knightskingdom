@@ -1,4 +1,4 @@
 export { default as MainGame } from './MainGame/MainGame';
 export { default as SnapShot } from './SnapShot/SnapShot';
-export { default as MyModels } from './MyModels/MyModels';
+// TODO: implement MyModels before re-exporting
 export { default as WorkShop } from './WorkShop/WorkShop';

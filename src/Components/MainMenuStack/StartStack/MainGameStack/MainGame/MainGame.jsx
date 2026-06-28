@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './MainGame.module.css';
 import { GameEngine, ComponentTop, ComponentBottom } from './index';
 import { Bucket } from './ComponentTop/Bucket/index';
@@ -7,10 +7,11 @@ import { Drive } from './ComponentTop/Drive/index';
 import { Climate } from './ComponentBottom/Climate/index';
 import { Music } from './ComponentBottom/Music/index';
 import { musicTracks } from './MainGameResourceStack/index';
+import { Modes } from './GameEngine/GameEngineResourceStack/index';
 
-const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData, setWorldData }) => {
+const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData }) => {
 
-  const [mode, setMode] = useState('NONE');
+  const [mode, setMode] = useState(Modes.NONE);
   const [selectedModelMode, setSelectedModelMode] = useState('NONE');
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [showBucket, setShowBucket] = useState(false);
@@ -32,7 +33,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
   const [intermediateMapData, setIntermediateMapData] = useState(null);
 
   const resetModes = () => {
-    setMode('NONE');
+    setMode(Modes.NONE);
     setSelectedModelMode('NONE');
   }
 
@@ -50,22 +51,21 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
 
   const handleLoadModel = (model) => {
     setSelectedModelMode(model);
-    setMode('ADDING');
+    setMode(Modes.ADDING);
   }
 
   const handleMove = () => {
-    setMode('MOVING');
-    console.log('Mode set to MOVING');
+    setMode(Modes.MOVING);
     setSelectedModelMode('NONE');
   }
 
   const handleRotate = () => {
-    setMode('ROTATING');
+    setMode(Modes.ROTATING);
     setSelectedModelMode('NONE');
   }
 
   const handlePalette = () => {
-    setMode('PAINTING');
+    setMode(Modes.PAINTING);
     setSelectedModelMode('NONE');
     if (isFollowing) {
       setIsFollowing(false);
@@ -78,59 +78,14 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     setSelectedModelMode('NONE');
   }
 
-  useEffect(() => {
-    // if (moveToScreen && intermediateMapData) {
-    //   console.log("intermediateMapData MainGame", intermediateMapData);
-    //   navigateToSnapshot(intermediateMapData);
-    // }
-    switch (mode) {
-    case 'ADDING':
-      console.log('Mode set to ADDING');
-      console.log(mode);
-      break;
-    case 'MOVING':
-      console.log('Mode set to MOVING');
-      console.log(mode);
-      break;
-    case 'ROTATING':
-      console.log('Mode set to ROTATING');
-      console.log(mode);
-      break;
-    case 'PAINTING':
-      console.log('Mode set to PAINTING');
-      console.log(mode);
-      break;
-      case 'DELETING':
-      console.log('Mode set to DELETING');
-      console.log(mode);
-      break;
-    case 'ACTION':
-      console.log('Mode set to ACTION');
-      console.log(mode);
-      break;
-    case 'DRIVING':
-      console.log('Mode set to DRIVING');
-      console.log(mode);
-      break;
-    case 'PLAYING':
-      console.log('Mode set to PLAYING');
-      console.log(mode);
-      break;
-    default:
-      resetModes();
-      // setCameraNeedsReset(false);
-      break;
-    }
-  }, [mode]);
-
   const handleDelete = () => {
-    setMode('DELETING');
+    setMode(Modes.DELETING);
     setSelectedModelMode('NONE');
   };
 
   const handleAction = () => {
     setIsActionOpen(!isActionOpen);
-    setMode('ACTION');
+    setMode(Modes.ACTION);
     setSelectedModelMode('NONE');
   }
 
@@ -141,7 +96,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     if (showBucket) {
       setShowBucket(false);
     }
-    setMode('DRIVING');
+    setMode(Modes.DRIVING);
     setIsFollowing(!isFollowing);
     setSelectedModelMode('NONE');
   }
@@ -170,7 +125,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
   }
 
   const handlePlay = () => {
-    setMode('PLAYING');
+    setMode(Modes.PLAYING);
     setSelectedModelMode('NONE');
   }
 
@@ -297,14 +252,19 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     setSelectedModelMode('NONE');
   }
 
+  const handleNavigateToWorkshop = () => {
+    navigateToWorkshop({
+      ...mapData,
+      sceneSnapshot: intermediateMapData,
+    });
+  };
+
   const handleNavigateToSnapShot = () => {
     if (intermediateMapData === null) {
       return;
-    } else {
-      setWorldData(intermediateMapData);
-      navigateToSnapshot();
     }
-  }
+    navigateToSnapshot(intermediateMapData);
+  };
 
   return (
     <div className={styles.mainDiv}>
@@ -392,7 +352,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
           handleMusic={handleMusic}
           activeIcon={activeIcon}
           setActiveIcon={setActiveIcon}
-          navigateToWorkshop={navigateToWorkshop}
+          navigateToWorkshop={handleNavigateToWorkshop}
           handleNavigateToSnapShot={handleNavigateToSnapShot}
           handleMusicChange={handleMusicChange}
         />

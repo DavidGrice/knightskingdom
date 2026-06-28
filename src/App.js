@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Navigate, BrowserRouter as Router, useNavigate } from 'react-router-dom';
-import { fetchData, updateUserData } from './api';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { fetchData, persistUserData } from './api';
 import styles from './App.module.css';
-import { AuthenticationStack } from './components/AuthenticationStack';
-import { MainMenuStack } from './components/MainMenuStack';
+import { AuthenticationStack } from './Components/AuthenticationStack';
+import { MainMenuStack } from './Components/MainMenuStack';
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class App extends Component {
     this.state = {
       userData: null,
       loading: true,
-      isAuthenticated: false, // Add authentication state
+      isAuthenticated: false,
       selectedProfile: null,
     };
   }
@@ -24,50 +24,46 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.userData !== this.state.userData) {
-      updateUserData(this.state.userData);
+      persistUserData(this.state.userData);
     }
   }
 
-    // Function to update userData
-    updateUserData = (newUserData) => {
-      this.setState({ userData: newUserData });
-    };
+  updateUserData = (newUserData) => {
+    this.setState({ userData: newUserData });
+  };
 
   navigateToMainMenu = (selectedProfile) => {
-    this.setState({ isAuthenticated: true }); // Set authentication status
-    this.setState({ selectedProfile: selectedProfile });
+    this.setState({ isAuthenticated: true, selectedProfile });
   };
 
   navigateToAuthentication = () => {
-    this.setState({ isAuthenticated: false }); // Set authentication status
-    this.setState({ selectedProfile: null });
-  }
+    this.setState({ isAuthenticated: false, selectedProfile: null });
+  };
 
   render() {
     const { userData, loading, isAuthenticated, selectedProfile } = this.state;
 
     return (
-        <div className={styles.mainDiv}>
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            
-            !isAuthenticated ? (
-              <Router>
-                <AuthenticationStack
-                  userData={userData}
-                  updateUserData={this.updateUserData} // Pass the function as a prop
-                  navigateToMainMenu={this.navigateToMainMenu} />
-              </Router>
-            )  : (
-              <Router>
-                <MainMenuStack
-                  navigateToAuthentication={this.navigateToAuthentication}
-                  selectedProfile={selectedProfile} />
-              </Router>
-            )
-          )}
-        </div>
+      <div className={styles.mainDiv}>
+        {loading ? (
+          <p>Loading...</p>
+        ) : !isAuthenticated ? (
+          <Router>
+            <AuthenticationStack
+              userData={userData}
+              updateUserData={this.updateUserData}
+              navigateToMainMenu={this.navigateToMainMenu}
+            />
+          </Router>
+        ) : (
+          <Router>
+            <MainMenuStack
+              navigateToAuthentication={this.navigateToAuthentication}
+              selectedProfile={selectedProfile}
+            />
+          </Router>
+        )}
+      </div>
     );
   }
 }

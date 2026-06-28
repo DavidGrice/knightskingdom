@@ -1,30 +1,27 @@
-// import * as THREE from 'three';
-
-// const SkyBoxLoader = (mapData, scene) => {
-//     const skyboxGeometry = new THREE.BoxGeometry(600, 600, 600);
-//     const texLoader = new THREE.CubeTextureLoader();
-//     const texturePaths = mapData.skyBoxes.map((skyBox) => skyBox.filePath);
-//     const texture = texLoader.load(
-//         texturePaths,
-//         () => console.log('Skybox textures loaded successfully'),
-//         undefined,
-//         (error) => console.error('Error loading skybox textures:', error)
-//     );
-//     const skyboxMaterial = new THREE.MeshBasicMaterial({
-//         envMap: texture,
-//         side: THREE.BackSide
-//     });
-//     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-//     skybox.position.set(0, 0, 0);
-//     skybox.isMovable = false;
-//     scene.add(skybox);
-// };
-
-// export default SkyBoxLoader;
-
 import * as THREE from 'three';
 
+const climateModeToInt = {
+  SUNNY: 0,
+  WINDY: 1,
+  FOGGY: 2,
+  RAIN: 3,
+  SNOW: 4,
+  DARK_SUNNY: 5,
+  DARK_WINDY: 6,
+  DARK_FOGGY: 7,
+  DARK_DRIZZLY: 8,
+  DARK_THUNDERSTORM: 9,
+};
+
+const resolveClimateMode = (climateMode) => {
+  if (typeof climateMode === 'number') {
+    return climateMode;
+  }
+  return climateModeToInt[climateMode] ?? 0;
+};
+
 const SkyBoxLoader = (mapData, scene, selectedClimateMode) => {
+  const climateModeInt = resolveClimateMode(selectedClimateMode);
     const skyboxGeometry = new THREE.BoxGeometry(600, 600, 600);
     const texLoader = new THREE.CubeTextureLoader();
     const texturePaths = mapData.skyBoxes.map((skyBox) => skyBox.filePath);
@@ -39,7 +36,7 @@ const SkyBoxLoader = (mapData, scene, selectedClimateMode) => {
         uniforms: {
             skybox: { value: texture },
             climateFactor: { value: 1.0 }, // Default climate factor
-            climateMode: { value: selectedClimateMode }
+            climateMode: { value: climateModeInt }
         },
         vertexShader: `
             varying vec3 vWorldPosition;
@@ -110,7 +107,7 @@ const SkyBoxLoader = (mapData, scene, selectedClimateMode) => {
 
     // Function to update the climate mode
     const updateClimate = (newClimateMode) => {
-        skyboxMaterial.uniforms.climateMode.value = newClimateMode;
+        skyboxMaterial.uniforms.climateMode.value = resolveClimateMode(newClimateMode);
     };
 
     return updateClimate;

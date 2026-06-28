@@ -1,50 +1,49 @@
 import userData from './data/userData.json';
 
-// async function fetchData() {
-//     // const url = './data/userData.json'; // Path to the local file
-//     // try {
-//     //     const response = await fetch(url);
-//     //     if (!response.ok) {
-//     //         throw new Error('Network response was not ok');
-//     //     }
-//     //     const data = await response.json();
-//     //     console.log('Data fetched:', data);
-//     //     return data;
-//     // } catch (error) {
-//     //     console.error('There was a problem with the fetch operation:', error);
-//     // }
-//     return data;
-// }
+const STORAGE_KEY = 'knights-kingdom-user-data';
 
-// export default fetchData;
+const defaultProfileOptions = {
+  brickQuality: 'medium',
+  renderer: 'hardware',
+  dialogue: 'on',
+  music: 'on',
+};
 
-
-export async function updateUserData(updatedData) {
-    try {
-      const response = await fetch('/updateUserData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const result = await response.text();
-      console.log(result);
-    } catch (error) {
-      console.error('Error updating user data:', error);
-    }
-}
+export { defaultProfileOptions };
 
 export const fetchData = () => {
-    try {
-        const response = userData;
-        return response;
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
     }
+    return userData;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return userData;
+  }
+};
+
+export async function persistUserData(updatedData) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedData));
+  } catch (error) {
+    console.error('Error saving user data to localStorage:', error);
+  }
+
+  try {
+    const response = await fetch('/updateUserData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  } catch (error) {
+    // API unavailable — localStorage is the fallback for now
+  }
 }
