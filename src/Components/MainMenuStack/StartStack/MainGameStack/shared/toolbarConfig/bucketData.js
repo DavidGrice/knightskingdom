@@ -23,36 +23,35 @@ import {
     challengesData as workshopChallengesData,
 } from '../../WorkShop/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/index';
 
-export const getBucketConfig = (dataSource) => {
-    if (dataSource === 'bricks') {
-        return {
-            tabIcons: workshopTabIcons,
-            arrowImages: workshopBucketImages,
-            tabData: [
-                basicData,
-                slimData,
-                wedgeData,
-                cylindricalData,
-                archesData,
-                castleComponentsData,
-                windowsDoorsFencesData,
-                castleAccessoriesData,
-                tilesData,
-                workshopChallengesData,
-            ],
-        };
-    }
-
-    return {
-        tabIcons: gameTabIcons,
-        arrowImages: gameBucketImages,
-        tabData: [
-            minifigureAnimalsData,
-            buildingsData,
-            vehiclesData,
-            sceneryData,
-            explosivesData,
-            gameChallengesData,
-        ],
-    };
+const gameBucketConfig = {
+    tabIcons: gameTabIcons,
+    arrowImages: gameBucketImages,
+    tabData: [
+        minifigureAnimalsData,
+        buildingsData,
+        vehiclesData,
+        sceneryData,
+        explosivesData,
+        gameChallengesData,
+    ],
 };
+
+const workshopBucketConfig = {
+    tabIcons: workshopTabIcons,
+    arrowImages: workshopBucketImages,
+    tabData: [
+        basicData,
+        slimData,
+        wedgeData,
+        cylindricalData,
+        archesData,
+        castleComponentsData,
+        windowsDoorsFencesData,
+        castleAccessoriesData,
+        tilesData,
+        workshopChallengesData,
+    ],
+};
+
+export const getBucketConfig = (dataSource) =>
+    dataSource === 'bricks' ? workshopBucketConfig : gameBucketConfig;

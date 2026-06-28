@@ -1,4 +1,10 @@
-.mainDiv {
+* {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.app-main-div {
   height: 100vh;
   width: 100vw;
   background-color: black;

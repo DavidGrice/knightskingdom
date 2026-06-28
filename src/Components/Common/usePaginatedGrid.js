@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 const usePaginatedGrid = ({
   items,
@@ -8,64 +8,52 @@ const usePaginatedGrid = ({
   onReset,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [downArrowImage, setDownArrowImage] = useState(arrows.downSolid);
-  const [upArrowImage, setUpArrowImage] = useState(arrows.upSolid);
-  const [displayedItems, setDisplayedItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const totalPages = Math.max(1, Math.ceil(items.length / itemsPerPage));
+  const onResetRef = useRef(onReset);
+  onResetRef.current = onReset;
 
   useEffect(() => {
-    if (resetToken) {
-      setCurrentPage(1);
-      setDisplayedItems([]);
-      setSelectedItem(null);
-      onReset?.();
-    }
+    setCurrentPage(1);
+    setSelectedItem(null);
+    onResetRef.current?.();
+  }, [resetToken]);
 
-    if (items.length > itemsPerPage && items.length % itemsPerPage !== 0) {
-      if (currentPage === totalPages) {
-        setDownArrowImage(arrows.downSolid);
-      } else {
-        setDownArrowImage(arrows.downGreen);
-      }
-    } else {
-      setDownArrowImage(arrows.downSolid);
-    }
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
 
-    if (currentPage === 1) {
-      setUpArrowImage(arrows.upSolid);
-    } else {
-      setUpArrowImage(arrows.upGreen);
-    }
-
+  const displayedItems = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    setDisplayedItems(items.slice(startIndex, endIndex));
+    return items.slice(startIndex, startIndex + itemsPerPage);
+  }, [items, currentPage, itemsPerPage]);
+
+  const downArrowImage = useMemo(() => {
+    if (items.length > itemsPerPage && items.length % itemsPerPage !== 0) {
+      return currentPage === totalPages ? arrows.downSolid : arrows.downGreen;
+    }
+    return arrows.downSolid;
   }, [
-    arrows.downGreen,
-    arrows.downSolid,
-    arrows.upGreen,
-    arrows.upSolid,
-    currentPage,
-    items,
+    items.length,
     itemsPerPage,
-    onReset,
-    resetToken,
+    currentPage,
     totalPages,
+    arrows.downSolid,
+    arrows.downGreen,
   ]);
 
+  const upArrowImage = useMemo(() => (
+    currentPage === 1 ? arrows.upSolid : arrows.upGreen
+  ), [currentPage, arrows.upSolid, arrows.upGreen]);
+
   const handleDownArrowClick = useCallback(() => {
-    if (currentPage < totalPages) {
-      setCurrentPage((page) => page + 1);
-    }
-  }, [currentPage, totalPages]);
+    setCurrentPage((page) => (page < totalPages ? page + 1 : page));
+  }, [totalPages]);
 
   const handleUpArrowClick = useCallback(() => {
-    if (currentPage > 1) {
-      setCurrentPage((page) => page - 1);
-    }
-  }, [currentPage]);
+    setCurrentPage((page) => (page > 1 ? page - 1 : page));
+  }, []);
 
   return {
     currentPage,

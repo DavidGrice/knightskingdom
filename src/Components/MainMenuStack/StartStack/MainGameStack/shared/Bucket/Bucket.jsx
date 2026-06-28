@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './Bucket.module.css';
 import BucketTop from './BucketTop/BucketTop';
 import BucketBottom from './BucketBottom/BucketBottom';
 import { getBucketConfig } from '../toolbarConfig';
 
 const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
-    const { tabIcons, tabData, arrowImages } = getBucketConfig(dataSource);
+    const { tabIcons, tabData, arrowImages } = useMemo(
+        () => getBucketConfig(dataSource),
+        [dataSource]
+    );
     const [activeIcon, setActiveIcon] = useState(0);
     const [activeBucket, setActiveBucket] = useState(0);
-    const [didUpdate, setDidUpdate] = useState(false);
+    const [resetKey, setResetKey] = useState(0);
 
     const handleIconClick = (icon) => {
         setActiveIcon(icon);
         setActiveBucket(icon);
-        setDidUpdate(!didUpdate);
+        setResetKey((key) => key + 1);
     };
 
     const handleItemSelect = (item) => {
@@ -27,8 +30,7 @@ const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
             <BucketTop tabIcons={tabIcons} activeIcon={activeIcon} onIconClick={handleIconClick} />
             <BucketBottom
                 activeBucket={activeBucket}
-                didUpdate={didUpdate}
-                setDidUpdate={setDidUpdate}
+                resetKey={resetKey}
                 tabData={tabData}
                 arrowImages={arrowImages}
                 onItemSelect={handleItemSelect}

@@ -186,7 +186,68 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — Next.js Migration Phases 1–4 (App Router)
+
+### Scaffold (Phase 1–2, prior session)
+
+- CRA → Next.js 15; `app/layout.jsx`, `app/globals.css`, `jsconfig.json`, `next.config.mjs`
+- `src/lib/routes.js` — canonical `ROUTES` constants
+- `src/lib/context/UserDataProvider.jsx` — replaces `App.js` class state
+
+### App Router pages (Phase 3–4)
+
+| Route | Page file |
+|-------|-----------|
+| `/` | Redirect → auth or main-menu |
+| `/authentication` | `app/authentication/page.jsx` |
+| `/main-menu` | `app/(game)/main-menu/page.jsx` |
+| `/options` | `app/(game)/options/page.jsx` |
+| `/credits` | `app/(game)/credits/page.jsx` |
+| `/start-stack/start` | `app/(game)/start-stack/start/page.jsx` |
+| `/start-stack/main-game` | `app/(game)/start-stack/main-game/page.jsx` |
+| `/start-stack/main-game/workshop` | `.../workshop/page.jsx` |
+| `/start-stack/main-game/snapshot` | `.../snapshot/page.jsx` |
+| `/start-stack/main-game/my-models` | `.../my-models/page.jsx` |
+
+### New providers
+
+| File | Purpose |
+|------|---------|
+| `WorldSessionProvider.jsx` | Single `worldData` source; save/snapshot/delete callbacks; Next router navigation |
+| `app/(game)/layout.jsx` | Auth gate (redirect unauthenticated → `/authentication`) |
+| `app/(game)/start-stack/layout.jsx` | Wraps `WorldSessionProvider` |
+
+### Removed / updated
+
+- **Deleted** `app/legacy-game-shell.jsx` (react-router bridge)
+- `UserDataProvider` — `navigateToMainMenu` / `navigateToAuthentication` use `next/navigation`
+- `MainMenu.jsx` — `useRouter` + `ROUTES` instead of `react-router-dom`
+- Main game route is now `/start-stack/main-game` (was `/start-stack/main-game/game`)
+
+## 2026-06-28 — Phases 5–7 (Grid, Engine, Cleanup)
+
+### Phase 5 — `usePaginatedGrid` infinite loop fix
+
+- Replaced `useEffect` + `setState` sync with `useMemo` derived state for `displayedItems` and arrow images
+- `BucketBottom` memoizes `arrows` object so deps stay stable
+
+### Phase 6 — GameEngine fixes (partial)
+
+- `loadedMapIdRef` reloads map assets when `mapData.id` changes (was stuck on first world)
+- `canvasRef` assignment moved out of render into mount `useEffect`
+- Scene parent updates deferred via `startTransition` (prior session)
+
+### Phase 7 — Legacy cleanup
+
+**Deleted:** `App.js`, `index.js`, CRA test/CSS files, `public/index.html`, react-router shells (`*Stack.jsx`)
+
+**Removed dependency:** `react-router-dom`
+
+**New scripts:** `npm run clean`, `npm run dev:clean`
+
+---
+
 ## Build Status
 
 - `npm run build` — **passes** (warnings only, pre-existing ESLint)
-- Bundle ~3.18 MB gzipped main chunk (unchanged order of magnitude)
+- 14 App Router pages generated; main-game chunk ~280 kB

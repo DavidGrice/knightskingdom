@@ -44,8 +44,6 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
   const {
     mode,
     selectedModelMode,
-    isSaveOpen,
-    lastSaveMessage,
     showBucket,
     isPaletteOpen,
     color,
@@ -96,22 +94,6 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
         />
       }
     >
-      {isSaveOpen && lastSaveMessage && (
-        <div style={{
-          position: 'absolute',
-          top: '110px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'rgba(0,0,0,0.75)',
-          color: '#fff',
-          padding: '8px 16px',
-          borderRadius: '6px',
-          zIndex: 5,
-          fontSize: '14px',
-        }}>
-          {lastSaveMessage}
-        </div>
-      )}
       {showBucket && (
         <div>
           <Bucket dataSource="models" handleLoadModel={handleLoadModel} />

@@ -17,8 +17,6 @@ const ComponentTop = ({
     handleDrive,
     handleAction,
     handleSave,
-    handlePaint,
-    handlePaintAndDrive,
     handlePlay,
     resetModes,
     setCameraNeedsReset,
@@ -29,43 +27,50 @@ const ComponentTop = ({
     const [activeIcon, setActiveIcon] = useState(null);
 
     const handleGameIconClick = (type) => {
-        switch (type) {
-            case 'bucket':
-                handleBucket();
-                break;
-            case 'move':
-                handleMove();
-                break;
-            case 'reverse':
-                handleRotate();
-                break;
-            case 'repaint':
-                handlePalette();
-                break;
-            case 'delete':
-                handleDelete();
-                break;
-            case 'action':
-                handleAction();
-                break;
-            case 'drive':
-                handleDrive();
-                setCameraNeedsReset(true);
-                break;
-            case 'play':
-                handlePlay();
-                break;
-            default:
-                resetModes();
-                break;
-        }
-        setActiveIcon((prevActiveIcon) => {
-            if (prevActiveIcon === type) {
-                resetModes();
-                return null;
+        const isToggleOff = activeIcon === type;
+
+        if (!isToggleOff) {
+            switch (type) {
+                case 'bucket':
+                    handleBucket();
+                    break;
+                case 'move':
+                    handleMove();
+                    break;
+                case 'reverse':
+                    handleRotate();
+                    break;
+                case 'repaint':
+                    handlePalette();
+                    break;
+                case 'delete':
+                    handleDelete();
+                    break;
+                case 'action':
+                    handleAction();
+                    break;
+                case 'drive':
+                    handleDrive();
+                    setCameraNeedsReset(true);
+                    break;
+                case 'play':
+                    handlePlay();
+                    break;
+                default:
+                    resetModes();
+                    break;
             }
-            return type;
-        });
+        }
+
+        if (isToggleOff) {
+            if (type === 'bucket') {
+                handleBucket();
+            }
+            resetModes();
+            setActiveIcon(null);
+        } else {
+            setActiveIcon(type);
+        }
     };
 
     const handleWorkshopIconClick = (type) => {
@@ -97,15 +102,13 @@ const ComponentTop = ({
     );
 
     const renderBucketButton = () => (
-        <div
-            className={styles.bucketButton}
-            onClick={mode === 'game' ? () => handleIconClick('bucket') : handleBucket}
-        >
+        <div className={styles.bucketButton}>
             <TopIconComponent
                 passiveIcon={leaveIcon.iconData.bucketPassive}
                 activeIcon={leaveIcon.iconData.bucketActive}
                 type="bucket"
                 isActive={mode === 'game' ? activeIcon === 'bucket' : undefined}
+                onClick={mode === 'game' ? () => handleIconClick('bucket') : handleBucket}
             />
         </div>
     );
@@ -113,19 +116,13 @@ const ComponentTop = ({
     const renderMiddleIcons = () => (
         <div className={styles.middleDiv}>
             {middleIcons.map((icon, index) => (
-                <div
-                    key={index}
-                    className={styles[icon.className]}
-                    onClick={() => handleIconClick(icon.type)}
-                >
+                <div key={index} className={styles[icon.className]}>
                     <TopIconComponent
                         passiveIcon={icon.passiveIcon}
                         activeIcon={icon.activeIcon}
                         type={icon.type}
                         isActive={activeIcon === icon.type}
-                        handlePaintAndDrive={handlePaintAndDrive}
-                        handlePaint={handlePaint}
-                        resetModes={resetModes}
+                        onClick={() => handleIconClick(icon.type)}
                     />
                 </div>
             ))}

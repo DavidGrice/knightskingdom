@@ -29,12 +29,14 @@ knightskingdom/
 
 ## App Entry & Auth Gate
 
-`App.js` is a **class component** that:
+**Next.js App Router** (`app/`):
 
-1. Loads profiles via `fetchData()` on mount
-2. Persists via `persistUserData()` in `componentDidUpdate`
-3. Toggles `isAuthenticated` to swap `AuthenticationStack` vs `MainMenuStack`
-4. Each stack gets its **own** `<Router>` (known limitation; Phase 6 fix)
+1. `app/layout.jsx` wraps all pages in `UserDataProvider`
+2. `UserDataProvider` loads profiles via `fetchData()` and persists via `persistUserData()`
+3. `/` redirects to `/authentication` or `/main-menu` based on `isAuthenticated`
+4. `app/(game)/layout.jsx` auth-gates all game screens (redirect → `/authentication`)
+
+`App.js` and react-router `*Stack.jsx` shells are **deprecated** (kept for reference until Phase 7 cleanup).
 
 **Profile shape:**
 ```json
@@ -55,33 +57,21 @@ knightskingdom/
 
 ## Routing Map
 
-### AuthenticationStack
-| Path | Component |
-|------|-----------|
-| `/authentication` | Authentication |
-| `*` | → `/authentication` |
+Canonical paths in `src/lib/routes.js`. Each route is an `app/` page (no react-router at runtime).
 
-### MainMenuStack
-| Path | Component |
-|------|-----------|
-| `/main-menu` | MainMenu |
-| `/options` | Options |
-| `/credits` | Credits |
-| `/start-stack/*` | StartStack |
-| `*` | → `/main-menu` |
+| Path | Component | Provider scope |
+|------|-----------|----------------|
+| `/authentication` | Authentication | `UserDataProvider` |
+| `/main-menu` | MainMenu | `(game)` auth gate |
+| `/options` | Options | `(game)` auth gate |
+| `/credits` | Credits | `(game)` auth gate |
+| `/start-stack/start` | Start (World picker) | `WorldSessionProvider` |
+| `/start-stack/main-game` | MainGame | `WorldSessionProvider` + `GameProvider` |
+| `/start-stack/main-game/workshop` | WorkShop | `WorldSessionProvider` |
+| `/start-stack/main-game/snapshot` | SnapShot | `WorldSessionProvider` |
+| `/start-stack/main-game/my-models` | MyModels | `WorldSessionProvider` |
 
-### StartStack
-| Path | Component |
-|------|-----------|
-| `/start-stack/start` | Start (World picker) |
-| `/start-stack/main-game/*` | MainGameStack |
-
-### MainGameStack
-| Path | Component |
-|------|-----------|
-| `/game` | MainGame (default) |
-| `/workshop` | WorkShop |
-| `/snapshot` | SnapShot |
+**Save flow:** `GameContext.handleSave` → `onSaveWorldProgress` → `router.push(my-models)`
 
 ---
 

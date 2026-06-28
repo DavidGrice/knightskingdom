@@ -1,0 +1,167 @@
+'use client';
+
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '../routes';
+import { useUserData } from './UserDataProvider';
+import {
+  saveWorldProgress,
+  appendWorldSnapshot,
+  deleteSavedWorld,
+} from '@/api/worldSave';
+
+const WorldSessionContext = createContext(null);
+
+export const WorldSessionProvider = ({ children }) => {
+  const router = useRouter();
+  const { userData, selectedProfile, updateUserData } = useUserData();
+  const [worldData, setWorldData] = useState(null);
+
+  const currentProfile = useMemo(
+    () => userData?.find((p) => p.id === selectedProfile?.id) || selectedProfile,
+    [userData, selectedProfile]
+  );
+
+  const navigateToStartMenu = useCallback(() => {
+    router.push(ROUTES.startStack.start);
+  }, [router]);
+
+  const navigateToMainGame = useCallback(
+    (mapData) => {
+      if (mapData) {
+        setWorldData(mapData);
+      }
+      router.push(ROUTES.startStack.mainGame);
+    },
+    [router]
+  );
+
+  const navigateToWorkshop = useCallback(
+    (updatedWorldData) => {
+      if (updatedWorldData) {
+        setWorldData(updatedWorldData);
+      }
+      router.push(ROUTES.startStack.workshop);
+    },
+    [router]
+  );
+
+  const navigateToSnapshot = useCallback(
+    (snapshotData) => {
+      if (snapshotData) {
+        setWorldData((prevData) => ({
+          ...prevData,
+          sceneSnapshot: snapshotData,
+          snapshots: [
+            ...(prevData?.snapshots || []),
+            ...(snapshotData.imageDataUrl ? [snapshotData] : []),
+          ],
+        }));
+      }
+      router.push(ROUTES.startStack.snapshot);
+    },
+    [router]
+  );
+
+  const navigateToMyModels = useCallback(() => {
+    router.push(ROUTES.startStack.myModels);
+  }, [router]);
+
+  const navigateBackToGame = useCallback(() => {
+    navigateToMainGame(worldData);
+  }, [navigateToMainGame, worldData]);
+
+  const onSaveWorldProgress = useCallback(
+    (profileId, worldId, payload) => {
+      if (!userData || !updateUserData) {
+        return;
+      }
+      const updated = saveWorldProgress(userData, profileId, worldId, payload);
+      updateUserData(updated);
+      setWorldData((prev) => ({
+        ...prev,
+        savedScene: payload.scene,
+        savedThumbnail: payload.thumbnail,
+      }));
+    },
+    [userData, updateUserData]
+  );
+
+  const onAppendSnapshot = useCallback(
+    (profileId, worldId, snapshotEntry) => {
+      if (!userData || !updateUserData) {
+        return;
+      }
+      const updated = appendWorldSnapshot(
+        userData,
+        profileId,
+        worldId,
+        snapshotEntry
+      );
+      updateUserData(updated);
+    },
+    [userData, updateUserData]
+  );
+
+  const onDeleteSavedWorld = useCallback(
+    (worldId) => {
+      if (!userData || !updateUserData || !currentProfile?.id) {
+        return;
+      }
+      const updated = deleteSavedWorld(userData, currentProfile.id, worldId);
+      updateUserData(updated);
+    },
+    [userData, updateUserData, currentProfile]
+  );
+
+  const value = useMemo(
+    () => ({
+      worldData,
+      currentProfile,
+      navigateToStartMenu,
+      navigateToMainGame,
+      navigateToWorkshop,
+      navigateToSnapshot,
+      navigateToMyModels,
+      navigateBackToGame,
+      onSaveWorldProgress,
+      onAppendSnapshot,
+      onDeleteSavedWorld,
+    }),
+    [
+      worldData,
+      currentProfile,
+      navigateToStartMenu,
+      navigateToMainGame,
+      navigateToWorkshop,
+      navigateToSnapshot,
+      navigateToMyModels,
+      navigateBackToGame,
+      onSaveWorldProgress,
+      onAppendSnapshot,
+      onDeleteSavedWorld,
+    ]
+  );
+
+  return (
+    <WorldSessionContext.Provider value={value}>
+      {children}
+    </WorldSessionContext.Provider>
+  );
+};
+
+export const useWorldSession = () => {
+  const context = useContext(WorldSessionContext);
+  if (!context) {
+    throw new Error('useWorldSession must be used within WorldSessionProvider');
+  }
+  return context;
+};
+
+export default WorldSessionContext;

@@ -15,10 +15,16 @@ export {
   appendWorldSnapshot,
   updateProfileOptions,
   getSavedWorld,
+  getSavedWorldsList,
+  deleteSavedWorld,
   ensureProfileSaveSlots,
 } from './worldSave';
 
 export const fetchData = () => {
+  if (typeof window === 'undefined') {
+    return userData;
+  }
+
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -39,7 +45,7 @@ export async function persistUserData(updatedData) {
   }
 
   try {
-    const response = await fetch('/updateUserData', {
+    const response = await fetch('/api/updateUserData', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

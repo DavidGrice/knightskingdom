@@ -21,13 +21,14 @@ export const GameProvider = ({
   onAppendSnapshot,
   navigateToWorkshop,
   navigateToSnapshot,
+  navigateToMyModels,
 }) => {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   const gameEngineRef = useRef(null);
   const audioRef = useRef(null);
 
   useEffect(() => {
-    const saved = selectedProfile?.savedWorlds?.[mapData?.id];
+    const saved = selectedProfile?.savedWorlds?.[String(mapData?.id)];
     if (saved?.scene) {
       dispatch({
         type: 'HYDRATE_SCENE',
@@ -48,24 +49,34 @@ export const GameProvider = ({
   }, [state.sceneState]);
 
   const handleSave = useCallback(() => {
-    if (!selectedProfile?.id || !mapData?.id || !onSaveWorldProgress) {
-      dispatch({ type: 'SET_SAVE_MESSAGE', payload: 'No profile or world selected.' });
-      resetModes();
-      return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
     }
+    dispatch({ type: 'SET_ACTIVE_MUSIC', payload: { index: 0, track: 'NONE' } });
 
-    const scene = captureCurrentScene();
-    const thumbnail = gameEngineRef.current?.captureFrame?.() || null;
+    try {
+      if (selectedProfile?.id && mapData?.id && onSaveWorldProgress) {
+        const scene = captureCurrentScene();
+        let thumbnail = null;
+        try {
+          thumbnail = gameEngineRef.current?.captureFrame?.() || null;
+        } catch {
+          // Canvas capture can fail; save should still proceed.
+        }
 
-    onSaveWorldProgress(selectedProfile.id, mapData.id, {
-      scene,
-      thumbnail,
-      worldName: mapData.name,
-    });
-
-    dispatch({ type: 'SET_SAVE_MESSAGE', payload: `Saved ${mapData.name}` });
-    resetModes();
-  }, [selectedProfile, mapData, onSaveWorldProgress, captureCurrentScene, resetModes]);
+        onSaveWorldProgress(selectedProfile.id, mapData.id, {
+          scene,
+          thumbnail,
+          worldName: mapData.name,
+        });
+      }
+    } finally {
+      resetModes();
+      navigateToMyModels?.();
+    }
+  }, [selectedProfile, mapData, onSaveWorldProgress, captureCurrentScene, resetModes, navigateToMyModels]);
 
   const handleBucket = useCallback(() => {
     const next = !state.showBucket;

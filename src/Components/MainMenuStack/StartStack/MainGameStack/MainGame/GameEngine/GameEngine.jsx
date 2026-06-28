@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
+import { useEffect, useRef, useState, useImperativeHandle, forwardRef, startTransition } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComponent';
@@ -18,7 +18,7 @@ const GameEngine = forwardRef(({
   const isDragging = useRef(false);
   const mouse = new THREE.Vector2();
   const raycaster = new THREE.Raycaster();
-  const modelsLoaded = useRef(false); // Track if models are loaded
+  const loadedMapIdRef = useRef(null);
   const [originalCameraPosition, setOriginalCameraPosition] = useState(null);
   const [originalCameraQuaternion, setOriginalCameraQuaternion] = useState(null);
   const [climateLoaded, setClimateLoaded] = useState(false);
@@ -51,29 +51,22 @@ const GameEngine = forwardRef(({
     getSceneState: () => serializeSceneFromThree(scene, camera, selectedClimateMode),
   }), [renderer, scene, camera, selectedClimateMode]);
 
-  canvasRef.current = renderer.domElement;
-  // Apply styles to the canvas
-  // if (canvasRef.current) {
-  //   canvasRef.current.style.border = '2px solid black';
-  //   canvasRef.current.style.borderRadius = '10px';
-  //   canvasRef.current.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-  // }
-
   useEffect(() => {
     const mountNode = mountRef.current;
   
     if (mountNode) {
       mountNode.appendChild(renderer.domElement);
+      canvasRef.current = renderer.domElement;
       renderer.setSize(window.innerWidth, window.innerHeight);
       if (!climateLoaded) {
         SkyBoxLoader(mapData, scene, selectedClimateMode);
         ClimateLoader(selectedClimateMode, scene);
         setClimateLoaded(true);
       }
-      if (!modelsLoaded.current) {
+      if (loadedMapIdRef.current !== mapData?.id) {
         MapLoader(mapData, scene, () => setModelLoaded(true));
         ModelLoader('preload', null, null, mapData, scene);
-        modelsLoaded.current = true; // Mark models as loaded
+        loadedMapIdRef.current = mapData?.id ?? null;
       }
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableZoom = true;
@@ -109,9 +102,25 @@ const GameEngine = forwardRef(({
 
   useEffect(() => {
     const updateSceneState = () => {
-      if (onSceneChange) {
-        onSceneChange(serializeSceneFromThree(scene, camera, selectedClimateMode));
+      if (!onSceneChange) {
+        return;
       }
+      const sceneState = serializeSceneFromThree(scene, camera, selectedClimateMode);
+      startTransition(() => {
+        onSceneChange(sceneState);
+      });
+    };
+
+    const clearCameraReset = () => {
+      startTransition(() => {
+        setCameraNeedsReset(false);
+      });
+    };
+
+    const clearClimateUpdate = () => {
+      startTransition(() => {
+        setClimateNeedsUpdating(false);
+      });
     };
 
     //region Event Listeners
@@ -303,11 +312,11 @@ const GameEngine = forwardRef(({
   
     if (cameraNeedsReset) {
       restoreOriginalCamera();
-      setCameraNeedsReset(false);
+      clearCameraReset();
     }
     if (isClimateOpen && climateNeedsUpdating) {
       ClimateLoader(selectedClimateMode, scene, climateNeedsUpdating, currentSystem, setCurrentSystem);
-      setClimateNeedsUpdating(false);
+      clearClimateUpdate();
       SkyBoxLoader(mapData, scene, selectedClimateMode);
       updateSceneState();
     }
@@ -319,7 +328,7 @@ const GameEngine = forwardRef(({
         window.addEventListener('click', onMouseClick, false);
         if (cameraNeedsReset) {
           restoreOriginalCamera();
-          setCameraNeedsReset(false);
+          clearCameraReset();
         }
         break;
       case Modes.MOVING:
@@ -328,35 +337,35 @@ const GameEngine = forwardRef(({
         window.addEventListener('mouseup', onMouseUp);
         if (cameraNeedsReset) {
           restoreOriginalCamera();
-          setCameraNeedsReset(false);
+          clearCameraReset();
         }
         break;
       case Modes.ROTATING:
         window.addEventListener('mousedown', onMouseDown);
         if (cameraNeedsReset) {
           restoreOriginalCamera();
-          setCameraNeedsReset(false);
+          clearCameraReset();
         }
         break;
       case Modes.PAINTING:
         window.addEventListener('mousedown', onMouseDown);
         if (cameraNeedsReset) {
           restoreOriginalCamera();
-          setCameraNeedsReset(false);
+          clearCameraReset();
         }
         break;
       case Modes.DELETING:
         window.addEventListener('mousedown', onMouseDown);
         if (cameraNeedsReset) {
           restoreOriginalCamera();
-          setCameraNeedsReset(false);
+          clearCameraReset();
         }
         break;
       case Modes.ACTION:
         window.addEventListener('mousedown', onMouseDown);
         if (cameraNeedsReset) {
           restoreOriginalCamera();
-          setCameraNeedsReset(false);
+          clearCameraReset();
         }
         break;
       case Modes.DRIVING:
@@ -381,5 +390,7 @@ const GameEngine = forwardRef(({
     </div>
   );
 });
+
+GameEngine.displayName = 'GameEngine';
 
 export default GameEngine;

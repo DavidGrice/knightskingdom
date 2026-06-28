@@ -7,9 +7,7 @@ const TopIconComponent = ({
     isActive,
     type,
     onClick,
-    handlePaintAndDrive,
     resetModes,
-    handlePaint,
 }) => {
     const [icon, setIcon] = useState(passiveIcon);
     const [active, setActive] = useState(false);
@@ -28,36 +26,28 @@ const TopIconComponent = ({
     };
 
     const defaultStyle = sizeMapping[type] || { width: '50px', height: '50px' };
-    const usesInternalToggle = type === 'play' || type === 'save' || (type === 'bucket' && isActive === undefined);
+    const isControlled = isActive !== undefined;
+    const usesInternalToggle = type === 'play' || type === 'save' || (type === 'bucket' && !isControlled);
 
     const handleInternalToggle = () => {
-        onClick && onClick();
+        onClick?.();
         if (active) {
             setIcon(passiveIcon);
             setActive(false);
-            resetModes && resetModes();
+            resetModes?.();
         } else {
             setIcon(activeIcon);
             setActive(true);
         }
     };
 
-    const handleMiddleIconClick = () => {
-        if (handlePaintAndDrive) {
-            handlePaintAndDrive();
-        } else if (handlePaint) {
-            handlePaint();
-        }
-        onClick && onClick();
-        if (active) {
-            setIcon(passiveIcon);
-            setActive(false);
-            resetModes && resetModes();
-        } else {
-            setIcon(activeIcon);
-            setActive(true);
-        }
-    };
+    if (isControlled) {
+        return (
+            <div className={styles.mainDiv} onClick={onClick} style={defaultStyle}>
+                <img src={isActive ? activeIcon : passiveIcon} alt="Icon" style={defaultStyle} />
+            </div>
+        );
+    }
 
     if (usesInternalToggle) {
         return (
@@ -68,7 +58,7 @@ const TopIconComponent = ({
     }
 
     return (
-        <div className={styles.mainDiv} onClick={handleMiddleIconClick} style={defaultStyle}>
+        <div className={styles.mainDiv} onClick={onClick} style={defaultStyle}>
             <img src={isActive ? activeIcon : passiveIcon} alt="Icon" style={defaultStyle} />
         </div>
     );

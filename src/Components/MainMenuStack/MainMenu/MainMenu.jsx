@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './MainMenu.module.css';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/lib/routes';
 import { CommonComponent, MenuScreenLayout } from '../../Common';
 import castleBackground from './MainMenuResources/castle.png';
 import Start2 from './MainMenuResources/start_2.png';
@@ -15,7 +16,7 @@ import Quit2 from './MainMenuResources/quit_2.png';
 import Quit4 from './MainMenuResources/quit_4.png';
 
 const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <MenuScreenLayout backgroundImage={castleBackground} contentClassName={styles.centeredContainer}>
@@ -38,7 +39,7 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
           initialImage={Options2}
           hoverImage={Options4}
           altText="Options"
-          onClick={() => navigate('/options')}
+          onClick={() => router.push(ROUTES.options)}
         />
       </div>
       <div className={styles.divSeparators}>
@@ -46,7 +47,7 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
           initialImage={Credits2}
           hoverImage={Credits4}
           altText="Credits"
-          onClick={() => navigate('/credits')}
+          onClick={() => router.push(ROUTES.credits)}
         />
       </div>
       <div className={styles.divSeparators}>

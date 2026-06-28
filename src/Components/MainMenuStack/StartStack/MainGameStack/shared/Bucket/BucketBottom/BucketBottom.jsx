@@ -1,73 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import styles from './BucketBottom.module.css';
 import selectedImage from '../../../MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/wh_selection.png';
+import usePaginatedGrid from '../../../../../../Common/usePaginatedGrid';
 
-const BucketBottom = ({ activeBucket, didUpdate, setDidUpdate, tabData, arrowImages, onItemSelect }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [downArrowImage, setDownArrowImage] = useState(arrowImages.downArrowSolid);
-    const [upArrowImage, setUpArrowImage] = useState(arrowImages.upArrowSolid);
-    const [displayedItems, setDisplayedItems] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
+const BucketBottom = ({ activeBucket, resetKey, tabData, arrowImages, onItemSelect }) => {
+    const items = useMemo(
+        () => tabData[activeBucket] || tabData[0] || [],
+        [tabData, activeBucket]
+    );
 
-    const items = tabData[activeBucket] || tabData[0];
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const arrows = useMemo(
+        () => ({
+            upSolid: arrowImages.upArrowSolid,
+            upGreen: arrowImages.upArrowGreen,
+            downSolid: arrowImages.downArrowSolid,
+            downGreen: arrowImages.downArrowGreen,
+        }),
+        [
+            arrowImages.upArrowSolid,
+            arrowImages.upArrowGreen,
+            arrowImages.downArrowSolid,
+            arrowImages.downArrowGreen,
+        ]
+    );
 
-    useEffect(() => {
-        if (didUpdate) {
-            setCurrentPage(1);
-            setDisplayedItems([]);
-            setSelectedItem(null);
-            setDidUpdate(false);
-        }
-        if (items.length > itemsPerPage && items.length % itemsPerPage !== 0) {
-            if (currentPage === totalPages) {
-                setDownArrowImage(arrowImages.downArrowSolid);
-            } else {
-                setDownArrowImage(arrowImages.downArrowGreen);
-            }
-        } else {
-            setDownArrowImage(arrowImages.downArrowSolid);
-        }
-        if (currentPage === 1) {
-            setUpArrowImage(arrowImages.upArrowSolid);
-        } else {
-            setUpArrowImage(arrowImages.upArrowGreen);
-        }
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        setDisplayedItems(items.slice(startIndex, endIndex));
-    }, [currentPage, items, didUpdate, setDidUpdate, arrowImages, totalPages, itemsPerPage]);
-
-    const handleDownArrowClick = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-            setUpArrowImage(arrowImages.upArrowGreen);
-            if (currentPage + 1 === totalPages) {
-                setDownArrowImage(arrowImages.downArrowSolid);
-            }
-        } else {
-            setDownArrowImage(arrowImages.downArrowSolid);
-        }
-    };
-
-    const handleUpArrowClick = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-            setUpArrowImage(arrowImages.upArrowGreen);
-            if (currentPage - 1 === 1) {
-                setUpArrowImage(arrowImages.upArrowSolid);
-            }
-        } else {
-            setUpArrowImage(arrowImages.upArrowSolid);
-        }
-    };
+    const {
+        displayedItems,
+        downArrowImage,
+        upArrowImage,
+        selectedItem,
+        setSelectedItem,
+        handleDownArrowClick,
+        handleUpArrowClick,
+    } = usePaginatedGrid({
+        items,
+        itemsPerPage: 6,
+        arrows,
+        resetToken: resetKey,
+    });
 
     const handleItemClick = (item) => {
         setSelectedItem(item);
-        if (onItemSelect) {
-            onItemSelect(item);
-        }
+        onItemSelect?.(item);
     };
 
     return (
@@ -78,7 +52,7 @@ const BucketBottom = ({ activeBucket, didUpdate, setDidUpdate, tabData, arrowIma
             <div className={styles.body}>
                 {displayedItems.map((item, index) => (
                     <div
-                        key={index}
+                        key={item.name ?? index}
                         className={styles.item}
                         style={{ backgroundImage: `url(${item.image})` }}
                         onClick={() => handleItemClick(item)}
