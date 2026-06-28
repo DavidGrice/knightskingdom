@@ -1,10 +1,15 @@
 'use client';
 
-import { WorkShop } from '@/Components/MainMenuStack/StartStack/MainGameStack';
+import { LazyWorkshopScreen } from '@/lib/lazyGameScreens';
 import { useWorldSession } from '@/lib/context/WorldSessionProvider';
 
 export default function WorkshopPage() {
   const { worldData, navigateToMainGame } = useWorldSession();
 
-  return <WorkShop navigateToMainGame={navigateToMainGame} mapData={worldData} />;
+  return (
+    <LazyWorkshopScreen
+      mapData={worldData}
+      navigateToMainGame={navigateToMainGame}
+    />
+  );
 }

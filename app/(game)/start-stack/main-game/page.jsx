@@ -1,7 +1,6 @@
 'use client';
 
-import { MainGame } from '@/Components/MainMenuStack/StartStack/MainGameStack';
-import { GameProvider } from '@/Components/MainMenuStack/StartStack/MainGameStack/context';
+import { LazyMainGameScreen } from '@/lib/lazyGameScreens';
 import { useWorldSession } from '@/lib/context/WorldSessionProvider';
 
 export default function MainGamePage() {
@@ -17,7 +16,7 @@ export default function MainGamePage() {
   } = useWorldSession();
 
   return (
-    <GameProvider
+    <LazyMainGameScreen
       mapData={worldData}
       selectedProfile={currentProfile}
       onSaveWorldProgress={onSaveWorldProgress}
@@ -25,13 +24,7 @@ export default function MainGamePage() {
       navigateToWorkshop={navigateToWorkshop}
       navigateToSnapshot={navigateToSnapshot}
       navigateToMyModels={navigateToMyModels}
-    >
-      <MainGame
-        navigateToStartMenu={navigateToStartMenu}
-        navigateToWorkshop={navigateToWorkshop}
-        navigateToSnapshot={navigateToSnapshot}
-        mapData={worldData}
-      />
-    </GameProvider>
+      navigateToStartMenu={navigateToStartMenu}
+    />
   );
 }

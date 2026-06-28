@@ -16,7 +16,7 @@ Use this folder to resume work on **LEGO Creator: Knight's Kingdom** modernizati
 
 Tell Grok:
 
-> Read `grok/README.md` and `grok/ROADMAP.md`. We are on branch `grok-dev`. Continue from Phase 10 (or specify a task).
+> Read `grok/README.md` and `grok/ROADMAP.md`. We are on branch `grok-dev`. Phases 0–10 complete; continue from user backlog or new features.
 
 **Run the app:**
 ```powershell
@@ -36,9 +36,8 @@ npm run build
 
 | Area | State |
 |------|-------|
-| **Phases 0–9** | ✅ Complete |
-| **Phase 10** | ⬜ Next — infra (`userService`, code splitting, ESLint) |
-| **Working on** | Nothing in flight; ready for Phase 10 or user tasks |
+| **Phases 0–10** | ✅ Complete |
+| **Working on** | User backlog + optional polish (see below) |
 | **User backlog** | Fix save game menu styling (MyModels CSS) |
 
 **Recent commits:**
@@ -68,7 +67,7 @@ Dual-purpose repo:
 | 3D | Three.js v0.161 via `GameEngineCore` (imperative WebGL) |
 | State | `GameContext` (useReducer) + `WorldSessionProvider` |
 | Styling | CSS Modules per component |
-| Persistence | `localStorage` + `src/api/worldSave.js` |
+| Persistence | `src/services/userService.js` + `src/api/worldSave.js` |
 
 ### Scale (approx.)
 
@@ -146,19 +145,13 @@ Authentication → MainMenu → Start (world pick) → MainGame
 | 7 | CRA / react-router removal |
 | 8 | GameEngineCore, hydrate on load, engine cleanup, real fog |
 | 9 | Snapshot gallery, workshop mapData, dark weather, worlds 2–10 |
+| 10 | `userService`, lazy game routes, ESLint fix, dead CSS trim |
 
 See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 
 ---
 
 ## Roadmap — What's Next
-
-### Phase 10 — Infrastructure (recommended next)
-
-- [ ] `src/services/userService.js`
-- [ ] Code splitting / lazy routes
-- [ ] ESLint cleanup
-- [ ] Dead CSS removal
 
 ### User backlog
 
@@ -180,7 +173,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | SnapShot gallery | Grid CSS functional but not final art pass |
 | Shared worlds | No `filePath` / engine assets |
 | Worlds 2–10 | Reuse `map1` GLB until unique maps added |
-| ESLint | `react-hooks/exhaustive-deps` in GameEngine (non-blocking) |
+| ESLint | Minor unused-vars in some components (non-blocking) |
 | Workshop | Brick tools visual only; no 3D brick editor yet |
 
 ### Resolved (was open)

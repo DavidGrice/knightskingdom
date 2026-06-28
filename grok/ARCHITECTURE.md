@@ -3,7 +3,7 @@
 Deep-dive breakdown of the **game codebase** (`src/` + `app/`).  
 For RE assets see `resources/` and root `README.md`.
 
-**Last updated:** 2026-06-28 (post Phase 9)
+**Last updated:** 2026-06-28 (post Phase 10)
 
 ---
 
@@ -16,7 +16,8 @@ knightskingdom/
 │   └── (game)/              ← Auth-gated game screens
 ├── grok/                    ← Session continuation docs
 ├── src/
-│   ├── api/                 ← fetchData, worldSave
+│   ├── api/                 ← re-exports userService + worldSave
+│   ├── services/            ← userService (persistence layer)
 │   ├── data/worlds/         ← World catalogs + engine assets
 │   ├── lib/
 │   │   ├── routes.js        ← Canonical ROUTES constants
@@ -215,12 +216,24 @@ Each UI area has `*ResourceStack/index.js` importing PNGs and exporting frame ar
 
 ---
 
+## Lazy Loading (Phase 10)
+
+Game stack routes use `next/dynamic` via `src/lib/lazyGameScreens.jsx`:
+
+| Route | Lazy screen |
+|-------|-------------|
+| `/start-stack/main-game` | `MainGameScreen` (GameProvider + MainGame + Three.js) |
+| `.../workshop` | `WorkshopScreen` |
+| `.../snapshot` | `SnapshotScreen` |
+| `.../my-models` | `MyModelsScreen` |
+
+Page shells stay ~300–400 B; heavy chunks load on demand.
+
 ## ESLint / Tech Debt (Non-Blocking)
 
-- `react-hooks/exhaustive-deps` in `GameEngine.jsx` (mapData / selectedClimateMode)
 - Some unused vars in game components
-- Main-game chunk ~284 kB — no code splitting yet (Phase 10)
 - MyModels / SnapShot CSS not final art pass
+- Unique GLB assets per world 2–10
 
 ---
 

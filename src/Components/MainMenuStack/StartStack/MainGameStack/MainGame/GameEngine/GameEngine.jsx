@@ -49,9 +49,11 @@ const GameEngine = forwardRef(({
     };
   }, []);
 
+  const mapId = mapData?.id;
+
   useEffect(() => {
     const core = coreRef.current;
-    if (!core || !mapData) {
+    if (!core || !mapData || mapId == null) {
       return;
     }
 
@@ -61,7 +63,9 @@ const GameEngine = forwardRef(({
     core.loadWorld(mapData, {
       onReady: () => setAssetsReady(true),
     });
-  }, [mapData?.id]);
+    // Climate changes after load are handled by the climateNeedsUpdating effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reload world only when map id changes
+  }, [mapId]);
 
   useEffect(() => {
     const core = coreRef.current;

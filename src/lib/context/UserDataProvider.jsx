@@ -11,47 +11,15 @@ import React, {
   useState,
 } from 'react';
 import { useRouter } from 'next/navigation';
-import { fetchData, persistUserData } from '@/api';
+import {
+  loadUserData,
+  saveUserData,
+  readSessionAuth,
+  writeSessionAuth,
+} from '@/services/userService';
 import { ROUTES } from '../routes';
 
-const AUTH_SESSION_KEY = 'knights-kingdom-auth';
-
 const UserDataContext = createContext(null);
-
-const readSessionAuth = () => {
-  if (typeof window === 'undefined') {
-    return { isAuthenticated: false, selectedProfile: null };
-  }
-
-  try {
-    const stored = sessionStorage.getItem(AUTH_SESSION_KEY);
-    if (!stored) {
-      return { isAuthenticated: false, selectedProfile: null };
-    }
-    const { selectedProfile } = JSON.parse(stored);
-    return {
-      isAuthenticated: Boolean(selectedProfile),
-      selectedProfile: selectedProfile || null,
-    };
-  } catch {
-    return { isAuthenticated: false, selectedProfile: null };
-  }
-};
-
-const writeSessionAuth = (selectedProfile) => {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  if (selectedProfile) {
-    sessionStorage.setItem(
-      AUTH_SESSION_KEY,
-      JSON.stringify({ selectedProfile })
-    );
-  } else {
-    sessionStorage.removeItem(AUTH_SESSION_KEY);
-  }
-};
 
 export const UserDataProvider = ({ children }) => {
   const router = useRouter();
@@ -63,7 +31,7 @@ export const UserDataProvider = ({ children }) => {
 
   useLayoutEffect(() => {
     const session = readSessionAuth();
-    setUserData(fetchData());
+    setUserData(loadUserData());
     setIsAuthenticated(session.isAuthenticated);
     setSelectedProfile(session.selectedProfile);
     setHydrated(true);
@@ -74,7 +42,7 @@ export const UserDataProvider = ({ children }) => {
       skipPersistRef.current = false;
       return;
     }
-    persistUserData(userData);
+    saveUserData(userData);
   }, [hydrated, userData]);
 
   const updateUserData = useCallback((newUserData) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { SnapShot } from '@/Components/MainMenuStack/StartStack/MainGameStack';
+import { LazySnapshotScreen } from '@/lib/lazyGameScreens';
 import { useWorldSession } from '@/lib/context/WorldSessionProvider';
 
 export default function SnapshotPage() {
@@ -12,10 +12,10 @@ export default function SnapshotPage() {
   } = useWorldSession();
 
   return (
-    <SnapShot
-      navigateToMainGame={navigateToMainGame}
+    <LazySnapshotScreen
       mapData={worldData}
       selectedProfile={currentProfile}
+      navigateToMainGame={navigateToMainGame}
       onRemoveSnapshot={onRemoveSnapshot}
     />
   );

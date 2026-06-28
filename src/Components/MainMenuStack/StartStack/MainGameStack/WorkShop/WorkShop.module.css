@@ -20,28 +20,3 @@
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     pointer-events: none;
 }
-
-.mainDiv {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-}
-
-.topComponent {
-    position: absolute;
-    top: 0;
-    width: 800px;
-    height: 103px;
-    z-index: 3;
-}
-
-.bottomComponent {
-    position: absolute;
-    bottom: 0;
-    width: 800px;
-    height: 126px;
-    z-index: 3;
-}

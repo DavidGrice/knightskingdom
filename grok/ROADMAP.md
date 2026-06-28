@@ -47,7 +47,7 @@ flowchart LR
 | 7 | ✅ Done | CRA / react-router legacy removal |
 | 8 | ✅ Done | Engine hardening (Core, hydrate, cleanup) |
 | 9 | ✅ Done | Snapshot gallery, workshop, dark weather, worlds |
-| 10 | ⬜ **Next** | `userService`, code splitting, ESLint |
+| 10 | ✅ Done | `userService`, code splitting, ESLint |
 
 ### Deferred / user-owned
 
@@ -195,12 +195,18 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 
 ---
 
-## Phase 10 — Infrastructure ⬜ **NEXT**
+## Phase 10 — Infrastructure ✅
 
-- [ ] `src/services/userService.js` — unify JSON / localStorage / API
-- [ ] Code splitting / lazy routes (main-game chunk ~284 kB today)
-- [ ] ESLint cleanup (`react-hooks/exhaustive-deps`, unused vars)
-- [ ] Remove dead CSS in screen `.module.css` files
+- [x] `src/services/userService.js` — seed JSON, localStorage, session auth, API POST
+- [x] `src/api/index.js` — thin re-export layer over `userService` + `worldSave`
+- [x] Lazy game routes via `src/lib/lazyGameScreens.jsx` + `screens/` wrappers
+- [x] Main-game First Load JS: ~284 kB → ~107 kB (Three.js deferred)
+- [x] `GameEngine.jsx` exhaustive-deps warning resolved
+- [x] Removed dead layout CSS from `WorkShop.module.css`
+
+### Deferred
+- [ ] Broader ESLint unused-vars sweep
+- [ ] Dead CSS audit across all screen `.module.css` files
 - [ ] TypeScript migration (optional)
 
 ---

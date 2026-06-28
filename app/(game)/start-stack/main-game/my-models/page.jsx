@@ -1,13 +1,13 @@
 'use client';
 
-import { MyModels } from '@/Components/MainMenuStack/StartStack/MainGameStack';
+import { LazyMyModelsScreen } from '@/lib/lazyGameScreens';
 import { useWorldSession } from '@/lib/context/WorldSessionProvider';
 
 export default function MyModelsPage() {
   const { currentProfile, onDeleteSavedWorld, navigateBackToGame } = useWorldSession();
 
   return (
-    <MyModels
+    <LazyMyModelsScreen
       selectedProfile={currentProfile}
       onDeleteSavedWorld={onDeleteSavedWorld}
       navigateBackToGame={navigateBackToGame}

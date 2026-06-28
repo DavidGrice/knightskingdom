@@ -324,9 +324,35 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — Phase 10: Infrastructure
+
+### `src/services/userService.js` (new)
+
+- `loadUserData` / `saveUserData` — seed JSON → localStorage → API POST
+- `readSessionAuth` / `writeSessionAuth` — session profile selection
+- `defaultProfileOptions`, storage key constants
+- `src/api/index.js` — thin re-export facade (backward compatible `fetchData` / `persistUserData`)
+
+### Code splitting
+
+| File | Role |
+|------|------|
+| `src/lib/lazyGameScreens.jsx` | `next/dynamic` wrappers with loading state |
+| `MainGameStack/screens/*.jsx` | Thin screen entry points for lazy import |
+| `app/.../main-game/*/page.jsx` | Pages import lazy screens only |
+
+**Result:** `/start-stack/main-game` First Load JS ~284 kB → ~107 kB
+
+### Cleanup
+
+- `GameEngine.jsx` — exhaustive-deps warning fixed (map reload scoped to `mapId`)
+- `WorkShop.module.css` — removed unused layout rules (now in `GameShell`)
+
+---
+
 ## Build Status
 
-- `npm run build` — **passes** (warnings only, pre-existing ESLint)
-- 14 App Router pages generated; main-game chunk ~284 kB
-- **Next:** Phase 10 — `userService`, code splitting, ESLint cleanup
+- `npm run build` — **passes** (no ESLint warnings)
+- 14 App Router pages; main-game route ~107 kB First Load JS
+- **Phases 0–10 complete**
 - **User backlog:** save game menu styling
