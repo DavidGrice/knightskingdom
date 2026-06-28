@@ -4,15 +4,16 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComponent';
 import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
 import { Modes } from './GameEngineResourceStack/index';
-import { serializeSceneFromThree } from '../../context/sceneSchema';
+import { applySavedSceneToThree, serializeSceneFromThree } from '../../context/sceneSchema';
 
 const GameEngine = forwardRef(({
-  mapData, color, mode, activeCamera, isFollowing, addModel,
+  mapData, hydrationScene, color, mode, activeCamera, isFollowing, addModel,
   selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating,
   cameraNeedsReset, setCameraNeedsReset, isClimateOpen, onSceneChange,
 }, ref) => {
   const mountRef = useRef(null);
-  const [modelLoaded, setModelLoaded] = useState(false);
+  const [assetsReady, setAssetsReady] = useState(false);
+  const hasHydratedRef = useRef(false);
   const [loading, setLoading] = useState(false);
   const selectedObject = useRef(null);
   const isDragging = useRef(false);
@@ -52,6 +53,11 @@ const GameEngine = forwardRef(({
   }), [renderer, scene, camera, selectedClimateMode]);
 
   useEffect(() => {
+    hasHydratedRef.current = false;
+    setAssetsReady(false);
+  }, [mapData?.id]);
+
+  useEffect(() => {
     const mountNode = mountRef.current;
   
     if (mountNode) {
@@ -64,9 +70,14 @@ const GameEngine = forwardRef(({
         setClimateLoaded(true);
       }
       if (loadedMapIdRef.current !== mapData?.id) {
-        MapLoader(mapData, scene, () => setModelLoaded(true));
-        ModelLoader('preload', null, null, mapData, scene);
+        MapLoader(mapData, scene, () => {
+          ModelLoader('preload', null, null, mapData, scene, () => {
+            setAssetsReady(true);
+          });
+        });
         loadedMapIdRef.current = mapData?.id ?? null;
+      } else {
+        setAssetsReady(true);
       }
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableZoom = true;
@@ -98,7 +109,24 @@ const GameEngine = forwardRef(({
     }
     }, [camera, climateLoaded, mapData, renderer, scene, selectedClimateMode]);
 
-  
+  useEffect(() => {
+    if (!assetsReady || !hydrationScene || hasHydratedRef.current) {
+      return;
+    }
+
+    applySavedSceneToThree(scene, camera, hydrationScene, {
+      restorePlayable: (entry) => {
+        ModelLoader('restore', entry.modelId, entry, null, scene);
+      },
+    });
+
+    if (hydrationScene.climate) {
+      SkyBoxLoader(mapData, scene, hydrationScene.climate);
+      ClimateLoader(hydrationScene.climate, scene);
+    }
+
+    hasHydratedRef.current = true;
+  }, [assetsReady, hydrationScene, scene, camera, mapData, selectedClimateMode]);
 
   useEffect(() => {
     const updateSceneState = () => {

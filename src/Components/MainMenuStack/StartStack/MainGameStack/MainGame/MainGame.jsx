@@ -9,6 +9,7 @@ import { useGameContext } from '../context';
 const MainGameContent = ({ navigateToStartMenu, mapData }) => {
   const {
     state,
+    hydrationScene,
     gameEngineRef,
     resetModes,
     handleSave,
@@ -138,6 +139,7 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
       <GameEngine
         ref={gameEngineRef}
         mapData={mapData}
+        hydrationScene={hydrationScene}
         color={color}
         mode={mode}
         activeCamera={activeCamera}

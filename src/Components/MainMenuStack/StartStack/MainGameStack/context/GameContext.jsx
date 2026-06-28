@@ -1,7 +1,7 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Modes } from '../MainGame/GameEngine/GameEngineResourceStack/index';
 import { musicTracks } from '../MainGame/MainGameResourceStack/index';
-import { createSnapshotEntry } from './sceneSchema';
+import { createEmptySceneState, createSnapshotEntry } from './sceneSchema';
 import { gameReducer, initialGameState } from './gameReducer';
 
 const GameContext = createContext(null);
@@ -24,6 +24,7 @@ export const GameProvider = ({
   navigateToMyModels,
 }) => {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
+  const [hydrationScene, setHydrationScene] = useState(null);
   const gameEngineRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -34,7 +35,12 @@ export const GameProvider = ({
         type: 'HYDRATE_SCENE',
         payload: { scene: saved.scene, climate: saved.scene.climate },
       });
+      setHydrationScene(saved.scene);
+      return;
     }
+
+    dispatch({ type: 'SET_SCENE_STATE', payload: createEmptySceneState() });
+    setHydrationScene(null);
   }, [mapData?.id, selectedProfile]);
 
   const resetModes = useCallback(() => {
@@ -261,6 +267,7 @@ export const GameProvider = ({
 
   const value = useMemo(() => ({
     state,
+    hydrationScene,
     gameEngineRef,
     resetModes,
     handleSave,
@@ -299,6 +306,7 @@ export const GameProvider = ({
     setActiveMusic: (index) => handleMusicChange(index),
   }), [
     state,
+    hydrationScene,
     resetModes,
     handleSave,
     handleBucket,
