@@ -33,3 +33,8 @@
   display: flex;
   flex-direction: row;
 }
+
+.leaveIconHolder {
+  width: 100%;
+  height: 100%;
+}

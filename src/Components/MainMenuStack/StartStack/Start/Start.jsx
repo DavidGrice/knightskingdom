@@ -21,7 +21,7 @@ const Start = ({ navigateToMenu, navigateToMainGame }) => {
       contentClassName={styles.centeredContainer}
       bottomLeft={<BackCheckmarkButton onClick={handleCheckmarkClick} />}
       topRight={
-        <div onClick={navigateToMenu}>
+        <div className={styles.leaveIconHolder} onClick={navigateToMenu}>
           <IconComponent
             type="leave"
             placeholderImage={leaveIcon.placeholderIcon}
