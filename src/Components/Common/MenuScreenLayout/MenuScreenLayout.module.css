@@ -37,8 +37,5 @@
   right: 13%;
   height: 87px;
   width: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 10;
 }
