@@ -1,118 +1,14 @@
-.modelsBody {
-    position: relative;
-    height: 530px;
-    width: 519px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.upArrowHolder {
-    height: 26px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 3%;
-    cursor: pointer;
-}
-
-.upArrow {
-    width: 42px;
-    height: 26px;
-    z-index: 10;
-    background-repeat: no-repeat;
-}
-
-.body {
-    display: grid;
-    grid-template-columns: repeat(3, 42px);
-    grid-template-rows: repeat(3, 19px);
-    gap: 90px;
-    width: 446px;
-    height: 350px;
-    margin-top: 3%;
-    margin-left: 13%;
-}
-
 .item {
-    position: relative;
-    width: 109px;
-    height: 80px;
-    overflow: hidden;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    cursor: default;
+}
+
+.itemInteractive {
     cursor: pointer;
-}
-
-.highlightedImage {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    pointer-events: none;
-}
-
-.highlightedImage img {
-    display: block;
-    width: 109px;
-    height: 80px;
-}
-
-.downArrowHolder {
-    position: absolute;
-    bottom: 23.5%;
-    right: 46%;
-    width: 42px;
-    height: 26px;
-    z-index: 9;
-    cursor: pointer;
-}
-
-.downArrow {
-    width: 42px;
-    height: 26px;
-    z-index: 10;
-    background-repeat: no-repeat;
-}
-
-.lowerContent {
-    width: 75%;
-    height: 13%;
-    position: absolute;
-    bottom: 9%;
-    left: 0.5%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 37px;
 }
 
 .iconComponentHolder {
     height: 72px;
     width: 71px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    margin-top: 3%;
-    cursor: pointer;
-}
-
-.helpComponentHolder {
-    width: 140px;
-    height: 103px;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    bottom: 13%;
-    right: 1%;
-    z-index: 10;
 }
 
 .emptyMessage {

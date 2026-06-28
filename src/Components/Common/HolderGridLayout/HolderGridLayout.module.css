@@ -1,0 +1,184 @@
+.gridRoot {
+    position: relative;
+    width: var(--hgl-body-w);
+    height: var(--hgl-body-h);
+    overflow: visible;
+}
+
+.upArrowHolder {
+    position: absolute;
+    top: var(--hgl-up-y);
+    left: var(--hgl-up-x);
+    transform: translateX(-50%);
+    width: 42px;
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.upArrow {
+    width: 42px;
+    height: 26px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.body {
+    position: absolute;
+    left: var(--hgl-grid-left);
+    top: var(--hgl-grid-top);
+    display: grid;
+    grid-template-columns: repeat(3, var(--hgl-cell-w));
+    grid-template-rows: repeat(3, var(--hgl-cell-h));
+    column-gap: var(--hgl-gap-x);
+    row-gap: var(--hgl-gap-y);
+    margin: 0;
+    width: max-content;
+    height: max-content;
+}
+
+.item {
+    position: relative;
+    width: var(--hgl-cell-w);
+    height: var(--hgl-cell-h);
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.highlightedImage {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.highlightedImage img {
+    display: block;
+    width: var(--hgl-cell-w);
+    height: var(--hgl-cell-h);
+}
+
+.downArrowHolder {
+    position: absolute;
+    top: var(--hgl-down-y);
+    left: var(--hgl-down-x);
+    transform: translateX(-50%);
+    width: 42px;
+    height: 26px;
+    z-index: 9;
+    cursor: pointer;
+}
+
+.downArrow {
+    width: 42px;
+    height: 26px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.helpComponentHolder {
+    position: absolute;
+    left: var(--hgl-help-x);
+    top: var(--hgl-help-y);
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 103px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.lowerContent {
+    position: absolute;
+    z-index: 9;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.iconComponentHolder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.variantWorldLight {
+    --hgl-body-w: 519px;
+    --hgl-body-h: 530px;
+    --hgl-grid-left: 74px;
+    --hgl-grid-top: 95px;
+    --hgl-cell-w: 109px;
+    --hgl-cell-h: 80px;
+    --hgl-gap-x: 23px;
+    --hgl-gap-y: 28px;
+    --hgl-up-x: 259px;
+    --hgl-up-y: 30px;
+    --hgl-down-x: 259px;
+    --hgl-down-y: 400px;
+    --hgl-help-x: 476px;
+    --hgl-help-y: 447px;
+}
+
+.variantWorldDark {
+    --hgl-body-w: 519px;
+    --hgl-body-h: 530px;
+    --hgl-grid-left: 74px;
+    --hgl-grid-top: 95px;
+    --hgl-cell-w: 109px;
+    --hgl-cell-h: 80px;
+    --hgl-gap-x: 23px;
+    --hgl-gap-y: 28px;
+    --hgl-up-x: 259px;
+    --hgl-up-y: 30px;
+    --hgl-down-x: 259px;
+    --hgl-down-y: 400px;
+    --hgl-help-x: 452px;
+    --hgl-help-y: 427px;
+}
+
+.variantSnapshot {
+    --hgl-body-w: 516px;
+    --hgl-body-h: 530px;
+    --hgl-grid-left: 70px;
+    --hgl-grid-top: 98px;
+    --hgl-cell-w: 109px;
+    --hgl-cell-h: 80px;
+    --hgl-gap-x: 23px;
+    --hgl-gap-y: 28px;
+    --hgl-up-x: 258px;
+    --hgl-up-y: 30px;
+    --hgl-down-x: 258px;
+    --hgl-down-y: 403px;
+    --hgl-help-x: 473px;
+    --hgl-help-y: 450px;
+}
+
+.variantMyModels {
+    --hgl-body-w: 519px;
+    --hgl-body-h: 587px;
+    --hgl-grid-left: 74px;
+    --hgl-grid-top: 152px;
+    --hgl-cell-w: 109px;
+    --hgl-cell-h: 80px;
+    --hgl-gap-x: 23px;
+    --hgl-gap-y: 28px;
+    --hgl-up-x: 259px;
+    --hgl-up-y: 30px;
+    --hgl-down-x: 259px;
+    --hgl-down-y: 448px;
+    --hgl-help-x: 449px;
+    --hgl-help-y: 472px;
+}

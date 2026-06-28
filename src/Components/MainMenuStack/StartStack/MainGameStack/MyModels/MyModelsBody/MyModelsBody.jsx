@@ -1,19 +1,17 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './MyModelsBody.module.css';
 import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../Common';
+import { createHolderGridStyles, footerPositionStyle, HOLDER_VARIANTS } from '../../../../../Common/HolderGridLayout';
 import { getSavedWorldsList, resolveSnapshotImage } from '../../../../../../api/worldSave';
 import { myModelsData } from '../MyModelsResourceStack';
 
-const paginatedStyles = {
-  gridRoot: styles.modelsBody,
-  upArrowHolder: styles.upArrowHolder,
-  upArrow: styles.upArrow,
-  body: styles.body,
+const paginatedStyles = createHolderGridStyles(HOLDER_VARIANTS.MY_MODELS, {
   item: styles.item,
-  highlightedImage: styles.highlightedImage,
-  downArrowHolder: styles.downArrowHolder,
-  downArrow: styles.downArrow,
-};
+  itemInteractive: styles.itemInteractive,
+  iconComponentHolder: styles.iconComponentHolder,
+});
+
+const footerStyle = footerPositionStyle(HOLDER_VARIANTS.MY_MODELS);
 
 const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
   const savedItems = useMemo(() => {
@@ -71,15 +69,15 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
   };
 
   const footer = (
-    <div className={styles.lowerContent}>
-      <div className={styles.iconComponentHolder}>
+    <div className={paginatedStyles.lowerContent} style={footerStyle}>
+      <div className={paginatedStyles.iconComponentHolder}>
         <IconComponent
           type="copy"
           placeholderImage={myModelsData.copyPlaceholder}
           frames={myModelsData.copyFrames}
         />
       </div>
-      <div className={styles.iconComponentHolder} onClick={handleDelete}>
+      <div className={paginatedStyles.iconComponentHolder} onClick={handleDelete}>
         <IconComponent
           type="delete"
           placeholderImage={myModelsData.deletePlaceholder}
@@ -90,7 +88,7 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
   );
 
   const helpCorner = (
-    <div className={styles.helpComponentHolder}>
+    <div className={paginatedStyles.helpComponentHolder}>
       <HelpComponent
         placeholderImage={myModelsData.placeholderHelper}
         frames={myModelsData.helperFrames}
@@ -100,7 +98,7 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
 
   if (savedItems.length === 0) {
     return (
-      <div className={styles.modelsBody}>
+      <div className={paginatedStyles.gridRoot}>
         <div className={styles.emptyMessage}>
           No saved worlds yet. Return to the game and use the save icon.
         </div>
@@ -121,6 +119,7 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
       onDownArrowClick={handleDownArrowClick}
       onItemClick={handleItemClick}
       getItemKey={(item) => item.id}
+      isItemInteractive={(item) => Boolean(item?.image)}
       footer={footer}
       helpCorner={helpCorner}
     />

@@ -5,5 +5,11 @@ export { default as BackCheckmarkButton } from './BackCheckmarkButton/BackCheckm
 export { default as MenuScreenLayout } from './MenuScreenLayout/MenuScreenLayout';
 export { default as PaginatedGrid } from './PaginatedGrid/PaginatedGrid';
 export { default as usePaginatedGrid } from './usePaginatedGrid';
+export {
+  createHolderGridStyles,
+  footerPositionStyle,
+  HOLDER_VARIANTS,
+  getWorldHolderVariant,
+} from './HolderGridLayout';
 export { default as LoadingComponent } from './LoadingComponent/LoadingComponent';
 export { default as LoadingModal } from './LoadingModal/LoadingModal';

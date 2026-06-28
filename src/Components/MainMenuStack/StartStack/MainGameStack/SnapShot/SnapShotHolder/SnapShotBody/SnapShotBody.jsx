@@ -1,23 +1,20 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './SnapShotBody.module.css';
 import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../../Common';
+import { createHolderGridStyles, footerPositionStyle, HOLDER_VARIANTS } from '../../../../../../Common/HolderGridLayout';
 import { mergeSnapshotLists, normalizeSnapshotEntry, resolveSnapshotImage } from '@/api/worldSave';
 import { snapshotData } from './SnapShotBodyResourceStack/index';
 import selectedImage from './SnapShotBodyResourceStack/selected.png';
 
 const ITEMS_PER_PAGE = 9;
 
-const paginatedStyles = {
-  gridRoot: styles.snapshotBody,
-  upArrowHolder: styles.upArrowHolder,
-  upArrow: styles.upArrow,
-  body: styles.body,
+const paginatedStyles = createHolderGridStyles(HOLDER_VARIANTS.SNAPSHOT, {
   item: styles.item,
   itemInteractive: styles.itemInteractive,
-  highlightedImage: styles.highlightedImage,
-  downArrowHolder: styles.downArrowHolder,
-  downArrow: styles.downArrow,
-};
+  iconComponentHolder: styles.iconComponentHolder,
+});
+
+const footerStyle = footerPositionStyle(HOLDER_VARIANTS.SNAPSHOT);
 
 const SnapShotBody = ({
   selectedProfile,
@@ -103,22 +100,22 @@ const SnapShotBody = ({
   };
 
   const footer = (
-    <div className={styles.lowerContent}>
-      <div className={styles.iconComponentHolder} onClick={handlePrint}>
+    <div className={paginatedStyles.lowerContent} style={footerStyle}>
+      <div className={paginatedStyles.iconComponentHolder} onClick={handlePrint}>
         <IconComponent
           type="print"
           placeholderImage={snapshotData.placeHolderPrint}
           frames={snapshotData.print}
         />
       </div>
-      <div className={styles.iconComponentHolder}>
+      <div className={paginatedStyles.iconComponentHolder}>
         <IconComponent
           type="destroy"
           placeholderImage={snapshotData.placeHolderDestroy}
           frames={snapshotData.destroy}
         />
       </div>
-      <div className={styles.iconComponentHolder} onClick={handleDelete}>
+      <div className={paginatedStyles.iconComponentHolder} onClick={handleDelete}>
         <IconComponent
           type="delete"
           placeholderImage={snapshotData.placeHolderDelete}
@@ -129,7 +126,7 @@ const SnapShotBody = ({
   );
 
   const helpCorner = (
-    <div className={styles.helpComponentHolder}>
+    <div className={paginatedStyles.helpComponentHolder}>
       <HelpComponent
         placeholderImage={snapshotData.placeholderHelper}
         frames={snapshotData.helperFrames}
@@ -139,7 +136,7 @@ const SnapShotBody = ({
 
   if (snapshotItems.length === 0) {
     return (
-      <div className={styles.snapshotBody}>
+      <div className={paginatedStyles.gridRoot}>
         <div className={styles.emptyMessage}>
           No snapshots yet. Use the camera icon in-game to capture your world.
         </div>
