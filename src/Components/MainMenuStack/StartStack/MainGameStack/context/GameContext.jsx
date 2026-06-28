@@ -13,6 +13,13 @@ const CLIMATE_BY_INDEX = [
 
 const MUSIC_BY_INDEX = ['NONE', 'GOOD', 'VERYGOOD', 'BAD', 'VERYBAD'];
 
+const MUSIC_TRACK_SOURCES = {
+  GOOD: musicTracks.GOOD,
+  VERYGOOD: musicTracks.VERYGOOD,
+  BAD: musicTracks.BAD,
+  VERYBAD: musicTracks.VERYBAD,
+};
+
 export const GameProvider = ({
   children,
   mapData,
@@ -27,6 +34,46 @@ export const GameProvider = ({
   const [hydrationScene, setHydrationScene] = useState(null);
   const gameEngineRef = useRef(null);
   const audioRef = useRef(null);
+  const audioPlayTokenRef = useRef(0);
+
+  const stopMusicPlayback = useCallback(() => {
+    audioPlayTokenRef.current += 1;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+  }, []);
+
+  const startMusicPlayback = useCallback((track) => {
+    const source = MUSIC_TRACK_SOURCES[track];
+    if (!source) {
+      stopMusicPlayback();
+      return;
+    }
+
+    stopMusicPlayback();
+    const playToken = audioPlayTokenRef.current;
+    const newAudio = new Audio(source);
+    newAudio.loop = true;
+    audioRef.current = newAudio;
+
+    const playAttempt = newAudio.play();
+    if (playAttempt?.catch) {
+      playAttempt.catch((error) => {
+        if (playToken !== audioPlayTokenRef.current) {
+          return;
+        }
+        if (error?.name !== 'AbortError') {
+          console.warn('Music playback failed:', error);
+        }
+      });
+    }
+  }, [stopMusicPlayback]);
+
+  useEffect(() => () => {
+    stopMusicPlayback();
+  }, [stopMusicPlayback]);
 
   useEffect(() => {
     const saved = selectedProfile?.savedWorlds?.[String(mapData?.id)];
@@ -55,11 +102,7 @@ export const GameProvider = ({
   }, [state.sceneState]);
 
   const handleSave = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
+    stopMusicPlayback();
     dispatch({ type: 'SET_ACTIVE_MUSIC', payload: { index: 0, track: 'NONE' } });
 
     try {
@@ -82,7 +125,7 @@ export const GameProvider = ({
       resetModes();
       navigateToMyModels?.();
     }
-  }, [selectedProfile, mapData, onSaveWorldProgress, captureCurrentScene, resetModes, navigateToMyModels]);
+  }, [selectedProfile, mapData, onSaveWorldProgress, captureCurrentScene, resetModes, navigateToMyModels, stopMusicPlayback]);
 
   const handleBucket = useCallback(() => {
     const next = !state.showBucket;
@@ -181,34 +224,16 @@ export const GameProvider = ({
   }, []);
 
   const handleMusicChange = useCallback((index) => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-
     const track = MUSIC_BY_INDEX[index] || 'NONE';
-    let newAudio = null;
 
-    if (track === 'GOOD') {
-      newAudio = new Audio(musicTracks.GOOD);
-    } else if (track === 'VERYGOOD') {
-      newAudio = new Audio(musicTracks.VERYGOOD);
-    } else if (track === 'BAD') {
-      newAudio = new Audio(musicTracks.BAD);
-    } else if (track === 'VERYBAD') {
-      newAudio = new Audio(musicTracks.VERYBAD);
-    }
-
-    if (newAudio) {
-      newAudio.loop = true;
-      newAudio.play();
-      audioRef.current = newAudio;
+    if (track === 'NONE') {
+      stopMusicPlayback();
     } else {
-      audioRef.current = null;
+      startMusicPlayback(track);
     }
 
     dispatch({ type: 'SET_ACTIVE_MUSIC', payload: { index, track } });
-  }, []);
+  }, [startMusicPlayback, stopMusicPlayback]);
 
   const handleMusic = useCallback(() => {
     if (state.isClimateOpen) {
