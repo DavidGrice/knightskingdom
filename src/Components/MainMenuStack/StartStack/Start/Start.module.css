@@ -32,6 +32,7 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+  z-index: 10;
 }
 
 .leaveIconHolder {
