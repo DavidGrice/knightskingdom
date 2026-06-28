@@ -43,7 +43,9 @@ const createSnowParticleSystem = (scene) => {
     );
   }
 
-  snowGeometry.setAttribute('position', new THREE.Float32BufferAttribute(snowVertices, 3));
+  const snowPositions = new THREE.Float32BufferAttribute(snowVertices, 3);
+  snowPositions.setUsage(THREE.DynamicDrawUsage);
+  snowGeometry.setAttribute('position', snowPositions);
   const snowMaterial = new THREE.PointsMaterial({
     color: 0xffffff,
     size: 0.5,
@@ -69,7 +71,9 @@ const createRainParticleSystem = (scene) => {
     );
   }
 
-  rainGeometry.setAttribute('position', new THREE.Float32BufferAttribute(rainVertices, 3));
+  const rainPositions = new THREE.Float32BufferAttribute(rainVertices, 3);
+  rainPositions.setUsage(THREE.DynamicDrawUsage);
+  rainGeometry.setAttribute('position', rainPositions);
   const rainMaterial = new THREE.PointsMaterial({
     color: 0x63e5ff,
     size: 0.5,
@@ -118,7 +122,9 @@ const createWindySystem = (scene) => {
   }
 
   const particleGeometry = new THREE.BufferGeometry();
-  particleGeometry.setAttribute('position', new THREE.BufferAttribute(particles, 3));
+  const windyPositions = new THREE.BufferAttribute(particles, 3);
+  windyPositions.setUsage(THREE.DynamicDrawUsage);
+  particleGeometry.setAttribute('position', windyPositions);
   const particleMaterial = new THREE.PointsMaterial({
     color: 0xffffff,
     size: 1,
@@ -129,33 +135,46 @@ const createWindySystem = (scene) => {
   return particleSystem;
 };
 
-const updateWeatherSystem = (climate, system) => {
-  if (!system?.geometry?.attributes?.position) {
+const updateWeatherSystem = (system) => {
+  const positionAttribute = system?.geometry?.attributes?.position;
+  if (!positionAttribute?.array) {
     return;
   }
 
-  const speedFactor = 10;
-  const positions = system.geometry.attributes.position.array;
+  const positions = positionAttribute.array;
 
-  if (climate === 'SNOW' || climate === 'RAIN') {
+  if (system.name === 'SNOW' || system.name === 'RAIN') {
+    const speedFactor = system.name === 'SNOW' ? 2 : 10;
     for (let i = 0; i < positions.length; i += 3) {
+      if (system.name === 'SNOW') {
+        positions[i] += Math.random() * 0.4 - 0.2;
+      }
       positions[i + 1] -= Math.random() * speedFactor;
       if (positions[i + 1] < 0) {
         positions[i + 1] = 500;
       }
     }
-    system.geometry.attributes.position.needsUpdate = true;
+    positionAttribute.needsUpdate = true;
     return;
   }
 
-  if (climate === 'WINDY') {
+  if (system.name === 'WINDY') {
     for (let i = 0; i < positions.length; i += 3) {
       positions[i] += Math.random() * 0.1 - 0.05;
       positions[i + 1] += Math.random() * 0.1 - 0.05;
       positions[i + 2] += Math.random() * 0.1 - 0.05;
     }
-    system.geometry.attributes.position.needsUpdate = true;
+    positionAttribute.needsUpdate = true;
   }
+};
+
+const animateWeatherSystems = (scene) => {
+  WEATHER_SYSTEM_NAMES.forEach((name) => {
+    const weatherSystem = scene.getObjectByName(name);
+    if (weatherSystem) {
+      updateWeatherSystem(weatherSystem);
+    }
+  });
 };
 
 const ClimateLoader = (
@@ -164,7 +183,6 @@ const ClimateLoader = (
   climateNeedsUpdating = false,
   currentSystem = null,
   setCurrentSystem = null,
-  registerFrameCallback = null,
 ) => {
   removeCurrentWeatherSystem(scene, currentSystem, climateNeedsUpdating);
   WEATHER_SYSTEM_NAMES.forEach((name) => removeSceneObjectByName(scene, name));
@@ -194,12 +212,8 @@ const ClimateLoader = (
     setCurrentSystem(system);
   }
 
-  if (system && typeof registerFrameCallback === 'function') {
-    registerFrameCallback(() => updateWeatherSystem(climate, system));
-  }
-
   return system;
 };
 
-export { WEATHER_SYSTEM_NAMES, updateWeatherSystem };
+export { WEATHER_SYSTEM_NAMES, animateWeatherSystems, updateWeatherSystem };
 export default ClimateLoader;

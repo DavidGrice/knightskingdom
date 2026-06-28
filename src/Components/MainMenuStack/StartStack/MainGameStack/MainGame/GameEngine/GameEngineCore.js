@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
+import { animateWeatherSystems } from './Loaders/ClimateLoader';
 import { applySavedSceneToThree, serializeSceneFromThree } from '../../context/sceneSchema';
 import { disposeObject3D, removeSceneChildrenExcept } from './sceneDispose';
 
@@ -15,7 +16,7 @@ export class GameEngineCore {
     this.mountNode = null;
     this.animationFrameId = null;
     this.frameCallbacks = new Set();
-    this.unregisterClimateCallback = null;
+    this.unregisterWeatherCallback = null;
     this.loadedMapId = null;
     this.mapData = null;
     this.climateMode = 'SUNNY';
@@ -47,6 +48,9 @@ export class GameEngineCore {
     this.camera.position.set(0, 5, 10);
 
     window.addEventListener('resize', this.handleResize);
+    this.unregisterWeatherCallback = this.registerFrameCallback(() => {
+      animateWeatherSystems(this.scene);
+    });
     this.animationFrameId = requestAnimationFrame(this.animate);
 
     return this.renderer.domElement;
@@ -65,21 +69,9 @@ export class GameEngineCore {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  clearClimateFrameCallback() {
-    if (this.unregisterClimateCallback) {
-      this.unregisterClimateCallback();
-      this.unregisterClimateCallback = null;
-    }
-  }
-
   setClimate(mapData, climateMode, { force = false } = {}) {
     if (!mapData) {
       return;
-    }
-
-    if (this.unregisterClimateCallback) {
-      this.unregisterClimateCallback();
-      this.unregisterClimateCallback = null;
     }
 
     SkyBoxLoader(mapData, this.scene, climateMode);
@@ -90,9 +82,6 @@ export class GameEngineCore {
       this.climateParticleSystem,
       (system) => {
         this.climateParticleSystem = system;
-      },
-      (callback) => {
-        this.unregisterClimateCallback = this.registerFrameCallback(callback);
       },
     );
     this.climateMode = climateMode;
@@ -166,7 +155,10 @@ export class GameEngineCore {
       this.animationFrameId = null;
     }
 
-    this.clearClimateFrameCallback();
+    if (this.unregisterWeatherCallback) {
+      this.unregisterWeatherCallback();
+      this.unregisterWeatherCallback = null;
+    }
     this.frameCallbacks.clear();
     window.removeEventListener('resize', this.handleResize);
     this.controls?.dispose();
