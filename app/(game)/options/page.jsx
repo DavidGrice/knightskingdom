@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation';
 import Options from '@/Components/MainMenuStack/Options/Options';
 import { useUserData } from '@/lib/context/UserDataProvider';
+import { useScreenReady } from '@/lib/context/GameLoadingProvider';
 import { updateProfileOptions } from '@/api/worldSave';
 import { ROUTES } from '@/lib/routes';
 
 export default function OptionsPage() {
+  useScreenReady();
   const { selectedProfile, userData, updateUserData } = useUserData();
   const router = useRouter();
 

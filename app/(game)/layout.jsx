@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserData } from '@/lib/context/UserDataProvider';
+import { GameLoadingProvider } from '@/lib/context/GameLoadingProvider';
 import { ROUTES } from '@/lib/routes';
 
 export default function GameLayout({ children }) {
@@ -23,5 +24,9 @@ export default function GameLayout({ children }) {
     return null;
   }
 
-  return <div className="app-main-div">{children}</div>;
+  return (
+    <GameLoadingProvider>
+      <div className="app-main-div">{children}</div>
+    </GameLoadingProvider>
+  );
 }

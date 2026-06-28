@@ -1,9 +1,9 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import LoadingComponent from '@/Components/Common/LoadingComponent/LoadingComponent';
+import { DynamicImportLoading } from '@/lib/context/GameLoadingProvider';
 
-const screenLoading = () => <LoadingComponent isLoading />;
+const screenLoading = () => <DynamicImportLoading />;
 
 export const LazyMainGameScreen = dynamic(
   () => import('@/Components/MainMenuStack/StartStack/MainGameStack/screens/MainGameScreen'),

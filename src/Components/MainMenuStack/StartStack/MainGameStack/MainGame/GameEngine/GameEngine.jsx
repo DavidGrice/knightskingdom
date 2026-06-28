@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef, startTransition } from 'react';
 import * as THREE from 'three';
-import LoadingComponent from '../../../../../Common/LoadingComponent/LoadingComponent';
+import { useGameLoading, useManagedLoading } from '@/lib/context/GameLoadingProvider';
 import { ModelLoader } from './Loaders/index';
 import { Modes } from './GameEngineResourceStack/index';
 import { serializeSceneFromThree } from '../../context/sceneSchema';
@@ -17,7 +17,6 @@ const GameEngine = forwardRef(({
   const canvasRef = useRef(null);
   const hasHydratedRef = useRef(false);
   const [assetsReady, setAssetsReady] = useState(false);
-  const [loading] = useState(false);
   const selectedObject = useRef(null);
   const isDragging = useRef(false);
   const mouse = useRef(new THREE.Vector2());
@@ -50,6 +49,16 @@ const GameEngine = forwardRef(({
   }, []);
 
   const mapId = mapData?.id;
+
+  const { stopLoading } = useGameLoading();
+
+  useManagedLoading('world-assets', Boolean(mapData && !assetsReady));
+
+  useEffect(() => {
+    if (assetsReady) {
+      stopLoading('navigation');
+    }
+  }, [assetsReady, stopLoading]);
 
   useEffect(() => {
     const core = coreRef.current;
@@ -347,11 +356,7 @@ const GameEngine = forwardRef(({
     onSceneChange,
   ]);
 
-  return (
-    <div ref={mountRef}>
-      {loading && <LoadingComponent />}
-    </div>
-  );
+  return <div ref={mountRef} />;
 });
 
 GameEngine.displayName = 'GameEngine';

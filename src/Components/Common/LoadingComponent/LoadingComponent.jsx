@@ -39,7 +39,7 @@ const LoadingComponent = ({ isLoading = true }) => {
   };
 
   return (
-    <div className={styles.mainDiv}>
+    <div className={styles.videoWrapper}>
       <video
         ref={videoRef}
         width="120"

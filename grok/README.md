@@ -155,7 +155,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 
 ### User backlog
 
-- [ ] **Lego Clock loading modal** — show as a proper modal overlay while game/components load to completion (not just a brief lazy-import flash)
+- [x] **Lego Clock loading modal** — global overlay via `GameLoadingProvider` (navigation, lazy chunks, world assets)
 - [ ] Fix save game menu styling (MyModels / save screen layout)
 
 ### Deferred

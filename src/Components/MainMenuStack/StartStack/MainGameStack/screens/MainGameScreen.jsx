@@ -2,6 +2,8 @@
 
 import MainGame from '../MainGame/MainGame';
 import { GameProvider } from '../context';
+import { useEffect } from 'react';
+import { useGameLoading } from '@/lib/context/GameLoadingProvider';
 
 const MainGameScreen = ({
   mapData,
@@ -12,23 +14,33 @@ const MainGameScreen = ({
   navigateToSnapshot,
   navigateToMyModels,
   navigateToStartMenu,
-}) => (
-  <GameProvider
-    mapData={mapData}
-    selectedProfile={selectedProfile}
-    onSaveWorldProgress={onSaveWorldProgress}
-    onAppendSnapshot={onAppendSnapshot}
-    navigateToWorkshop={navigateToWorkshop}
-    navigateToSnapshot={navigateToSnapshot}
-    navigateToMyModels={navigateToMyModels}
-  >
-    <MainGame
-      navigateToStartMenu={navigateToStartMenu}
+}) => {
+  const { stopLoading } = useGameLoading();
+
+  useEffect(() => {
+    if (!mapData) {
+      stopLoading('navigation');
+    }
+  }, [mapData, stopLoading]);
+
+  return (
+    <GameProvider
+      mapData={mapData}
+      selectedProfile={selectedProfile}
+      onSaveWorldProgress={onSaveWorldProgress}
+      onAppendSnapshot={onAppendSnapshot}
       navigateToWorkshop={navigateToWorkshop}
       navigateToSnapshot={navigateToSnapshot}
-      mapData={mapData}
-    />
-  </GameProvider>
-);
+      navigateToMyModels={navigateToMyModels}
+    >
+      <MainGame
+        navigateToStartMenu={navigateToStartMenu}
+        navigateToWorkshop={navigateToWorkshop}
+        navigateToSnapshot={navigateToSnapshot}
+        mapData={mapData}
+      />
+    </GameProvider>
+  );
+};
 
 export default MainGameScreen;
