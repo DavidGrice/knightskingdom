@@ -20,25 +20,36 @@ const ComponentBottom = ({
     const config = getBottomToolbarConfig(mode);
 
     const handleIconClick = (type) => {
+        const isToggleOff = activeIcon === type;
+
         if (mode === 'game') {
-            if (type === 'hammer') {
-                handleMusicChange(0);
-                navigateToWorkshop();
+            switch (type) {
+                case 'hammer':
+                    if (!isToggleOff) {
+                        handleMusicChange(0);
+                        navigateToWorkshop();
+                    }
+                    break;
+                case 'camera':
+                    if (!isToggleOff) {
+                        handleMusicChange(0);
+                        handleNavigateToSnapShot();
+                    }
+                    break;
+                case 'climate':
+                    handleClimate();
+                    break;
+                case 'music':
+                    handleMusic();
+                    break;
+                default:
+                    break;
             }
-            if (type === 'camera') {
-                handleMusicChange(0);
-                handleNavigateToSnapShot();
-            }
-            if (type === 'climate') {
-                handleClimate();
-            }
-            if (type === 'music') {
-                handleMusic();
-            }
-        } else if (type === 'sweep') {
+        } else if (type === 'sweep' && !isToggleOff) {
             console.log('Sweep');
         }
-        setActiveIcon((prevActiveIcon) => (prevActiveIcon === type ? null : type));
+
+        setActiveIcon(isToggleOff ? null : type);
     };
 
     const renderButton = (button) => (

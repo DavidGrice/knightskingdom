@@ -29,55 +29,64 @@ const ComponentTop = ({
     const handleGameIconClick = (type) => {
         const isToggleOff = activeIcon === type;
 
-        if (!isToggleOff) {
-            switch (type) {
-                case 'bucket':
-                    handleBucket();
-                    break;
-                case 'move':
+        switch (type) {
+            case 'bucket':
+                handleBucket();
+                break;
+            case 'repaint':
+                handlePalette();
+                break;
+            case 'action':
+                handleAction();
+                break;
+            case 'drive':
+                handleDrive();
+                setCameraNeedsReset(true);
+                break;
+            case 'move':
+                if (!isToggleOff) {
                     handleMove();
-                    break;
-                case 'reverse':
+                }
+                break;
+            case 'reverse':
+                if (!isToggleOff) {
                     handleRotate();
-                    break;
-                case 'repaint':
-                    handlePalette();
-                    break;
-                case 'delete':
+                }
+                break;
+            case 'delete':
+                if (!isToggleOff) {
                     handleDelete();
-                    break;
-                case 'action':
-                    handleAction();
-                    break;
-                case 'drive':
-                    handleDrive();
-                    setCameraNeedsReset(true);
-                    break;
-                case 'play':
+                }
+                break;
+            case 'play':
+                if (!isToggleOff) {
                     handlePlay();
-                    break;
-                default:
-                    resetModes();
-                    break;
-            }
+                }
+                break;
+            default:
+                break;
         }
 
         if (isToggleOff) {
-            if (type === 'bucket') {
-                handleBucket();
-            }
             resetModes();
             setActiveIcon(null);
-        } else {
-            setActiveIcon(type);
+            return;
         }
+
+        setActiveIcon(type);
     };
 
     const handleWorkshopIconClick = (type) => {
+        const isToggleOff = activeIcon === type;
+
         if (type === 'repaint') {
             handlePalette();
         }
-        setActiveIcon((prevActiveIcon) => (prevActiveIcon === type ? null : type));
+        if (type === 'bucket') {
+            handleBucket();
+        }
+
+        setActiveIcon(isToggleOff ? null : type);
     };
 
     const handleIconClick = mode === 'game' ? handleGameIconClick : handleWorkshopIconClick;
@@ -107,8 +116,8 @@ const ComponentTop = ({
                 passiveIcon={leaveIcon.iconData.bucketPassive}
                 activeIcon={leaveIcon.iconData.bucketActive}
                 type="bucket"
-                isActive={mode === 'game' ? activeIcon === 'bucket' : undefined}
-                onClick={mode === 'game' ? () => handleIconClick('bucket') : handleBucket}
+                isActive={activeIcon === 'bucket'}
+                onClick={() => handleIconClick('bucket')}
             />
         </div>
     );
