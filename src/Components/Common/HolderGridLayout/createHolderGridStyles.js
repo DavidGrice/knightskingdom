@@ -5,6 +5,24 @@ const resolveVariant = (variantOrKey) => (
   typeof variantOrKey === 'string' ? HOLDER_VARIANTS[variantOrKey] : variantOrKey
 );
 
+/** @param {import('./holderGridMetrics').HolderVariant} variant */
+export const variantToLayoutVars = (variant) => ({
+  '--hgl-body-w': `${variant.bodyWidth}px`,
+  '--hgl-body-h': `${variant.bodyHeight}px`,
+  '--hgl-grid-left': `${variant.gridLeft}px`,
+  '--hgl-grid-top': `${variant.gridTop}px`,
+  '--hgl-cell-w': `${variant.width}px`,
+  '--hgl-cell-h': `${variant.height}px`,
+  '--hgl-gap-x': `${variant.x}px`,
+  '--hgl-gap-y': `${variant.y}px`,
+  '--hgl-up-x': `${variant.upArrow.x}px`,
+  '--hgl-up-y': `${variant.upArrow.y}px`,
+  '--hgl-down-x': `${variant.downArrow.x}px`,
+  '--hgl-down-y': `${variant.downArrow.y}px`,
+  '--hgl-help-x': `${variant.help.x}px`,
+  '--hgl-help-y': `${variant.help.y}px`,
+});
+
 /**
  * Build PaginatedGrid style map from a holder layout variant.
  * @param {import('./holderGridMetrics').HolderVariant | keyof typeof HOLDER_VARIANTS} variantOrKey
@@ -12,10 +30,9 @@ const resolveVariant = (variantOrKey) => (
  */
 export const createHolderGridStyles = (variantOrKey, overrides = {}) => {
   const variant = resolveVariant(variantOrKey);
-  const variantClass = holderStyles[variant.className];
 
   const base = {
-    gridRoot: `${holderStyles.gridRoot} ${variantClass}`.trim(),
+    gridRoot: holderStyles.gridRoot,
     upArrowHolder: holderStyles.upArrowHolder,
     upArrow: holderStyles.upArrow,
     body: holderStyles.body,
@@ -26,6 +43,7 @@ export const createHolderGridStyles = (variantOrKey, overrides = {}) => {
     helpComponentHolder: holderStyles.helpComponentHolder,
     lowerContent: holderStyles.lowerContent,
     iconComponentHolder: holderStyles.iconComponentHolder,
+    rootLayoutStyle: variantToLayoutVars(variant),
     variant,
   };
 

@@ -8,6 +8,7 @@ export { default as usePaginatedGrid } from './usePaginatedGrid';
 export {
   createHolderGridStyles,
   footerPositionStyle,
+  variantToLayoutVars,
   HOLDER_VARIANTS,
   getWorldHolderVariant,
 } from './HolderGridLayout';

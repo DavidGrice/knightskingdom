@@ -6,11 +6,12 @@
     width: 519px;
     height: 587px;
     position: absolute;
-    left: calc(29.15% - 145px);
-    top: 6%;
+    left: 50%;
+    transform: translateX(-62%);
+    top: 5%;
     z-index: 2;
     background-image: url('../MyModelsResourceStack/drop_down.png');
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: top center;
+    background-position: center;
 }

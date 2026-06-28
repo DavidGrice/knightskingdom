@@ -98,7 +98,7 @@ const MyModelsBody = ({ selectedProfile, onDeleteSavedWorld }) => {
 
   if (savedItems.length === 0) {
     return (
-      <div className={paginatedStyles.gridRoot}>
+      <div className={paginatedStyles.gridRoot} style={paginatedStyles.rootLayoutStyle}>
         <div className={styles.emptyMessage}>
           No saved worlds yet. Return to the game and use the save icon.
         </div>

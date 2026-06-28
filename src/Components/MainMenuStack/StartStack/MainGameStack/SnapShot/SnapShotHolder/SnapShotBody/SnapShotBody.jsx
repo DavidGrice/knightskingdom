@@ -136,7 +136,7 @@ const SnapShotBody = ({
 
   if (snapshotItems.length === 0) {
     return (
-      <div className={paginatedStyles.gridRoot}>
+      <div className={paginatedStyles.gridRoot} style={paginatedStyles.rootLayoutStyle}>
         <div className={styles.emptyMessage}>
           No snapshots yet. Use the camera icon in-game to capture your world.
         </div>

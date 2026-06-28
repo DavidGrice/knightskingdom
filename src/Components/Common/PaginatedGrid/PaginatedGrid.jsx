@@ -20,7 +20,10 @@ const PaginatedGrid = ({
   footer = null,
   helpCorner = null,
 }) => (
-  <div className={`${styles.gridRoot} ${rootClassName}`.trim()} style={rootStyle || undefined}>
+  <div
+    className={`${styles.gridRoot} ${rootClassName}`.trim()}
+    style={{ ...styles.rootLayoutStyle, ...rootStyle }}
+  >
     <div className={styles.upArrowHolder} onClick={onUpArrowClick}>
       <div
         className={styles.upArrow}

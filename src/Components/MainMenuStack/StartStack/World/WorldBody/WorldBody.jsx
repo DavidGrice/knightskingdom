@@ -100,6 +100,7 @@ const WorldBody = ({ isLocalWorlds, didUpdate, setDidUpdate, setWorldData }) => 
     <PaginatedGrid
       styles={paginatedStyles}
       rootStyle={{
+        ...paginatedStyles.rootLayoutStyle,
         backgroundImage: `url(${theme.body})`,
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
