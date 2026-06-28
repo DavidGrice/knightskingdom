@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — MyModels: fix grid metrics (restore 50ecb12 layout)
+
+| File | Change |
+|------|--------|
+| `MyModelsBody.module.css` | Restore `441×229` body, grid `gap: 18px 12px`, `margin-left: 13%` — was wrongly `gap: 40px` / `530px` tall |
+| `MyModelsHolder.module.css` | Drop `justify-content: center` that squashed overlays |
+
+Prior “SnapShot alignment” used incorrect CRA extract values; slots did not line up with purple `drop_down.png` cells.
+
+---
+
 ## 2026-06-28 — MyModels: align overlay layout with SnapShot / WorldBody
 
 | File | Change |
