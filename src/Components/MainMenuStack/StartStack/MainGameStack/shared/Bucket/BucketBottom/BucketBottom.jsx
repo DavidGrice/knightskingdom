@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
-import styles from './BucketBottom.module.css';
+import gameStyles from './BucketBottom.module.css';
+import workshopStyles from './BucketBottom.workshop.module.css';
 import selectedImage from '../../../MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/wh_selection.png';
 import usePaginatedGrid from '../../../../../../Common/usePaginatedGrid';
 
-const BucketBottom = ({ activeBucket, resetKey, tabData, arrowImages, onItemSelect }) => {
+const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrowImages, onItemSelect }) => {
+    const styles = variant === 'workshop' ? workshopStyles : gameStyles;
     const items = useMemo(
         () => tabData[activeBucket] || tabData[0] || [],
         [tabData, activeBucket]

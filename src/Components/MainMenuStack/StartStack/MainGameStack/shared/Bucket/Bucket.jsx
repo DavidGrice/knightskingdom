@@ -1,10 +1,15 @@
 import React, { useMemo, useState } from 'react';
-import styles from './Bucket.module.css';
+import gameStyles from './Bucket.module.css';
+import workshopStyles from './Bucket.workshop.module.css';
 import BucketTop from './BucketTop/BucketTop';
 import BucketBottom from './BucketBottom/BucketBottom';
 import { getBucketConfig } from '../toolbarConfig';
 
 const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
+    const isWorkshop = dataSource === 'bricks';
+    const styles = isWorkshop ? workshopStyles : gameStyles;
+    const variant = isWorkshop ? 'workshop' : 'game';
+
     const { tabIcons, tabData, arrowImages } = useMemo(
         () => getBucketConfig(dataSource),
         [dataSource]
@@ -27,8 +32,14 @@ const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
 
     return (
         <div className={styles.bucketDiv}>
-            <BucketTop tabIcons={tabIcons} activeIcon={activeIcon} onIconClick={handleIconClick} />
+            <BucketTop
+                variant={variant}
+                tabIcons={tabIcons}
+                activeIcon={activeIcon}
+                onIconClick={handleIconClick}
+            />
             <BucketBottom
+                variant={variant}
                 activeBucket={activeBucket}
                 resetKey={resetKey}
                 tabData={tabData}
