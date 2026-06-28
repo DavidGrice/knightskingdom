@@ -4,6 +4,19 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — SnapShot screenshot menu styling
+
+Restored original CRA grid layout for the screenshot gallery.
+
+| File | Change |
+|------|--------|
+| `SnapShotBody.module.css` | Original 3×3 grid (`gap: 90px`, 42×19 tracks, 109×80 items) |
+| `SnapShot.module.css` | Preview border `#fff9` to match original |
+
+**Backlog:** MyModels further polish re-added per user request.
+
+---
+
 ## 2026-06-28 — MyModels save menu styling
 
 Restored original CRA layout for the save game screen (had been incorrectly copied from SnapShot).
@@ -368,4 +381,4 @@ Restored original CRA layout for the save game screen (had been incorrectly copi
 - `npm run build` — **passes** (no ESLint warnings)
 - 14 App Router pages; main-game route ~107 kB First Load JS
 - **Phases 0–10 complete**
-- **User backlog:** screenshot menu, workshop menu
+- **User backlog:** MyModels further polish, workshop menu

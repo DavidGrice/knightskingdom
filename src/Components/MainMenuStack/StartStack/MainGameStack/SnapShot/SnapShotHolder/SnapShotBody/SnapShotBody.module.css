@@ -13,12 +13,14 @@
     flex-direction: row;
     justify-content: center;
     margin-top: 3%;
+    cursor: pointer;
 }
 
 .upArrow {
     width: 42px;
     height: 26px;
     z-index: 10;
+    background-repeat: no-repeat;
 }
 
 .upArrowGreen {
@@ -29,11 +31,11 @@
 
 .body {
     display: grid;
-    grid-template-columns: repeat(3, 109px);
-    grid-template-rows: repeat(3, 80px);
-    gap: 24px 36px;
-    width: 411px;
-    height: 312px;
+    grid-template-columns: repeat(3, 42px);
+    grid-template-rows: repeat(3, 19px);
+    gap: 90px;
+    width: 446px;
+    height: 350px;
     margin-top: 3%;
     margin-left: 13%;
 }
@@ -47,6 +49,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid #ccc;
     cursor: pointer;
 }
 
@@ -65,12 +68,14 @@
     width: 42px;
     height: 26px;
     z-index: 9;
+    cursor: pointer;
 }
 
 .downArrow {
     width: 42px;
     height: 26px;
     z-index: 10;
+    background-repeat: no-repeat;
 }
 
 .downArrowGreen {
@@ -100,6 +105,7 @@
     display: flex;
     flex-direction: row;
     margin-top: 3%;
+    cursor: pointer;
 }
 
 .helpComponentHolder {
@@ -125,8 +131,4 @@
     text-align: center;
     width: 70%;
     z-index: 1;
-}
-
-.iconComponentHolder {
-    cursor: pointer;
 }

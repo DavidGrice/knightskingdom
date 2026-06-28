@@ -21,7 +21,7 @@
     right: 8%;
     top: 15%;
     z-index: 2;
-    border: 2px solid rgba(255, 255, 255, 0.6);
+    border: 2px solid #fff9;
     border-radius: 4px;
     overflow: hidden;
     max-width: 200px;

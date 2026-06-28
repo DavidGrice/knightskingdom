@@ -232,7 +232,7 @@ Page shells stay ~300–400 B; heavy chunks load on demand.
 ## ESLint / Tech Debt (Non-Blocking)
 
 - Some unused vars in game components
-- MyModels / SnapShot CSS not final art pass
+- MyModels CSS further polish (backlog); WorkShop menu styling pending
 - Unique GLB assets per world 2–10
 
 ---
