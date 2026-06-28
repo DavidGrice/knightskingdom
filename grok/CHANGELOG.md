@@ -247,7 +247,86 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-28 — Phase 8: Engine Hardening
+
+### Phase 8a — Save/load hydrate (`a430cc2`)
+
+| File | Changes |
+|------|---------|
+| `context/sceneSchema.js` | `applySavedSceneToThree`, `applyCameraFromState`, `isPlayableModelEntry` |
+| `GameEngine/Loaders/ModelLoader.jsx` | `restore` case, `setupPlayableGltfScene` |
+| `context/GameContext.jsx` | `hydrationScene` separate from live `sceneState` |
+| `GameEngine/GameEngine.jsx` | Hydrate after assets ready |
+
+### Phase 8b — GameEngineCore (`5d6ace3`)
+
+| File | Changes |
+|------|---------|
+| `GameEngine/GameEngineCore.js` | **New** — single rAF loop, `mount()` / `dispose()`, `registerFrameCallback` |
+| `GameEngine/sceneDispose.js` | **New** — dispose utilities, preserved world roots |
+| `GameEngine/GameEngine.jsx` | Thin React wrapper delegating to core |
+| `Loaders/SkyBoxLoader.jsx` | Removes old `SkyBox` before re-add |
+| `Loaders/ClimateLoader.jsx` | Weather animation via frame callbacks (no orphan loops) |
+| `Loaders/MapLoader.jsx` | Tags map as `GameMap` |
+
+### Phase 8c — Engine cleanup (`6da68aa`)
+
+| File | Changes |
+|------|---------|
+| `ModelLoader.jsx` | Shared `configureGltfMeshNodes`; preload reuses playable path; ~200 lines dead code removed |
+| `GameEngine.jsx` | Canvas-bound pointer events; `getBoundingClientRect` raycasting |
+| `ClimateLoader.jsx` | `FOGGY` particle drift + `DynamicDrawUsage` (later replaced by real fog) |
+
+### Post-8 bug fixes
+
+| Commit | Fix |
+|--------|-----|
+| `12c7730` | Toolbar toggle-close for paint, drive, climate, music, bucket |
+| `2b94f13` | Music `AbortError` from interrupted `play()` promises |
+| `a6d05d7` | Snow particles — scene lookup each frame |
+| `d19e6b0`–`d84ea90` | Start page leave icon visibility / stacking |
+| `f15c48a` | Real atmospheric fog + low-lying mist layers (replaced particle fog) |
+
+---
+
+## 2026-06-28 — Phase 9: Features (`0117c9b`)
+
+### SnapShot real gallery
+
+| File | Changes |
+|------|---------|
+| `api/worldSave.js` | `getWorldSnapshots`, `mergeSnapshotLists`, `removeWorldSnapshot` |
+| `SnapShotBody.jsx` | Profile + session captures in paginated grid; print/delete |
+| `SnapShotHolder.jsx` | Passes profile/mapData callbacks |
+| `SnapShot.jsx` | Preview updates on selection |
+| `snapshot/page.jsx` | Wires `currentProfile`, `onRemoveSnapshot` |
+| `WorldSessionProvider.jsx` | `onRemoveSnapshot` callback |
+
+### Workshop mapData
+
+| File | Changes |
+|------|---------|
+| `WorkShop.jsx` | Receives `mapData`; world name label; save returns to game |
+| `WorkShop.module.css` | Workshop background + world label styles |
+| `workshop/page.jsx` | Passes `worldData` |
+
+### Dark weather modes
+
+| File | Changes |
+|------|---------|
+| `ClimateLoader.jsx` | `DARK_SUNNY`, `DARK_WINDY`, `DARK_DRIZZLY`, `DARK_THUNDERSTORM`; parameterized rain |
+
+### Worlds 2–10
+
+| File | Changes |
+|------|---------|
+| `localWorlds.js` | All 10 worlds unlocked; worlds 2–10 use `map1` placeholder assets |
+
+---
+
 ## Build Status
 
 - `npm run build` — **passes** (warnings only, pre-existing ESLint)
-- 14 App Router pages generated; main-game chunk ~280 kB
+- 14 App Router pages generated; main-game chunk ~284 kB
+- **Next:** Phase 10 — `userService`, code splitting, ESLint cleanup
+- **User backlog:** save game menu styling

@@ -3,14 +3,15 @@
 Phased cleanup and modernization plan for **`src/` game code only**.  
 RE work (`resources/`, `tools/`) is out of scope unless requested.
 
-**Branch:** `grok-dev`
+**Branch:** `grok-dev`  
+**Last updated:** 2026-06-28
 
 ---
 
 ## Guiding Principles
 
 1. **Stack-first organization** — keep `*Stack` folder structure; improve internals.
-2. **Incremental phases** — each phase leaves `npm start` working.
+2. **Incremental phases** — each phase leaves `npm run build` working.
 3. **Minimal → Moderate → Ambitious** — prefer small wins before large refactors.
 4. **Commit per phase** — commit on `grok-dev` after each completed phase.
 
@@ -20,24 +21,42 @@ RE work (`resources/`, `tools/`) is out of scope unless requested.
 
 ```mermaid
 flowchart LR
-    p0[Phase0_BranchSetup]
-    p1[Phase1_MinimalCleanup]
-    p2[Phase2_SharedComponents]
-    p3[Phase3_SharedGameUI]
+    p0[Phase0_Setup]
+    p1[Phase1_Cleanup]
+    p2[Phase2_SharedUI]
+    p3[Phase3_GameUI]
     p4[Phase4_GameState]
-    p5[Phase5_EngineR3F]
-    p0 --> p1 --> p2 --> p3 --> p4 --> p5
+    p5[Phase5_GridFix]
+    p6[Phase6_NextJS]
+    p7[Phase7_LegacyCleanup]
+    p8[Phase8_Engine]
+    p9[Phase9_Features]
+    p10[Phase10_Infra]
+    p0 --> p1 --> p2 --> p3 --> p4 --> p5 --> p6 --> p7 --> p8 --> p9 --> p10
 ```
 
-| Phase | Status | Depth | Focus |
-|-------|--------|-------|-------|
-| 0 | ✅ Done | Setup | `grok-dev` branch |
-| 1 | ✅ Done | Minimal | Bugs, dead code, data flow fixes |
-| 2 | ✅ Done | Moderate | Common layout, PaginatedGrid, world data |
-| 3 | ✅ Done | Moderate | Merge MainGame/WorkShop UI trees |
-| 4 | ✅ Done | Moderate | GameContext, serializable saves |
-| 5 | ⬜ Next | Ambitious | React Three Fiber migration |
-| 6 | ⬜ Planned | Infrastructure | API service, bundle splitting |
+| Phase | Status | Focus |
+|-------|--------|-------|
+| 0 | ✅ Done | `grok-dev` branch setup |
+| 1 | ✅ Done | Bugs, dead code, data flow fixes |
+| 2 | ✅ Done | Common layout, PaginatedGrid, world data |
+| 3 | ✅ Done | Merge MainGame/WorkShop UI trees |
+| 4 | ✅ Done | GameContext, serializable saves |
+| 5 | ✅ Done | `usePaginatedGrid` stability fix |
+| 6 | ✅ Done | Next.js 15 App Router migration |
+| 7 | ✅ Done | CRA / react-router legacy removal |
+| 8 | ✅ Done | Engine hardening (Core, hydrate, cleanup) |
+| 9 | ✅ Done | Snapshot gallery, workshop, dark weather, worlds |
+| 10 | ⬜ **Next** | `userService`, code splitting, ESLint |
+
+### Deferred / user-owned
+
+| Item | Status | Notes |
+|------|--------|-------|
+| Save game menu styling | ⬜ Pending | User will adjust MyModels / save UI CSS |
+| R3F migration | ⬜ Deferred | Plain Three.js retained; `GameEngineCore` instead |
+| Unique GLB per world 2–10 | ⬜ Deferred | All worlds use `map1` placeholder for now |
+| Shared worlds playability | ⬜ Deferred | No `filePath` on shared catalog yet |
 
 ---
 
@@ -53,96 +72,17 @@ flowchart LR
 
 **Goal:** Fix bugs and remove dead code without restructuring.
 
-### Cross-cutting
-| Task | Status |
-|------|--------|
-| Fix `App.js` `./Components/` import casing | ✅ |
-| `persistUserData` + localStorage | ✅ |
-| Delete `src/api/api.js` | ✅ |
-| Remove unused App imports | ✅ |
-
-### AuthenticationStack (priority)
-| Task | Status |
-|------|--------|
-| Profile object selection (not string) | ✅ |
-| Wire `updateUserData` on mutations | ✅ |
-| Break circular import | ✅ |
-| Stable IDs + default options | ✅ |
-| Empty name guard | ✅ |
-
-**Deferred options:**
-- B: Lift profile state to App
-- C: `useProfiles` hook
-- D: Split into ProfileList / ProfileCard
-
-### MainMenuStack
-| Task | Status |
-|------|--------|
-| Delete `PlayerSelect/` stub | ✅ |
-| Remove dead `/change-player`, `/quit` routes | ✅ |
-| Trim Credits comments | ✅ |
-
-**Deferred:** MenuScreenLayout, unified navigation, Options persistence
-
-### StartStack / World
-| Task | Status |
-|------|--------|
-| Clear selection on tab switch | ✅ |
-| Guard checkmark | ✅ |
-| Fix World 10 duplicate | ✅ |
-| `key={item.id}` | ✅ |
-
-**Deferred:** WorldBody JSX dedup (done in P2), world catalog extract (done in P2)
-
-### MainGameStack
-| Task | Status |
-|------|--------|
-| Workshop navigation passes worldData | ✅ |
-| Snapshot passes sceneSnapshot | ✅ |
-| SkyBox climate type fix | ✅ |
-| `Modes` enum usage | ✅ |
-| MyModels TODO / barrel removal | ✅ |
-
-**Deferred:** Merge UI trees, GameContext, R3F
+See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks complete.
 
 ---
 
 ## Phase 2 — Shared Components ✅
 
-**Goal:** Extract reusable primitives; reduce duplication without merging game/workshop yet.
+**Goal:** Extract reusable primitives; reduce duplication.
 
-### Common layer
-| Task | Status |
-|------|--------|
-| `BackCheckmarkButton` | ✅ |
-| `MenuScreenLayout` | ✅ |
-| `usePaginatedGrid` hook | ✅ |
-| `PaginatedGrid` component | ✅ |
-
-### Screen migrations
-| Screen | Status |
-|--------|--------|
-| Authentication | ✅ |
-| MainMenu | ✅ |
-| Options | ✅ |
-| Credits | ✅ |
-| Start | ✅ |
-
-### PaginatedGrid adopters
-| Component | Status |
-|-----------|--------|
-| WorldBody (deduped local/shared) | ✅ |
-| MainGame BucketBottom | ✅ |
-| WorkShop BucketBottom | ✅ |
-| SnapShotBody | ✅ |
-
-### World data
-| Task | Status |
-|------|--------|
-| `src/data/worlds/engineAssets.js` | ✅ |
-| `src/data/worlds/localWorlds.js` | ✅ |
-| `src/data/worlds/sharedWorlds.js` | ✅ |
-| Slim `WorldBodyResourceStack` (themes only) | ✅ |
+- `BackCheckmarkButton`, `MenuScreenLayout`, `usePaginatedGrid`, `PaginatedGrid`
+- World catalog → `src/data/worlds/`
+- Screen migrations: Authentication, MainMenu, Options, Credits, Start
 
 ---
 
@@ -150,41 +90,9 @@ flowchart LR
 
 **Goal:** ~40% file reduction by merging parallel MainGame/WorkShop trees.
 
-### Target structure
-```
-MainGameStack/
-  shared/
-    GameShell/           ← layout CSS (game vs workshop heights)
-    ComponentTop/        ← mode: 'game' | 'workshop'
-    ComponentBottom/
-    Bucket/
-      BucketBottom.jsx   ← dataSource: models | bricks
-    Palette/             ← variant + optional onColorSelect
-    BottomIconComponent/
-    TopIconComponent/
-    Ball/
-    toolbarConfig/       ← imports from existing *ResourceStack barrels
-```
-
-### Tasks
-- [x] Create `MainGameStack/shared/` folder
-- [x] `ComponentTop` with icon config per mode
-- [x] `ComponentBottom` with icon config per mode
-- [x] `Bucket` + `BucketBottom` with `dataSource` prop
-- [x] `Palette` unified (game 14 colors + hex, workshop 22 visual)
-- [x] Thin `MainGame.jsx` / `WorkShop.jsx` wrappers via `GameShell`
-- [x] Keep separate `*ResourceStack` barrels; config in `toolbarConfig/`
-- [x] Thin re-exports in old `MainGame/` and `WorkShop/` component paths
-
-### MainGame vs WorkShop differences to preserve
-
-| Feature | MainGame | WorkShop |
-|---------|----------|----------|
-| GameEngine | Yes | No |
-| ComponentTop tools | 6 + play + drive | 5 brick tools |
-| ComponentBottom | hammer, camera, climate, music | sweep only |
-| Bucket data | models/vehicles/scenery | brick categories |
-| Palette | 14 colors → GameEngine | 22 colors visual only |
+- `MainGameStack/shared/` — `GameShell`, `ComponentTop`, `ComponentBottom`, `Bucket`, `Palette`
+- `mode: 'game' | 'workshop'` config via `toolbarConfig/`
+- Thin `MainGame.jsx` / `WorkShop.jsx` wrappers
 
 ---
 
@@ -193,82 +101,130 @@ MainGameStack/
 **Goal:** Single source of truth; enable real save/load.
 
 - [x] `GameContext` + `useReducer` in `MainGameStack/context/`
-- [x] Replace 20+ `useState` in `MainGame.jsx` (now thin shell via `useGameContext`)
-- [x] Serializable scene schema in `context/sceneSchema.js`
-- [x] SnapShot: `renderer.domElement.toDataURL()` → profile `savedWorlds[id].snapshots[]`
-- [x] `MyModels` minimal list UI (saved worlds from profile)
-- [x] Wire `handleSave` → `saveWorldProgress()` → localStorage via App
-- [x] Options → `selectedProfile.options` persistence (controlled `OptionsMenuPlaceholder`)
+- [x] Serializable scene schema (`sceneSchema.js`)
+- [x] Canvas capture → `savedWorlds[id].snapshots[]`
+- [x] `MyModels` saved-world list UI
+- [x] `handleSave` → `saveWorldProgress()` → localStorage
+- [x] Options → `selectedProfile.options` persistence
 
 ---
 
-## Phase 5 — Engine Modernization ⬜
+## Phase 5 — Grid Stability ✅
 
-**Goal:** Maintainable 3D layer.
+**Goal:** Fix pagination infinite-loop bug.
 
-| Current | Target |
-|---------|--------|
-| Raw THREE in useEffect | `@react-three/fiber` + `drei` |
-| Imperative loaders | `useGLTF`, React scene tree |
-| Window event listeners | R3F pointer events |
-| Multiple rAF loops | Single render loop |
-
-### Suggested structure
-```
-GameEngine/
-  GameCanvas.jsx
-  hooks/useGameMode.js
-  hooks/useScenePersistence.js
-  systems/ClimateSystem.jsx
-  systems/MapScene.jsx
-  systems/ModelInstance.jsx
-```
-
-### Open engine bugs to fix during migration
-- `modelsLoaded` ref blocks reload on mapData change
-- SkyBox re-added on climate change without removing old mesh
-- ModelLoader `Vector3.copy` bug in add case
-- ClimateLoader windy `setCurrentSystem` not called
+- [x] `usePaginatedGrid` — `useMemo` derived state instead of sync `useEffect`
+- [x] `BucketBottom` — stable `arrows` object for hook deps
 
 ---
 
-## Phase 6 — Infrastructure ⬜
+## Phase 6 — Next.js Migration ✅
 
-- [ ] `src/services/userService.js`
-- [ ] Optional `server/` + CRA proxy for dev API
-- [ ] Code splitting / lazy routes for 3.2 MB bundle
-- [ ] Single `Router` in App (`/authentication/*`, `/main-menu/*`)
+**Goal:** CRA → Next.js 15 App Router.
+
+- [x] `app/` pages for all routes (`src/lib/routes.js` constants)
+- [x] `UserDataProvider` replaces `App.js` class state
+- [x] `WorldSessionProvider` for in-game session + navigation
+- [x] Auth gate in `app/(game)/layout.jsx`
+
+---
+
+## Phase 7 — Legacy Cleanup ✅
+
+**Goal:** Remove CRA / react-router shells.
+
+- [x] Deleted `App.js`, `index.js`, CRA test files, `*Stack.jsx` routers
+- [x] Removed `react-router-dom` dependency
+- [x] Added `npm run clean`, `npm run dev:clean`
+
+---
+
+## Phase 8 — Engine Hardening ✅
+
+**Goal:** Maintainable Three.js lifecycle without R3F migration.
+
+### Phase 8a — Save/load hydrate ✅
+- [x] `applySavedSceneToThree`, `applyCameraFromState` in `sceneSchema.js`
+- [x] `ModelLoader` `restore` case + `setupPlayableGltfScene`
+- [x] `hydrationScene` in `GameContext`; hydrate after assets ready in `GameEngine`
+
+### Phase 8b — GameEngineCore ✅
+- [x] `GameEngineCore.js` — single rAF loop, `registerFrameCallback`, `mount()` / `dispose()`
+- [x] `sceneDispose.js` — dispose utilities, preserved world roots
+- [x] `GameEngine.jsx` — thin React wrapper
+- [x] `SkyBoxLoader` — removes old skybox before re-add
+- [x] `ClimateLoader` — no orphan rAF loops
+- [x] `MapLoader` — tags map as `GameMap`
+
+### Phase 8c — Engine cleanup ✅
+- [x] `ModelLoader` — shared `configureGltfMeshNodes`, removed ~200 lines dead code
+- [x] Canvas-bound pointer events + `getBoundingClientRect` raycasting
+- [x] Atmospheric fog + low-lying mist layers (replaced particle fog)
+
+### Bug fixes (post-8b)
+- [x] Toolbar toggle-close for paint, drive, climate, music, bucket
+- [x] Music `AbortError` from interrupted `play()` promises
+- [x] Snow particle animation (scene lookup each frame)
+- [x] Start page leave icon stacking / sizing
+
+---
+
+## Phase 9 — Features ✅
+
+**Goal:** Wire remaining game features to real data.
+
+### SnapShot real gallery ✅
+- [x] `getWorldSnapshots`, `mergeSnapshotLists`, `removeWorldSnapshot` in `worldSave.js`
+- [x] `SnapShotBody` — profile + session captures in paginated grid
+- [x] Print / delete actions; preview on selection
+- [x] `onRemoveSnapshot` in `WorldSessionProvider`
+
+### Workshop mapData ✅
+- [x] `WorkShop` receives `mapData` from `WorldSessionProvider`
+- [x] World name label; save/leave returns to same world session
+- [x] Workshop background from `WorkShopResourceStack`
+
+### Dark weather modes ✅
+- [x] `DARK_SUNNY`, `DARK_WINDY`, `DARK_DRIZZLY`, `DARK_THUNDERSTORM` in `ClimateLoader`
+- [x] `DARK_FOGGY` — dark atmospheric + mist layers
+- [x] Parameterized rain (drizzle vs thunderstorm intensity)
+
+### Worlds 2–10 ✅
+- [x] All local worlds unlocked and playable
+- [x] Placeholder: `map1` GLB + grass skybox until unique assets added
+
+---
+
+## Phase 10 — Infrastructure ⬜ **NEXT**
+
+- [ ] `src/services/userService.js` — unify JSON / localStorage / API
+- [ ] Code splitting / lazy routes (main-game chunk ~284 kB today)
+- [ ] ESLint cleanup (`react-hooks/exhaustive-deps`, unused vars)
+- [ ] Remove dead CSS in screen `.module.css` files
 - [ ] TypeScript migration (optional)
-- [ ] Remove dead CSS in screen `.module.css` files (post-MenuScreenLayout)
 
 ---
 
-## Per-Stack Reference (Original Analysis)
+## Per-Stack Reference
 
 ### AuthenticationStack
-- Profile CRUD, max 5 profiles, rank images (page/knight/baronet)
-- **Fixed:** persistence, selection types
-- **Future:** `useProfiles` hook, lift state to App
+- Profile CRUD, max 5 profiles, rank images
+- **Fixed:** persistence, selection types, stable IDs
+- **Future:** `useProfiles` hook
 
-### MainMenuStack
-- Thin router: MainMenu, Options, Credits, StartStack
-- **Fixed:** dead routes, PlayerSelect
-- **Future:** Options persistence, unified nav callbacks
-
-### StartStack / World
-- World picker → `mapData` → MainGameStack
-- Only World 1 has full engine assets
-- **Fixed:** selection bugs, data extract
-- **Future:** worlds 2–10 assets, shared world playability
+### MainMenuStack / StartStack
+- World picker → `mapData` → MainGameStack via `WorldSessionProvider`
+- **Fixed:** selection bugs, worlds 2–10 playable (placeholder map)
+- **Future:** unique map GLBs, shared world engine assets
 
 ### MainGameStack
-- Largest stack; MainGame vs WorkShop duplication
-- **Fixed:** data pipes, SkyBox, Modes
-- **Future:** Phase 3 merge, Phase 4 state, Phase 5 R3F
+- **Fixed:** shared UI, GameContext, engine core, snapshots, workshop context
+- **Future:** save menu styling (user), brick workshop 3D (out of scope)
 
-### Common
-- **Added:** BackCheckmarkButton, MenuScreenLayout, PaginatedGrid
-- **Future:** consolidate checkmark PNG copies across ResourceStacks
+### GameEngine
+- Plain Three.js via `GameEngineCore` (no R3F)
+- Single render loop; climate animation via frame callbacks
+- **Future:** optional R3F migration if ever needed
 
 ---
 
@@ -277,4 +233,3 @@ GameEngine/
 - `resources/` — RE research, SDK, sample LCA files
 - `tools/lca2obj/` — Python LCA parser
 - Root `workshop_slim_*.obj` sample outputs
-- `package.json` major upgrades (CRA eject, etc.)
