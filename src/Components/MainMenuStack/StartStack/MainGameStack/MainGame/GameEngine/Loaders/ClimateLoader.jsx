@@ -97,7 +97,9 @@ const createFogSystem = (scene) => {
     );
   }
 
-  fogGeometry.setAttribute('position', new THREE.Float32BufferAttribute(fogVertices, 3));
+  const fogPositions = new THREE.Float32BufferAttribute(fogVertices, 3);
+  fogPositions.setUsage(THREE.DynamicDrawUsage);
+  fogGeometry.setAttribute('position', fogPositions);
   const fogMaterial = new THREE.PointsMaterial({
     color: 0xaaaaaa,
     size: 0.5,
@@ -163,6 +165,16 @@ const updateWeatherSystem = (system) => {
       positions[i] += Math.random() * 0.1 - 0.05;
       positions[i + 1] += Math.random() * 0.1 - 0.05;
       positions[i + 2] += Math.random() * 0.1 - 0.05;
+    }
+    positionAttribute.needsUpdate = true;
+    return;
+  }
+
+  if (system.name === 'FOGGY') {
+    for (let i = 0; i < positions.length; i += 3) {
+      positions[i] += Math.random() * 0.04 - 0.02;
+      positions[i + 1] += Math.random() * 0.02 - 0.01;
+      positions[i + 2] += Math.random() * 0.04 - 0.02;
     }
     positionAttribute.needsUpdate = true;
   }

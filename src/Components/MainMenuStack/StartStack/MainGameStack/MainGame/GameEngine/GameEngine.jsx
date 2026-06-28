@@ -149,14 +149,20 @@ const GameEngine = forwardRef(({
       }
     };
 
-    const onMouseClick = (event) => {
-      if (event.target !== canvasRef.current) {
-        return;
-      }
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return undefined;
+    }
 
+    const setMouseFromEvent = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    };
+
+    const onMouseClick = (event) => {
       event.preventDefault();
-      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      setMouseFromEvent(event);
       raycaster.current.setFromCamera(mouse.current, camera);
       const intersects = raycaster.current.intersectObjects(scene.children, true);
       if (intersects.length > 0 && mode === Modes.ADDING) {
@@ -177,13 +183,8 @@ const GameEngine = forwardRef(({
     };
 
     const onMouseDown = (event) => {
-      if (event.target !== canvasRef.current) {
-        return;
-      }
-
       event.preventDefault();
-      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      setMouseFromEvent(event);
       raycaster.current.setFromCamera(mouse.current, camera);
       const intersects = raycaster.current.intersectObjects(scene.children, true);
       if (intersects.length === 0) {
@@ -254,13 +255,12 @@ const GameEngine = forwardRef(({
     };
 
     const onMouseMove = (event) => {
-      if (event.target !== canvasRef.current || mode !== Modes.MOVING || !isDragging.current) {
+      if (mode !== Modes.MOVING || !isDragging.current) {
         return;
       }
 
       event.preventDefault();
-      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      setMouseFromEvent(event);
       raycaster.current.setFromCamera(mouse.current, camera);
       const intersects = raycaster.current.intersectObjects(scene.children, true);
       if (intersects.length > 0 && selectedObject.current) {
@@ -284,10 +284,6 @@ const GameEngine = forwardRef(({
     };
 
     const onMouseUp = (event) => {
-      if (event.target !== canvasRef.current) {
-        return;
-      }
-
       event.preventDefault();
       if (selectedObject.current?.isMovable) {
         isDragging.current = false;
@@ -298,10 +294,10 @@ const GameEngine = forwardRef(({
     };
 
     const removeAllEventListeners = () => {
-      window.removeEventListener('mousedown', onMouseDown);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
-      window.removeEventListener('click', onMouseClick);
+      canvas.removeEventListener('mousedown', onMouseDown);
+      canvas.removeEventListener('mousemove', onMouseMove);
+      canvas.removeEventListener('mouseup', onMouseUp);
+      canvas.removeEventListener('click', onMouseClick);
     };
 
     removeAllEventListeners();
@@ -313,21 +309,21 @@ const GameEngine = forwardRef(({
 
     switch (mode) {
       case Modes.ADDING:
-        window.addEventListener('click', onMouseClick, false);
+        canvas.addEventListener('click', onMouseClick, false);
         break;
       case Modes.MOVING:
-        window.addEventListener('mousedown', onMouseDown);
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', onMouseUp);
+        canvas.addEventListener('mousedown', onMouseDown);
+        canvas.addEventListener('mousemove', onMouseMove);
+        canvas.addEventListener('mouseup', onMouseUp);
         break;
       case Modes.ROTATING:
       case Modes.PAINTING:
       case Modes.DELETING:
       case Modes.ACTION:
-        window.addEventListener('mousedown', onMouseDown);
+        canvas.addEventListener('mousedown', onMouseDown);
         break;
       case Modes.DRIVING:
-        window.addEventListener('mousedown', onMouseDown);
+        canvas.addEventListener('mousedown', onMouseDown);
         break;
       default:
         break;
