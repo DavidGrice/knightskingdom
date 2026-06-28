@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './WorkShop.module.css';
+import { workshopStageToCssVars, WORKSHOP_STAGE_METRICS } from '../../../../Common';
 import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
 
 const WorkShop = ({ navigateToMainGame, mapData }) => {
@@ -25,11 +26,12 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
     setIsPaletteOpen(!isPaletteOpen);
   };
 
+  const stageStyle = useMemo(() => workshopStageToCssVars(), []);
+  const { worldTitle } = WORKSHOP_STAGE_METRICS;
+  const showWorldTitle = worldTitle.visible && mapData?.name;
+
   return (
     <div className={styles.workshopRoot}>
-      {mapData?.name && (
-        <div className={styles.worldLabel}>{mapData.name}</div>
-      )}
       <GameShell
         mode="workshop"
         top={(
@@ -50,7 +52,15 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
           />
         )}
       >
-        <div className={styles.stage}>
+        <div className={styles.stage} style={stageStyle}>
+          {showWorldTitle && (
+            <div
+              className={styles.worldLabel}
+              style={{ left: `${worldTitle.x}px`, top: `${worldTitle.y}px` }}
+            >
+              {mapData.name}
+            </div>
+          )}
           {showBucket && <Bucket dataSource="bricks" />}
           {isPaletteOpen && <Palette variant="workshop" />}
         </div>

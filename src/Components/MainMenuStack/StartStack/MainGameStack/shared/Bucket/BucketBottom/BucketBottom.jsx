@@ -1,11 +1,16 @@
 import React, { useMemo } from 'react';
 import gameStyles from './BucketBottom.module.css';
-import workshopStyles from './BucketBottom.workshop.module.css';
 import selectedImage from '../../../MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/wh_selection.png';
-import usePaginatedGrid from '../../../../../../Common/usePaginatedGrid';
+import {
+    PaginatedGrid,
+    createHolderGridStyles,
+    usePaginatedGrid,
+} from '../../../../../../Common';
+
+const workshopGridStyles = createHolderGridStyles('WORKSHOP_BUCKET');
 
 const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrowImages, onItemSelect }) => {
-    const styles = variant === 'workshop' ? workshopStyles : gameStyles;
+    const styles = gameStyles;
     const items = useMemo(
         () => tabData[activeBucket] || tabData[0] || [],
         [tabData, activeBucket]
@@ -45,6 +50,23 @@ const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrow
         setSelectedItem(item);
         onItemSelect?.(item);
     };
+
+    if (variant === 'workshop') {
+        return (
+            <PaginatedGrid
+                styles={workshopGridStyles}
+                displayedItems={displayedItems}
+                upArrowImage={upArrowImage}
+                downArrowImage={downArrowImage}
+                selectedItem={selectedItem}
+                selectionOverlay={selectedImage}
+                onUpArrowClick={handleUpArrowClick}
+                onDownArrowClick={handleDownArrowClick}
+                onItemClick={handleItemClick}
+                getItemKey={(item, index) => item.name ?? index}
+            />
+        );
+    }
 
     return (
         <div className={styles.bucketBottom}>

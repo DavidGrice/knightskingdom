@@ -32,8 +32,8 @@
     left: var(--hgl-grid-left);
     top: var(--hgl-grid-top);
     display: grid;
-    grid-template-columns: repeat(3, var(--hgl-cell-w));
-    grid-template-rows: repeat(3, var(--hgl-cell-h));
+    grid-template-columns: repeat(var(--hgl-grid-cols, 3), var(--hgl-cell-w));
+    grid-template-rows: repeat(var(--hgl-grid-rows, 3), var(--hgl-cell-h));
     column-gap: var(--hgl-gap-x);
     row-gap: var(--hgl-gap-y);
     margin: 0;

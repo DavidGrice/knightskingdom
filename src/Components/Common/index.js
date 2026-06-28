@@ -12,5 +12,11 @@ export {
   HOLDER_VARIANTS,
   getWorldHolderVariant,
 } from './HolderGridLayout';
+export {
+  WORKSHOP_CANVAS,
+  WORKSHOP_STAGE_METRICS,
+  rectToStyle,
+  workshopStageToCssVars,
+} from './WorkshopStageLayout';
 export { default as LoadingComponent } from './LoadingComponent/LoadingComponent';
 export { default as LoadingModal } from './LoadingModal/LoadingModal';

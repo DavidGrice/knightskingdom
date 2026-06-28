@@ -1,10 +1,10 @@
 .paletteDiv {
     position: absolute;
-    height: 196px;
-    width: 196px;
+    left: var(--wsl-palette-x, 370px);
+    top: var(--wsl-palette-y, 60px);
+    width: var(--wsl-palette-w, 196px);
+    height: var(--wsl-palette-h, 196px);
     background-image: url('../../WorkShop/ComponentTop/Palette/PaletteResourceStack/color_mixer_board.png');
-    right: 29.2%;
-    top: 10%;
     z-index: 4;
     display: flex;
     justify-content: center;

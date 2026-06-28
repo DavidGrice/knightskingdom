@@ -61,6 +61,24 @@ export const HOLDER_VARIANTS = {
     ...CELL,
     ...GRID_GAP,
   },
+  /** Workshop brick bucket — 238×556 drop_down.png, 2×3 grid */
+  WORKSHOP_BUCKET: {
+    className: 'variantWorkshopBucket',
+    bodyWidth: 238,
+    bodyHeight: 556,
+    gridColumns: 2,
+    gridRows: 3,
+    gridLeft: 24,
+    gridTop: 303,
+    upArrow: { x: 119, y: 248 },
+    downArrow: { x: 119, y: 518 },
+    help: null,
+    footer: null,
+    width: 95,
+    height: 67,
+    x: 24,
+    y: 28,
+  },
 };
 
 export const getWorldHolderVariant = (isLocalWorlds) => (

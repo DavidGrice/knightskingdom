@@ -1,13 +1,11 @@
 .bucketDiv {
     position: absolute;
     z-index: 2;
-    width: 238px;
-    height: 556px;
+    left: var(--wsl-bucket-x, 35px);
+    top: var(--wsl-bucket-y, 103px);
+    width: var(--wsl-bucket-w, 238px);
+    height: var(--wsl-bucket-h, 556px);
     background-image: url('../../WorkShop/ComponentTop/Bucket/BucketResourceStack/drop_down.png');
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    left: 29.15%;
-    top: 6%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }

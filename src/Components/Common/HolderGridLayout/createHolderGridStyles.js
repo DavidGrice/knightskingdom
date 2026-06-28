@@ -6,22 +6,31 @@ const resolveVariant = (variantOrKey) => (
 );
 
 /** @param {import('./holderGridMetrics').HolderVariant} variant */
-export const variantToLayoutVars = (variant) => ({
-  '--hgl-body-w': `${variant.bodyWidth}px`,
-  '--hgl-body-h': `${variant.bodyHeight}px`,
-  '--hgl-grid-left': `${variant.gridLeft}px`,
-  '--hgl-grid-top': `${variant.gridTop}px`,
-  '--hgl-cell-w': `${variant.width}px`,
-  '--hgl-cell-h': `${variant.height}px`,
-  '--hgl-gap-x': `${variant.x}px`,
-  '--hgl-gap-y': `${variant.y}px`,
-  '--hgl-up-x': `${variant.upArrow.x}px`,
-  '--hgl-up-y': `${variant.upArrow.y}px`,
-  '--hgl-down-x': `${variant.downArrow.x}px`,
-  '--hgl-down-y': `${variant.downArrow.y}px`,
-  '--hgl-help-x': `${variant.help.x}px`,
-  '--hgl-help-y': `${variant.help.y}px`,
-});
+export const variantToLayoutVars = (variant) => {
+  const vars = {
+    '--hgl-body-w': `${variant.bodyWidth}px`,
+    '--hgl-body-h': `${variant.bodyHeight}px`,
+    '--hgl-grid-left': `${variant.gridLeft}px`,
+    '--hgl-grid-top': `${variant.gridTop}px`,
+    '--hgl-cell-w': `${variant.width}px`,
+    '--hgl-cell-h': `${variant.height}px`,
+    '--hgl-gap-x': `${variant.x}px`,
+    '--hgl-gap-y': `${variant.y}px`,
+    '--hgl-grid-cols': `${variant.gridColumns ?? 3}`,
+    '--hgl-grid-rows': `${variant.gridRows ?? 3}`,
+    '--hgl-up-x': `${variant.upArrow.x}px`,
+    '--hgl-up-y': `${variant.upArrow.y}px`,
+    '--hgl-down-x': `${variant.downArrow.x}px`,
+    '--hgl-down-y': `${variant.downArrow.y}px`,
+  };
+
+  if (variant.help) {
+    vars['--hgl-help-x'] = `${variant.help.x}px`;
+    vars['--hgl-help-y'] = `${variant.help.y}px`;
+  }
+
+  return vars;
+};
 
 /**
  * Build PaginatedGrid style map from a holder layout variant.
