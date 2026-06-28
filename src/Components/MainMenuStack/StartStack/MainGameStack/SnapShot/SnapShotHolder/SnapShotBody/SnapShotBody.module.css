@@ -55,9 +55,15 @@
     cursor: pointer;
 }
 
-.itemSelected {
-    outline: 3px solid #00e8ff;
-    outline-offset: 0;
+.itemSelected::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    border: 3px solid #00e8ff;
+    box-sizing: border-box;
+    background: transparent;
 }
 
 .itemThumbnail {
