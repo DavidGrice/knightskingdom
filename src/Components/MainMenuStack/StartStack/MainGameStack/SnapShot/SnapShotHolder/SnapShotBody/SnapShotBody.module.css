@@ -29,11 +29,11 @@
 
 .body {
     display: grid;
-    grid-template-columns: repeat(3, 42px); /* Creates 3 equal columns */
-    grid-template-rows: repeat(3, 19px); /* Creates 3 equal columns */
-    gap: 90px; /* Adjust the gap between items as needed */
-    width: 446px;
-    height: 350px;
+    grid-template-columns: repeat(3, 109px);
+    grid-template-rows: repeat(3, 80px);
+    gap: 24px 36px;
+    width: 411px;
+    height: 312px;
     margin-top: 3%;
     margin-left: 13%;
 }
@@ -47,7 +47,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #ccc; /* Example border */
+    cursor: pointer;
 }
 
 .highlightedImage {
@@ -113,4 +113,20 @@
     bottom: 13%;
     right: 1%;
     z-index: 10;
+}
+
+.emptyMessage {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 13px;
+    text-align: center;
+    width: 70%;
+    z-index: 1;
+}
+
+.iconComponentHolder {
+    cursor: pointer;
 }

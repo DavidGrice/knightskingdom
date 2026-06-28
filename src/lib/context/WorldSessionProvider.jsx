@@ -14,6 +14,7 @@ import {
   saveWorldProgress,
   appendWorldSnapshot,
   deleteSavedWorld,
+  removeWorldSnapshot,
 } from '@/api/worldSave';
 
 const WorldSessionContext = createContext(null);
@@ -120,6 +121,33 @@ export const WorldSessionProvider = ({ children }) => {
     [userData, updateUserData, currentProfile]
   );
 
+  const onRemoveSnapshot = useCallback(
+    (worldId, snapshotId) => {
+      if (!userData || !updateUserData || !currentProfile?.id) {
+        return;
+      }
+      const updated = removeWorldSnapshot(
+        userData,
+        currentProfile.id,
+        worldId,
+        snapshotId,
+      );
+      updateUserData(updated);
+      setWorldData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const snapshots = (prev.snapshots || []).filter(
+          (entry) => String(entry.id) !== String(snapshotId),
+        );
+        const sceneSnapshot =
+          prev.sceneSnapshot?.id === snapshotId ? snapshots[0] || null : prev.sceneSnapshot;
+        return { ...prev, snapshots, sceneSnapshot };
+      });
+    },
+    [userData, updateUserData, currentProfile]
+  );
+
   const value = useMemo(
     () => ({
       worldData,
@@ -133,6 +161,7 @@ export const WorldSessionProvider = ({ children }) => {
       onSaveWorldProgress,
       onAppendSnapshot,
       onDeleteSavedWorld,
+      onRemoveSnapshot,
     }),
     [
       worldData,
@@ -146,6 +175,7 @@ export const WorldSessionProvider = ({ children }) => {
       onSaveWorldProgress,
       onAppendSnapshot,
       onDeleteSavedWorld,
+      onRemoveSnapshot,
     ]
   );
 

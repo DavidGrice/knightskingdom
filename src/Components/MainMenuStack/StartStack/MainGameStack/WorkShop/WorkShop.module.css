@@ -1,3 +1,26 @@
+.workshopRoot {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background-image: url('./WorkShopResourceStack/background.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.worldLabel {
+    position: absolute;
+    top: 108px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    color: #f0e6c8;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+}
+
 .mainDiv {
     display: flex;
     flex-direction: column;

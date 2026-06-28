@@ -77,8 +77,13 @@ const updateAmbientLight = (scene, color, intensity) => {
   ambientLight.intensity = intensity;
 };
 
-const createSunnySystem = (scene) => {
+const createSunnySystem = (scene, { dark = false } = {}) => {
   clearSceneFog(scene);
+  if (dark) {
+    scene.fog = new THREE.FogExp2(0x2a2520, 0.008);
+    updateAmbientLight(scene, 0x3a3028, 10);
+    return null;
+  }
   updateAmbientLight(scene, 0x404040, 35);
   return null;
 };
@@ -112,13 +117,23 @@ const createSnowParticleSystem = (scene) => {
   return snow;
 };
 
-const createRainParticleSystem = (scene) => {
+const createRainParticleSystem = (scene, {
+  particleCount = 2000,
+  ambientColor = 0x000080,
+  ambientIntensity = 50,
+  rainColor = 0x63e5ff,
+  rainSpeed = 10,
+  atmosphericFog = null,
+} = {}) => {
   clearSceneFog(scene);
-  updateAmbientLight(scene, 0x000080, 50);
+  if (atmosphericFog) {
+    scene.fog = atmosphericFog;
+  }
+  updateAmbientLight(scene, ambientColor, ambientIntensity);
   const rainGeometry = new THREE.BufferGeometry();
   const rainVertices = [];
 
-  for (let i = 0; i < 2000; i += 1) {
+  for (let i = 0; i < particleCount; i += 1) {
     rainVertices.push(
       Math.random() * 1000 - 500,
       Math.random() * 500,
@@ -130,11 +145,12 @@ const createRainParticleSystem = (scene) => {
   rainPositions.setUsage(THREE.DynamicDrawUsage);
   rainGeometry.setAttribute('position', rainPositions);
   const rainMaterial = new THREE.PointsMaterial({
-    color: 0x63e5ff,
+    color: rainColor,
     size: 0.5,
   });
   const rain = new THREE.Points(rainGeometry, rainMaterial);
   rain.name = 'RAIN';
+  rain.userData.rainSpeed = rainSpeed;
   scene.add(rain);
   return rain;
 };
@@ -192,9 +208,14 @@ const createFogSystem = (scene, { dark = false } = {}) => {
   return fogGroup;
 };
 
-const createWindySystem = (scene) => {
+const createWindySystem = (scene, { dark = false } = {}) => {
   clearSceneFog(scene);
-  updateAmbientLight(scene, 0xffffff, 0.2);
+  if (dark) {
+    scene.fog = new THREE.FogExp2(0x3a3a50, 0.01);
+    updateAmbientLight(scene, 0x505070, 8);
+  } else {
+    updateAmbientLight(scene, 0xffffff, 0.2);
+  }
   const particleCount = 1000;
   const particles = new Float32Array(particleCount * 3);
 
@@ -236,7 +257,7 @@ const updateWeatherSystem = (system) => {
   const positions = positionAttribute.array;
 
   if (system.name === 'SNOW' || system.name === 'RAIN') {
-    const speedFactor = system.name === 'SNOW' ? 2 : 10;
+    const speedFactor = system.name === 'SNOW' ? 2 : (system.userData?.rainSpeed ?? 10);
     for (let i = 0; i < positions.length; i += 3) {
       if (system.name === 'SNOW') {
         positions[i] += Math.random() * 0.4 - 0.2;
@@ -285,11 +306,34 @@ const ClimateLoader = (
     case 'SUNNY':
       createSunnySystem(scene);
       break;
+    case 'DARK_SUNNY':
+      createSunnySystem(scene, { dark: true });
+      break;
     case 'SNOW':
       system = createSnowParticleSystem(scene);
       break;
     case 'RAIN':
       system = createRainParticleSystem(scene);
+      break;
+    case 'DARK_DRIZZLY':
+      system = createRainParticleSystem(scene, {
+        particleCount: 1200,
+        ambientColor: 0x1a1a40,
+        ambientIntensity: 22,
+        rainColor: 0x4a6a9a,
+        rainSpeed: 4,
+        atmosphericFog: new THREE.FogExp2(0x1a1a30, 0.012),
+      });
+      break;
+    case 'DARK_THUNDERSTORM':
+      system = createRainParticleSystem(scene, {
+        particleCount: 3500,
+        ambientColor: 0x0a0a20,
+        ambientIntensity: 18,
+        rainColor: 0x3a5a8a,
+        rainSpeed: 18,
+        atmosphericFog: new THREE.FogExp2(0x0a0a18, 0.018),
+      });
       break;
     case 'FOGGY':
       system = createFogSystem(scene);
@@ -299,6 +343,9 @@ const ClimateLoader = (
       break;
     case 'WINDY':
       system = createWindySystem(scene);
+      break;
+    case 'DARK_WINDY':
+      system = createWindySystem(scene, { dark: true });
       break;
     default:
       break;

@@ -65,6 +65,60 @@ export const updateProfileOptions = (userData, profileId, optionsPatch) =>
 export const getSavedWorld = (profile, worldId) =>
   profile?.savedWorlds?.[worldKey(worldId)] || null;
 
+export const getWorldSnapshots = (profile, worldId) =>
+  getSavedWorld(profile, worldId)?.snapshots || [];
+
+export const mergeSnapshotLists = (...lists) => {
+  const seen = new Set();
+  const merged = [];
+
+  lists.flat().forEach((entry) => {
+    if (!entry) {
+      return;
+    }
+    const key = entry.id ?? entry.createdAt ?? entry.imageDataUrl;
+    if (!key || seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    merged.push(entry);
+  });
+
+  return merged.sort(
+    (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime(),
+  );
+};
+
+export const removeWorldSnapshot = (userData, profileId, worldId, snapshotId) =>
+  userData.map((profile) => {
+    if (profile.id !== profileId) {
+      return profile;
+    }
+
+    const key = worldKey(worldId);
+    const withSlots = ensureProfileSaveSlots(profile);
+    const existing = withSlots.savedWorlds[key];
+    if (!existing) {
+      return withSlots;
+    }
+
+    const snapshots = (existing.snapshots || []).filter(
+      (entry) => String(entry.id) !== String(snapshotId),
+    );
+
+    return {
+      ...withSlots,
+      savedWorlds: {
+        ...withSlots.savedWorlds,
+        [key]: {
+          ...existing,
+          snapshots,
+          updatedAt: new Date().toISOString(),
+        },
+      },
+    };
+  });
+
 export const getSavedWorldsList = (profile) => {
   const saved = profile?.savedWorlds || {};
   return Object.entries(saved).map(([key, data]) => ({

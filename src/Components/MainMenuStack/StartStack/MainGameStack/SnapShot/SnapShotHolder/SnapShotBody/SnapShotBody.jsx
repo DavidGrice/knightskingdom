@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from './SnapShotBody.module.css';
-import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../../Common/index';
+import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../../Common';
+import { mergeSnapshotLists } from '@/api/worldSave';
 import { snapshotData } from './SnapShotBodyResourceStack/index';
 import selectedImage from './SnapShotBodyResourceStack/selected.png';
 
@@ -15,8 +16,21 @@ const paginatedStyles = {
   downArrow: styles.downArrow,
 };
 
-const SnapShotBody = () => {
-  const items = snapshotData.body;
+const SnapShotBody = ({
+  selectedProfile,
+  mapData,
+  onRemoveSnapshot,
+  onSelectSnapshot,
+}) => {
+  const snapshotItems = useMemo(() => {
+    const profileSnapshots = selectedProfile?.savedWorlds?.[String(mapData?.id)]?.snapshots || [];
+    const merged = mergeSnapshotLists(profileSnapshots, mapData?.snapshots || []);
+
+    return merged.map((entry) => ({
+      ...entry,
+      image: entry.imageDataUrl || null,
+    }));
+  }, [selectedProfile, mapData?.id, mapData?.snapshots]);
 
   const {
     displayedItems,
@@ -27,7 +41,7 @@ const SnapShotBody = () => {
     handleDownArrowClick,
     handleUpArrowClick,
   } = usePaginatedGrid({
-    items,
+    items: snapshotItems,
     itemsPerPage: 9,
     arrows: {
       upSolid: snapshotData.upArrowGold,
@@ -39,11 +53,37 @@ const SnapShotBody = () => {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
+    onSelectSnapshot?.(item);
+  };
+
+  const handleDelete = () => {
+    if (!selectedItem || !mapData?.id || !onRemoveSnapshot) {
+      return;
+    }
+    onRemoveSnapshot(mapData.id, selectedItem.id);
+    setSelectedItem(null);
+    onSelectSnapshot?.(null);
+  };
+
+  const handlePrint = () => {
+    if (!selectedItem?.imageDataUrl) {
+      return;
+    }
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      return;
+    }
+    printWindow.document.write(
+      `<html><head><title>Snapshot</title></head><body style="margin:0">`
+      + `<img src="${selectedItem.imageDataUrl}" style="width:100%" onload="window.print();window.close()" />`
+      + `</body></html>`,
+    );
+    printWindow.document.close();
   };
 
   const footer = (
     <div className={styles.lowerContent}>
-      <div className={styles.iconComponentHolder} onClick={() => selectedItem && console.log(selectedItem.image)}>
+      <div className={styles.iconComponentHolder} onClick={handlePrint}>
         <IconComponent
           type="print"
           placeholderImage={snapshotData.placeHolderPrint}
@@ -57,7 +97,7 @@ const SnapShotBody = () => {
           frames={snapshotData.destroy}
         />
       </div>
-      <div className={styles.iconComponentHolder}>
+      <div className={styles.iconComponentHolder} onClick={handleDelete}>
         <IconComponent
           type="delete"
           placeholderImage={snapshotData.placeHolderDelete}
@@ -76,6 +116,17 @@ const SnapShotBody = () => {
     </div>
   );
 
+  if (snapshotItems.length === 0) {
+    return (
+      <div className={styles.snapshotBody}>
+        <div className={styles.emptyMessage}>
+          No snapshots yet. Use the camera icon in-game to capture your world.
+        </div>
+        {helpCorner}
+      </div>
+    );
+  }
+
   return (
     <PaginatedGrid
       styles={paginatedStyles}
@@ -87,7 +138,7 @@ const SnapShotBody = () => {
       onUpArrowClick={handleUpArrowClick}
       onDownArrowClick={handleDownArrowClick}
       onItemClick={handleItemClick}
-      getItemKey={(item, index) => item.id ?? index}
+      getItemKey={(item) => item.id}
       footer={footer}
       helpCorner={helpCorner}
     />
