@@ -117,19 +117,43 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
-## Build Status
+## 2026-06-28 — Phase 3: Shared Game UI
 
-- `npm run build` — **passes** (warnings only, pre-existing ESLint)
-- Bundle ~3.18 MB gzipped main chunk (unchanged order of magnitude)
+### New: `MainGameStack/shared/`
+
+| Area | Files | Purpose |
+|------|-------|---------|
+| `toolbarConfig/` | `topToolbar.js`, `bottomToolbar.js`, `bucketData.js`, `paletteData.js` | Mode-specific icon/data config; imports existing `*ResourceStack` barrels |
+| `GameShell/` | `GameShell.jsx`, `GameShell.module.css` | Shared top/bottom layout shell (`mode` sets heights) |
+| `TopIconComponent/` | merged `TopIconComponent` + `ComponentTopIcon` | Unified top toolbar icon |
+| `BottomIconComponent/` | shared bottom icon | Climate, hammer, sweep, zoom, etc. |
+| `Ball/` | mode-specific CSS | Zoom controls + optional target (game only) |
+| `ComponentTop/` | `ComponentTop.jsx` + game/workshop CSS | 6 game tools + play vs 5 brick tools |
+| `ComponentBottom/` | `ComponentBottom.jsx` + game/workshop CSS | 4 game buttons vs sweep-only workshop |
+| `Bucket/` | `Bucket`, `BucketTop`, `BucketBottom`, `BucketIcon` | `dataSource`: `models` \| `bricks` |
+| `Palette/` | `Palette.jsx` + game/workshop CSS | `variant` + optional `onColorSelect` (hex) |
+
+### Updated screens
+
+| File | Changes |
+|------|---------|
+| `MainGame/MainGame.jsx` | Uses `GameShell` + shared `ComponentTop`, `ComponentBottom`, `Bucket`, `Palette` |
+| `WorkShop/WorkShop.jsx` | Same shared imports; no `MainGame.module.css` / `WorkShop.module.css` layout duplication |
+
+### Thin re-exports (backward compat)
+
+- `MainGame/ComponentTop/ComponentTop.jsx` → `shared` with `mode="game"`
+- `WorkShop/ComponentTop/ComponentTop.jsx` → `shared` with `mode="workshop"`
+- Same pattern for `ComponentBottom`, `Bucket`, `Palette`
+
+### Preserved separately
+
+- `*ResourceStack/` asset folders (unchanged)
+- `MainGame/GameEngine/`, `Drive/`, `Climate/`, `Music/` (game-only)
 
 ---
 
-## Not Yet Committed
+## Build Status
 
-User may want to commit Phase 1 + Phase 2 on `grok-dev`:
-
-```powershell
-git add -A
-git status
-git commit -m "Grok Phase 1-2: cleanup, shared components, world data extract"
-```
+- `npm run build` — **passes** (warnings only, pre-existing ESLint)
+- Bundle ~3.19 MB gzipped main chunk (unchanged order of magnitude)

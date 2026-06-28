@@ -34,8 +34,8 @@ flowchart LR
 | 0 | ✅ Done | Setup | `grok-dev` branch |
 | 1 | ✅ Done | Minimal | Bugs, dead code, data flow fixes |
 | 2 | ✅ Done | Moderate | Common layout, PaginatedGrid, world data |
-| 3 | ⬜ Next | Moderate | Merge MainGame/WorkShop UI trees |
-| 4 | ⬜ Planned | Moderate | GameContext, serializable saves |
+| 3 | ✅ Done | Moderate | Merge MainGame/WorkShop UI trees |
+| 4 | ⬜ Next | Moderate | GameContext, serializable saves |
 | 5 | ⬜ Planned | Ambitious | React Three Fiber migration |
 | 6 | ⬜ Planned | Infrastructure | API service, bundle splitting |
 
@@ -146,7 +146,7 @@ flowchart LR
 
 ---
 
-## Phase 3 — Shared Game UI ⬜ NEXT
+## Phase 3 — Shared Game UI ✅
 
 **Goal:** ~40% file reduction by merging parallel MainGame/WorkShop trees.
 
@@ -154,24 +154,27 @@ flowchart LR
 ```
 MainGameStack/
   shared/
-    GameShell/           ← layout CSS from MainGame.module.css
+    GameShell/           ← layout CSS (game vs workshop heights)
     ComponentTop/        ← mode: 'game' | 'workshop'
     ComponentBottom/
     Bucket/
       BucketBottom.jsx   ← dataSource: models | bricks
-    Palette/             ← optional onColorSelect callback
+    Palette/             ← variant + optional onColorSelect
     BottomIconComponent/
     TopIconComponent/
+    Ball/
+    toolbarConfig/       ← imports from existing *ResourceStack barrels
 ```
 
 ### Tasks
-- [ ] Create `MainGameStack/shared/` folder
-- [ ] `ComponentTop` with icon config per mode
-- [ ] `ComponentBottom` with icon config per mode
-- [ ] `Bucket` + `BucketBottom` with `dataSource` prop
-- [ ] `Palette` unified (resolve gold/yellow naming)
-- [ ] Thin `MainGame.jsx` / `WorkShop.jsx` wrappers
-- [ ] Keep separate `*ResourceStack` barrels OR unified config map
+- [x] Create `MainGameStack/shared/` folder
+- [x] `ComponentTop` with icon config per mode
+- [x] `ComponentBottom` with icon config per mode
+- [x] `Bucket` + `BucketBottom` with `dataSource` prop
+- [x] `Palette` unified (game 14 colors + hex, workshop 22 visual)
+- [x] Thin `MainGame.jsx` / `WorkShop.jsx` wrappers via `GameShell`
+- [x] Keep separate `*ResourceStack` barrels; config in `toolbarConfig/`
+- [x] Thin re-exports in old `MainGame/` and `WorkShop/` component paths
 
 ### MainGame vs WorkShop differences to preserve
 

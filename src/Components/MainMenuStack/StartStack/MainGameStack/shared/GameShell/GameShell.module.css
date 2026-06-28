@@ -1,0 +1,38 @@
+.mainDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.topComponent {
+    position: absolute;
+    top: 0;
+    width: 800px;
+    z-index: 3;
+}
+
+.topComponent[data-mode="game"] {
+    height: 98px;
+}
+
+.topComponent[data-mode="workshop"] {
+    height: 103px;
+}
+
+.bottomComponent {
+    position: absolute;
+    bottom: 0;
+    width: 800px;
+    z-index: 3;
+}
+
+.bottomComponent[data-mode="game"] {
+    height: 120px;
+}
+
+.bottomComponent[data-mode="workshop"] {
+    height: 126px;
+}

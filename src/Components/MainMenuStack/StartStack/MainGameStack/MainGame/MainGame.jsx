@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import styles from './MainGame.module.css';
-import { GameEngine, ComponentTop, ComponentBottom } from './index';
-import { Bucket } from './ComponentTop/Bucket/index';
-import { Palette } from './ComponentTop/Palette/index';
+import { GameEngine } from './index';
 import { Drive } from './ComponentTop/Drive/index';
 import { Climate } from './ComponentBottom/Climate/index';
 import { Music } from './ComponentBottom/Music/index';
 import { musicTracks } from './MainGameResourceStack/index';
 import { Modes } from './GameEngine/GameEngineResourceStack/index';
+import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
 
 const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot, mapData }) => {
 
@@ -120,7 +118,6 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
     if (showBucket) {
       setShowBucket(false);
     }
-    // setCameraNeedsReset(false)
     setSelectedModelMode('NONE');
   }
 
@@ -267,37 +264,48 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
   };
 
   return (
-    <div className={styles.mainDiv}>
-      <div className={styles.topComponent}>
-        <ComponentTop 
+    <GameShell
+      mode="game"
+      top={
+        <ComponentTop
+          mode="game"
           navigateToStartMenu={navigateToStartMenu}
           handleSave={handleSave}
           handleBucket={handleBucket}
           handleMove={handleMove}
           handleRotate={handleRotate}
           handlePalette={handlePalette}
-          handleColor={handleColor}
           handleDelete={handleDelete}
           handleAction={handleAction}
           handleDrive={handleDrive}
           handlePaintAndDrive={handlePaintAndDrive}
           handlePlay={handlePlay}
           resetModes={resetModes}
-          setMode={setMode}
           setCameraNeedsReset={setCameraNeedsReset}
           handleMusicChange={handleMusicChange}
         />
-      </div>
+      }
+      bottom={
+        <ComponentBottom
+          mode="game"
+          handleClimate={handleClimate}
+          handleMusic={handleMusic}
+          activeIcon={activeIcon}
+          setActiveIcon={setActiveIcon}
+          navigateToWorkshop={handleNavigateToWorkshop}
+          handleNavigateToSnapShot={handleNavigateToSnapShot}
+          handleMusicChange={handleMusicChange}
+        />
+      }
+    >
       {showBucket && (
         <div>
-          <Bucket
-          handleLoadModel={handleLoadModel}
-          />
+          <Bucket dataSource="models" handleLoadModel={handleLoadModel} />
         </div>
       )}
       {isPaletteOpen && (
         <div>
-          <Palette handleColor={handleColor} />
+          <Palette variant="game" onColorSelect={handleColor} />
         </div>
       )}
       {isFollowing && (
@@ -346,18 +354,7 @@ const MainGame = ({ navigateToStartMenu, navigateToWorkshop, navigateToSnapshot,
         isClimateOpen={isClimateOpen}
         setIntermediateMapData={setIntermediateMapData}
       />
-      <div className={styles.bottomComponent}>
-        <ComponentBottom
-          handleClimate={handleClimate}
-          handleMusic={handleMusic}
-          activeIcon={activeIcon}
-          setActiveIcon={setActiveIcon}
-          navigateToWorkshop={handleNavigateToWorkshop}
-          handleNavigateToSnapShot={handleNavigateToSnapShot}
-          handleMusicChange={handleMusicChange}
-        />
-      </div>
-    </div>
+    </GameShell>
   );
 }
 
