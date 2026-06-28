@@ -54,7 +54,9 @@ flowchart LR
 | Item | Status | Notes |
 |------|--------|-------|
 | Lego Clock loading modal | ✅ Done | `GameLoadingProvider` + portal modal across `(game)` routes |
-| Save game menu styling | ⬜ Pending | User will adjust MyModels / save UI CSS |
+| Screenshot menu (SnapShot) | ⬜ Pending | Gallery UI/layout polish |
+| Workshop menu (WorkShop) | ⬜ Pending | Toolbar/panel UI/layout polish |
+| Save game menu styling | ⬜ Pending | MyModels / save UI CSS |
 | R3F migration | ⬜ Deferred | Plain Three.js retained; `GameEngineCore` instead |
 | Unique GLB per world 2–10 | ⬜ Deferred | All worlds use `map1` placeholder for now |
 | Shared worlds playability | ⬜ Deferred | No `filePath` on shared catalog yet |
