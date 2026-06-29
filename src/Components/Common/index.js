@@ -17,6 +17,7 @@ export {
   WORKSHOP_STAGE_METRICS,
   rectToStyle,
   workshopStageToCssVars,
+  useWorkshopCanvasScale,
 } from './WorkshopStageLayout';
 export { default as LoadingComponent } from './LoadingComponent/LoadingComponent';
 export { default as LoadingModal } from './LoadingModal/LoadingModal';

@@ -4,3 +4,4 @@ export {
   rectToStyle,
   workshopStageToCssVars,
 } from './workshopStageMetrics';
+export { default as useWorkshopCanvasScale } from './useWorkshopCanvasScale';

@@ -1,22 +1,57 @@
+/* Letterbox viewport; fixed 800×600 game canvas scales inside */
 .workshopRoot {
-    position: relative;
-    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100vw;
-    background-image: url('./WorkShopResourceStack/background.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
 }
 
-/* 800px-wide anchor so bucket/palette % positions match the background art */
+.workshopScaler {
+    width: 800px;
+    height: 600px;
+    flex-shrink: 0;
+    transform: scale(var(--wsl-scale, 1));
+    transform-origin: center center;
+}
+
+.canvas {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background-image: url('./WorkShopResourceStack/background.png');
+    background-size: 800px 600px;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.topComponent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 103px;
+    z-index: 3;
+}
+
+.bottomComponent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 800px;
+    height: 126px;
+    z-index: 3;
+}
+
 .stage {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 0;
+    inset: 0;
     width: 800px;
-    height: 100%;
+    height: 600px;
     pointer-events: none;
+    z-index: 2;
 }
 
 .stage > * {

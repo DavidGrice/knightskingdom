@@ -16,8 +16,8 @@ export const WORKSHOP_STAGE_METRICS = {
   canvas: WORKSHOP_CANVAS,
   topBar: { height: 103 },
   bottomBar: { height: 126 },
-  /** Nudge both toolbars right (+) or left (-) vs centered 800px stage (overlay art vs background) */
-  barOffsetX: 32,
+  /** Legacy offset before 800×600 canvas scaler; keep 0 inside fixed canvas */
+  barOffsetX: 0,
   /** Toolbar slots on overlay_top (783×103 stretched to 800px) — left grid panel region */
   toolbar: {
     bucketButton: { x: 35, y: 5, width: 45, height: 63 },
