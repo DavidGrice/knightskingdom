@@ -25,8 +25,8 @@ export const WORKSHOP_STAGE_METRICS = {
     middleTools: { x: 366, y: 19, width: 310, height: 65 },
     leaveButton: { x: 691, y: 5, width: 91, height: 72 },
   },
-  /** Brick bucket holder — anchored to background red panel (not toolbar button) */
-  bucketPanel: { x: 16, y: 103, width: 238, height: 556 },
+  /** Brick bucket holder — legacy top 6% (~36px), sits under grey top bar overlay */
+  bucketPanel: { x: 16, y: 36, width: 238, height: 556 },
   /** color_mixer_board 196×196; legacy right 29.2% → x=370 on 800px canvas */
   palettePanel: { x: 370, y: 60, width: 196, height: 196 },
   /** Optional world name plaque on the background art — hidden until positioned */
