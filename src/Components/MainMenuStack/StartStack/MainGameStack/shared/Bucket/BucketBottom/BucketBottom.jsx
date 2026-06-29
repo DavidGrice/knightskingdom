@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import gameStyles from './BucketBottom.module.css';
 import workshopBucketStyles from '../Bucket.workshop.module.css';
+import workshopBrickStyles from './BucketBottom.workshop.module.css';
 import selectedImage from '../../../MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/wh_selection.png';
 import {
     PaginatedGrid,
@@ -8,7 +9,10 @@ import {
     usePaginatedGrid,
 } from '../../../../../../Common';
 
-const workshopGridStyles = createHolderGridStyles('WORKSHOP_BUCKET');
+const workshopGridStyles = createHolderGridStyles('WORKSHOP_BUCKET', {
+    item: workshopBrickStyles.brickItem,
+    highlightedImage: workshopBrickStyles.brickHighlight,
+});
 
 const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrowImages, onItemSelect }) => {
     const styles = gameStyles;

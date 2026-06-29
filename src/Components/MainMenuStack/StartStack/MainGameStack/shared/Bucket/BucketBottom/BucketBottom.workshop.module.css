@@ -1,73 +1,27 @@
-.bucketBottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 65%;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.upArrowHolder {
-    height: 26px;
-    width: 100%;
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 15%;
-}
-
-.upArrow {
-    width: 42px;
-    height: 26px;
-    z-index: 10;
-    background-repeat: no-repeat;
-}
-
-.body {
-    display: grid;
-    grid-template-columns: repeat(2, 55px);
-    grid-template-rows: repeat(3, 40px);
-    gap: 40px;
-    width: 100%;
-    height: 80%;
-    margin-top: 30%;
-    margin-left: 10%;
-}
-
-.item {
-    position: relative;
-    width: 95px;
-    height: 67px;
-    background-position: center;
+/* Workshop brick previews — smaller thumbs with padding inside recess slots */
+.brickItem {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.highlightedImage {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
-}
-
-.downArrowHolder {
-    position: absolute;
-    justify-content: center;
-    bottom: 0%;
-    width: 42px;
-    height: 26px;
-    z-index: 9;
-}
-
-.downArrow {
-    width: 42px;
-    height: 26px;
-    z-index: 10;
+    background-size: 76% 76%;
+    background-position: center;
     background-repeat: no-repeat;
+}
+
+.brickHighlight {
     position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: none;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.brickHighlight img {
+    width: 76%;
+    height: 76%;
+    object-fit: contain;
 }
