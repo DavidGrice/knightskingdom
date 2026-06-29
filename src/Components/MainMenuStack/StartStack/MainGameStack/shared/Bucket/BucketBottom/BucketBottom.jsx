@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import gameStyles from './BucketBottom.module.css';
+import workshopBucketStyles from '../Bucket.workshop.module.css';
 import selectedImage from '../../../MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/wh_selection.png';
 import {
     PaginatedGrid,
@@ -55,6 +56,7 @@ const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrow
         return (
             <PaginatedGrid
                 styles={workshopGridStyles}
+                rootClassName={workshopBucketStyles.bucketGrid}
                 displayedItems={displayedItems}
                 upArrowImage={upArrowImage}
                 downArrowImage={downArrowImage}

@@ -3,10 +3,18 @@
     z-index: 4;
     overflow: visible;
     left: var(--wsl-bucket-x, 16px);
-    top: var(--wsl-bucket-y, 36px);
+    top: var(--wsl-bucket-y, 0px);
     width: var(--wsl-bucket-w, 238px);
     height: var(--wsl-bucket-h, 556px);
     background-image: url('../../WorkShop/ComponentTop/Bucket/BucketResourceStack/drop_down.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
+}
+
+.bucketGrid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
