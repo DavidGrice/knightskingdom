@@ -1,9 +1,9 @@
 .bucketDiv {
     position: absolute;
-    z-index: 2;
+    z-index: 4;
     overflow: visible;
     left: var(--wsl-bucket-x, 16px);
-    top: var(--wsl-bucket-y, 103px);
+    top: var(--wsl-bucket-y, 36px);
     width: var(--wsl-bucket-w, 238px);
     height: var(--wsl-bucket-h, 556px);
     background-image: url('../../WorkShop/ComponentTop/Bucket/BucketResourceStack/drop_down.png');

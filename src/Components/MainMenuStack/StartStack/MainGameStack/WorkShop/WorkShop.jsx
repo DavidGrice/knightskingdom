@@ -41,14 +41,11 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
     <div className={styles.workshopRoot}>
       <div ref={scalerRef} className={styles.workshopScaler} style={stageStyle}>
         <div className={styles.canvas}>
-          <div className={styles.topComponent}>
-            <ComponentTop
+          <div className={styles.bottomComponent}>
+            <ComponentBottom
               mode="workshop"
-              handleBucket={handleBucket}
-              handlePaint={handlePaint}
-              handlePalette={handlePalette}
-              handleSave={handleSave}
-              navigateToMainGame={() => navigateToMainGame(mapData)}
+              activeIcon={activeIcon}
+              setActiveIcon={setActiveIcon}
             />
           </div>
           <div className={styles.stage}>
@@ -63,11 +60,14 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
             {showBucket && <Bucket dataSource="bricks" />}
             {isPaletteOpen && <Palette variant="workshop" />}
           </div>
-          <div className={styles.bottomComponent}>
-            <ComponentBottom
+          <div className={styles.topComponent}>
+            <ComponentTop
               mode="workshop"
-              activeIcon={activeIcon}
-              setActiveIcon={setActiveIcon}
+              handleBucket={handleBucket}
+              handlePaint={handlePaint}
+              handlePalette={handlePalette}
+              handleSave={handleSave}
+              navigateToMainGame={() => navigateToMainGame(mapData)}
             />
           </div>
         </div>

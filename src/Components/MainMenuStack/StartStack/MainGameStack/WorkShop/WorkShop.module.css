@@ -21,19 +21,8 @@
     position: relative;
     width: 800px;
     height: 600px;
-    background-image: url('./WorkShopResourceStack/background.png');
-    background-size: 800px 600px;
-    background-repeat: no-repeat;
+    background: #000;
     overflow: hidden;
-}
-
-.topComponent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 800px;
-    height: 103px;
-    z-index: 3;
 }
 
 .bottomComponent {
@@ -51,7 +40,16 @@
     width: 800px;
     height: 600px;
     pointer-events: none;
-    z-index: 2;
+    z-index: 4;
+}
+
+.topComponent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 103px;
+    z-index: 5;
 }
 
 .stage > * {
