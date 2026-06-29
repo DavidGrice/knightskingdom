@@ -1,8 +1,5 @@
-/* Letterbox viewport; fixed 800×600 game canvas scales inside */
+/* Top/bottom bars via GameShell (unscaled); 800×600 stage scales inside */
 .workshopRoot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100vw;
     height: 100vh;
     background: #000;
@@ -13,6 +10,8 @@
     width: 800px;
     height: 600px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
     transform: scale(var(--wsl-scale, 1));
     transform-origin: center center;
 }
@@ -25,15 +24,6 @@
     overflow: visible;
 }
 
-.bottomComponent {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 800px;
-    height: 126px;
-    z-index: 3;
-}
-
 .stage {
     position: absolute;
     inset: 0;
@@ -43,7 +33,6 @@
     z-index: 4;
 }
 
-/* Bucket dropdown above bottom bar and top toolbar overlay */
 .bucketLayer {
     position: absolute;
     inset: 0;
@@ -55,20 +44,6 @@
 }
 
 .bucketLayer > * {
-    pointer-events: auto;
-}
-
-.topComponent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 800px;
-    height: 103px;
-    z-index: 7;
-    pointer-events: none;
-}
-
-.topComponent > * {
     pointer-events: auto;
 }
 

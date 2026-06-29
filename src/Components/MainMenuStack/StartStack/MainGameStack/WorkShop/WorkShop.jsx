@@ -5,7 +5,7 @@ import {
   WORKSHOP_STAGE_METRICS,
   useWorkshopCanvasScale,
 } from '../../../../Common';
-import { ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
+import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
 
 const WorkShop = ({ navigateToMainGame, mapData }) => {
   const scalerRef = useRef(null);
@@ -38,44 +38,48 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
   const showWorldTitle = worldTitle.visible && mapData?.name;
 
   return (
-    <div className={styles.workshopRoot}>
-      <div ref={scalerRef} className={styles.workshopScaler} style={stageStyle}>
-        <div className={styles.canvas}>
-          <div className={styles.bottomComponent}>
-            <ComponentBottom
-              mode="workshop"
-              activeIcon={activeIcon}
-              setActiveIcon={setActiveIcon}
-            />
-          </div>
-          <div className={styles.stage}>
-            {showWorldTitle && (
-              <div
-                className={styles.worldLabel}
-                style={{ left: `${worldTitle.x}px`, top: `${worldTitle.y}px` }}
-              >
-                {mapData.name}
+    <div className={styles.workshopRoot} style={stageStyle}>
+      <GameShell
+        mode="workshop"
+        top={(
+          <ComponentTop
+            mode="workshop"
+            handleBucket={handleBucket}
+            handlePaint={handlePaint}
+            handlePalette={handlePalette}
+            handleSave={handleSave}
+            navigateToMainGame={() => navigateToMainGame(mapData)}
+          />
+        )}
+        bottom={(
+          <ComponentBottom
+            mode="workshop"
+            activeIcon={activeIcon}
+            setActiveIcon={setActiveIcon}
+          />
+        )}
+      >
+        <div ref={scalerRef} className={styles.workshopScaler}>
+          <div className={styles.canvas}>
+            <div className={styles.stage}>
+              {showWorldTitle && (
+                <div
+                  className={styles.worldLabel}
+                  style={{ left: `${worldTitle.x}px`, top: `${worldTitle.y}px` }}
+                >
+                  {mapData.name}
+                </div>
+              )}
+              {isPaletteOpen && <Palette variant="workshop" />}
+            </div>
+            {showBucket && (
+              <div className={styles.bucketLayer}>
+                <Bucket dataSource="bricks" />
               </div>
             )}
-            {isPaletteOpen && <Palette variant="workshop" />}
-          </div>
-          {showBucket && (
-            <div className={styles.bucketLayer}>
-              <Bucket dataSource="bricks" />
-            </div>
-          )}
-          <div className={styles.topComponent}>
-            <ComponentTop
-              mode="workshop"
-              handleBucket={handleBucket}
-              handlePaint={handlePaint}
-              handlePalette={handlePalette}
-              handleSave={handleSave}
-              navigateToMainGame={() => navigateToMainGame(mapData)}
-            />
           </div>
         </div>
-      </div>
+      </GameShell>
     </div>
   );
 };
