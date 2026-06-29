@@ -7,6 +7,51 @@ import { serializeSceneFromThree } from '../../context/sceneSchema';
 import { GameEngineCore } from './GameEngineCore';
 import { disposeObject3D } from './sceneDispose';
 
+const DRAG_SMOOTHING = 0.28;
+const _lookTarget = new THREE.Vector3();
+const _planeHit = new THREE.Vector3();
+const _dragPlane = new THREE.Plane();
+
+const findModelRoot = (object, scene) => {
+  let node = object;
+  while (node?.parent && node.parent !== scene) {
+    node = node.parent;
+  }
+  return node;
+};
+
+const findDriveRoot = (object) => {
+  let node = object;
+  while (node) {
+    if (node.userData?.frontCameraHelper && node.userData?.backCameraHelper) {
+      return node;
+    }
+    node = node.parent;
+  }
+  return null;
+};
+
+const applyDriveCameraView = (core, driveRoot, cameraType) => {
+  const { camera, controls } = core;
+  const frontHelper = driveRoot.userData.frontCameraHelper;
+  const backHelper = driveRoot.userData.backCameraHelper;
+  const headBack = driveRoot.getObjectByName('head_back');
+  if (!frontHelper || !backHelper || !headBack) {
+    return;
+  }
+
+  const viewHelper = cameraType === 'front' ? frontHelper : backHelper;
+  viewHelper.getWorldPosition(camera.position);
+  headBack.getWorldPosition(_lookTarget);
+  camera.lookAt(_lookTarget);
+  camera.updateMatrixWorld();
+
+  if (controls) {
+    controls.target.copy(_lookTarget);
+    controls.update();
+  }
+};
+
 const GameEngine = forwardRef(({
   mapData, hydrationScene, color, mode, activeCamera, isFollowing, addModel,
   selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating,
@@ -23,6 +68,12 @@ const GameEngine = forwardRef(({
   const raycaster = useRef(new THREE.Raycaster());
   const originalCameraPosition = useRef(null);
   const originalCameraQuaternion = useRef(null);
+  const driveTargetRef = useRef(null);
+  const dragRootRef = useRef(null);
+  const dragPlaneYRef = useRef(0);
+  const dragPosRef = useRef({ x: 0, z: 0 });
+  const unregisterDragSmoothRef = useRef(null);
+  const unregisterDriveFollowRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
     captureFrame: () => coreRef.current?.captureFrame() ?? null,
@@ -115,7 +166,7 @@ const GameEngine = forwardRef(({
       return undefined;
     }
 
-    const { scene, camera, frontCamera, backCamera } = core;
+    const { scene, camera } = core;
 
     const updateSceneState = () => {
       if (!onSceneChange) {
@@ -144,7 +195,30 @@ const GameEngine = forwardRef(({
       if (originalCameraPosition.current && originalCameraQuaternion.current) {
         camera.position.copy(originalCameraPosition.current);
         camera.quaternion.copy(originalCameraQuaternion.current);
+        if (core.controls) {
+          core.controls.target.set(0, 0, 0);
+          core.controls.update();
+        }
       }
+      driveTargetRef.current = null;
+    };
+
+    const stopDragSmooth = () => {
+      unregisterDragSmoothRef.current?.();
+      unregisterDragSmoothRef.current = null;
+    };
+
+    const startDragSmooth = () => {
+      stopDragSmooth();
+      unregisterDragSmoothRef.current = core.registerFrameCallback(() => {
+        if (!isDragging.current || !dragRootRef.current) {
+          return;
+        }
+        const root = dragRootRef.current;
+        const target = dragPosRef.current;
+        root.position.x += (target.x - root.position.x) * DRAG_SMOOTHING;
+        root.position.z += (target.z - root.position.z) * DRAG_SMOOTHING;
+      });
     };
 
     const hideWireframe = (object) => {
@@ -203,25 +277,20 @@ const GameEngine = forwardRef(({
         return;
       }
 
-      const intersectedObject = intersects[0].object.parent;
-      const setCameraViews = (driveObject, cameraType) => {
-        const frontCameraHelper = driveObject.parent.userData.frontCameraHelper;
-        const backCameraHelper = driveObject.parent.userData.backCameraHelper;
-        if (cameraType === 'back') {
-          camera.position.copy(frontCameraHelper.getWorldPosition(new THREE.Vector3()));
-          backCamera.position.copy(backCameraHelper.getWorldPosition(new THREE.Vector3()));
-        } else {
-          camera.position.copy(backCameraHelper.getWorldPosition(new THREE.Vector3()));
-          backCamera.position.copy(frontCameraHelper.getWorldPosition(new THREE.Vector3()));
-        }
-      };
+      const hitObject = intersects[0].object;
+      const intersectedObject = hitObject.parent;
 
       switch (mode) {
         case Modes.MOVING:
-          if (intersectedObject.isMovable) {
-            selectedObject.current = intersectedObject;
+          if (hitObject.isMovable || intersectedObject?.isMovable) {
+            selectedObject.current = hitObject.isMovable ? hitObject : intersectedObject;
+            const root = findModelRoot(selectedObject.current, scene);
+            dragRootRef.current = root;
+            dragPlaneYRef.current = root.position.y;
+            dragPosRef.current = { x: root.position.x, z: root.position.z };
             isDragging.current = true;
-            intersectedObject.visible = true;
+            selectedObject.current.visible = true;
+            startDragSmooth();
           }
           break;
         case Modes.ROTATING:
@@ -253,12 +322,15 @@ const GameEngine = forwardRef(({
             disposeObject3D(intersectedObject.parent);
           }
           break;
-        case Modes.DRIVING:
-          if (intersectedObject.isDriveable) {
+        case Modes.DRIVING: {
+          const driveRoot = findDriveRoot(hitObject);
+          if (driveRoot) {
             saveOriginalCamera();
-            setCameraViews(intersectedObject, activeCamera);
+            driveTargetRef.current = driveRoot;
+            applyDriveCameraView(core, driveRoot, activeCamera ?? 'back');
           }
           break;
+        }
         default:
           break;
       }
@@ -267,31 +339,17 @@ const GameEngine = forwardRef(({
     };
 
     const onMouseMove = (event) => {
-      if (mode !== Modes.MOVING || !isDragging.current) {
+      if (mode !== Modes.MOVING || !isDragging.current || !dragRootRef.current) {
         return;
       }
 
       event.preventDefault();
       setMouseFromEvent(event);
       raycaster.current.setFromCamera(mouse.current, camera);
-      const intersects = raycaster.current.intersectObjects(scene.children, true);
-      if (intersects.length > 0 && selectedObject.current) {
-        const intersectionPoint = intersects[0].point;
-        selectedObject.current.parent.position.set(
-          intersectionPoint.x,
-          selectedObject.current.position.y,
-          intersectionPoint.z,
-        );
-        selectedObject.current.parent.userData.frontCameraHelper.position.set(
-          intersectionPoint.x,
-          selectedObject.current.position.y,
-          intersectionPoint.z,
-        );
-        selectedObject.current.parent.userData.backCameraHelper.position.set(
-          intersectionPoint.x,
-          selectedObject.current.position.y,
-          intersectionPoint.z,
-        );
+      _dragPlane.set(new THREE.Vector3(0, 1, 0), -dragPlaneYRef.current);
+      if (raycaster.current.ray.intersectPlane(_dragPlane, _planeHit)) {
+        dragPosRef.current.x = _planeHit.x;
+        dragPosRef.current.z = _planeHit.z;
       }
     };
 
@@ -299,6 +357,8 @@ const GameEngine = forwardRef(({
       event.preventDefault();
       if (selectedObject.current?.isMovable) {
         isDragging.current = false;
+        stopDragSmooth();
+        dragRootRef.current = null;
         selectedObject.current.visible = false;
         selectedObject.current = null;
         updateSceneState();
@@ -317,6 +377,26 @@ const GameEngine = forwardRef(({
     if (cameraNeedsReset) {
       restoreOriginalCamera();
       clearCameraReset();
+    }
+
+    unregisterDriveFollowRef.current?.();
+    if (mode === Modes.DRIVING && isFollowing) {
+      if (!driveTargetRef.current) {
+        scene.traverse((child) => {
+          if (!driveTargetRef.current && child.userData?.frontCameraHelper) {
+            driveTargetRef.current = child;
+          }
+        });
+      }
+      if (driveTargetRef.current) {
+        applyDriveCameraView(core, driveTargetRef.current, activeCamera ?? 'back');
+        unregisterDriveFollowRef.current = core.registerFrameCallback(() => {
+          if (!driveTargetRef.current) {
+            return;
+          }
+          applyDriveCameraView(core, driveTargetRef.current, activeCamera ?? 'back');
+        });
+      }
     }
 
     switch (mode) {
@@ -343,12 +423,16 @@ const GameEngine = forwardRef(({
 
     return () => {
       removeAllEventListeners();
+      stopDragSmooth();
+      unregisterDriveFollowRef.current?.();
+      unregisterDriveFollowRef.current = null;
     };
   }, [
     mode,
     color,
     addModel,
     activeCamera,
+    isFollowing,
     cameraNeedsReset,
     selectedClimateMode,
     setCameraNeedsReset,
