@@ -18,21 +18,10 @@ const SelectedModels = {
     },
 };
 
-function updateCameraHelpers(model, frontCameraHelper, backCameraHelper) {
-    frontCameraHelper.quaternion.copy(model.quaternion);
-    frontCameraHelper.position.copy(model.position);
-    frontCameraHelper.position.set(
-        frontCameraHelper.position.x,
-        frontCameraHelper.position.y,
-        frontCameraHelper.position.z + 2,
-    );
-    backCameraHelper.quaternion.copy(model.quaternion);
-    backCameraHelper.position.copy(model.position);
-    backCameraHelper.position.set(
-        backCameraHelper.position.x,
-        backCameraHelper.position.y,
-        backCameraHelper.position.z - 2,
-    );
+/** Local offsets on head_back — used for drive-target detection; view math uses head rig directly */
+function updateCameraHelpers(_headBack, frontCameraHelper, backCameraHelper) {
+    frontCameraHelper.position.set(0, 0.4, 2);
+    backCameraHelper.position.set(0, 0.15, 0.05);
 }
 
 const configureGltfMeshNodes = (gltf) => {
@@ -130,29 +119,13 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color }) =
     }
 };
 
-const registerCameraHelperUpdates = (child, frontCameraHelper, backCameraHelper, registerFrameCallback) => {
-    updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
-
-    if (typeof registerFrameCallback === 'function') {
-        registerFrameCallback(() => updateCameraHelpers(child, frontCameraHelper, backCameraHelper));
-        return;
-    }
-
-    const animate = () => {
-        requestAnimationFrame(animate);
-        updateCameraHelpers(child, frontCameraHelper, backCameraHelper);
-    };
-    animate();
-};
-
-const attachCameraHelperUpdates = (gltf, registerFrameCallback) => {
+const attachCameraHelperUpdates = (gltf) => {
     const headBack = gltf.scene.getObjectByName('head_back');
     if (headBack && gltf.scene.userData.frontCameraHelper && gltf.scene.userData.backCameraHelper) {
-        registerCameraHelperUpdates(
+        updateCameraHelpers(
             headBack,
             gltf.scene.userData.frontCameraHelper,
             gltf.scene.userData.backCameraHelper,
-            registerFrameCallback,
         );
     }
 };
@@ -174,7 +147,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, regi
                     (gltf) => {
                         setupMapGltfScene(gltf, model);
                         scene.add(gltf.scene);
-                        attachCameraHelperUpdates(gltf, registerFrameCallback);
+                        attachCameraHelperUpdates(gltf);
 
                         loadedCount += 1;
                         if (loadedCount === models.length) {
@@ -191,7 +164,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, regi
                 (gltf) => {
                     setupPlayableGltfScene(gltf, modelData, position || {});
                     scene.add(gltf.scene);
-                    attachCameraHelperUpdates(gltf, registerFrameCallback);
+                    attachCameraHelperUpdates(gltf);
                 },
                 undefined,
                 (error) => {
@@ -205,7 +178,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, regi
                 (gltf) => {
                     setupPlayableGltfScene(gltf, modelData, { position });
                     scene.add(gltf.scene);
-                    attachCameraHelperUpdates(gltf, registerFrameCallback);
+                    attachCameraHelperUpdates(gltf);
                 },
                 undefined,
                 (error) => {

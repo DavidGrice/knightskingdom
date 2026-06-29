@@ -182,7 +182,13 @@ export const GameProvider = ({
       dispatch({ type: 'TOGGLE_BUCKET', payload: false });
     }
     dispatch({ type: 'SET_MODE', payload: Modes.DRIVING });
-    dispatch({ type: 'SET_FOLLOWING', payload: !state.isFollowing });
+    if (state.isFollowing) {
+      dispatch({ type: 'SET_FOLLOWING', payload: false });
+      dispatch({ type: 'SET_CAMERA_NEEDS_RESET', payload: true });
+    } else {
+      dispatch({ type: 'SET_FOLLOWING', payload: true });
+      dispatch({ type: 'SET_ACTIVE_CAMERA', payload: 'back' });
+    }
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
   }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);
 

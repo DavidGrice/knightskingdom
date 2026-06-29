@@ -8,8 +8,13 @@ import { GameEngineCore } from './GameEngineCore';
 import { disposeObject3D } from './sceneDispose';
 
 const DRAG_SMOOTHING = 0.35;
+const THIRD_PERSON_DISTANCE = 4.5;
+const THIRD_PERSON_HEIGHT = 0.45;
+const FIRST_PERSON_EYE_LIFT = 0.14;
+const FIRST_PERSON_LOOK_AHEAD = 12;
 const _lookTarget = new THREE.Vector3();
 const _worldPos = new THREE.Vector3();
+const _forward = new THREE.Vector3();
 
 const promoteWireframeToBox = (node) => {
   if (node?.name === 'wireframe' && node.parent?.isMovable) {
@@ -69,20 +74,33 @@ const resolveDriveTarget = (scene) => {
   return fallback;
 };
 
-/** Matches legacy button mapping: "back" uses front helper, "front" uses back helper */
+/**
+ * Drive cameras:
+ * - "back" button: 3rd-person — in front of the champ, looking at them (matches drive UI icon)
+ * - "front" button: 1st-person — through the champ's eyes, looking forward
+ */
 const applyDriveCameraView = (core, driveRoot, cameraType) => {
   const { camera, controls } = core;
-  const frontHelper = driveRoot.userData.frontCameraHelper;
-  const backHelper = driveRoot.userData.backCameraHelper;
   const headBack = driveRoot.getObjectByName('head_back');
-  if (!frontHelper || !backHelper || !headBack) {
+  if (!headBack) {
     return;
   }
 
-  const viewHelper = cameraType === 'back' ? frontHelper : backHelper;
-  viewHelper.getWorldPosition(_worldPos);
-  camera.position.copy(_worldPos);
-  headBack.getWorldPosition(_lookTarget);
+  headBack.getWorldPosition(_worldPos);
+  driveRoot.getWorldDirection(_forward);
+
+  if (cameraType === 'back') {
+    _worldPos.addScaledVector(_forward, THIRD_PERSON_DISTANCE);
+    _worldPos.y += THIRD_PERSON_HEIGHT;
+    camera.position.copy(_worldPos);
+    headBack.getWorldPosition(_lookTarget);
+    _lookTarget.y += 0.25;
+  } else {
+    _worldPos.y += FIRST_PERSON_EYE_LIFT;
+    camera.position.copy(_worldPos);
+    _lookTarget.copy(_worldPos).addScaledVector(_forward, FIRST_PERSON_LOOK_AHEAD);
+  }
+
   camera.lookAt(_lookTarget);
   camera.updateMatrixWorld();
 

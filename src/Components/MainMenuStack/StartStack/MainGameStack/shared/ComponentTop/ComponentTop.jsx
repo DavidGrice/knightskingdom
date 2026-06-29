@@ -41,7 +41,6 @@ const ComponentTop = ({
                 break;
             case 'drive':
                 handleDrive();
-                setCameraNeedsReset(true);
                 break;
             case 'move':
                 if (!isToggleOff) {

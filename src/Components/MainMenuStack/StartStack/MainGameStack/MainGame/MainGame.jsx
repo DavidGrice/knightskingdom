@@ -108,6 +108,7 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
       {isFollowing && (
         <div>
           <Drive
+            activeCamera={activeCamera}
             handleCameraSwitch={handleCameraSwitch}
             cameraNeedsReset={cameraNeedsReset}
             setCameraNeedsReset={setCameraNeedsReset}
