@@ -78,6 +78,8 @@ const setupMapGltfScene = (gltf, mapModel) => {
     gltf.scene.isDeletable = true;
     gltf.scene.isModel = true;
     gltf.scene.userData.modelId = mapModel.name;
+    gltf.scene.userData.isPlayableModel = true;
+    gltf.scene.userData.isDefaultDriveTarget = true;
 
     configureGltfMeshNodes(gltf);
     gltf.scene.position.set(mapModel.position.x, mapModel.position.y, mapModel.position.z);

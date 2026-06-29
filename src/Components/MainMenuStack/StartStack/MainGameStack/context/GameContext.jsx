@@ -188,6 +188,7 @@ export const GameProvider = ({
     } else {
       dispatch({ type: 'SET_FOLLOWING', payload: true });
       dispatch({ type: 'SET_ACTIVE_CAMERA', payload: 'back' });
+      dispatch({ type: 'SET_CAMERA_NEEDS_RESET', payload: false });
     }
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
   }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);

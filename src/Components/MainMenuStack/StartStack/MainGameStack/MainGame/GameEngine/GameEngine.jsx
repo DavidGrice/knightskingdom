@@ -48,30 +48,31 @@ const findMovableFromIntersects = (intersects) => {
   return null;
 };
 
-const findDriveRoot = (object) => {
-  let node = object;
-  while (node) {
-    if (node.userData?.frontCameraHelper && node.userData?.backCameraHelper) {
-      return node;
-    }
-    node = node.parent;
-  }
-  return null;
-};
-
 const resolveDriveTarget = (scene) => {
+  let defaultTarget = null;
+  let playable = null;
+  let archer = null;
   let fallback = null;
+
   scene.traverse((child) => {
     if (!child.userData?.frontCameraHelper || !child.userData?.backCameraHelper) {
       return;
     }
-    if (child.userData.isPlayableModel || child.name === 'Archer') {
-      fallback = child;
+    if (!child.getObjectByName('head_back')) {
+      return;
+    }
+    if (child.userData.isDefaultDriveTarget) {
+      defaultTarget = child;
+    } else if (child.userData.isPlayableModel) {
+      playable = playable ?? child;
+    } else if (child.name === 'Archer') {
+      archer = archer ?? child;
     } else if (!fallback) {
       fallback = child;
     }
   });
-  return fallback;
+
+  return defaultTarget ?? playable ?? archer ?? fallback;
 };
 
 /**
@@ -350,14 +351,6 @@ const GameEngine = forwardRef(({
             updateSceneState();
           }
           break;
-        case Modes.DRIVING: {
-          const driveRoot = findDriveRoot(hitObject) ?? resolveDriveTarget(scene);
-          if (driveRoot) {
-            driveTargetRef.current = driveRoot;
-            applyDriveCameraView(core, driveRoot, activeCameraRef.current ?? 'back');
-          }
-          break;
-        }
         default:
           break;
       }
@@ -433,7 +426,6 @@ const GameEngine = forwardRef(({
         canvas.addEventListener('mousedown', onMouseDown);
         break;
       case Modes.DRIVING:
-        canvas.addEventListener('mousedown', onMouseDown);
         break;
       default:
         setControlsEnabled(true);
@@ -489,7 +481,8 @@ const GameEngine = forwardRef(({
     unregisterDriveFollowRef.current = null;
 
     if (mode === Modes.DRIVING && isFollowing && assetsReady) {
-      const driveTarget = driveTargetRef.current ?? resolveDriveTarget(scene);
+      driveTargetRef.current = null;
+      const driveTarget = resolveDriveTarget(scene);
       if (driveTarget) {
         driveTargetRef.current = driveTarget;
         saveOriginalCamera();
