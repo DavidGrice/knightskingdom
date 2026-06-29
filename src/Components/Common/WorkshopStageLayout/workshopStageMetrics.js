@@ -18,15 +18,17 @@ export const WORKSHOP_STAGE_METRICS = {
   bottomBar: { height: 126 },
   /** Legacy offset before 800×600 canvas scaler; keep 0 inside fixed canvas */
   barOffsetX: 0,
-  /** Toolbar slots on overlay_top (783×103 stretched to 800px) — left grid panel region */
+  /** Toolbar slots on overlay_top (783×103 stretched to 800px) */
   toolbar: {
-    bucketButton: { x: 35, y: 5, width: 45, height: 63 },
-    saveButton: { x: 130, y: 13, width: 56, height: 58 },
+    bucketButton: { x: 249, y: 5, width: 45, height: 63 },
+    saveButton: { x: 302, y: 13, width: 56, height: 58 },
+    saveGap: 8,
+    middleGap: 8,
     middleTools: { x: 366, y: 19, width: 310, height: 65 },
     leaveButton: { x: 691, y: 5, width: 91, height: 72 },
   },
-  /** Brick bucket holder — legacy top 6% (~36px), sits under grey top bar overlay */
-  bucketPanel: { x: 16, y: 36, width: 238, height: 556 },
+  /** Brick bucket holder — left column under toolbar; tabs align with bucket/save slot */
+  bucketPanel: { x: 16, y: 0, width: 238, height: 556 },
   /** color_mixer_board 196×196; legacy right 29.2% → x=370 on 800px canvas */
   palettePanel: { x: 370, y: 60, width: 196, height: 196 },
   /** Optional world name plaque on the background art — hidden until positioned */
@@ -50,6 +52,7 @@ export const workshopStageToCssVars = () => {
     topBar,
     bottomBar,
     barOffsetX,
+    toolbar,
   } = WORKSHOP_STAGE_METRICS;
 
   return {
@@ -66,5 +69,10 @@ export const workshopStageToCssVars = () => {
     '--wsl-palette-y': `${palettePanel.y}px`,
     '--wsl-palette-w': `${palettePanel.width}px`,
     '--wsl-palette-h': `${palettePanel.height}px`,
+    '--wsl-toolbar-bucket-x': `${toolbar.bucketButton.x}px`,
+    '--wsl-toolbar-bucket-y': `${toolbar.bucketButton.y}px`,
+    '--wsl-toolbar-save-y': `${toolbar.saveButton.y}px`,
+    '--wsl-toolbar-save-gap': `${toolbar.saveGap}px`,
+    '--wsl-toolbar-middle-gap': `${toolbar.middleGap}px`,
   };
 };

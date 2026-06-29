@@ -10,26 +10,28 @@
 .bucketButton {
     width: 45px;
     height: 63px;
-    margin-left: 35px;
-    margin-top: 5px;
+    margin-left: var(--wsl-toolbar-bucket-x, 249px);
+    margin-top: var(--wsl-toolbar-bucket-y, 5px);
+    flex-shrink: 0;
 }
 
 .saveButton {
     width: 56px;
     height: 58px;
-    margin-top: 13px;
-    margin-left: 50px;
+    margin-top: var(--wsl-toolbar-save-y, 13px);
+    margin-left: var(--wsl-toolbar-save-gap, 8px);
+    flex-shrink: 0;
 }
 
 .middleDiv {
-    /* Legacy used invalid `width: 350` (ignored) — fixed width squeezes icons on 800px bar */
     height: 65px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-left: 180px;
+    margin-left: var(--wsl-toolbar-middle-gap, 8px);
     margin-top: 19px;
+    flex-shrink: 0;
 }
 
 .goodBye {
