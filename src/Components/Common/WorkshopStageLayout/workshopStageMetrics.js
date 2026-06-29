@@ -27,7 +27,7 @@ export const WORKSHOP_STAGE_METRICS = {
     leaveButton: { x: 691, y: 5, width: 91, height: 72 },
   },
   /** Brick bucket holder — left column; y pushed down below top bar overlap */
-  bucketPanel: { x: 0, y: 44, width: 238, height: 556 },
+  bucketPanel: { x: 0, y: 69, width: 238, height: 556 },
   /** color_mixer_board 196×196; legacy right 29.2% → x=370 on 800px canvas */
   palettePanel: { x: 370, y: 60, width: 196, height: 196 },
   /** Optional world name plaque on the background art — hidden until positioned */
