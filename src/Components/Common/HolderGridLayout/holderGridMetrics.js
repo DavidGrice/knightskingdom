@@ -73,7 +73,7 @@ export const HOLDER_VARIANTS = {
     gridRows: 3,
     gridLeft: 24,
     /** Dark-red brick recess bands in drop_down.png ≈ y 430–466 */
-    gridTop: 330,
+    gridTop: 270,
     upArrow: { x: 119, y: 232 },
     downArrow: { x: 119, y: 512 },
     help: null,
