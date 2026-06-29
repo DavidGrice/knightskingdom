@@ -20,10 +20,9 @@ export const WORKSHOP_STAGE_METRICS = {
   barOffsetX: 0,
   /** Toolbar slots on overlay_top (783×103 stretched to 800px) */
   toolbar: {
-    bucketButton: { x: 249, y: 5, width: 45, height: 63 },
-    saveButton: { x: 302, y: 13, width: 56, height: 58 },
+    bucketButton: { x: 195, y: 5, width: 45, height: 63 },
+    saveButton: { x: 248, y: 13, width: 56, height: 58 },
     saveGap: 8,
-    middleGap: 8,
     middleTools: { x: 366, y: 19, width: 310, height: 65 },
     leaveButton: { x: 691, y: 5, width: 91, height: 72 },
   },
@@ -55,6 +54,12 @@ export const workshopStageToCssVars = () => {
     toolbar,
   } = WORKSHOP_STAGE_METRICS;
 
+  const saveRight = toolbar.bucketButton.x
+    + toolbar.bucketButton.width
+    + toolbar.saveGap
+    + toolbar.saveButton.width;
+  const middleGap = toolbar.middleTools.x - saveRight;
+
   return {
     '--wsl-canvas-w': `${canvas.width}px`,
     '--wsl-canvas-h': `${canvas.height}px`,
@@ -73,6 +78,6 @@ export const workshopStageToCssVars = () => {
     '--wsl-toolbar-bucket-y': `${toolbar.bucketButton.y}px`,
     '--wsl-toolbar-save-y': `${toolbar.saveButton.y}px`,
     '--wsl-toolbar-save-gap': `${toolbar.saveGap}px`,
-    '--wsl-toolbar-middle-gap': `${toolbar.middleGap}px`,
+    '--wsl-toolbar-middle-gap': `${middleGap}px`,
   };
 };

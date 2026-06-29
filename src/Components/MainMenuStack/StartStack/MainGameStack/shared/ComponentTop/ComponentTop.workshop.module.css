@@ -10,7 +10,7 @@
 .bucketButton {
     width: 45px;
     height: 63px;
-    margin-left: var(--wsl-toolbar-bucket-x, 249px);
+    margin-left: var(--wsl-toolbar-bucket-x, 195px);
     margin-top: var(--wsl-toolbar-bucket-y, 5px);
     flex-shrink: 0;
 }
@@ -29,7 +29,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-left: var(--wsl-toolbar-middle-gap, 8px);
+    margin-left: var(--wsl-toolbar-middle-gap, 58px);
     margin-top: 19px;
     flex-shrink: 0;
 }
