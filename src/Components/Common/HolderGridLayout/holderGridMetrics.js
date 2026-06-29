@@ -63,8 +63,7 @@ export const HOLDER_VARIANTS = {
   },
   /**
    * Workshop brick bucket — 238×556 drop_down.png, 2×3 grid.
-   * Measured: arrows ~(119,200) and ~(110,519); grid 24+95+24+95=238;
-   * recess uses uniform dark-red (not black slots); gridTop≈303 from legacy %.
+   * Pixel-mapped from drop_down.png + legacy BucketBottom % (see grok/analyze-workshop-images.mjs).
    */
   WORKSHOP_BUCKET: {
     className: 'variantWorkshopBucket',
@@ -74,14 +73,24 @@ export const HOLDER_VARIANTS = {
     gridRows: 3,
     gridLeft: 24,
     gridTop: 303,
-    upArrow: { x: 119, y: 200 },
-    downArrow: { x: 110, y: 519 },
+    upArrow: { x: 119, y: 196 },
+    downArrow: { x: 119, y: 519 },
     help: null,
     footer: null,
     width: 95,
     height: 67,
     x: 24,
-    y: 28,
+    y: 14,
+    tabs: {
+      top: 22,
+      left: 14,
+      width: 210,
+      height: 172,
+      cols: 3,
+      cell: 70,
+      rowGap: 2,
+      colGap: 0,
+    },
   },
 };
 

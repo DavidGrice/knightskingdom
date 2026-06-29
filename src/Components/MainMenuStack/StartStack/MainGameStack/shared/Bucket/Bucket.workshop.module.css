@@ -1,6 +1,7 @@
 .bucketDiv {
     position: absolute;
     z-index: 2;
+    overflow: visible;
     left: var(--wsl-bucket-x, 16px);
     top: var(--wsl-bucket-y, 103px);
     width: var(--wsl-bucket-w, 238px);

@@ -3,12 +3,17 @@ import gameStyles from './Bucket.module.css';
 import workshopStyles from './Bucket.workshop.module.css';
 import BucketTop from './BucketTop/BucketTop';
 import BucketBottom from './BucketBottom/BucketBottom';
+import { workshopBucketTabVars } from '../../../../../Common';
 import { getBucketConfig } from '../toolbarConfig';
 
 const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
     const isWorkshop = dataSource === 'bricks';
     const styles = isWorkshop ? workshopStyles : gameStyles;
     const variant = isWorkshop ? 'workshop' : 'game';
+    const bucketLayoutStyle = useMemo(
+        () => (isWorkshop ? workshopBucketTabVars('WORKSHOP_BUCKET') : undefined),
+        [isWorkshop],
+    );
 
     const { tabIcons, tabData, arrowImages } = useMemo(
         () => getBucketConfig(dataSource),
@@ -31,7 +36,7 @@ const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
     };
 
     return (
-        <div className={styles.bucketDiv}>
+        <div className={styles.bucketDiv} style={bucketLayoutStyle}>
             <BucketTop
                 variant={variant}
                 tabIcons={tabIcons}

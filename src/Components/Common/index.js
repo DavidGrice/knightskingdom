@@ -9,6 +9,7 @@ export {
   createHolderGridStyles,
   footerPositionStyle,
   variantToLayoutVars,
+  workshopBucketTabVars,
   HOLDER_VARIANTS,
   getWorldHolderVariant,
 } from './HolderGridLayout';

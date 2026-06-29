@@ -64,6 +64,23 @@ export const createHolderGridStyles = (variantOrKey, overrides = {}) => {
   }, { ...base });
 };
 
+/** @param {import('./holderGridMetrics').HolderVariant | keyof typeof HOLDER_VARIANTS} variantOrKey */
+export const workshopBucketTabVars = (variantOrKey) => {
+  const { tabs } = resolveVariant(variantOrKey);
+  if (!tabs) {
+    return undefined;
+  }
+  return {
+    '--wkb-tab-top': `${tabs.top}px`,
+    '--wkb-tab-left': `${tabs.left}px`,
+    '--wkb-tab-w': `${tabs.width}px`,
+    '--wkb-tab-h': `${tabs.height}px`,
+    '--wkb-tab-cell': `${tabs.cell}px`,
+    '--wkb-tab-row-gap': `${tabs.rowGap}px`,
+    '--wkb-tab-col-gap': `${tabs.colGap}px`,
+  };
+};
+
 export const footerPositionStyle = (variantOrKey) => {
   const { footer } = resolveVariant(variantOrKey);
   if (!footer) {
