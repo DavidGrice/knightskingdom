@@ -18,10 +18,21 @@ const SelectedModels = {
     },
 };
 
-/** Helpers are parented to head_back — keep stable local offsets only */
-function updateCameraHelpers(_headBack, frontCameraHelper, backCameraHelper) {
-    frontCameraHelper.position.set(0, 0, 2);
-    backCameraHelper.position.set(0, 0, -2);
+function updateCameraHelpers(model, frontCameraHelper, backCameraHelper) {
+    frontCameraHelper.quaternion.copy(model.quaternion);
+    frontCameraHelper.position.copy(model.position);
+    frontCameraHelper.position.set(
+        frontCameraHelper.position.x,
+        frontCameraHelper.position.y,
+        frontCameraHelper.position.z + 2,
+    );
+    backCameraHelper.quaternion.copy(model.quaternion);
+    backCameraHelper.position.copy(model.position);
+    backCameraHelper.position.set(
+        backCameraHelper.position.x,
+        backCameraHelper.position.y,
+        backCameraHelper.position.z - 2,
+    );
 }
 
 const configureGltfMeshNodes = (gltf) => {
@@ -58,12 +69,12 @@ const configureGltfMeshNodes = (gltf) => {
 
         if (child.isMesh && child.name === 'head_back') {
             const frontCameraHelper = new THREE.Object3D();
-            frontCameraHelper.position.set(0, 0, 2);
+            frontCameraHelper.position.set(child.position.x, child.position.y, child.position.z + 2);
             child.add(frontCameraHelper);
             gltf.scene.userData.frontCameraHelper = frontCameraHelper;
 
             const backCameraHelper = new THREE.Object3D();
-            backCameraHelper.position.set(0, 0, -2);
+            backCameraHelper.position.set(child.position.x, child.position.y, child.position.z - 2);
             child.add(backCameraHelper);
             gltf.scene.userData.backCameraHelper = backCameraHelper;
         }
