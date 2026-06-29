@@ -34,7 +34,7 @@ const PaginatedGrid = ({
       {displayedItems.map((item, index) => {
         const interactive = isItemInteractive(item) && !isItemDisabled(item);
         const isSelected = selectedItem != null
-          && getItemKey(selectedItem, index) === getItemKey(item, index);
+          && getItemKey(selectedItem, 0) === getItemKey(item, 0);
         const useThumbnail = Boolean(styles.itemThumbnail);
         const itemClassName = [
           styles.item,

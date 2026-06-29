@@ -51,7 +51,25 @@ const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrow
         resetToken: resetKey,
     });
 
+    const isSameItem = (a, b) => {
+        if (!a || !b) {
+            return false;
+        }
+        if (a === b) {
+            return true;
+        }
+        if (a.name != null && b.name != null) {
+            return a.name === b.name;
+        }
+        return false;
+    };
+
     const handleItemClick = (item) => {
+        if (isSameItem(selectedItem, item)) {
+            setSelectedItem(null);
+            onItemSelect?.(null);
+            return;
+        }
         setSelectedItem(item);
         onItemSelect?.(item);
     };
