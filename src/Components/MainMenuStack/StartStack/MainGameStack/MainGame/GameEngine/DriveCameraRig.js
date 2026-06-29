@@ -3,20 +3,79 @@ import * as THREE from 'three';
 const _position = new THREE.Vector3();
 const _lookAt = new THREE.Vector3();
 const _faceForward = new THREE.Vector3();
+const _headFrontPos = new THREE.Vector3();
+const _headBackPos = new THREE.Vector3();
+const _center = new THREE.Vector3();
 
-/** Tuned for archer_with_box2.glb — head_back local space */
+/** Tuned for archer_with_box2.glb */
 export const ARCHER_RIG_OFFSETS = {
-  firstPersonEye: { x: 0, y: 0.1, z: 0.02 },
-  thirdPerson: { x: 0, y: 0.4, z: 0 },
-  thirdPersonDistance: 4.2,
-  thirdPersonHeight: 0.15,
-  lookAtHeight: 0.22,
-  firstLookAhead: 10,
+  thirdPersonDistance: 4.5,
+  thirdPersonHeight: 0.55,
+  firstLookAhead: 12,
+  eyeFrontBlend: 0.38,
 };
 
-const getFaceForward = (head, target) => {
-  head.getWorldDirection(target);
-  target.negate();
+/**
+ * Archer parts share a baked quaternion where -Z points mostly up, not forward.
+ * Horizontal facing comes from the chest_front mesh +X axis (see probe-archer-axes.mjs).
+ */
+const getFaceForward = (champRoot, target) => {
+  const chestFront = champRoot.getObjectByName('chest_front');
+  const headFront = champRoot.getObjectByName('head_front');
+  const source = chestFront ?? headFront ?? champRoot.getObjectByName('head_back');
+
+  if (!source) {
+    return null;
+  }
+
+  source.updateWorldMatrix(true, false);
+  target.set(1, 0, 0).transformDirection(source.matrixWorld);
+  target.y = 0;
+
+  if (target.lengthSq() < 1e-6) {
+    source.getWorldDirection(target);
+    target.y = 0;
+  }
+
+  if (target.lengthSq() < 1e-6) {
+    return null;
+  }
+
+  target.normalize();
+  return target;
+};
+
+const getHeadCenter = (champRoot, target) => {
+  const headFront = champRoot.getObjectByName('head_front');
+  const headBack = champRoot.getObjectByName('head_back');
+
+  if (headFront && headBack) {
+    headFront.getWorldPosition(_headFrontPos);
+    headBack.getWorldPosition(_headBackPos);
+    target.copy(_headFrontPos).lerp(_headBackPos, 0.5);
+    return target;
+  }
+
+  if (headBack) {
+    headBack.getWorldPosition(target);
+  } else if (headFront) {
+    headFront.getWorldPosition(target);
+  }
+  return target;
+};
+
+const getEyePosition = (champRoot, blend, target) => {
+  const headFront = champRoot.getObjectByName('head_front');
+  const headBack = champRoot.getObjectByName('head_back');
+
+  if (headFront && headBack) {
+    headFront.getWorldPosition(_headFrontPos);
+    headBack.getWorldPosition(_headBackPos);
+    target.copy(_headFrontPos).lerp(_headBackPos, 1 - blend);
+    return target;
+  }
+
+  getHeadCenter(champRoot, target);
   return target;
 };
 
@@ -24,45 +83,25 @@ export class DriveCameraRig {
   constructor(champRoot, offsets = ARCHER_RIG_OFFSETS) {
     this.champRoot = champRoot;
     this.offsets = offsets;
-    this.headBack = champRoot.getObjectByName('head_back');
     this.lastLookAt = new THREE.Vector3();
-
-    this.firstPerson = new THREE.Object3D();
-    this.firstPerson.name = 'rig_first_person';
-    this.thirdPerson = new THREE.Object3D();
-    this.thirdPerson.name = 'rig_third_person';
-    this.lookAt = new THREE.Object3D();
-    this.lookAt.name = 'rig_look_at';
-
-    const anchor = this.headBack ?? champRoot;
-    const { firstPersonEye, thirdPerson } = offsets;
-
-    this.firstPerson.position.set(firstPersonEye.x, firstPersonEye.y, firstPersonEye.z);
-    this.thirdPerson.position.set(thirdPerson.x, thirdPerson.y, thirdPerson.z);
-    this.lookAt.position.set(0, offsets.lookAtHeight, 0);
-
-    anchor.add(this.firstPerson);
-    anchor.add(this.thirdPerson);
-    anchor.add(this.lookAt);
   }
 
   applyToCamera(camera, view) {
-    const head = this.headBack;
-    if (!head) {
+    if (!getFaceForward(this.champRoot, _faceForward)) {
       return false;
     }
 
+    getHeadCenter(this.champRoot, _center);
+
     if (view === 'third') {
-      head.getWorldPosition(_position);
-      getFaceForward(head, _faceForward);
+      _position.copy(_center);
       _position.addScaledVector(_faceForward, this.offsets.thirdPersonDistance);
       _position.y += this.offsets.thirdPersonHeight;
       camera.position.copy(_position);
-      this.lookAt.getWorldPosition(_lookAt);
-      _lookAt.y += this.offsets.lookAtHeight * 0.5;
+      _lookAt.copy(_center);
+      _lookAt.y += 0.2;
     } else {
-      this.firstPerson.getWorldPosition(_position);
-      getFaceForward(head, _faceForward);
+      getEyePosition(this.champRoot, this.offsets.eyeFrontBlend, _position);
       camera.position.copy(_position);
       _lookAt.copy(_position).addScaledVector(_faceForward, this.offsets.firstLookAhead);
     }
@@ -74,8 +113,6 @@ export class DriveCameraRig {
   }
 
   dispose() {
-    this.firstPerson.parent?.remove(this.firstPerson);
-    this.thirdPerson.parent?.remove(this.thirdPerson);
-    this.lookAt.parent?.remove(this.lookAt);
+    // Rig uses live mesh transforms — no scene nodes to remove.
   }
 }
