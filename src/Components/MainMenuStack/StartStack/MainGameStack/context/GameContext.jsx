@@ -187,14 +187,14 @@ export const GameProvider = ({
       dispatch({ type: 'SET_CAMERA_NEEDS_RESET', payload: true });
     } else {
       dispatch({ type: 'SET_FOLLOWING', payload: true });
-      dispatch({ type: 'SET_ACTIVE_CAMERA', payload: 'back' });
+      dispatch({ type: 'SET_DRIVE_VIEW', payload: 'third' });
       dispatch({ type: 'SET_CAMERA_NEEDS_RESET', payload: false });
     }
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
   }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);
 
-  const handleCameraSwitch = useCallback((type) => {
-    dispatch({ type: 'SET_ACTIVE_CAMERA', payload: type });
+  const handleDriveViewSwitch = useCallback((view) => {
+    dispatch({ type: 'SET_DRIVE_VIEW', payload: view });
   }, []);
 
   const handlePaintAndDrive = useCallback(() => {
@@ -318,7 +318,7 @@ export const GameProvider = ({
     handleDelete,
     handleAction,
     handleDrive,
-    handleCameraSwitch,
+    handleDriveViewSwitch,
     handlePaintAndDrive,
     handlePlay,
     handleClimate,
@@ -356,7 +356,7 @@ export const GameProvider = ({
     handleDelete,
     handleAction,
     handleDrive,
-    handleCameraSwitch,
+    handleDriveViewSwitch,
     handlePaintAndDrive,
     handlePlay,
     handleClimate,

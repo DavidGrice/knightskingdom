@@ -22,7 +22,7 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
     handleDelete,
     handleAction,
     handleDrive,
-    handleCameraSwitch,
+    handleDriveViewSwitch,
     handlePaintAndDrive,
     handlePlay,
     handleClimate,
@@ -56,7 +56,7 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
     selectedClimateMode,
     climateNeedsUpdating,
     activeMusic,
-    activeCamera,
+    driveView,
     cameraNeedsReset,
   } = state;
 
@@ -108,8 +108,8 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
       {isFollowing && (
         <div>
           <Drive
-            activeCamera={activeCamera}
-            handleCameraSwitch={handleCameraSwitch}
+            driveView={driveView}
+            handleDriveViewSwitch={handleDriveViewSwitch}
             cameraNeedsReset={cameraNeedsReset}
             setCameraNeedsReset={setCameraNeedsReset}
           />
@@ -143,7 +143,7 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
         hydrationScene={hydrationScene}
         color={color}
         mode={mode}
-        activeCamera={activeCamera}
+        driveView={driveView}
         isFollowing={isFollowing}
         addModel={selectedModelMode}
         selectedClimateMode={selectedClimateMode}

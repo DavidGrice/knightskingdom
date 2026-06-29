@@ -18,7 +18,7 @@ export const initialGameState = {
   climateNeedsUpdating: false,
   activeMusic: 0,
   selectedMusic: 'NONE',
-  activeCamera: null,
+  driveView: null,
   cameraNeedsReset: false,
   sceneState: createEmptySceneState(),
   lastSaveMessage: null,
@@ -68,8 +68,8 @@ export const gameReducer = (state, action) => {
       return { ...state, climateNeedsUpdating: action.payload };
     case 'SET_ACTIVE_MUSIC':
       return { ...state, activeMusic: action.payload.index, selectedMusic: action.payload.track };
-    case 'SET_ACTIVE_CAMERA':
-      return { ...state, activeCamera: action.payload, selectedModelMode: 'NONE' };
+    case 'SET_DRIVE_VIEW':
+      return { ...state, driveView: action.payload, selectedModelMode: 'NONE' };
     case 'SET_CAMERA_NEEDS_RESET':
       return { ...state, cameraNeedsReset: action.payload };
     case 'SET_SCENE_STATE':

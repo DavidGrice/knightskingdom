@@ -18,11 +18,7 @@ const SelectedModels = {
     },
 };
 
-/** Local offsets on head_back — used for drive-target detection; view math uses head rig directly */
-function updateCameraHelpers(_headBack, frontCameraHelper, backCameraHelper) {
-    frontCameraHelper.position.set(0, 0.4, 2);
-    backCameraHelper.position.set(0, 0.15, 0.05);
-}
+let addedChampCounter = 0;
 
 const configureGltfMeshNodes = (gltf) => {
     gltf.scene.traverse((child) => {
@@ -56,20 +52,15 @@ const configureGltfMeshNodes = (gltf) => {
             gltf.scene.userData.transparentBox = child;
         }
 
-        if (child.isMesh && child.name === 'head_back') {
-            const frontCameraHelper = new THREE.Object3D();
-            frontCameraHelper.position.set(child.position.x, child.position.y, child.position.z + 2);
-            child.add(frontCameraHelper);
-            gltf.scene.userData.frontCameraHelper = frontCameraHelper;
-
-            const backCameraHelper = new THREE.Object3D();
-            backCameraHelper.position.set(child.position.x, child.position.y, child.position.z - 2);
-            child.add(backCameraHelper);
-            gltf.scene.userData.backCameraHelper = backCameraHelper;
-        }
-
         child.isPaintable = true;
     });
+};
+
+const registerDriveSubject = (gltf, cameraController, { driveId, isDefault = false }) => {
+    if (!cameraController || !gltf.scene.getObjectByName('head_back')) {
+        return;
+    }
+    cameraController.registerSubject(gltf.scene, driveId, { isDefault });
 };
 
 const setupMapGltfScene = (gltf, mapModel) => {
@@ -78,8 +69,6 @@ const setupMapGltfScene = (gltf, mapModel) => {
     gltf.scene.isDeletable = true;
     gltf.scene.isModel = true;
     gltf.scene.userData.modelId = mapModel.name;
-    gltf.scene.userData.isPlayableModel = true;
-    gltf.scene.userData.isDefaultDriveTarget = true;
 
     configureGltfMeshNodes(gltf);
     gltf.scene.position.set(mapModel.position.x, mapModel.position.y, mapModel.position.z);
@@ -96,7 +85,6 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color }) =
     gltf.scene.isDeletable = true;
     gltf.scene.isModel = modelConfig.isModel;
     gltf.scene.userData.modelId = modelKey;
-    gltf.scene.userData.isPlayableModel = true;
 
     configureGltfMeshNodes(gltf);
 
@@ -121,18 +109,7 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color }) =
     }
 };
 
-const attachCameraHelperUpdates = (gltf) => {
-    const headBack = gltf.scene.getObjectByName('head_back');
-    if (headBack && gltf.scene.userData.frontCameraHelper && gltf.scene.userData.backCameraHelper) {
-        updateCameraHelpers(
-            headBack,
-            gltf.scene.userData.frontCameraHelper,
-            gltf.scene.userData.backCameraHelper,
-        );
-    }
-};
-
-const ModelLoader = (type, modelData, position, mapData, scene, onComplete, registerFrameCallback) => {
+const ModelLoader = (type, modelData, position, mapData, scene, onComplete, cameraController) => {
     const loader = new GLTFLoader();
     switch (type) {
         case 'preload': {
@@ -149,7 +126,10 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, regi
                     (gltf) => {
                         setupMapGltfScene(gltf, model);
                         scene.add(gltf.scene);
-                        attachCameraHelperUpdates(gltf);
+                        registerDriveSubject(gltf, cameraController, {
+                            driveId: `champ-map-${model.id}`,
+                            isDefault: true,
+                        });
 
                         loadedCount += 1;
                         if (loadedCount === models.length) {
@@ -166,7 +146,11 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, regi
                 (gltf) => {
                     setupPlayableGltfScene(gltf, modelData, position || {});
                     scene.add(gltf.scene);
-                    attachCameraHelperUpdates(gltf);
+                    const restoredId = position?.driveId ?? `champ-restored-${modelData}`;
+                    registerDriveSubject(gltf, cameraController, {
+                        driveId: restoredId,
+                        isDefault: false,
+                    });
                 },
                 undefined,
                 (error) => {
@@ -180,7 +164,11 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, regi
                 (gltf) => {
                     setupPlayableGltfScene(gltf, modelData, { position });
                     scene.add(gltf.scene);
-                    attachCameraHelperUpdates(gltf);
+                    addedChampCounter += 1;
+                    registerDriveSubject(gltf, cameraController, {
+                        driveId: `champ-added-${modelData}-${addedChampCounter}`,
+                        isDefault: false,
+                    });
                 },
                 undefined,
                 (error) => {

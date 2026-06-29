@@ -4,6 +4,7 @@ import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/i
 import { animateWeatherSystems } from './Loaders/ClimateLoader';
 import { applySavedSceneToThree, serializeSceneFromThree } from '../../context/sceneSchema';
 import { disposeObject3D, removeSceneChildrenExcept } from './sceneDispose';
+import { CameraController } from './CameraController';
 
 export class GameEngineCore {
   constructor() {
@@ -25,6 +26,7 @@ export class GameEngineCore {
     this.climateMode = 'SUNNY';
     this.climateParticleSystem = null;
     this.climateInitialized = false;
+    this.cameraController = new CameraController(this);
 
     this.handleResize = this.handleResize.bind(this);
     this.animate = this.animate.bind(this);
@@ -61,6 +63,7 @@ export class GameEngineCore {
 
   animate() {
     this.animationFrameId = requestAnimationFrame(this.animate);
+    this.cameraController.update();
     this.controls?.update();
     this.frameCallbacks.forEach((callback) => callback());
     this.renderer.render(this.scene, this.camera);
@@ -104,6 +107,7 @@ export class GameEngineCore {
     }
 
     removeSceneChildrenExcept(this.scene);
+    this.cameraController.clearSubjects();
     this.loadedMapId = mapData.id;
     this.mapData = mapData;
 
@@ -115,7 +119,7 @@ export class GameEngineCore {
         mapData,
         this.scene,
         () => onReady?.(),
-        this.registerFrameCallback,
+        this.cameraController,
       );
     });
   }
@@ -134,7 +138,7 @@ export class GameEngineCore {
           null,
           this.scene,
           null,
-          this.registerFrameCallback,
+          this.cameraController,
         );
       },
     });
@@ -173,6 +177,8 @@ export class GameEngineCore {
       this.unregisterWeatherCallback = null;
     }
     this.frameCallbacks.clear();
+    this.cameraController.clearSubjects();
+    this.cameraController.exitDrive();
     window.removeEventListener('resize', this.handleResize);
     this.controls?.dispose();
     this.controls = null;

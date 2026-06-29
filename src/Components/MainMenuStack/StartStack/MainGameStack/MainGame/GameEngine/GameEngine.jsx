@@ -8,13 +8,6 @@ import { GameEngineCore } from './GameEngineCore';
 import { disposeObject3D } from './sceneDispose';
 
 const DRAG_SMOOTHING = 0.35;
-const THIRD_PERSON_DISTANCE = 4.5;
-const THIRD_PERSON_HEIGHT = 0.45;
-const FIRST_PERSON_EYE_LIFT = 0.14;
-const FIRST_PERSON_LOOK_AHEAD = 12;
-const _lookTarget = new THREE.Vector3();
-const _worldPos = new THREE.Vector3();
-const _forward = new THREE.Vector3();
 
 const promoteWireframeToBox = (node) => {
   if (node?.name === 'wireframe' && node.parent?.isMovable) {
@@ -48,71 +41,8 @@ const findMovableFromIntersects = (intersects) => {
   return null;
 };
 
-const resolveDriveTarget = (scene) => {
-  let defaultTarget = null;
-  let playable = null;
-  let archer = null;
-  let fallback = null;
-
-  scene.traverse((child) => {
-    if (!child.userData?.frontCameraHelper || !child.userData?.backCameraHelper) {
-      return;
-    }
-    if (!child.getObjectByName('head_back')) {
-      return;
-    }
-    if (child.userData.isDefaultDriveTarget) {
-      defaultTarget = child;
-    } else if (child.userData.isPlayableModel) {
-      playable = playable ?? child;
-    } else if (child.name === 'Archer') {
-      archer = archer ?? child;
-    } else if (!fallback) {
-      fallback = child;
-    }
-  });
-
-  return defaultTarget ?? playable ?? archer ?? fallback;
-};
-
-/**
- * Drive cameras:
- * - "back" button: 3rd-person — in front of the champ, looking at them (matches drive UI icon)
- * - "front" button: 1st-person — through the champ's eyes, looking forward
- */
-const applyDriveCameraView = (core, driveRoot, cameraType) => {
-  const { camera, controls } = core;
-  const headBack = driveRoot.getObjectByName('head_back');
-  if (!headBack) {
-    return;
-  }
-
-  headBack.getWorldPosition(_worldPos);
-  driveRoot.getWorldDirection(_forward);
-
-  if (cameraType === 'back') {
-    _worldPos.addScaledVector(_forward, THIRD_PERSON_DISTANCE);
-    _worldPos.y += THIRD_PERSON_HEIGHT;
-    camera.position.copy(_worldPos);
-    headBack.getWorldPosition(_lookTarget);
-    _lookTarget.y += 0.25;
-  } else {
-    _worldPos.y += FIRST_PERSON_EYE_LIFT;
-    camera.position.copy(_worldPos);
-    _lookTarget.copy(_worldPos).addScaledVector(_forward, FIRST_PERSON_LOOK_AHEAD);
-  }
-
-  camera.lookAt(_lookTarget);
-  camera.updateMatrixWorld();
-
-  if (controls) {
-    controls.target.copy(_lookTarget);
-    controls.update();
-  }
-};
-
 const GameEngine = forwardRef(({
-  mapData, hydrationScene, color, mode, activeCamera, isFollowing, addModel,
+  mapData, hydrationScene, color, mode, driveView, isFollowing, addModel,
   selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating,
   cameraNeedsReset, setCameraNeedsReset, isClimateOpen, onSceneChange,
 }, ref) => {
@@ -125,17 +55,11 @@ const GameEngine = forwardRef(({
   const isDragging = useRef(false);
   const mouse = useRef(new THREE.Vector2());
   const raycaster = useRef(new THREE.Raycaster());
-  const originalCameraPosition = useRef(null);
-  const originalCameraQuaternion = useRef(null);
-  const driveTargetRef = useRef(null);
   const modeRef = useRef(mode);
-  const activeCameraRef = useRef(activeCamera);
   const onSceneChangeRef = useRef(onSceneChange);
   const setCameraNeedsResetRef = useRef(setCameraNeedsReset);
-  const unregisterDriveFollowRef = useRef(null);
 
   modeRef.current = mode;
-  activeCameraRef.current = activeCamera;
   onSceneChangeRef.current = onSceneChange;
   setCameraNeedsResetRef.current = setCameraNeedsReset;
 
@@ -286,7 +210,7 @@ const GameEngine = forwardRef(({
         null,
         scene,
         null,
-        core.registerFrameCallback.bind(core),
+        core.cameraController,
       );
       updateSceneState();
     };
@@ -444,73 +368,22 @@ const GameEngine = forwardRef(({
       return undefined;
     }
 
-    const { scene, camera } = core;
+    const { consumedReset } = core.cameraController.syncFromReact({
+      mode,
+      isFollowing,
+      driveView,
+      cameraNeedsReset,
+      assetsReady,
+    });
 
-    const saveOriginalCamera = () => {
-      if (!originalCameraPosition.current && !originalCameraQuaternion.current) {
-        originalCameraPosition.current = camera.position.clone();
-        originalCameraQuaternion.current = camera.quaternion.clone();
-      }
-    };
-
-    const restoreOriginalCamera = () => {
-      if (originalCameraPosition.current && originalCameraQuaternion.current) {
-        camera.position.copy(originalCameraPosition.current);
-        camera.quaternion.copy(originalCameraQuaternion.current);
-        if (core.controls) {
-          core.controls.target.set(0, 0, 0);
-          core.controls.update();
-        }
-      }
-      originalCameraPosition.current = null;
-      originalCameraQuaternion.current = null;
-      driveTargetRef.current = null;
-      if (core.controls) {
-        core.controls.enabled = true;
-      }
-    };
-
-    if (cameraNeedsReset) {
-      restoreOriginalCamera();
+    if (consumedReset) {
       startTransition(() => {
         setCameraNeedsResetRef.current(false);
       });
     }
 
-    unregisterDriveFollowRef.current?.();
-    unregisterDriveFollowRef.current = null;
-
-    if (mode === Modes.DRIVING && isFollowing && assetsReady) {
-      driveTargetRef.current = null;
-      const driveTarget = resolveDriveTarget(scene);
-      if (driveTarget) {
-        driveTargetRef.current = driveTarget;
-        saveOriginalCamera();
-        if (core.controls) {
-          core.controls.enabled = false;
-        }
-        const cameraType = activeCamera ?? 'back';
-        applyDriveCameraView(core, driveTarget, cameraType);
-        unregisterDriveFollowRef.current = core.registerFrameCallback(() => {
-          if (modeRef.current !== Modes.DRIVING || !driveTargetRef.current) {
-            return;
-          }
-          applyDriveCameraView(
-            core,
-            driveTargetRef.current,
-            activeCameraRef.current ?? 'back',
-          );
-        });
-      }
-    } else if (mode !== Modes.DRIVING && core.controls) {
-      core.controls.enabled = true;
-    }
-
-    return () => {
-      unregisterDriveFollowRef.current?.();
-      unregisterDriveFollowRef.current = null;
-    };
-  }, [mode, isFollowing, activeCamera, assetsReady, cameraNeedsReset]);
+    return undefined;
+  }, [mode, isFollowing, driveView, assetsReady, cameraNeedsReset]);
 
   return <div ref={mountRef} />;
 });
