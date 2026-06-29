@@ -20,6 +20,36 @@ const findModelRoot = (object, scene) => {
   return node;
 };
 
+const promoteWireframeToBox = (node) => {
+  if (node?.name === 'wireframe' && node.parent?.isMovable) {
+    return node.parent;
+  }
+  return node;
+};
+
+const findInteractableTarget = (object, flag) => {
+  let node = object;
+  while (node) {
+    if (node[flag]) {
+      return promoteWireframeToBox(node);
+    }
+    node = node.parent;
+  }
+  return null;
+};
+
+const findMovableTarget = (object) => findInteractableTarget(object, 'isMovable');
+
+const findMovableFromIntersects = (intersects) => {
+  for (const intersect of intersects) {
+    const movable = findMovableTarget(intersect.object);
+    if (movable) {
+      return movable;
+    }
+  }
+  return null;
+};
+
 const findDriveRoot = (object) => {
   let node = object;
   while (node) {
@@ -29,6 +59,21 @@ const findDriveRoot = (object) => {
     node = node.parent;
   }
   return null;
+};
+
+const resolveDriveTarget = (scene) => {
+  let fallback = null;
+  scene.traverse((child) => {
+    if (!child.userData?.frontCameraHelper || !child.userData?.backCameraHelper) {
+      return;
+    }
+    if (child.userData.isPlayableModel) {
+      fallback = child;
+    } else if (!fallback) {
+      fallback = child;
+    }
+  });
+  return fallback;
 };
 
 const applyDriveCameraView = (core, driveRoot, cameraType) => {
@@ -281,26 +326,30 @@ const GameEngine = forwardRef(({
       const intersectedObject = hitObject.parent;
 
       switch (mode) {
-        case Modes.MOVING:
-          if (hitObject.isMovable || intersectedObject?.isMovable) {
-            selectedObject.current = hitObject.isMovable ? hitObject : intersectedObject;
-            const root = findModelRoot(selectedObject.current, scene);
+        case Modes.MOVING: {
+          const movable = findMovableFromIntersects(intersects);
+          if (movable) {
+            selectedObject.current = movable;
+            const root = findModelRoot(movable, scene);
             dragRootRef.current = root;
             dragPlaneYRef.current = root.position.y;
             dragPosRef.current = { x: root.position.x, z: root.position.z };
             isDragging.current = true;
-            selectedObject.current.visible = true;
+            movable.visible = true;
             startDragSmooth();
           }
           break;
-        case Modes.ROTATING:
-          if (intersectedObject.isRotatable) {
-            hideWireframe(intersectedObject);
-            selectedObject.current = intersectedObject;
-            intersectedObject.parent.rotateY(Math.PI / 2);
-            showWireframe(intersectedObject);
+        }
+        case Modes.ROTATING: {
+          const rotatable = findInteractableTarget(hitObject, 'isRotatable');
+          if (rotatable) {
+            hideWireframe(rotatable);
+            selectedObject.current = rotatable;
+            rotatable.parent.rotateY(Math.PI / 2);
+            showWireframe(rotatable);
           }
           break;
+        }
         case Modes.PAINTING: {
           const filteredIntersects = intersects.filter(
             (intersect) => intersect.object.name !== 'transparentBox' && intersect.object.name !== 'wireframe',
@@ -323,7 +372,7 @@ const GameEngine = forwardRef(({
           }
           break;
         case Modes.DRIVING: {
-          const driveRoot = findDriveRoot(hitObject);
+          const driveRoot = findDriveRoot(hitObject) ?? resolveDriveTarget(scene);
           if (driveRoot) {
             saveOriginalCamera();
             driveTargetRef.current = driveRoot;
@@ -381,15 +430,11 @@ const GameEngine = forwardRef(({
 
     unregisterDriveFollowRef.current?.();
     if (mode === Modes.DRIVING && isFollowing) {
-      if (!driveTargetRef.current) {
-        scene.traverse((child) => {
-          if (!driveTargetRef.current && child.userData?.frontCameraHelper) {
-            driveTargetRef.current = child;
-          }
-        });
-      }
-      if (driveTargetRef.current) {
-        applyDriveCameraView(core, driveTargetRef.current, activeCamera ?? 'back');
+      const driveTarget = driveTargetRef.current ?? resolveDriveTarget(scene);
+      if (driveTarget) {
+        driveTargetRef.current = driveTarget;
+        saveOriginalCamera();
+        applyDriveCameraView(core, driveTarget, activeCamera ?? 'back');
         unregisterDriveFollowRef.current = core.registerFrameCallback(() => {
           if (!driveTargetRef.current) {
             return;
@@ -433,6 +478,7 @@ const GameEngine = forwardRef(({
     addModel,
     activeCamera,
     isFollowing,
+    assetsReady,
     cameraNeedsReset,
     selectedClimateMode,
     setCameraNeedsReset,
