@@ -72,14 +72,14 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
               )}
               {isPaletteOpen && <Palette variant="workshop" />}
             </div>
-            {showBucket && (
-              <div className={styles.bucketLayer}>
-                <Bucket dataSource="bricks" />
-              </div>
-            )}
           </div>
         </div>
       </GameShell>
+      {showBucket && (
+        <div className={styles.bucketLayer}>
+          <Bucket dataSource="bricks" />
+        </div>
+      )}
     </div>
   );
 };

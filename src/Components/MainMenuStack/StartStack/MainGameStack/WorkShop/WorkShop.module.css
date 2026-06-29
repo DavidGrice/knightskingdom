@@ -1,5 +1,6 @@
-/* Top/bottom bars via GameShell (unscaled); 800×600 stage scales inside */
+/* Top/bottom bars + bucket unscaled on 800px anchor; stage alone scales */
 .workshopRoot {
+    position: relative;
     width: 100vw;
     height: 100vh;
     background: #000;
@@ -33,12 +34,15 @@
     z-index: 4;
 }
 
+/* Same 800px center anchor as GameShell toolbars — no canvas scale */
 .bucketLayer {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(calc(-50% + var(--wsl-bar-offset-x, 0px)));
     width: 800px;
-    height: 600px;
-    z-index: 8;
+    height: 100vh;
+    z-index: 5;
     pointer-events: none;
     overflow: visible;
 }
