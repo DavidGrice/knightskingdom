@@ -22,7 +22,7 @@
     width: 800px;
     height: 600px;
     background: #000;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .bottomComponent {
@@ -43,13 +43,28 @@
     z-index: 4;
 }
 
+/* Bucket dropdown above bottom bar, below top toolbar */
+.bucketLayer {
+    position: absolute;
+    inset: 0;
+    width: 800px;
+    height: 600px;
+    z-index: 6;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.bucketLayer > * {
+    pointer-events: auto;
+}
+
 .topComponent {
     position: absolute;
     top: 0;
     left: 0;
     width: 800px;
     height: 103px;
-    z-index: 5;
+    z-index: 7;
 }
 
 .stage > * {

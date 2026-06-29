@@ -57,9 +57,13 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
                 {mapData.name}
               </div>
             )}
-            {showBucket && <Bucket dataSource="bricks" />}
             {isPaletteOpen && <Palette variant="workshop" />}
           </div>
+          {showBucket && (
+            <div className={styles.bucketLayer}>
+              <Bucket dataSource="bricks" />
+            </div>
+          )}
           <div className={styles.topComponent}>
             <ComponentTop
               mode="workshop"

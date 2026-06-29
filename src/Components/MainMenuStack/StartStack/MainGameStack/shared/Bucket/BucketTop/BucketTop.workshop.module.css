@@ -3,12 +3,14 @@
     top: var(--wkb-tab-top, 22px);
     left: var(--wkb-tab-left, 14px);
     width: var(--wkb-tab-w, 210px);
-    height: var(--wkb-tab-h, 172px);
-    z-index: 1;
+    height: var(--wkb-tab-h, 214px);
+    z-index: 3;
+    overflow: visible;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    pointer-events: auto;
 }
 
 .bucketTopRow {
