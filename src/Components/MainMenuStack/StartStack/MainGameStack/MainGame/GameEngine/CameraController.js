@@ -1,5 +1,6 @@
 import { Modes } from './GameEngineResourceStack/index';
 import { DriveCameraRig } from './DriveCameraRig';
+import { getDriveCameraProfile } from './driveCameraProfiles';
 
 export class CameraController {
   constructor(core) {
@@ -19,14 +20,18 @@ export class CameraController {
     this.activeDriveId = null;
   }
 
-  registerSubject(champRoot, driveId, { isDefault = false } = {}) {
+  registerSubject(champRoot, driveId, { isDefault = false, profileId } = {}) {
     if (!champRoot.getObjectByName('head_back')) {
       return;
     }
 
-    const rig = new DriveCameraRig(champRoot);
+    const profile = getDriveCameraProfile(
+      profileId ?? champRoot.userData.driveCameraProfileId,
+    );
+    const rig = new DriveCameraRig(champRoot, profile);
     champRoot.userData.driveId = driveId;
-    this.subjects.set(driveId, { rig, root: champRoot });
+    champRoot.userData.driveCameraProfileId = profile.id;
+    this.subjects.set(driveId, { rig, root: champRoot, profileId: profile.id });
 
     if (isDefault) {
       this.defaultDriveId = driveId;

@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 
 import Archer from '../GameEngineResourceStack/models/archer_with_box2.glb';
+import { resolveDriveCameraProfile } from '../driveCameraProfiles';
 
 const SelectedModels = {
     NONE: 'NONE',
@@ -56,11 +57,17 @@ const configureGltfMeshNodes = (gltf) => {
     });
 };
 
-const registerDriveSubject = (gltf, cameraController, { driveId, isDefault = false }) => {
+const attachDriveCameraProfile = (gltf, modelKey, modelName) => {
+    const profile = resolveDriveCameraProfile(modelKey, modelName);
+    gltf.scene.userData.driveCameraProfileId = profile.id;
+    return profile.id;
+};
+
+const registerDriveSubject = (gltf, cameraController, { driveId, isDefault = false, profileId }) => {
     if (!cameraController || !gltf.scene.getObjectByName('head_back')) {
         return;
     }
-    cameraController.registerSubject(gltf.scene, driveId, { isDefault });
+    cameraController.registerSubject(gltf.scene, driveId, { isDefault, profileId });
 };
 
 const setupMapGltfScene = (gltf, mapModel) => {
@@ -71,6 +78,7 @@ const setupMapGltfScene = (gltf, mapModel) => {
     gltf.scene.userData.modelId = mapModel.name;
 
     configureGltfMeshNodes(gltf);
+    attachDriveCameraProfile(gltf, null, mapModel.name);
     gltf.scene.position.set(mapModel.position.x, mapModel.position.y, mapModel.position.z);
 };
 
@@ -87,6 +95,7 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color }) =
     gltf.scene.userData.modelId = modelKey;
 
     configureGltfMeshNodes(gltf);
+    attachDriveCameraProfile(gltf, modelKey, modelConfig.name);
 
     if (position) {
         if (position.isVector3) {
@@ -129,6 +138,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                         registerDriveSubject(gltf, cameraController, {
                             driveId: `champ-map-${model.id}`,
                             isDefault: true,
+                            profileId: gltf.scene.userData.driveCameraProfileId,
                         });
 
                         loadedCount += 1;
@@ -150,6 +160,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                     registerDriveSubject(gltf, cameraController, {
                         driveId: restoredId,
                         isDefault: false,
+                        profileId: gltf.scene.userData.driveCameraProfileId,
                     });
                 },
                 undefined,
@@ -168,6 +179,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                     registerDriveSubject(gltf, cameraController, {
                         driveId: `champ-added-${modelData}-${addedChampCounter}`,
                         isDefault: false,
+                        profileId: gltf.scene.userData.driveCameraProfileId,
                     });
                 },
                 undefined,
