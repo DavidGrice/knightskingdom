@@ -73,9 +73,9 @@ export const HOLDER_VARIANTS = {
     gridRows: 3,
     gridLeft: 24,
     /** Dark-red brick recess bands in drop_down.png ≈ y 430–466 */
-    gridTop: 400,
-    upArrow: { x: 119, y: 218 },
-    downArrow: { x: 119, y: 536 },
+    gridTop: 330,
+    upArrow: { x: 119, y: 232 },
+    downArrow: { x: 119, y: 512 },
     help: null,
     footer: null,
     width: 95,
@@ -86,7 +86,8 @@ export const HOLDER_VARIANTS = {
       top: 22,
       left: 14,
       width: 210,
-      height: 172,
+      /** 3×70px cells + 2×2px row gaps = 214px */
+      height: 214,
       cols: 3,
       cell: 70,
       rowGap: 2,
