@@ -7,6 +7,8 @@ const _faceForward = new THREE.Vector3();
 const _headUp = new THREE.Vector3();
 const _headFrontPos = new THREE.Vector3();
 const _headBackPos = new THREE.Vector3();
+const _lookForward = new THREE.Vector3();
+const _worldUp = new THREE.Vector3(0, 1, 0);
 const _box = new THREE.Box3();
 
 const LOCAL_AXIS_VECTORS = {
@@ -51,9 +53,7 @@ const resolveFacingSource = (champRoot, facing) => {
   return champRoot;
 };
 
-const getFaceForward = (champRoot, profile, target) => {
-  const { facing } = profile;
-
+const getFaceForward = (champRoot, facing, target) => {
   if (facing.strategy === 'meshCenterPair') {
     const fromMesh = findMesh(champRoot, [
       facing.fromMesh,
@@ -103,6 +103,19 @@ const getFaceForward = (champRoot, profile, target) => {
 
   if (facing.sign) {
     target.multiplyScalar(facing.sign);
+  }
+
+  return target;
+};
+
+const getFirstPersonLookForward = (champRoot, profile, bodyForward, target) => {
+  const facing = profile.firstPersonFacing ?? profile.facing;
+  if (!getFaceForward(champRoot, facing, target)) {
+    target.copy(bodyForward);
+  }
+
+  if (profile.offsets?.firstPersonYawRadians) {
+    target.applyAxisAngle(_worldUp, profile.offsets.firstPersonYawRadians);
   }
 
   return target;
@@ -202,7 +215,7 @@ export class DriveCameraRig {
   applyToCamera(camera, view) {
     this.champRoot.updateWorldMatrix(true, true);
 
-    if (!getFaceForward(this.champRoot, this.profile, _faceForward)) {
+    if (!getFaceForward(this.champRoot, this.profile.facing, _faceForward)) {
       return false;
     }
 
@@ -218,9 +231,10 @@ export class DriveCameraRig {
       _position.y += offsets.thirdPersonHeight ?? 0;
       camera.position.copy(_position);
     } else {
-      getEyePosition(this.champRoot, anchors, offsets, _faceForward, _position);
+      getFirstPersonLookForward(this.champRoot, this.profile, _faceForward, _lookForward);
+      getEyePosition(this.champRoot, anchors, offsets, _lookForward, _position);
       camera.position.copy(_position);
-      _lookAt.copy(_position).addScaledVector(_faceForward, offsets.firstLookAhead);
+      _lookAt.copy(_position).addScaledVector(_lookForward, offsets.firstLookAhead);
       if (offsets.levelFirstPersonPitch) {
         _lookAt.y = _position.y;
       }
