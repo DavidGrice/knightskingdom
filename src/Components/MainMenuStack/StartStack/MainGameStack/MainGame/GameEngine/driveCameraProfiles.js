@@ -2,9 +2,10 @@
  * Per-model drive camera profiles.
  *
  * Different GLB champs can have different baked orientations. Do not assume
- * Object3D.getWorldDirection() (-Z) is horizontal forward — e.g. archer_with_box2
- * bakes a quaternion where -Z points mostly up (+Y). For that asset, horizontal
- * facing comes from chest_front local +X projected onto the XZ plane.
+ * Object3D.getWorldDirection() (-Z) or mesh local ±X is horizontal forward.
+ * Example: archer_with_box2 bakes a quaternion where -Z points mostly up (+Y).
+ * For that asset, horizontal facing is chest_front bbox center minus
+ * chest_back bbox center, flattened to the XZ plane.
  *
  * When adding a new driveable model:
  * 1. Add a profile here (or reuse ARCHER if the rig matches).
@@ -17,27 +18,26 @@ export const DRIVE_CAMERA_PROFILES = {
     id: 'ARCHER',
     label: 'Archer minifig (archer_with_box2.glb)',
     notes:
-      'Baked part quaternion points -Z upward. Horizontal face-out uses chest_front -X on XZ (+X points into the torso).',
+      'Face forward = normalize(chest_front center - chest_back center) on XZ. Not local ±X or -Z.',
     facing: {
-      strategy: 'meshLocalAxis',
-      sourceMesh: 'chest_front',
-      fallbackMeshes: ['head_front', 'head_back'],
-      localAxis: 'negX',
+      strategy: 'meshCenterPair',
+      fromMesh: 'chest_back',
+      toMesh: 'chest_front',
       flattenY: true,
     },
     anchors: {
       headFront: 'head_front',
       headBack: 'head_back',
       chestFront: 'chest_front',
-      thirdPersonBase: 'head_front',
+      chestBack: 'chest_back',
+      thirdPersonLookAt: 'head_front',
     },
     offsets: {
-      thirdPersonDistance: 7,
-      thirdPersonHeight: 0.25,
+      thirdPersonDistance: 4.5,
+      thirdPersonHeight: 0.1,
       firstLookAhead: 14,
-      eyeHeightLift: 0.42,
-      eyeForwardInset: 0.15,
-      lookAtHeightBoost: 0.15,
+      eyeBehindFace: 0.15,
+      lookAtHeightBoost: 0,
       levelFirstPersonPitch: true,
     },
   },
@@ -55,6 +55,7 @@ export const DRIVE_CAMERA_PROFILES = {
     anchors: {
       headFront: 'head_front',
       headBack: 'head_back',
+      thirdPersonLookAt: 'head_front',
     },
     offsets: {
       thirdPersonDistance: 6,

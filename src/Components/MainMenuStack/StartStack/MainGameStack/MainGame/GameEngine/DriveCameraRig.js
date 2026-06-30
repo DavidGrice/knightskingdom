@@ -7,7 +7,7 @@ const _faceForward = new THREE.Vector3();
 const _headUp = new THREE.Vector3();
 const _headFrontPos = new THREE.Vector3();
 const _headBackPos = new THREE.Vector3();
-const _center = new THREE.Vector3();
+const _box = new THREE.Box3();
 
 const LOCAL_AXIS_VECTORS = {
   posX: new THREE.Vector3(1, 0, 0),
@@ -31,6 +31,16 @@ const findMesh = (champRoot, names = []) => {
   return null;
 };
 
+const getMeshBBoxCenter = (mesh, target) => {
+  if (!mesh) {
+    return null;
+  }
+  mesh.updateWorldMatrix(true, false);
+  _box.setFromObject(mesh);
+  _box.getCenter(target);
+  return target;
+};
+
 const resolveFacingSource = (champRoot, facing) => {
   if (facing.strategy === 'meshLocalAxis') {
     return findMesh(champRoot, [
@@ -44,7 +54,24 @@ const resolveFacingSource = (champRoot, facing) => {
 const getFaceForward = (champRoot, profile, target) => {
   const { facing } = profile;
 
-  if (facing.strategy === 'meshLocalAxis') {
+  if (facing.strategy === 'meshCenterPair') {
+    const fromMesh = findMesh(champRoot, [
+      facing.fromMesh,
+      ...(facing.fallbackFromMeshes ?? []),
+    ]);
+    const toMesh = findMesh(champRoot, [
+      facing.toMesh,
+      ...(facing.fallbackToMeshes ?? []),
+    ]);
+
+    if (!fromMesh || !toMesh) {
+      return null;
+    }
+
+    getMeshBBoxCenter(toMesh, _headFrontPos);
+    getMeshBBoxCenter(fromMesh, _headBackPos);
+    target.copy(_headFrontPos).sub(_headBackPos);
+  } else if (facing.strategy === 'meshLocalAxis') {
     const source = resolveFacingSource(champRoot, facing);
     if (!source) {
       return null;
@@ -86,35 +113,36 @@ const getHeadCenter = (champRoot, anchors, target) => {
   const headBack = findMesh(champRoot, [anchors.headBack]);
 
   if (headFront && headBack) {
-    headFront.getWorldPosition(_headFrontPos);
-    headBack.getWorldPosition(_headBackPos);
+    getMeshBBoxCenter(headFront, _headFrontPos);
+    getMeshBBoxCenter(headBack, _headBackPos);
     target.copy(_headFrontPos).lerp(_headBackPos, 0.5);
     return target;
   }
 
-  if (headBack) {
-    headBack.getWorldPosition(target);
-  } else if (headFront) {
-    headFront.getWorldPosition(target);
+  if (headBack && getMeshBBoxCenter(headBack, target)) {
+    return target;
   }
-  return target;
-};
-
-const getThirdPersonBase = (champRoot, anchors, target) => {
-  const baseMesh = findMesh(champRoot, [
-    anchors.thirdPersonBase,
-    anchors.chestFront,
-    anchors.headFront,
-    anchors.headBack,
-  ]);
-
-  if (baseMesh) {
-    baseMesh.getWorldPosition(target);
+  if (headFront && getMeshBBoxCenter(headFront, target)) {
     return target;
   }
 
-  getHeadCenter(champRoot, anchors, target);
+  champRoot.getWorldPosition(target);
   return target;
+};
+
+const getThirdPersonLookAt = (champRoot, anchors, target) => {
+  const lookMesh = findMesh(champRoot, [
+    anchors.thirdPersonLookAt,
+    anchors.headFront,
+    anchors.chestFront,
+    anchors.headBack,
+  ]);
+
+  if (lookMesh && getMeshBBoxCenter(lookMesh, target)) {
+    return target;
+  }
+
+  return getHeadCenter(champRoot, anchors, target);
 };
 
 const getEyePosition = (champRoot, anchors, offsets, faceForward, target) => {
@@ -123,12 +151,20 @@ const getEyePosition = (champRoot, anchors, offsets, faceForward, target) => {
   const head = headFront ?? headBack;
 
   if (!head) {
-    getHeadCenter(champRoot, anchors, target);
+    return getHeadCenter(champRoot, anchors, target);
+  }
+
+  if (offsets.eyeBehindFace != null) {
+    const eyeMesh = headFront ?? head;
+    if (!getMeshBBoxCenter(eyeMesh, target)) {
+      return getHeadCenter(champRoot, anchors, target);
+    }
+    target.addScaledVector(faceForward, -offsets.eyeBehindFace);
     return target;
   }
 
   head.updateWorldMatrix(true, false);
-  head.getWorldPosition(target);
+  getMeshBBoxCenter(head, target);
 
   _headUp.set(0, 1, 0).transformDirection(head.matrixWorld);
   target.addScaledVector(_headUp, offsets.eyeHeightLift ?? 0);
@@ -153,18 +189,16 @@ export class DriveCameraRig {
     }
 
     const { offsets, anchors } = this.profile;
-    getHeadCenter(this.champRoot, anchors, _center);
 
     if (view === 'third') {
-      getThirdPersonBase(this.champRoot, anchors, _position);
-      _position.addScaledVector(
+      getThirdPersonLookAt(this.champRoot, anchors, _lookAt);
+      _lookAt.y += offsets.lookAtHeightBoost ?? 0;
+      _position.copy(_lookAt).addScaledVector(
         _faceForward,
         offsets.thirdPersonDistance * (offsets.thirdPersonDistanceSign ?? 1),
       );
-      _position.y += offsets.thirdPersonHeight;
+      _position.y += offsets.thirdPersonHeight ?? 0;
       camera.position.copy(_position);
-      _lookAt.copy(_center);
-      _lookAt.y += offsets.lookAtHeightBoost ?? 0.2;
     } else {
       getEyePosition(this.champRoot, anchors, offsets, _faceForward, _position);
       camera.position.copy(_position);
