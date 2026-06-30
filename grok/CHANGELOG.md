@@ -36,7 +36,22 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 Parametric bricks with stud bumps; unknown catalog ids fall back to 2×2. GLB override via `brickCatalog` `shape: 'GLB'`. Build passes.
 
-**Next: D2** — persist `brickInstances[]` on save; restore on workshop re-entry.
+## 2026-06-30 — Phase 11 D2: workshop save/load
+
+| File | Change |
+|------|--------|
+| `src/api/workshopSave.js` | **New** — `getWorkshopDraft`, `saveWorkshopDraft`, `clearWorkshopDraft` |
+| `WorkshopEngineCore.js` | `loadBrickInstances`, `captureFrame` |
+| `WorkshopEngine.jsx` | Hydrate draft after engine mount |
+| `WorkshopContext.jsx` | `persistDraft` on save + leave |
+| `WorldSessionProvider.jsx` | `onSaveWorkshopDraft`, `workshopDraft` memo |
+| `workshop/page.jsx`, `WorkshopScreen.jsx` | Wire profile + draft |
+
+Draft stored at `profile.savedWorlds[worldId].workshopDraft`.
+
+**Backlog logged:** bucket closes on brick select; straight camera; finite build bounds.
+
+**Next: D3** — expand `brickCatalog.js`; address backlog items.
 
 ---
 

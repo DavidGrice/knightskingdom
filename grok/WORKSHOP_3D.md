@@ -2,7 +2,7 @@
 
 **Branch:** `grok-dev`  
 **Last updated:** 2026-06-30  
-**Status:** **D1 implemented** (2026-06-30) — D2 persistence next  
+**Status:** **D2 implemented** (2026-06-30) — D3 catalog expansion next  
 **Prior work:** Workshop UI/layout ✅ complete (`WorkshopStageLayout`, `workshopStageMetrics.js`, `HolderGridLayout`)
 
 ---
@@ -72,12 +72,22 @@ flowchart LR
 | Phase | Goal | Deliverable | Effort |
 |-------|------|-------------|--------|
 | **D1** | Playable workshop | `WorkshopEngineCore`, build plate, ~12 core parametric bricks, place/move/rotate/delete/sweep, bucket selection wired | Small |
-| **D2** | Polish + persistence | Paint, duplicate, stud snap, `WorkshopContext`, save/load `brickInstances[]` on profile | Medium |
+| **D2** | Polish + persistence | ✅ `workshopSave.js`, save/load `brickInstances[]` on `savedWorlds[id].workshopDraft` | Medium |
 | **D3** | Full bucket catalog (3D) | `brickCatalog.js` — map every bucket entry to parametric shape + stud footprint; approximate slopes/cylinders/arches | Medium–Large |
 | **D4** | Main world integration | Export creation → `customCreations[]` → "My Creations" in game bucket → place as runtime `Group` in world | Medium |
 | **D5** | Optional extras | Challenge builds, building instructions, hand-curated GLBs for hero parts | Large / optional |
 
 Each phase must pass `npm run build`.
+
+---
+
+## Backlog (user-reported, post-D1)
+
+| Priority | Issue | Notes |
+|----------|-------|-------|
+| High | **Bucket closes on brick select** | `handleBrickSelect` sets `TOGGLE_BUCKET false` — keep bucket open while placing (original game behavior) |
+| High | **Fixed straight camera** | Match main game: fixed camera facing straight at build area, not current diagonal isometric `(14, 11, 14)` |
+| Medium | **Finite build bounds vs full viewport** | Viewport/canvas can span full width; actual **model/build plate** for save-to-world should be a **finite stud region** (define export bounds separate from visual plate) |
 
 ---
 
@@ -325,7 +335,9 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 |------|-------|
 | 2026-06-30 | Workshop UI ✅. Researched original game. Option D recommended. |
 | 2026-06-30 | **User confirmed Option D.** LCA→GLB abandoned. Plan revised. |
-| 2026-06-30 | **D1 shipped:** WorkshopEngine, BrickFactory (parametric + GLB path), WorkshopContext, toolbar/bucket wired. Optional GLBs: `public/workshop/bricks/`. **Next: D2** save/load `brickInstances[]`. |
+| 2026-06-30 | **D1 shipped:** WorkshopEngine, BrickFactory, WorkshopContext, toolbar wired. |
+| 2026-06-30 | **Backlog added:** bucket stay-open, straight camera, finite build bounds. |
+| 2026-06-30 | **D2 shipped:** `workshopSave.js`, hydrate on enter, save on save/leave + thumbnail. **Next: D3** catalog + backlog fixes. |
 
 ---
 

@@ -19,7 +19,11 @@ export class WorkshopEngineCore {
     this.camera.position.set(14, 11, 14);
     this.camera.lookAt(0, 0, 0);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: false,
+      preserveDrawingBuffer: true,
+    });
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -196,6 +200,42 @@ export class WorkshopEngineCore {
       rotation: { x: brick.rotation.x, y: brick.rotation.y, z: brick.rotation.z },
       color: brick.userData.color || this.defaultColor,
     }));
+  }
+
+  loadBrickInstances(instances = []) {
+    this.clearAllBricks();
+    instances.forEach((entry) => {
+      if (!entry?.brickId) {
+        return;
+      }
+      const brick = createBrickSync(entry.brickId, { color: entry.color || this.defaultColor });
+      if (entry.position) {
+        brick.position.set(entry.position.x, entry.position.y, entry.position.z);
+      }
+      if (entry.rotation) {
+        brick.rotation.set(entry.rotation.x, entry.rotation.y, entry.rotation.z);
+      }
+      brick.userData.instanceId = entry.instanceId
+        || `${entry.brickId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      brick.userData.color = (entry.color || this.defaultColor).replace?.('#', '')
+        || entry.color
+        || this.defaultColor;
+      this.bricksGroup.add(brick);
+    });
+  }
+
+  captureFrame() {
+    if (!this.mountNode) {
+      return null;
+    }
+    this.renderer.render(this.scene, this.camera);
+    try {
+      const dataUrl = this.renderer.domElement.toDataURL('image/png');
+      return dataUrl && dataUrl.length > 100 ? dataUrl : null;
+    } catch (error) {
+      console.error('Workshop captureFrame failed:', error);
+      return null;
+    }
   }
 
   dispose() {

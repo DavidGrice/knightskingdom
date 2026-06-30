@@ -17,6 +17,7 @@ import {
   deleteSavedWorld,
   removeWorldSnapshot,
 } from '@/api/worldSave';
+import { getWorkshopDraft, saveWorkshopDraft } from '@/api/workshopSave';
 
 const WorldSessionContext = createContext(null);
 
@@ -134,6 +135,32 @@ export const WorldSessionProvider = ({ children }) => {
     [userData, updateUserData, currentProfile]
   );
 
+  const onSaveWorkshopDraft = useCallback(
+    (profileId, worldId, payload) => {
+      if (!userData || !updateUserData) {
+        return;
+      }
+      const updated = saveWorkshopDraft(userData, profileId, worldId, payload);
+      updateUserData(updated);
+      setWorldData((prev) => ({
+        ...prev,
+        workshopDraft: {
+          brickInstances: payload.brickInstances || [],
+          thumbnail: payload.thumbnail ?? null,
+          updatedAt: new Date().toISOString(),
+        },
+      }));
+    },
+    [userData, updateUserData],
+  );
+
+  const workshopDraft = useMemo(
+    () => getWorkshopDraft(currentProfile, worldData?.id)
+      || worldData?.workshopDraft
+      || null,
+    [currentProfile, worldData],
+  );
+
   const onRemoveSnapshot = useCallback(
     (worldId, snapshotId) => {
       if (!userData || !updateUserData || !currentProfile?.id) {
@@ -175,10 +202,13 @@ export const WorldSessionProvider = ({ children }) => {
       onAppendSnapshot,
       onDeleteSavedWorld,
       onRemoveSnapshot,
+      onSaveWorkshopDraft,
+      workshopDraft,
     }),
     [
       worldData,
       currentProfile,
+      workshopDraft,
       navigateToStartMenu,
       navigateToMainGame,
       navigateToWorkshop,
@@ -189,6 +219,7 @@ export const WorldSessionProvider = ({ children }) => {
       onAppendSnapshot,
       onDeleteSavedWorld,
       onRemoveSnapshot,
+      onSaveWorkshopDraft,
     ]
   );
 

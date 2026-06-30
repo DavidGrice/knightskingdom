@@ -234,8 +234,10 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 
 | Sub-phase | Status | Deliverable |
 |-----------|--------|-------------|
-| D1 | ⬜ **NEXT** | `WorkshopEngineCore` + `BrickFactory` + ~12 parametric bricks + basic tools |
-| D2 | ⬜ | Paint, duplicate, stud snap, `brickInstances[]` save/load on profile |
+| D1 | ✅ | `WorkshopEngineCore` + `BrickFactory` + basic tools |
+| D2 | ✅ | `workshopSave.js`, `brickInstances[]` save/load + thumbnail |
+| D2b | ⬜ **Backlog** | Bucket stay-open; straight camera; finite build bounds |
+| D3 | ⬜ **NEXT** | Full parametric `brickCatalog.js` (~200 entries) |
 | D3 | ⬜ | Full `brickCatalog.js` — map ~200 bucket entries to parametric shape recipes |
 | D4 | ⬜ | `customCreations[]` → main world bucket → runtime `Group` placement |
 | D5 | ⬜ | Challenges + instructions + optional hand-authored GLBs (optional) |

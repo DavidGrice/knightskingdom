@@ -14,7 +14,14 @@ import { initialWorkshopState, workshopReducer } from './workshopReducer';
 
 const WorkshopContext = createContext(null);
 
-export const WorkshopProvider = ({ children }) => {
+export const WorkshopProvider = ({
+  children,
+  mapData,
+  currentProfile,
+  workshopDraft,
+  onSaveWorkshopDraft,
+  navigateToMainGame,
+}) => {
   const [state, dispatch] = useReducer(workshopReducer, initialWorkshopState);
   const engineRef = useRef(null);
 
@@ -76,9 +83,34 @@ export const WorkshopProvider = ({ children }) => {
     resetModes();
   }, [resetModes]);
 
+  const persistDraft = useCallback(() => {
+    const profileId = currentProfile?.id;
+    const worldId = mapData?.id;
+    if (!profileId || worldId == null || !onSaveWorkshopDraft) {
+      return;
+    }
+
+    const brickInstances = engineRef.current?.getBrickInstances?.() ?? [];
+    let thumbnail = workshopDraft?.thumbnail ?? null;
+    try {
+      thumbnail = engineRef.current?.captureFrame?.() || thumbnail;
+    } catch {
+      // Canvas capture can fail; still persist brick list.
+    }
+
+    onSaveWorkshopDraft(profileId, worldId, { brickInstances, thumbnail });
+  }, [currentProfile, mapData, onSaveWorkshopDraft, workshopDraft]);
+
+  const handleSave = useCallback(() => {
+    persistDraft();
+    navigateToMainGame?.(mapData);
+  }, [persistDraft, navigateToMainGame, mapData]);
+
   const value = useMemo(() => ({
     state,
     engineRef,
+    mapData,
+    workshopDraft,
     resetModes,
     handleBucket,
     handleBrickSelect,
@@ -89,8 +121,12 @@ export const WorkshopProvider = ({ children }) => {
     handlePalette,
     handleColor,
     handleSweep,
+    handleSave,
+    persistDraft,
   }), [
     state,
+    mapData,
+    workshopDraft,
     resetModes,
     handleBucket,
     handleBrickSelect,
@@ -101,6 +137,8 @@ export const WorkshopProvider = ({ children }) => {
     handlePalette,
     handleColor,
     handleSweep,
+    handleSave,
+    persistDraft,
   ]);
 
   return (

@@ -11,12 +11,13 @@ import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../sh
 import { WorkshopProvider, useWorkshopContext } from './context';
 import { WorkshopEngine } from './WorkshopEngine';
 
-const WorkShopContent = ({ navigateToMainGame, mapData }) => {
+const WorkShopContent = () => {
   const scalerRef = useRef(null);
   const [activeIcon, setActiveIcon] = useState(null);
   const {
     state,
     engineRef,
+    workshopDraft,
     resetModes,
     handleBucket,
     handleBrickSelect,
@@ -27,6 +28,8 @@ const WorkShopContent = ({ navigateToMainGame, mapData }) => {
     handlePalette,
     handleColor,
     handleSweep,
+    handleSave,
+    mapData,
   } = useWorkshopContext();
 
   const {
@@ -38,10 +41,6 @@ const WorkShopContent = ({ navigateToMainGame, mapData }) => {
   } = state;
 
   useWorkshopCanvasScale(scalerRef);
-
-  const handleSave = () => {
-    navigateToMainGame(mapData);
-  };
 
   const stageStyle = useMemo(() => workshopStageToCssVars(), []);
   const { worldTitle } = WORKSHOP_STAGE_METRICS;
@@ -62,7 +61,7 @@ const WorkShopContent = ({ navigateToMainGame, mapData }) => {
             handlePalette={handlePalette}
             handleSave={handleSave}
             resetModes={resetModes}
-            navigateToMainGame={() => navigateToMainGame(mapData)}
+            navigateToMainGame={handleSave}
             activeToolbarIcon={activeIcon}
             setActiveToolbarIcon={setActiveIcon}
           />
@@ -84,6 +83,7 @@ const WorkShopContent = ({ navigateToMainGame, mapData }) => {
                 mode={mode}
                 selectedBrickId={selectedBrickId}
                 color={color}
+                workshopDraft={workshopDraft}
               />
               {showWorldTitle && (
                 <div
@@ -109,9 +109,21 @@ const WorkShopContent = ({ navigateToMainGame, mapData }) => {
   );
 };
 
-const WorkShop = (props) => (
-  <WorkshopProvider>
-    <WorkShopContent {...props} />
+const WorkShop = ({
+  mapData,
+  navigateToMainGame,
+  currentProfile,
+  workshopDraft,
+  onSaveWorkshopDraft,
+}) => (
+  <WorkshopProvider
+    mapData={mapData}
+    currentProfile={currentProfile}
+    workshopDraft={workshopDraft}
+    onSaveWorkshopDraft={onSaveWorkshopDraft}
+    navigateToMainGame={navigateToMainGame}
+  >
+    <WorkShopContent />
   </WorkshopProvider>
 );
 

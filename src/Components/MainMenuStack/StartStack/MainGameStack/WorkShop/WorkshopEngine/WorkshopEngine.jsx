@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
+  useState,
 } from 'react';
 import * as THREE from 'three';
 import { WorkshopEngineCore } from './WorkshopEngineCore';
@@ -29,6 +30,7 @@ const WorkshopEngine = forwardRef(({
   mode,
   selectedBrickId,
   color,
+  workshopDraft,
 }, ref) => {
   const mountRef = useRef(null);
   const coreRef = useRef(null);
@@ -40,6 +42,8 @@ const WorkshopEngine = forwardRef(({
   const isDragging = useRef(false);
   const mouse = useRef(new THREE.Vector2());
   const raycaster = useRef(new THREE.Raycaster());
+  const hasHydratedRef = useRef(false);
+  const [engineReady, setEngineReady] = useState(false);
 
   modeRef.current = mode;
   selectedBrickIdRef.current = selectedBrickId;
@@ -49,6 +53,8 @@ const WorkshopEngine = forwardRef(({
     clearAllBricks: () => coreRef.current?.clearAllBricks(),
     setDefaultColor: (hex) => coreRef.current?.setDefaultColor(hex),
     getBrickInstances: () => coreRef.current?.getBrickInstances() ?? [],
+    loadBrickInstances: (instances) => coreRef.current?.loadBrickInstances(instances),
+    captureFrame: () => coreRef.current?.captureFrame() ?? null,
   }), []);
 
   useEffect(() => {
@@ -60,13 +66,28 @@ const WorkshopEngine = forwardRef(({
     const core = new WorkshopEngineCore();
     coreRef.current = core;
     canvasRef.current = core.mount(mountNode);
+    setEngineReady(true);
 
     return () => {
       core.dispose();
       coreRef.current = null;
       canvasRef.current = null;
+      hasHydratedRef.current = false;
+      setEngineReady(false);
     };
   }, []);
+
+  useEffect(() => {
+    const core = coreRef.current;
+    if (!engineReady || !core || hasHydratedRef.current) {
+      return;
+    }
+    const instances = workshopDraft?.brickInstances;
+    if (instances?.length) {
+      core.loadBrickInstances(instances);
+    }
+    hasHydratedRef.current = true;
+  }, [engineReady, workshopDraft]);
 
   useEffect(() => {
     coreRef.current?.setDefaultColor(color);

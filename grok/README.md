@@ -43,8 +43,8 @@ npm run build
 | Area | State |
 |------|-------|
 | **Phases 0–10** | ✅ Complete |
-| **Phase 11** | 🔄 Workshop 3D — **D1 done**, D2 save/load next |
-| **Working on** | D2: `brickInstances[]` persistence on profile — see [`WORKSHOP_3D.md`](./WORKSHOP_3D.md) |
+| **Phase 11** | 🔄 Workshop 3D — **D2 done**, D3 + backlog next |
+| **Working on** | D3 parametric catalog; backlog: bucket stay-open, straight camera, finite build bounds |
 | **Constraint** | **LCA→GLB abandoned** — use procedural/parametric meshes only |
 
 **Recent commits:**
@@ -166,8 +166,9 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 - [x] **Fix screenshot menu** — SnapShot gallery UI/layout polish
 - [x] **Fix workshop menu** — WorkShop toolbar/panel UI/layout polish (`WorkshopStageLayout`, pixel-anchored metrics)
 - [ ] **Workshop 3D brick editor** — Phase 11; [`WORKSHOP_3D.md`](./WORKSHOP_3D.md)
-  - D1 ⬜: `WorkshopEngineCore` + `BrickFactory` + basic tools
-  - D2: paint/duplicate/stud snap + `brickInstances[]` persistence
+  - D1 ✅: `WorkshopEngineCore` + `BrickFactory` + basic tools
+  - D2 ✅: `workshopSave.js` + `brickInstances[]` persistence on save/leave
+  - **Backlog:** bucket stays open on select; straight fixed camera; finite build bounds for world export
   - D3: full parametric catalog (~200 bucket entries) — **not LCA-derived**
   - D4: `customCreations[]` → main world placement (runtime Group)
 - [ ] Fix save game menu styling (MyModels — further polish, optional)
