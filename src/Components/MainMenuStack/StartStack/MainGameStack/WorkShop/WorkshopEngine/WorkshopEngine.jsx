@@ -178,8 +178,10 @@ const WorkshopEngine = forwardRef(({
         case WorkshopModes.ROTATING: {
           const brick = findBrickFromIntersects(intersects);
           if (brick) {
-            setBrickWireframeVisible(brick, true);
-            core.rotateBrick(brick);
+            const rotated = core.rotateBrick(brick);
+            if (rotated) {
+              setBrickWireframeVisible(brick, true);
+            }
           }
           break;
         }

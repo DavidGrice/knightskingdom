@@ -1,8 +1,15 @@
 import * as THREE from 'three';
-import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
+import {
+  attachSelectionBox,
+  centerGroupContentsXZ,
+  computeContentBounds,
+  updateSelectionBox,
+} from './selectionBox';
 import { PLATE_HEIGHT, STUD } from './studGrid';
+
+export { attachSelectionBox, updateSelectionBox };
 
 const gltfLoader = new GLTFLoader();
 const glbCache = new Map();
@@ -271,7 +278,7 @@ export const createBrick = async (brickId, options = {}) => {
   }
 
   configureBrickRoot(root, brickId, recipe);
-  attachSelectionBox(root);
+  attachSelectionBox(root, { visible: true, wireframeVisible: false });
   return root;
 };
 
@@ -287,7 +294,7 @@ export const createBrickSync = (brickId, options = {}) => {
 
   const root = createParametricBrick(recipe, colorHex);
   configureBrickRoot(root, brickId, recipe);
-  attachSelectionBox(root);
+  attachSelectionBox(root, { visible: true, wireframeVisible: false });
   return root;
 };
 
@@ -297,47 +304,11 @@ export const paintBrick = (root, colorHex) => {
   root.userData.color = typeof colorHex === 'string' ? colorHex : parsed?.toString(16);
 };
 
-const attachSelectionBox = (root) => {
-  const bounds = new THREE.Box3().setFromObject(root);
-  const size = bounds.getSize(new THREE.Vector3());
-  const center = bounds.getCenter(new THREE.Vector3());
-
-  const boxGeometry = new THREE.BoxGeometry(size.x, size.y, size.z);
-  const transparentMaterial = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    opacity: 0.08,
-    transparent: true,
-  });
-  const hitbox = new THREE.Mesh(boxGeometry, transparentMaterial);
-  hitbox.position.copy(center);
-  hitbox.name = 'transparentBox';
-
-  const edgesGeometry = new EdgesGeometry(boxGeometry);
-  const lineMaterial = new LineBasicMaterial({ color: 0xffffff });
-  const wireframe = new LineSegments(edgesGeometry, lineMaterial);
-  wireframe.position.copy(center);
-  wireframe.name = 'wireframe';
-  wireframe.isMovable = true;
-  wireframe.isRotatable = true;
-  wireframe.isPaintable = true;
-  wireframe.isDeletable = true;
-  wireframe.visible = false;
-
-  hitbox.isMovable = true;
-  hitbox.isRotatable = true;
-  hitbox.isPaintable = true;
-  hitbox.isDeletable = true;
-  hitbox.visible = true;
-  hitbox.material.depthWrite = false;
-
-  hitbox.add(wireframe);
-  root.add(hitbox);
-  root.userData.transparentBox = hitbox;
-};
-
 const alignGroupFeetToOrigin = (root) => {
-  const bounds = new THREE.Box3().setFromObject(root);
-  root.position.y -= bounds.min.y;
+  const bounds = computeContentBounds(root);
+  if (!bounds.isEmpty()) {
+    root.position.y -= bounds.min.y;
+  }
 };
 
 /**
@@ -365,8 +336,9 @@ export const buildGroupFromBrickInstances = (instances = [], options = {}) => {
     group.add(brick);
   });
 
-  attachSelectionBox(group);
+  centerGroupContentsXZ(group);
   alignGroupFeetToOrigin(group);
+  attachSelectionBox(group, { visible: false, wireframeVisible: false });
 
   const groupBox = group.userData.transparentBox;
   if (groupBox) {

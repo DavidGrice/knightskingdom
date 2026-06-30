@@ -7,6 +7,7 @@ import { Modes } from './GameEngineResourceStack/index';
 import { serializeSceneFromThree } from '../../context/sceneSchema';
 import { GameEngineCore } from './GameEngineCore';
 import { disposeObject3D } from './sceneDispose';
+import { updateSelectionBox } from '../../WorkShop/WorkshopEngine/BrickFactory';
 import {
   hideSelectionOutline,
   resolveMoveSelection,
@@ -286,12 +287,16 @@ const GameEngine = forwardRef(({
         }
         case Modes.ROTATING: {
           const rotatable = findInteractableTarget(hitObject, 'isRotatable')
+            ?? findInteractableTarget(hitObject, 'isMovable')
             ?? (intersectedObject?.isRotatable ? intersectedObject : null);
-          if (rotatable) {
-            hideWireframe(rotatable);
-            selectedObject.current = rotatable;
-            rotatable.parent.rotateY(Math.PI / 2);
-            showWireframe(rotatable);
+          const { selectionBox, moveRoot: root } = resolveMoveSelection(rotatable);
+          if (root) {
+            root.rotateY(Math.PI / 2);
+            updateSelectionBox(root);
+            if (selectionBox) {
+              showSelectionOutline(selectionBox);
+              window.setTimeout(() => hideSelectionOutline(selectionBox), 350);
+            }
             updateSceneState();
           }
           break;

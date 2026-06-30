@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { parseCreationModelId } from '@/api/customCreations';
-import { buildGroupFromBrickInstances } from '../../../WorkShop/WorkshopEngine/BrickFactory';
+import { buildGroupFromBrickInstances, updateSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
 
 const placementBox = new THREE.Box3();
 
@@ -69,6 +69,7 @@ const CreationLoader = (type, modelData, position, scene, customCreations = {}) 
       break;
   }
 
+  updateSelectionBox(group);
   scene.add(group);
   return group;
 };

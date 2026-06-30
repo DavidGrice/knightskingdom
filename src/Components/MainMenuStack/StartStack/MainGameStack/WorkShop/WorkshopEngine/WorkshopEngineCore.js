@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
-import { createBrickSync, paintBrick } from './BrickFactory';
+import { createBrickSync, paintBrick, updateSelectionBox } from './BrickFactory';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import { brickCollidesWithAny, getOrientedStuds } from './brickCollision';
 import { getBrickMoveGroup } from './brickStack';
@@ -256,8 +256,10 @@ export class WorkshopEngineCore {
       return false;
     }
     brickRoot.rotateY(Math.PI / 2);
+    updateSelectionBox(brickRoot);
     if (this.#brickCollides(brickRoot)) {
       brickRoot.rotateY(-Math.PI / 2);
+      updateSelectionBox(brickRoot);
       return false;
     }
     return true;
@@ -377,6 +379,7 @@ export class WorkshopEngineCore {
         || entry.color
         || this.defaultColor;
       this.bricksGroup.add(brick);
+      updateSelectionBox(brick);
     });
   }
 

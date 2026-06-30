@@ -6,6 +6,18 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Centered selection box + group rotation fix
+
+| File | Change |
+|------|--------|
+| `selectionBox.js` | **New** — content bounds, fixed wireframe offset, `updateSelectionBox` |
+| `BrickFactory.js` | Center creation XZ pivot; refresh box after geometry changes |
+| `WorkshopEngineCore.js` | Refresh selection box on rotate |
+| `GameEngine.jsx` | Rotate whole creation/model group; refresh box after rotate |
+| `ModelLoader.jsx`, `CreationLoader.js` | Recompute centered outline on load |
+
+Fixes wireframe double-offset; main-game creations rotate around group center.
+
 ## 2026-06-30 — Main game: white outline when moving creations
 
 | File | Change |

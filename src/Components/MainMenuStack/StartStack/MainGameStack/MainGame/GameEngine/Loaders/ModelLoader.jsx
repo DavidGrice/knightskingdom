@@ -4,6 +4,7 @@ import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 
 import Archer from '../GameEngineResourceStack/models/archer_with_box2.glb';
 import { resolveDriveCameraProfile } from '../driveCameraProfiles';
+import { updateSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
 
 const SelectedModels = {
     NONE: 'NONE',
@@ -97,6 +98,7 @@ const setupMapGltfScene = (gltf, mapModel) => {
     configureGltfMeshNodes(gltf);
     attachDriveCameraProfile(gltf, null, mapModel.name);
     alignPlayableRootToWorldPosition(gltf.scene, mapModel.position);
+    updateSelectionBox(gltf.scene);
 };
 
 const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, skipGroundAlign = false }) => {
@@ -141,6 +143,7 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, ski
             }
         });
     }
+    updateSelectionBox(gltf.scene);
 };
 
 const ModelLoader = (type, modelData, position, mapData, scene, onComplete, cameraController) => {

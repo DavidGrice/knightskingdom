@@ -71,7 +71,10 @@ export const findPaintBrickFromIntersects = (intersects = []) => {
 
 export const setBrickWireframeVisible = (brick, visible) => {
   const box = brick?.userData?.transparentBox;
-  const wireframe = box?.getObjectByName('wireframe');
+  if (!box) {
+    return;
+  }
+  const wireframe = box.getObjectByName('wireframe');
   if (wireframe) {
     wireframe.visible = visible;
   }
