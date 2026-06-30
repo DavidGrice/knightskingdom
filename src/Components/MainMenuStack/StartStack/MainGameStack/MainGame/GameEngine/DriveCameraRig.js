@@ -4,6 +4,7 @@ import { getDriveCameraProfile } from './driveCameraProfiles';
 const _position = new THREE.Vector3();
 const _lookAt = new THREE.Vector3();
 const _faceForward = new THREE.Vector3();
+const _headUp = new THREE.Vector3();
 const _headFrontPos = new THREE.Vector3();
 const _headBackPos = new THREE.Vector3();
 const _center = new THREE.Vector3();
@@ -72,6 +73,11 @@ const getFaceForward = (champRoot, profile, target) => {
   }
 
   target.normalize();
+
+  if (facing.sign) {
+    target.multiplyScalar(facing.sign);
+  }
+
   return target;
 };
 
@@ -94,18 +100,43 @@ const getHeadCenter = (champRoot, anchors, target) => {
   return target;
 };
 
-const getEyePosition = (champRoot, anchors, blend, target) => {
-  const headFront = findMesh(champRoot, [anchors.headFront]);
-  const headBack = findMesh(champRoot, [anchors.headBack]);
+const getThirdPersonBase = (champRoot, anchors, target) => {
+  const baseMesh = findMesh(champRoot, [
+    anchors.thirdPersonBase,
+    anchors.chestFront,
+    anchors.headFront,
+    anchors.headBack,
+  ]);
 
-  if (headFront && headBack) {
-    headFront.getWorldPosition(_headFrontPos);
-    headBack.getWorldPosition(_headBackPos);
-    target.copy(_headFrontPos).lerp(_headBackPos, 1 - blend);
+  if (baseMesh) {
+    baseMesh.getWorldPosition(target);
     return target;
   }
 
   getHeadCenter(champRoot, anchors, target);
+  return target;
+};
+
+const getEyePosition = (champRoot, anchors, offsets, faceForward, target) => {
+  const headFront = findMesh(champRoot, [anchors.headFront]);
+  const headBack = findMesh(champRoot, [anchors.headBack]);
+  const head = headFront ?? headBack;
+
+  if (!head) {
+    getHeadCenter(champRoot, anchors, target);
+    return target;
+  }
+
+  head.updateWorldMatrix(true, false);
+  head.getWorldPosition(target);
+
+  _headUp.set(0, 1, 0).transformDirection(head.matrixWorld);
+  target.addScaledVector(_headUp, offsets.eyeHeightLift ?? 0);
+
+  if (offsets.eyeForwardInset) {
+    target.addScaledVector(faceForward, offsets.eyeForwardInset);
+  }
+
   return target;
 };
 
@@ -125,16 +156,22 @@ export class DriveCameraRig {
     getHeadCenter(this.champRoot, anchors, _center);
 
     if (view === 'third') {
-      _position.copy(_center);
-      _position.addScaledVector(_faceForward, offsets.thirdPersonDistance);
+      getThirdPersonBase(this.champRoot, anchors, _position);
+      _position.addScaledVector(
+        _faceForward,
+        offsets.thirdPersonDistance * (offsets.thirdPersonDistanceSign ?? 1),
+      );
       _position.y += offsets.thirdPersonHeight;
       camera.position.copy(_position);
       _lookAt.copy(_center);
       _lookAt.y += offsets.lookAtHeightBoost ?? 0.2;
     } else {
-      getEyePosition(this.champRoot, anchors, offsets.eyeFrontBlend, _position);
+      getEyePosition(this.champRoot, anchors, offsets, _faceForward, _position);
       camera.position.copy(_position);
       _lookAt.copy(_position).addScaledVector(_faceForward, offsets.firstLookAhead);
+      if (offsets.levelFirstPersonPitch) {
+        _lookAt.y = _position.y;
+      }
     }
 
     this.lastLookAt.copy(_lookAt);
