@@ -170,7 +170,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
   - D2 ✅: `workshopSave.js` + `brickInstances[]` persistence on save/leave
   - **Backlog (D2b):** bucket stays open on select; straight fixed camera; finite build bounds for world export; top-bar move/rotate/paint/delete tools fully wired; duplicate places copy above original (height gap); selector box around bricks for collisions
   - D3 ✅: full parametric catalog (141 bucket entries via `generate-brick-catalog.mjs`) — **not LCA-derived**
-  - D4 ✅: `customCreations` → My Creations bucket tab → place in main world (runtime Group)
+  - D4 ✅: workshop save → `customCreations` with camera screenshot → **My Creations** tab in main-game bucket → place in world (runtime Group)
 - [ ] Fix save game menu styling (MyModels — further polish, optional)
 
 ### Deferred

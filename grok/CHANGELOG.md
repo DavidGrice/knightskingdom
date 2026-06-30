@@ -82,11 +82,18 @@ Unknown bucket ids still fall back to 2×2 brick. Build passes.
 | `WorldSessionProvider.jsx` | `onSaveWorkshopExport`, `customCreations` memo |
 | `Bucket.jsx`, `GameEngine.jsx` | Wire creations tab + placement click handler |
 
-Workshop save → profile `customCreations` → last game bucket tab → click world to place. Build passes.
+Workshop save captures workshop camera screenshot (`captureFrame`) → stored as `customCreations[id].thumbnail` → shown as tile image in main-game bucket **My Creations** tab → click world to place. Build passes.
 
 **Backlog expanded:** top-bar tools, duplicate-above, per-brick selector box.
 
 **Next: D2b** backlog polish.
+
+## 2026-06-30 — D4 docs + bucket screenshot thumbnails
+
+| File | Change |
+|------|--------|
+| `BucketBottom.jsx` | Render `data:` URL creation screenshots via `<img>` (CSS `url()` breaks captures) |
+| `creationsBucket.js`, grok docs | Document: workshop `captureFrame` → My Creations bucket tile image |
 
 ---
 

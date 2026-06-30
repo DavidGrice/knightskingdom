@@ -10,6 +10,10 @@ const creationsTabIcon = {
 const FALLBACK_THUMB = Building2;
 
 /**
+ * Build the main-game bucket "My Creations" tab from saved workshop exports.
+ * Each item uses the workshop camera screenshot (`creation.thumbnail` from
+ * `WorkshopEngineCore.captureFrame()` on save) as its bucket tile image.
+ *
  * @param {Record<string, { id: string, name?: string, thumbnail?: string | null }>} customCreations
  */
 export const buildCreationsBucketTab = (customCreations = {}) => {

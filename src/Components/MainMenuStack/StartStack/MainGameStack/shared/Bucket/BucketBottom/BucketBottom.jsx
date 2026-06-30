@@ -8,6 +8,9 @@ import {
     createHolderGridStyles,
     usePaginatedGrid,
 } from '../../../../../../Common';
+import GridThumbnail from '../../../../../../Common/PaginatedGrid/GridThumbnail';
+
+const isDataUrlImage = (src) => typeof src === 'string' && src.startsWith('data:');
 
 const workshopGridStyles = createHolderGridStyles('WORKSHOP_BUCKET', {
     item: workshopBrickStyles.brickItem,
@@ -102,9 +105,14 @@ const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrow
                     <div
                         key={item.name ?? index}
                         className={styles.item}
-                        style={{ backgroundImage: `url(${item.image})` }}
+                        style={!isDataUrlImage(item.image)
+                            ? { backgroundImage: `url(${item.image})` }
+                            : undefined}
                         onClick={() => handleItemClick(item)}
                     >
+                        {isDataUrlImage(item.image) && (
+                            <GridThumbnail src={item.image} className={styles.itemThumbnail} />
+                        )}
                         {selectedItem === item && (
                             <div className={styles.highlightedImage}>
                                 <img src={selectedImage} alt="Highlighted" />
