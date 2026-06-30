@@ -10,7 +10,7 @@ import React, {
 import * as THREE from 'three';
 import { WorkshopEngineCore } from './WorkshopEngineCore';
 import { WorkshopModes } from './workshopModes';
-import { clampXZToExportBounds, snapXZToStud } from './studGrid';
+import { clampXZToExportBounds, PLATE_HEIGHT, snapXZToStud, snapYToPlate } from './studGrid';
 import {
   findBrickFromIntersects,
   findPaintBrickFromIntersects,
@@ -34,6 +34,8 @@ const WorkshopEngine = forwardRef(({
   const colorRef = useRef(color);
   const selectedObject = useRef(null);
   const isDragging = useRef(false);
+  const verticalDragStart = useRef({ clientY: 0, brickY: 0 });
+  const shiftVerticalDragActive = useRef(false);
   const mouse = useRef(new THREE.Vector2());
   const raycaster = useRef(new THREE.Raycaster());
   const hasHydratedRef = useRef(false);
@@ -157,6 +159,11 @@ const WorkshopEngine = forwardRef(({
           if (brick) {
             selectedObject.current = brick;
             isDragging.current = true;
+            verticalDragStart.current = {
+              clientY: event.clientY,
+              brickY: brick.position.y,
+            };
+            shiftVerticalDragActive.current = event.shiftKey;
             setBrickWireframeVisible(brick, true);
           }
           break;
@@ -199,11 +206,35 @@ const WorkshopEngine = forwardRef(({
       }
     };
 
+    const VERTICAL_DRAG_PIXELS_PER_PLATE = 16;
+
     const onMouseMove = (event) => {
       if (modeRef.current !== WorkshopModes.MOVING || !isDragging.current || !selectedObject.current) {
         return;
       }
       event.preventDefault();
+      const brick = selectedObject.current;
+
+      if (event.shiftKey) {
+        if (!shiftVerticalDragActive.current) {
+          verticalDragStart.current = {
+            clientY: event.clientY,
+            brickY: brick.position.y,
+          };
+          shiftVerticalDragActive.current = true;
+        }
+        const deltaY = verticalDragStart.current.clientY - event.clientY;
+        const plateSteps = Math.round(deltaY / VERTICAL_DRAG_PIXELS_PER_PLATE);
+        const targetY = snapYToPlate(verticalDragStart.current.brickY + plateSteps * PLATE_HEIGHT);
+        core.trySetBrickPosition(brick, {
+          x: brick.position.x,
+          y: targetY,
+          z: brick.position.z,
+        });
+        return;
+      }
+
+      shiftVerticalDragActive.current = false;
       setMouseFromEvent(event);
       const plateHit = raycastBuildPlate();
       if (!plateHit) {
@@ -211,9 +242,11 @@ const WorkshopEngine = forwardRef(({
       }
       const clamped = clampXZToExportBounds(plateHit.point.x, plateHit.point.z);
       const snapped = snapXZToStud(clamped.x, clamped.z);
-      const brick = selectedObject.current;
-      brick.position.x = snapped.x;
-      brick.position.z = snapped.z;
+      core.trySetBrickPosition(brick, {
+        x: snapped.x,
+        y: brick.position.y,
+        z: snapped.z,
+      });
     };
 
     const endDrag = () => {
@@ -223,6 +256,7 @@ const WorkshopEngine = forwardRef(({
         setBrickWireframeVisible(brick, false);
       }
       isDragging.current = false;
+      shiftVerticalDragActive.current = false;
       selectedObject.current = null;
     };
 

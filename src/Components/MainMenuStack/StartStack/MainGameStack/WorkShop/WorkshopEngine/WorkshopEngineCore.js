@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
 import { createBrickSync, paintBrick } from './BrickFactory';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
+import { brickCollidesWithAny } from './brickCollision';
 import {
   BRICK_HEIGHT,
   BUILD_PLATE_SIZE,
@@ -11,6 +12,7 @@ import {
   isWithinExportBounds,
   snapPositionToStud,
   snapXZToStud,
+  snapYToPlate,
   STUD,
 } from './studGrid';
 
@@ -121,9 +123,17 @@ export class WorkshopEngineCore {
     const snapped = snapXZToStud(clamped.x, clamped.z);
     return {
       x: snapped.x,
-      y: point.y ?? 0,
+      y: snapYToPlate(point.y ?? 0),
       z: snapped.z,
     };
+  }
+
+  #allBricks() {
+    return this.bricksGroup.children.filter((child) => child.isBrick);
+  }
+
+  #brickCollides(brick, ignore = null) {
+    return brickCollidesWithAny(brick, this.#allBricks(), ignore);
   }
 
   addBrick(brickId, worldPoint, colorHex) {
@@ -140,6 +150,11 @@ export class WorkshopEngineCore {
     brick.position.set(placement.x, placement.y, placement.z);
     brick.userData.instanceId = `${brickId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     brick.userData.color = (colorHex || this.defaultColor).replace('#', '');
+
+    if (this.#brickCollides(brick)) {
+      disposeObject3D(brick);
+      return null;
+    }
 
     this.bricksGroup.add(brick);
     return brick;
@@ -169,9 +184,14 @@ export class WorkshopEngineCore {
 
   rotateBrick(brickRoot) {
     if (!brickRoot?.isBrick) {
-      return;
+      return false;
     }
     brickRoot.rotateY(Math.PI / 2);
+    if (this.#brickCollides(brickRoot)) {
+      brickRoot.rotateY(-Math.PI / 2);
+      return false;
+    }
+    return true;
   }
 
   duplicateBrick(brickRoot) {
@@ -190,7 +210,7 @@ export class WorkshopEngineCore {
     clone.userData.instanceId = `${brickId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     clone.userData.color = brickRoot.userData.color || this.defaultColor;
 
-    if (!this.#brickWithinExportBounds(clone)) {
+    if (!this.#brickWithinExportBounds(clone) || this.#brickCollides(clone)) {
       disposeObject3D(clone);
       return null;
     }
@@ -206,14 +226,38 @@ export class WorkshopEngineCore {
     paintBrick(brickRoot, colorHex);
   }
 
+  trySetBrickPosition(brickRoot, { x, y, z }) {
+    if (!brickRoot?.isBrick) {
+      return false;
+    }
+
+    const clamped = clampXZToExportBounds(x, z);
+    const snapped = snapPositionToStud({
+      x: clamped.x,
+      y: snapYToPlate(y ?? brickRoot.position.y),
+      z: clamped.z,
+    });
+
+    const previous = brickRoot.position.clone();
+    brickRoot.position.set(snapped.x, snapped.y, snapped.z);
+
+    if (!this.#brickWithinExportBounds(brickRoot) || this.#brickCollides(brickRoot)) {
+      brickRoot.position.copy(previous);
+      return false;
+    }
+
+    return true;
+  }
+
   moveBrickRoot(brickRoot, worldPoint) {
     if (!brickRoot?.isBrick || !worldPoint) {
-      return;
+      return false;
     }
-    const clamped = clampXZToExportBounds(worldPoint.x, worldPoint.z);
-    const snapped = snapPositionToStud({ x: clamped.x, y: brickRoot.position.y, z: clamped.z });
-    brickRoot.position.x = snapped.x;
-    brickRoot.position.z = snapped.z;
+    return this.trySetBrickPosition(brickRoot, {
+      x: worldPoint.x,
+      y: worldPoint.y ?? brickRoot.position.y,
+      z: worldPoint.z,
+    });
   }
 
   clearAllBricks() {

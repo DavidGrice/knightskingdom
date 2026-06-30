@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Workshop brick collision + Shift vertical move
+
+| File | Change |
+|------|--------|
+| `brickCollision.js` | **New** — stud-footprint AABB overlap checks (rotation-aware) |
+| `WorkshopEngineCore.js` | Collision on place/move/duplicate/stack/rotate; `trySetBrickPosition` |
+| `WorkshopEngine.jsx` | Shift+drag moves brick on Y-axis (mouse up = higher); collision-aware drag |
+| `studGrid.js` | `snapYToPlate` for plate-height vertical snapping |
+
+Bricks can no longer overlap when adjacent. Hold **Shift** while dragging in move mode to raise/lower a brick in plate-height steps.
+
 ## 2026-06-30 — Workshop menu complete; Phase 11 planning docs
 
 | File | Change |

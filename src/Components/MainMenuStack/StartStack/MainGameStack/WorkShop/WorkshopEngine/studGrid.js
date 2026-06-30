@@ -23,6 +23,8 @@ export const snapPositionToStud = (position) => ({
   z: snapStud(position.z),
 });
 
+export const snapYToPlate = (y) => Math.max(0, Math.round(y / PLATE_HEIGHT) * PLATE_HEIGHT);
+
 export const snapXZToStud = (x, z) => ({
   x: snapStud(x),
   z: snapStud(z),
