@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Workshop footprint-aware stud grid alignment
+
+| File | Change |
+|------|--------|
+| `studGrid.js` | `snapBrickCenterAxis/XZ` — 1-wide snaps to integer studs, 2-wide to half-stud centers |
+| `WorkshopEngineCore.js` | Place/move/load use footprint snap; export bounds check full footprint |
+| `WorkshopEngine.jsx` | Move drag uses oriented footprint snap |
+| `brickStuds.js` | Stack pick snaps click to nearest top stud |
+
+Fixes 2×2 (and other even bricks) placing off-grid; 1×1 can stack on individual studs.
+
 ## 2026-06-30 — Workshop stud-aware stack placement
 
 | File | Change |

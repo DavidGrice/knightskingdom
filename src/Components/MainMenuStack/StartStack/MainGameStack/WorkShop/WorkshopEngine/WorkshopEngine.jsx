@@ -11,7 +11,8 @@ import * as THREE from 'three';
 import { WorkshopEngineCore } from './WorkshopEngineCore';
 import { WorkshopModes } from './workshopModes';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
-import { clampXZToExportBounds, snapXZToStud } from './studGrid';
+import { getOrientedStuds } from './brickCollision';
+import { clampBrickCenterToExport } from './studGrid';
 import {
   findBrickFromIntersects,
   findBrickHitFromIntersects,
@@ -247,12 +248,12 @@ const WorkshopEngine = forwardRef(({
       if (!plateHit) {
         return;
       }
-      const clamped = clampXZToExportBounds(plateHit.point.x, plateHit.point.z);
-      const snapped = snapXZToStud(clamped.x, clamped.z);
+      const { w, d } = getOrientedStuds(brick);
+      const clamped = clampBrickCenterToExport(plateHit.point.x, plateHit.point.z, w, d);
       core.tryMoveBrickGroup(brick, {
-        x: snapped.x,
+        x: clamped.x,
         y: brick.position.y,
-        z: snapped.z,
+        z: clamped.z,
       });
     };
 

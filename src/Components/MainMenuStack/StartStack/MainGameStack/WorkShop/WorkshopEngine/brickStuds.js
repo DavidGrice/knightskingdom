@@ -1,6 +1,6 @@
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import { getOrientedStuds } from './brickCollision';
-import { EXPORT_HALF, snapYToHeight, STUD } from './studGrid';
+import { footprintWithinExportBounds, snapYToHeight, STUD } from './studGrid';
 
 const STUD_MATCH_EPS = 1e-3;
 
@@ -67,13 +67,6 @@ export const getRecipeStudFootprint = (recipe, rotationY = 0) => {
   };
 };
 
-const footprintWithinExportBounds = (cx, cz, w, d) => {
-  const halfW = (w * STUD) / 2;
-  const halfD = (d * STUD) / 2;
-  return Math.abs(cx) + halfW <= EXPORT_HALF + STUD_MATCH_EPS
-    && Math.abs(cz) + halfD <= EXPORT_HALF + STUD_MATCH_EPS;
-};
-
 /**
  * Every center where `newBrickId` can sit on top of `baseBrick`.
  * @param {import('three').Object3D} baseBrick
@@ -127,8 +120,23 @@ export const resolveStackPlacement = (baseBrick, newBrickId, hitPoint = null) =>
     return null;
   }
 
-  const hx = hitPoint?.x ?? baseBrick.position.x;
-  const hz = hitPoint?.z ?? baseBrick.position.z;
+  const baseStuds = getBrickTopStudPositions(baseBrick);
+  let hx = hitPoint?.x ?? baseBrick.position.x;
+  let hz = hitPoint?.z ?? baseBrick.position.z;
+
+  if (baseStuds.length > 0 && hitPoint) {
+    let nearestStud = baseStuds[0];
+    let nearestDist = Infinity;
+    baseStuds.forEach((stud) => {
+      const dist = (stud.x - hx) ** 2 + (stud.z - hz) ** 2;
+      if (dist < nearestDist) {
+        nearestDist = dist;
+        nearestStud = stud;
+      }
+    });
+    hx = nearestStud.x;
+    hz = nearestStud.z;
+  }
 
   let best = null;
   let bestDist = Infinity;

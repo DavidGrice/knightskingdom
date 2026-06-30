@@ -2,18 +2,17 @@ import * as THREE from 'three';
 import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
 import { createBrickSync, paintBrick } from './BrickFactory';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
-import { brickCollidesWithAny } from './brickCollision';
+import { brickCollidesWithAny, getOrientedStuds } from './brickCollision';
 import { getBrickMoveGroup } from './brickStack';
-import { resolveStackPlacement } from './brickStuds';
+import { getRecipeStudFootprint, resolveStackPlacement } from './brickStuds';
 import {
   BRICK_HEIGHT,
   BUILD_PLATE_SIZE,
-  EXPORT_HALF,
   EXPORT_PLATE_SIZE,
-  clampXZToExportBounds,
-  isWithinExportBounds,
-  snapPositionToStud,
-  snapXZToStud,
+  clampBrickCenterToExport,
+  footprintWithinExportBounds,
+  snapBrickCenterXZ,
+  snapPositionForBrick,
   snapYToHeight,
   STUD,
 } from './studGrid';
@@ -117,17 +116,18 @@ export class WorkshopEngineCore {
   }
 
   #brickWithinExportBounds(brick) {
-    return isWithinExportBounds(brick.position.x, brick.position.z);
+    const { w, d } = getOrientedStuds(brick);
+    return footprintWithinExportBounds(brick.position.x, brick.position.z, w, d);
   }
 
   #snapPlacementPoint(point, brickId) {
-    const clamped = clampXZToExportBounds(point.x, point.z);
-    const snapped = snapXZToStud(clamped.x, clamped.z);
     const recipe = resolveBrickRecipe(brickId);
+    const { w, d } = getRecipeStudFootprint(recipe, 0);
+    const clamped = clampBrickCenterToExport(point.x, point.z, w, d);
     return {
-      x: snapped.x,
+      x: clamped.x,
       y: snapYToHeight(point.y ?? 0, recipeHeight(recipe)),
-      z: snapped.z,
+      z: clamped.z,
     };
   }
 
@@ -158,12 +158,13 @@ export class WorkshopEngineCore {
 
     const recipe = resolveBrickRecipe(anchorBrick.userData.brickId);
     const brickHeight = recipeHeight(recipe);
-    const clamped = clampXZToExportBounds(x, z);
-    const snapped = snapPositionToStud({
+    const { w, d } = getOrientedStuds(anchorBrick);
+    const clamped = clampBrickCenterToExport(x, z, w, d);
+    const snapped = snapPositionForBrick({
       x: clamped.x,
       y: snapYToHeight(y ?? anchorBrick.position.y, brickHeight),
       z: clamped.z,
-    });
+    }, w, d);
 
     const delta = new THREE.Vector3(
       snapped.x - anchorPrev.x,
@@ -206,7 +207,8 @@ export class WorkshopEngineCore {
       }
       : this.#snapPlacementPoint(worldPoint, brickId);
 
-    if (!isWithinExportBounds(placement.x, placement.z)) {
+    const { w, d } = getRecipeStudFootprint(recipe, 0);
+    if (!footprintWithinExportBounds(placement.x, placement.z, w, d)) {
       return null;
     }
 
@@ -296,12 +298,13 @@ export class WorkshopEngineCore {
 
     const recipe = resolveBrickRecipe(brickRoot.userData.brickId);
     const brickHeight = recipeHeight(recipe);
-    const clamped = clampXZToExportBounds(x, z);
-    const snapped = snapPositionToStud({
+    const { w, d } = getOrientedStuds(brickRoot);
+    const clamped = clampBrickCenterToExport(x, z, w, d);
+    const snapped = snapPositionForBrick({
       x: clamped.x,
       y: snapYToHeight(y ?? brickRoot.position.y, brickHeight),
       z: clamped.z,
-    });
+    }, w, d);
 
     const previous = brickRoot.position.clone();
     brickRoot.position.set(snapped.x, snapped.y, snapped.z);
@@ -355,11 +358,14 @@ export class WorkshopEngineCore {
         return;
       }
       const brick = createBrickSync(entry.brickId, { color: entry.color || this.defaultColor });
-      if (entry.position) {
-        brick.position.set(entry.position.x, entry.position.y, entry.position.z);
-      }
       if (entry.rotation) {
         brick.rotation.set(entry.rotation.x, entry.rotation.y, entry.rotation.z);
+      }
+      if (entry.position) {
+        const loadRecipe = resolveBrickRecipe(entry.brickId);
+        const { w, d } = getRecipeStudFootprint(loadRecipe, brick.rotation.y);
+        const snapped = snapBrickCenterXZ(entry.position.x, entry.position.z, w, d);
+        brick.position.set(snapped.x, entry.position.y, snapped.z);
       }
       brick.userData.instanceId = entry.instanceId
         || `${entry.brickId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
