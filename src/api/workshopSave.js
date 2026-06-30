@@ -34,6 +34,7 @@ export const saveWorkshopDraft = (userData, profileId, worldId, payload) =>
           workshopDraft: {
             brickInstances: payload.brickInstances || [],
             thumbnail: payload.thumbnail ?? existing.workshopDraft?.thumbnail ?? null,
+            creationId: payload.creationId ?? existing.workshopDraft?.creationId ?? null,
             updatedAt: new Date().toISOString(),
           },
           updatedAt: new Date().toISOString(),

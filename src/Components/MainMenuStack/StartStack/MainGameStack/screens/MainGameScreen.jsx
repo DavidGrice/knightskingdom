@@ -14,6 +14,7 @@ const MainGameScreen = ({
   navigateToSnapshot,
   navigateToMyModels,
   navigateToStartMenu,
+  customCreations,
 }) => {
   const { stopLoading } = useGameLoading();
 
@@ -39,6 +40,7 @@ const MainGameScreen = ({
         navigateToWorkshop={navigateToWorkshop}
         navigateToSnapshot={navigateToSnapshot}
         mapData={mapData}
+        customCreations={customCreations}
       />
     </GameProvider>
   );

@@ -68,6 +68,26 @@ Unknown bucket ids still fall back to 2×2 brick. Build passes.
 
 **Next: D4** — `customCreations[]` → main world placement; or D2b backlog fixes.
 
+## 2026-06-30 — Phase 11 D4: workshop → main world placement
+
+| File | Change |
+|------|--------|
+| `src/api/customCreations.js` | **New** — profile `customCreations` CRUD, `CREATION_<id>` model ids |
+| `CreationLoader.js` | **New** — place/restore grouped brick creations in main world |
+| `BrickFactory.js` | `buildGroupFromBrickInstances()` + selection box wireframe |
+| `creationsBucket.js` | **New** — dynamic My Creations bucket tab from profile |
+| `sceneSchema.js` | Serialize/restore `CREATION_<id>` scene entries |
+| `workshopSave.js` | `workshopDraft.creationId` links draft to exported creation |
+| `WorkshopContext.jsx` | Save exports creation + navigates to main game |
+| `WorldSessionProvider.jsx` | `onSaveWorkshopExport`, `customCreations` memo |
+| `Bucket.jsx`, `GameEngine.jsx` | Wire creations tab + placement click handler |
+
+Workshop save → profile `customCreations` → last game bucket tab → click world to place. Build passes.
+
+**Backlog expanded:** top-bar tools, duplicate-above, per-brick selector box.
+
+**Next: D2b** backlog polish.
+
 ---
 
 ## 2026-06-28 — MyModels: fix grid metrics (restore 50ecb12 layout)

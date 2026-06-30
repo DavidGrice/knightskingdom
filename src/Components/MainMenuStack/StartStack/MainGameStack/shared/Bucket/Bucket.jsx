@@ -5,8 +5,9 @@ import BucketTop from './BucketTop/BucketTop';
 import BucketBottom from './BucketBottom/BucketBottom';
 import { workshopBucketTabVars } from '../../../../../Common';
 import { getBucketConfig } from '../toolbarConfig';
+import { buildCreationsBucketTab } from '../toolbarConfig/creationsBucket';
 
-const Bucket = ({ dataSource = 'models', handleLoadModel, onBrickSelect }) => {
+const Bucket = ({ dataSource = 'models', handleLoadModel, onBrickSelect, customCreations }) => {
     const isWorkshop = dataSource === 'bricks';
     const styles = isWorkshop ? workshopStyles : gameStyles;
     const variant = isWorkshop ? 'workshop' : 'game';
@@ -15,10 +16,21 @@ const Bucket = ({ dataSource = 'models', handleLoadModel, onBrickSelect }) => {
         [isWorkshop],
     );
 
-    const { tabIcons, tabData, arrowImages } = useMemo(
-        () => getBucketConfig(dataSource),
-        [dataSource]
-    );
+    const { tabIcons, tabData, arrowImages } = useMemo(() => {
+        const base = getBucketConfig(dataSource);
+        if (dataSource !== 'models') {
+            return base;
+        }
+        const creationsTab = buildCreationsBucketTab(customCreations);
+        if (!creationsTab) {
+            return base;
+        }
+        return {
+            tabIcons: [...base.tabIcons, creationsTab.tabIcon],
+            tabData: [...base.tabData, creationsTab.tabData],
+            arrowImages: base.arrowImages,
+        };
+    }, [dataSource, customCreations]);
     const [activeIcon, setActiveIcon] = useState(0);
     const [activeBucket, setActiveBucket] = useState(0);
     const [resetKey, setResetKey] = useState(0);

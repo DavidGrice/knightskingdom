@@ -20,6 +20,7 @@ export const WorkshopProvider = ({
   currentProfile,
   workshopDraft,
   onSaveWorkshopDraft,
+  onSaveWorkshopExport,
   navigateToMainGame,
 }) => {
   const [state, dispatch] = useReducer(workshopReducer, initialWorkshopState);
@@ -102,9 +103,36 @@ export const WorkshopProvider = ({
   }, [currentProfile, mapData, onSaveWorkshopDraft, workshopDraft]);
 
   const handleSave = useCallback(() => {
-    persistDraft();
+    const profileId = currentProfile?.id;
+    const worldId = mapData?.id;
+    const brickInstances = engineRef.current?.getBrickInstances?.() ?? [];
+    let thumbnail = workshopDraft?.thumbnail ?? null;
+    try {
+      thumbnail = engineRef.current?.captureFrame?.() || thumbnail;
+    } catch {
+      // Canvas capture can fail; still export brick list.
+    }
+
+    if (profileId && worldId != null && onSaveWorkshopExport) {
+      onSaveWorkshopExport(profileId, worldId, {
+        creationId: workshopDraft?.creationId ?? null,
+        brickInstances,
+        thumbnail,
+        name: mapData?.name ? `${mapData.name} Creation` : 'My Creation',
+      });
+    } else {
+      persistDraft();
+    }
+
     navigateToMainGame?.(mapData);
-  }, [persistDraft, navigateToMainGame, mapData]);
+  }, [
+    currentProfile,
+    mapData,
+    workshopDraft,
+    onSaveWorkshopExport,
+    persistDraft,
+    navigateToMainGame,
+  ]);
 
   const value = useMemo(() => ({
     state,

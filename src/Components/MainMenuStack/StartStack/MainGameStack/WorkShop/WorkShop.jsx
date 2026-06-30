@@ -115,12 +115,14 @@ const WorkShop = ({
   currentProfile,
   workshopDraft,
   onSaveWorkshopDraft,
+  onSaveWorkshopExport,
 }) => (
   <WorkshopProvider
     mapData={mapData}
     currentProfile={currentProfile}
     workshopDraft={workshopDraft}
     onSaveWorkshopDraft={onSaveWorkshopDraft}
+    onSaveWorkshopExport={onSaveWorkshopExport}
     navigateToMainGame={navigateToMainGame}
   >
     <WorkShopContent />

@@ -2,7 +2,7 @@
 
 **Branch:** `grok-dev`  
 **Last updated:** 2026-06-30  
-**Status:** **D3 implemented** (2026-06-30) — D4 world placement next
+**Status:** **D4 implemented** (2026-06-30) — D2b backlog polish next
 **Prior work:** Workshop UI/layout ✅ complete (`WorkshopStageLayout`, `workshopStageMetrics.js`, `HolderGridLayout`)
 
 ---
@@ -275,13 +275,19 @@ MainGame (D4):
 
 ---
 
-## Phase D4 — Main World Placement
+## Phase D4 — Main World Placement ✅
 
-- Add `customCreations` to profile schema + `worldSave.js` helpers
-- Game bucket: new tab or section "My Creations" with thumbnails
-- `ModelLoader` or `CreationLoader`: `buildGroupFromCreation(creation)` → placeable group
-- Extend `sceneSchema` to serialize/deserialize creation references in world saves
-- Workshop save button → persist creation + navigate to main game with creation available
+- [x] `customCreations` on profile + `customCreations.js` helpers (max 20)
+- [x] Game bucket: dynamic "My Creations" tab (last tab when creations exist)
+- [x] `CreationLoader` + `buildGroupFromBrickInstances()` with selection box wireframe
+- [x] `sceneSchema` serializes/restores `CREATION_<id>` entries
+- [x] Workshop save → exports to `customCreations` + links `workshopDraft.creationId`
+
+### D2b backlog (user-requested, not D4)
+
+- Top-bar move / rotate / paint / delete tools — wire fully like main game toolbar
+- Duplicate — copy brick and place new one **above** original (one brick-height gap), not beside
+- Selector box — transparent hitbox + wireframe around each brick/creation for collisions and picking
 
 ---
 
@@ -338,7 +344,8 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 | 2026-06-30 | **D1 shipped:** WorkshopEngine, BrickFactory, WorkshopContext, toolbar wired. |
 | 2026-06-30 | **Backlog added:** bucket stay-open, straight camera, finite build bounds. |
 | 2026-06-30 | **D2 shipped:** `workshopSave.js`, hydrate on enter, save on save/leave + thumbnail. |
-| 2026-06-30 | **D3 shipped:** `generate-brick-catalog.mjs` → 141 parametric recipes; SLOPE/CYLINDER/ARCH/COMPOSITE/TILE in `BrickFactory`. **Next: D4** or D2b backlog. |
+| 2026-06-30 | **D3 shipped:** `generate-brick-catalog.mjs` → 141 parametric recipes; SLOPE/CYLINDER/ARCH/COMPOSITE/TILE in `BrickFactory`. |
+| 2026-06-30 | **D4 shipped:** `customCreations.js`, `CreationLoader`, My Creations bucket tab, workshop save exports to main world. **Next: D2b** backlog. |
 
 ---
 

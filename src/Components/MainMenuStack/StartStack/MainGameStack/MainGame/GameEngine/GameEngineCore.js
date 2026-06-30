@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { MapLoader, ModelLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
+import { MapLoader, ModelLoader, CreationLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
 import { animateWeatherSystems } from './Loaders/ClimateLoader';
 import { applySavedSceneToThree, serializeSceneFromThree } from '../../context/sceneSchema';
 import { disposeObject3D, removeSceneChildrenExcept } from './sceneDispose';
@@ -124,7 +124,7 @@ export class GameEngineCore {
     });
   }
 
-  hydrateFromSaved(hydrationScene, mapData) {
+  hydrateFromSaved(hydrationScene, mapData, { customCreations } = {}) {
     if (!hydrationScene) {
       return;
     }
@@ -139,6 +139,15 @@ export class GameEngineCore {
           this.scene,
           null,
           this.cameraController,
+        );
+      },
+      restoreCreation: (entry) => {
+        CreationLoader(
+          'restore',
+          entry,
+          entry,
+          this.scene,
+          customCreations,
         );
       },
     });

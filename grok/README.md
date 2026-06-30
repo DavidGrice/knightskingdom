@@ -43,8 +43,8 @@ npm run build
 | Area | State |
 |------|-------|
 | **Phases 0–10** | ✅ Complete |
-| **Phase 11** | 🔄 Workshop 3D — **D3 done**, D4 + backlog next |
-| **Working on** | D4 world placement; backlog: bucket stay-open, straight camera, finite build bounds |
+| **Phase 11** | 🔄 Workshop 3D — **D4 done**, D2b backlog next |
+| **Working on** | D2b backlog: bucket stay-open, straight camera, finite bounds, top-bar tools, duplicate-above, brick selector box |
 | **Constraint** | **LCA→GLB abandoned** — use procedural/parametric meshes only |
 
 **Recent commits:**
@@ -168,9 +168,9 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 - [ ] **Workshop 3D brick editor** — Phase 11; [`WORKSHOP_3D.md`](./WORKSHOP_3D.md)
   - D1 ✅: `WorkshopEngineCore` + `BrickFactory` + basic tools
   - D2 ✅: `workshopSave.js` + `brickInstances[]` persistence on save/leave
-  - **Backlog:** bucket stays open on select; straight fixed camera; finite build bounds for world export
+  - **Backlog (D2b):** bucket stays open on select; straight fixed camera; finite build bounds for world export; top-bar move/rotate/paint/delete tools fully wired; duplicate places copy above original (height gap); selector box around bricks for collisions
   - D3 ✅: full parametric catalog (141 bucket entries via `generate-brick-catalog.mjs`) — **not LCA-derived**
-  - D4: `customCreations[]` → main world placement (runtime Group)
+  - D4 ✅: `customCreations` → My Creations bucket tab → place in main world (runtime Group)
 - [ ] Fix save game menu styling (MyModels — further polish, optional)
 
 ### Deferred

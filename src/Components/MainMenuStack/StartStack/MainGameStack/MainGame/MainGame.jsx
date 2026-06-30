@@ -6,7 +6,7 @@ import { Music } from './ComponentBottom/Music/index';
 import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
 import { useGameContext } from '../context';
 
-const MainGameContent = ({ navigateToStartMenu, mapData }) => {
+const MainGameContent = ({ navigateToStartMenu, mapData, customCreations }) => {
   const {
     state,
     hydrationScene,
@@ -97,7 +97,11 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
     >
       {showBucket && (
         <div>
-          <Bucket dataSource="models" handleLoadModel={handleLoadModel} />
+          <Bucket
+            dataSource="models"
+            handleLoadModel={handleLoadModel}
+            customCreations={customCreations}
+          />
         </div>
       )}
       {isPaletteOpen && (
@@ -146,6 +150,7 @@ const MainGameContent = ({ navigateToStartMenu, mapData }) => {
         driveView={driveView}
         isFollowing={isFollowing}
         addModel={selectedModelMode}
+        customCreations={customCreations}
         selectedClimateMode={selectedClimateMode}
         climateNeedsUpdating={climateNeedsUpdating}
         setClimateNeedsUpdating={setClimateNeedsUpdating}

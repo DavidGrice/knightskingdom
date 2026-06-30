@@ -9,6 +9,7 @@ const WorkshopScreen = ({
   currentProfile,
   workshopDraft,
   onSaveWorkshopDraft,
+  onSaveWorkshopExport,
 }) => {
   useScreenReady();
 
@@ -19,6 +20,7 @@ const WorkshopScreen = ({
       currentProfile={currentProfile}
       workshopDraft={workshopDraft}
       onSaveWorkshopDraft={onSaveWorkshopDraft}
+      onSaveWorkshopExport={onSaveWorkshopExport}
     />
   );
 };

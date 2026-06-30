@@ -18,6 +18,7 @@ import {
   removeWorldSnapshot,
 } from '@/api/worldSave';
 import { getWorkshopDraft, saveWorkshopDraft } from '@/api/workshopSave';
+import { getCustomCreations, saveCustomCreation } from '@/api/customCreations';
 
 const WorldSessionContext = createContext(null);
 
@@ -161,6 +162,48 @@ export const WorldSessionProvider = ({ children }) => {
     [currentProfile, worldData],
   );
 
+  const customCreations = useMemo(
+    () => getCustomCreations(currentProfile),
+    [currentProfile],
+  );
+
+  const onSaveWorkshopExport = useCallback(
+    (profileId, worldId, payload) => {
+      if (!userData || !updateUserData) {
+        return null;
+      }
+
+      const creationId = payload.creationId || crypto.randomUUID();
+      let updated = saveCustomCreation(userData, profileId, {
+        id: creationId,
+        name: payload.name,
+        brickInstances: payload.brickInstances || [],
+        thumbnail: payload.thumbnail ?? null,
+        worldId,
+      });
+      updated = saveWorkshopDraft(updated, profileId, worldId, {
+        brickInstances: payload.brickInstances || [],
+        thumbnail: payload.thumbnail ?? null,
+        creationId,
+      });
+      updateUserData(updated);
+
+      const draft = {
+        brickInstances: payload.brickInstances || [],
+        thumbnail: payload.thumbnail ?? null,
+        creationId,
+        updatedAt: new Date().toISOString(),
+      };
+      setWorldData((prev) => ({
+        ...prev,
+        workshopDraft: draft,
+      }));
+
+      return creationId;
+    },
+    [userData, updateUserData],
+  );
+
   const onRemoveSnapshot = useCallback(
     (worldId, snapshotId) => {
       if (!userData || !updateUserData || !currentProfile?.id) {
@@ -203,12 +246,15 @@ export const WorldSessionProvider = ({ children }) => {
       onDeleteSavedWorld,
       onRemoveSnapshot,
       onSaveWorkshopDraft,
+      onSaveWorkshopExport,
       workshopDraft,
+      customCreations,
     }),
     [
       worldData,
       currentProfile,
       workshopDraft,
+      customCreations,
       navigateToStartMenu,
       navigateToMainGame,
       navigateToWorkshop,
@@ -220,6 +266,7 @@ export const WorldSessionProvider = ({ children }) => {
       onDeleteSavedWorld,
       onRemoveSnapshot,
       onSaveWorkshopDraft,
+      onSaveWorkshopExport,
     ]
   );
 

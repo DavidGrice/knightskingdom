@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { isCreationModelId } from '@/api/customCreations';
 
 const vector3ToPlain = (v) => ({ x: v.x, y: v.y, z: v.z });
 
@@ -7,6 +8,8 @@ const eulerToPlain = (e) => ({ x: e.x, y: e.y, z: e.z });
 const PLAYABLE_MODEL_IDS = new Set(['ARCHER']);
 
 export const isPlayableModelEntry = (entry) => PLAYABLE_MODEL_IDS.has(entry?.modelId);
+
+export const isCreationModelEntry = (entry) => isCreationModelId(entry?.modelId);
 
 export const applyCameraFromState = (camera, cameraState) => {
   if (!camera || !cameraState?.position) {
@@ -37,7 +40,7 @@ const applyColorToModel = (root, colorHex) => {
   });
 };
 
-export const applySavedSceneToThree = (scene, camera, savedScene, { restorePlayable } = {}) => {
+export const applySavedSceneToThree = (scene, camera, savedScene, { restorePlayable, restoreCreation } = {}) => {
   if (!savedScene) {
     return;
   }
@@ -46,10 +49,15 @@ export const applySavedSceneToThree = (scene, camera, savedScene, { restorePlaya
 
   const mapModelUpdates = [];
   const playableEntries = [];
+  const creationEntries = [];
 
   (savedScene.models || []).forEach((entry) => {
     if (isPlayableModelEntry(entry)) {
       playableEntries.push(entry);
+      return;
+    }
+    if (isCreationModelEntry(entry)) {
+      creationEntries.push(entry);
       return;
     }
     mapModelUpdates.push(entry);
@@ -78,6 +86,10 @@ export const applySavedSceneToThree = (scene, camera, savedScene, { restorePlaya
   playableEntries.forEach((entry) => {
     restorePlayable?.(entry);
   });
+
+  creationEntries.forEach((entry) => {
+    restoreCreation?.(entry);
+  });
 };
 
 export const createEmptySceneState = (climate = 'SUNNY') => ({
@@ -101,6 +113,7 @@ export const serializeSceneFromThree = (scene, camera, climate) => {
     models.push({
       id: child.uuid,
       modelId: child.userData?.modelId || child.name || 'unknown',
+      creationId: child.userData?.creationId || null,
       position: vector3ToPlain(child.position),
       rotation: eulerToPlain(child.rotation),
       color: child.userData?.color || null,

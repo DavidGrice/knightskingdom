@@ -13,6 +13,7 @@ export default function MainGamePage() {
     navigateToMyModels,
     onSaveWorldProgress,
     onAppendSnapshot,
+    customCreations,
   } = useWorldSession();
 
   return (
@@ -25,6 +26,7 @@ export default function MainGamePage() {
       navigateToSnapshot={navigateToSnapshot}
       navigateToMyModels={navigateToMyModels}
       navigateToStartMenu={navigateToStartMenu}
+      customCreations={customCreations}
     />
   );
 }

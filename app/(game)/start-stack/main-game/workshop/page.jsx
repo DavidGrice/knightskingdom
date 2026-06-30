@@ -10,6 +10,7 @@ export default function WorkshopPage() {
     currentProfile,
     workshopDraft,
     onSaveWorkshopDraft,
+    onSaveWorkshopExport,
   } = useWorldSession();
 
   return (
@@ -19,6 +20,7 @@ export default function WorkshopPage() {
       currentProfile={currentProfile}
       workshopDraft={workshopDraft}
       onSaveWorkshopDraft={onSaveWorkshopDraft}
+      onSaveWorkshopExport={onSaveWorkshopExport}
     />
   );
 }

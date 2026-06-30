@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import { PLATE_HEIGHT, STUD } from './studGrid';
@@ -292,4 +293,94 @@ export const paintBrick = (root, colorHex) => {
   const parsed = typeof colorHex === 'string' ? parseInt(colorHex, 16) : colorHex;
   applyColor(root, parsed);
   root.userData.color = typeof colorHex === 'string' ? colorHex : parsed?.toString(16);
+};
+
+const attachSelectionBox = (root) => {
+  const bounds = new THREE.Box3().setFromObject(root);
+  const size = bounds.getSize(new THREE.Vector3());
+  const center = bounds.getCenter(new THREE.Vector3());
+
+  const boxGeometry = new THREE.BoxGeometry(size.x, size.y, size.z);
+  const transparentMaterial = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    opacity: 0.08,
+    transparent: true,
+  });
+  const hitbox = new THREE.Mesh(boxGeometry, transparentMaterial);
+  hitbox.position.copy(center);
+  hitbox.name = 'transparentBox';
+
+  const edgesGeometry = new EdgesGeometry(boxGeometry);
+  const lineMaterial = new LineBasicMaterial({ color: 0xffffff });
+  const wireframe = new LineSegments(edgesGeometry, lineMaterial);
+  wireframe.position.copy(center);
+  wireframe.name = 'wireframe';
+  wireframe.isMovable = true;
+  wireframe.isRotatable = true;
+  wireframe.isPaintable = true;
+  wireframe.isDeletable = true;
+  wireframe.visible = true;
+
+  hitbox.isMovable = true;
+  hitbox.isRotatable = true;
+  hitbox.isPaintable = true;
+  hitbox.isDeletable = true;
+  hitbox.visible = false;
+
+  hitbox.add(wireframe);
+  root.add(hitbox);
+  root.userData.transparentBox = hitbox;
+};
+
+const alignGroupFeetToOrigin = (root) => {
+  const bounds = new THREE.Box3().setFromObject(root);
+  root.position.y -= bounds.min.y;
+};
+
+/**
+ * Build a grouped, placeable creation from saved brick instances.
+ * @param {Array} instances
+ * @param {{ name?: string, modelId?: string, creationId?: string }} [options]
+ */
+export const buildGroupFromBrickInstances = (instances = [], options = {}) => {
+  const group = new THREE.Group();
+  group.name = options.name || 'CustomCreation';
+
+  instances.forEach((entry) => {
+    if (!entry?.brickId) {
+      return;
+    }
+    const brick = createBrickSync(entry.brickId, { color: entry.color });
+    if (entry.position) {
+      brick.position.set(entry.position.x, entry.position.y, entry.position.z);
+    }
+    if (entry.rotation) {
+      brick.rotation.set(entry.rotation.x, entry.rotation.y, entry.rotation.z);
+    }
+    brick.userData.instanceId = entry.instanceId || brick.userData.instanceId;
+    brick.userData.color = (entry.color || '').replace?.('#', '') || entry.color;
+    group.add(brick);
+  });
+
+  attachSelectionBox(group);
+  alignGroupFeetToOrigin(group);
+
+  group.isModel = true;
+  group.isMovable = true;
+  group.isRotatable = true;
+  group.isDeletable = true;
+  group.isPaintable = true;
+  group.userData.modelId = options.modelId || group.name;
+  group.userData.creationId = options.creationId || null;
+
+  group.traverse((child) => {
+    if (child !== group.userData.transparentBox && child.name !== 'wireframe') {
+      child.isMovable = true;
+      child.isRotatable = true;
+      child.isDeletable = true;
+      child.isPaintable = true;
+    }
+  });
+
+  return group;
 };

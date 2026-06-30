@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef, startTransition } from 'react';
 import * as THREE from 'three';
 import { useGameLoading } from '@/lib/context/GameLoadingProvider';
-import { ModelLoader } from './Loaders/index';
+import { ModelLoader, CreationLoader } from './Loaders/index';
+import { isCreationModelId } from '@/api/customCreations';
 import { Modes } from './GameEngineResourceStack/index';
 import { serializeSceneFromThree } from '../../context/sceneSchema';
 import { GameEngineCore } from './GameEngineCore';
@@ -64,6 +65,7 @@ const findDriveIdFromIntersects = (intersects) => {
 
 const GameEngine = forwardRef(({
   mapData, hydrationScene, color, mode, driveView, isFollowing, addModel,
+  customCreations,
   selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating,
   cameraNeedsReset, setCameraNeedsReset, isClimateOpen, onSceneChange,
 }, ref) => {
@@ -77,10 +79,12 @@ const GameEngine = forwardRef(({
   const mouse = useRef(new THREE.Vector2());
   const raycaster = useRef(new THREE.Raycaster());
   const modeRef = useRef(mode);
+  const customCreationsRef = useRef(customCreations);
   const onSceneChangeRef = useRef(onSceneChange);
   const setCameraNeedsResetRef = useRef(setCameraNeedsReset);
 
   modeRef.current = mode;
+  customCreationsRef.current = customCreations;
   onSceneChangeRef.current = onSceneChange;
   setCameraNeedsResetRef.current = setCameraNeedsReset;
 
@@ -164,9 +168,11 @@ const GameEngine = forwardRef(({
       return;
     }
 
-    core.hydrateFromSaved(hydrationScene, mapData);
+    core.hydrateFromSaved(hydrationScene, mapData, {
+      customCreations: customCreationsRef.current,
+    });
     hasHydratedRef.current = true;
-  }, [assetsReady, hydrationScene, mapData]);
+  }, [assetsReady, hydrationScene, mapData, customCreations]);
 
   useEffect(() => {
     const core = coreRef.current;
@@ -224,15 +230,25 @@ const GameEngine = forwardRef(({
       if (intersects.length === 0 || addModel === 'NONE') {
         return;
       }
-      ModelLoader(
-        'add',
-        addModel,
-        intersects[0].point,
-        null,
-        scene,
-        null,
-        core.cameraController,
-      );
+      if (isCreationModelId(addModel)) {
+        CreationLoader(
+          'add',
+          addModel,
+          intersects[0].point,
+          scene,
+          customCreationsRef.current,
+        );
+      } else {
+        ModelLoader(
+          'add',
+          addModel,
+          intersects[0].point,
+          null,
+          scene,
+          null,
+          core.cameraController,
+        );
+      }
       updateSceneState();
     };
 
