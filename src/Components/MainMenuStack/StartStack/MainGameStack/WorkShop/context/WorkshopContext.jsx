@@ -30,6 +30,10 @@ export const WorkshopProvider = ({
     dispatch({ type: 'RESET_MODES' });
   }, []);
 
+  const closeBucket = useCallback(() => {
+    dispatch({ type: 'TOGGLE_BUCKET', payload: false });
+  }, []);
+
   const handleBucket = useCallback(() => {
     const next = !state.showBucket;
     dispatch({ type: 'TOGGLE_BUCKET', payload: next });
@@ -49,30 +53,35 @@ export const WorkshopProvider = ({
   }, []);
 
   const handleMove = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.MOVING });
     dispatch({ type: 'SELECT_BRICK', payload: null });
-  }, []);
+  }, [closeBucket]);
 
   const handleRotate = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.ROTATING });
     dispatch({ type: 'SELECT_BRICK', payload: null });
-  }, []);
+  }, [closeBucket]);
 
   const handleDelete = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.DELETING });
     dispatch({ type: 'SELECT_BRICK', payload: null });
-  }, []);
+  }, [closeBucket]);
 
   const handleDuplicate = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.DUPLICATING });
     dispatch({ type: 'SELECT_BRICK', payload: null });
-  }, []);
+  }, [closeBucket]);
 
   const handlePalette = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.PAINTING });
     dispatch({ type: 'SELECT_BRICK', payload: null });
     dispatch({ type: 'TOGGLE_PALETTE', payload: !state.isPaletteOpen });
-  }, [state.isPaletteOpen]);
+  }, [closeBucket, state.isPaletteOpen]);
 
   const handleColor = useCallback((color) => {
     dispatch({ type: 'SET_COLOR', payload: color });

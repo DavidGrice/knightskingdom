@@ -140,39 +140,50 @@ export const GameProvider = ({
     dispatch({ type: 'SET_MODE', payload: Modes.ADDING });
   }, []);
 
+  const closeBucket = useCallback(() => {
+    if (state.showBucket) {
+      dispatch({ type: 'TOGGLE_BUCKET', payload: false });
+    }
+  }, [state.showBucket]);
+
   const handleMove = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: Modes.MOVING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, []);
+  }, [closeBucket]);
 
   const handleRotate = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: Modes.ROTATING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, []);
+  }, [closeBucket]);
 
   const handlePalette = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: Modes.PAINTING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
     if (state.isFollowing) {
       dispatch({ type: 'SET_FOLLOWING', payload: false });
     }
     dispatch({ type: 'TOGGLE_PALETTE', payload: !state.isPaletteOpen });
-  }, [state.isFollowing, state.isPaletteOpen]);
+  }, [closeBucket, state.isFollowing, state.isPaletteOpen]);
 
   const handleColor = useCallback((color) => {
     dispatch({ type: 'SET_COLOR', payload: color });
   }, []);
 
   const handleDelete = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: Modes.DELETING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, []);
+  }, [closeBucket]);
 
   const handleAction = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_ACTION_OPEN', payload: !state.isActionOpen });
     dispatch({ type: 'SET_MODE', payload: Modes.ACTION });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [state.isActionOpen]);
+  }, [closeBucket, state.isActionOpen]);
 
   const handleDrive = useCallback(() => {
     if (state.isPaletteOpen) {
@@ -211,9 +222,10 @@ export const GameProvider = ({
   }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);
 
   const handlePlay = useCallback(() => {
+    closeBucket();
     dispatch({ type: 'SET_MODE', payload: Modes.PLAYING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, []);
+  }, [closeBucket]);
 
   const handleClimate = useCallback(() => {
     if (state.isMusicOpen) {
