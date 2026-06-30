@@ -49,7 +49,7 @@ export const DRIVE_CAMERA_PROFILES = {
       firstPersonUseHeadCenter: true,
       eyeHeightLift: 0.55,
       eyeForwardOffset: 0.7,
-      firstPersonYawRadians: 0.2,
+      firstPersonYawRadians: 0.38,
       lookAtHeightBoost: 0,
       levelFirstPersonPitch: true,
     },
