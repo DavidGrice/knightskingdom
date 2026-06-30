@@ -1,6 +1,6 @@
 # Grok Git Workflow
 
-**Last updated:** 2026-06-28
+**Last updated:** 2026-06-30
 
 ## Rule for Grok sessions
 
@@ -41,7 +41,7 @@ If `git pull` says "already up to date" but changes are missing, Grok likely for
 
 ## Grok session checklist
 
-1. Read `grok/README.md` and `grok/ROADMAP.md`
+1. Read `grok/README.md`, `grok/WORKSHOP_3D.md` (if Phase 11), and `grok/ROADMAP.md`
 2. Work on branch `grok-dev`
 3. `npm run build` before committing
 4. Commit with a clear message

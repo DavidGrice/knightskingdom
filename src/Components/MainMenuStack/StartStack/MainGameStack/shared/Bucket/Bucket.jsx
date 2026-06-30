@@ -6,7 +6,7 @@ import BucketBottom from './BucketBottom/BucketBottom';
 import { workshopBucketTabVars } from '../../../../../Common';
 import { getBucketConfig } from '../toolbarConfig';
 
-const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
+const Bucket = ({ dataSource = 'models', handleLoadModel, onBrickSelect }) => {
     const isWorkshop = dataSource === 'bricks';
     const styles = isWorkshop ? workshopStyles : gameStyles;
     const variant = isWorkshop ? 'workshop' : 'game';
@@ -30,7 +30,11 @@ const Bucket = ({ dataSource = 'models', handleLoadModel }) => {
     };
 
     const handleItemSelect = (item) => {
-        if (handleLoadModel && item.SelectedModel) {
+        if (isWorkshop) {
+            onBrickSelect?.(item ?? null);
+            return;
+        }
+        if (handleLoadModel && item?.SelectedModel) {
             handleLoadModel(item.SelectedModel);
         }
     };

@@ -6,6 +6,40 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Workshop menu complete; Phase 11 planning docs
+
+| File | Change |
+|------|--------|
+| `grok/WORKSHOP_3D.md` | **New** — original game research, codebase gaps, options A–D, recommended phased plan (D1–D5), open decisions, D1 file list |
+| `grok/README.md` | Status table, backlog, session prompts, doc index, key paths |
+| `grok/ROADMAP.md` | Phase 11 added to overview + mermaid; sub-phases D1–D5 |
+| `grok/ARCHITECTURE.md` | Workshop stack table, planned 3D data flow |
+
+## 2026-06-30 — Option D confirmed; LCA→GLB removed from plan
+
+| File | Change |
+|------|--------|
+| `grok/WORKSHOP_3D.md` | Major revision: LCA pipeline abandoned; procedural `BrickFactory` + `brickInstances[]` JSON; D1–D5 redefined |
+| `grok/README.md`, `ROADMAP.md`, `ARCHITECTURE.md` | Align with new plan |
+
+## 2026-06-30 — Phase 11 D1: Workshop 3D engine
+
+| File | Change |
+|------|--------|
+| `WorkShop/WorkshopEngine/*` | **New** — `WorkshopEngineCore`, `WorkshopEngine`, `BrickFactory`, `brickCatalog`, `studGrid` |
+| `WorkShop/context/*` | **New** — `WorkshopContext`, `workshopReducer` |
+| `WorkShop/WorkShop.jsx` | Mount engine; wire toolbar, bucket, palette, sweep |
+| `shared/ComponentTop.jsx` | Workshop move/rotate/delete/duplicate handlers |
+| `shared/ComponentBottom.jsx` | Sweep callback |
+| `shared/Bucket.jsx` | `onBrickSelect` for workshop |
+| `public/workshop/bricks/README.md` | Optional GLB drop folder + sources |
+
+Parametric bricks with stud bumps; unknown catalog ids fall back to 2×2. GLB override via `brickCatalog` `shape: 'GLB'`. Build passes.
+
+**Next: D2** — persist `brickInstances[]` on save; restore on workshop re-entry.
+
+---
+
 ## 2026-06-28 — MyModels: fix grid metrics (restore 50ecb12 layout)
 
 | File | Change |
@@ -526,4 +560,4 @@ Restored original CRA layout for the save game screen (had been incorrectly copi
 - `npm run build` — **passes** (no ESLint warnings)
 - 14 App Router pages; main-game route ~107 kB First Load JS
 - **Phases 0–10 complete**
-- **User backlog:** MyModels further polish, workshop menu
+- **User backlog:** Workshop 3D brick editor

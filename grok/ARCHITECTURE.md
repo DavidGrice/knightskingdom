@@ -3,7 +3,7 @@
 Deep-dive breakdown of the **game codebase** (`src/` + `app/`).  
 For RE assets see `resources/` and root `README.md`.
 
-**Last updated:** 2026-06-28 (post Phase 10)
+**Last updated:** 2026-06-30 (Phase 11 planning)
 
 ---
 
@@ -167,11 +167,22 @@ WorldBody selects item
   → GameProvider(mapData) + GameEngine
 ```
 
-**Workshop:**
+**Workshop (UI ✅, 3D editor ⬜):**
 ```
 handleNavigateToWorkshop()
   → navigateToWorkshop({ ...mapData, sceneSnapshot })
-  → WorkShop(mapData) — shows world name, brick tools
+  → WorkShop(mapData)
+       ├── GameShell + toolbar/bucket/palette (done)
+       └── black viewport — empty div today; Phase 11 adds WorkshopEngine
+```
+
+**Workshop 3D editor (planned — see `grok/WORKSHOP_3D.md`):**
+```
+Brick bucket select → WorkshopContext SET_MODE ADDING
+  → click build plate → BrickLoader places snapped brick
+  → move/rotate/paint/delete/duplicate/sweep via toolbar
+  → save → brickInstances[] JSON → profile.customCreations[]
+  → main game bucket → BrickFactory.buildGroup() → place in world (no GLB file)
 ```
 
 **Snapshot:**
@@ -229,10 +240,27 @@ Game stack routes use `next/dynamic` via `src/lib/lazyGameScreens.jsx`:
 
 Page shells stay ~300–400 B; heavy chunks load on demand.
 
+## Workshop Stack (Phase 11 — in progress)
+
+| Layer | Status | Notes |
+|-------|--------|-------|
+| `WorkShop.jsx` + `WorkshopStageLayout` | ✅ | 800×600 scaled stage, CSS vars from `workshopStageMetrics.js` |
+| `shared/ComponentTop` (workshop mode) | ✅ UI / ⬜ handlers | move/rotate/delete/duplicate icons present; not wired to engine |
+| `shared/Bucket` (`dataSource: 'bricks'`) | ✅ UI / ⬜ selection | ~200 brick entries with `modelPath`; no `SelectedModel` / `handleLoadModel` |
+| `shared/ComponentBottom` sweep | ⬜ | `console.log('Sweep')` placeholder |
+| `WorkshopEngine` | ⬜ planned | Fork of `GameEngineCore`; flat plate, no map/climate |
+| `WorkshopContext` | ⬜ planned | Mirror `GameContext` subset for workshop tools |
+| `BrickFactory` | ⬜ planned | Parametric Three.js meshes from `brickCatalog.js` stud recipes |
+| `sceneSchema` extensions | ⬜ planned | `brickInstances[]` + `customCreations[]` on profile |
+
+**Brick assets:** PNG thumbnails for UI; 3D from **parametric factory** (not LCA). `.lca` files are RE archive only — LCA→GLB pipeline abandoned (unusable offsets/meshes after years of RE).
+
+---
+
 ## ESLint / Tech Debt (Non-Blocking)
 
 - Some unused vars in game components
-- MyModels CSS further polish (backlog); WorkShop menu styling pending
+- Workshop 3D editor — see `grok/WORKSHOP_3D.md`
 - Unique GLB assets per world 2–10
 
 ---

@@ -18,13 +18,18 @@ const ComponentTop = ({
     handleAction,
     handleSave,
     handlePlay,
+    handleDuplicate,
     resetModes,
     setCameraNeedsReset,
     handleMusicChange,
+    activeToolbarIcon,
+    setActiveToolbarIcon,
 }) => {
     const styles = mode === 'workshop' ? workshopStyles : gameStyles;
     const { leaveIcon, middleIcons, buttonOrder, showPlay } = getTopToolbarConfig(mode);
-    const [activeIcon, setActiveIcon] = useState(null);
+    const [localActiveIcon, setLocalActiveIcon] = useState(null);
+    const activeIcon = activeToolbarIcon ?? localActiveIcon;
+    const setActiveIcon = setActiveToolbarIcon ?? setLocalActiveIcon;
 
     const handleGameIconClick = (type) => {
         const isToggleOff = activeIcon === type;
@@ -78,14 +83,51 @@ const ComponentTop = ({
     const handleWorkshopIconClick = (type) => {
         const isToggleOff = activeIcon === type;
 
-        if (type === 'repaint') {
-            handlePalette();
-        }
-        if (type === 'bucket') {
-            handleBucket();
+        switch (type) {
+            case 'bucket':
+                handleBucket();
+                break;
+            case 'repaint':
+                handlePalette?.();
+                break;
+            case 'move':
+                if (!isToggleOff) {
+                    handleMove?.();
+                } else {
+                    resetModes?.();
+                }
+                break;
+            case 'reverse':
+                if (!isToggleOff) {
+                    handleRotate?.();
+                } else {
+                    resetModes?.();
+                }
+                break;
+            case 'delete':
+                if (!isToggleOff) {
+                    handleDelete?.();
+                } else {
+                    resetModes?.();
+                }
+                break;
+            case 'duplicate':
+                if (!isToggleOff) {
+                    handleDuplicate?.();
+                } else {
+                    resetModes?.();
+                }
+                break;
+            default:
+                break;
         }
 
-        setActiveIcon(isToggleOff ? null : type);
+        if (isToggleOff) {
+            setActiveIcon(null);
+            return;
+        }
+
+        setActiveIcon(type);
     };
 
     const handleIconClick = mode === 'game' ? handleGameIconClick : handleWorkshopIconClick;

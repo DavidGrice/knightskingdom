@@ -16,7 +16,7 @@ Use this folder to resume work on **LEGO Creator: Knight's Kingdom** modernizati
 
 Tell Grok:
 
-> Read `grok/README.md`, `grok/ROADMAP.md`, and `grok/WORKFLOW.md`. We are on branch `grok-dev`. Phases 0–10 complete; continue from user backlog or new features. **Push to `origin/grok-dev` after every commit.**
+> Read `grok/README.md`, `grok/WORKSHOP_3D.md`, `grok/ROADMAP.md` Phase 11, and `grok/WORKFLOW.md`. We are on branch `grok-dev`. Phases 0–10 complete; workshop UI done. **Active work: workshop 3D brick editor** (see WORKSHOP_3D.md). Push to `origin/grok-dev` after every commit.
 
 **Grok must push after committing** (user syncs via `git pull` in VS Code):
 
@@ -38,13 +38,14 @@ npm run build
 
 ---
 
-## Current Status (2026-06-28)
+## Current Status (2026-06-30)
 
 | Area | State |
 |------|-------|
 | **Phases 0–10** | ✅ Complete |
-| **Working on** | User backlog + optional polish (see below) |
-| **User backlog** | Workshop menu (WorkShop) |
+| **Phase 11** | 🔄 Workshop 3D — **D1 done**, D2 save/load next |
+| **Working on** | D2: `brickInstances[]` persistence on profile — see [`WORKSHOP_3D.md`](./WORKSHOP_3D.md) |
+| **Constraint** | **LCA→GLB abandoned** — use procedural/parametric meshes only |
 
 **Recent commits:**
 ```
@@ -163,8 +164,13 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 
 - [x] **Lego Clock loading modal** — global overlay via `GameLoadingProvider` (navigation, lazy chunks, world assets)
 - [x] **Fix screenshot menu** — SnapShot gallery UI/layout polish
-- [ ] **Fix workshop menu** — WorkShop toolbar/panel UI/layout polish
-- [ ] Fix save game menu styling (MyModels — further polish)
+- [x] **Fix workshop menu** — WorkShop toolbar/panel UI/layout polish (`WorkshopStageLayout`, pixel-anchored metrics)
+- [ ] **Workshop 3D brick editor** — Phase 11; [`WORKSHOP_3D.md`](./WORKSHOP_3D.md)
+  - D1 ⬜: `WorkshopEngineCore` + `BrickFactory` + basic tools
+  - D2: paint/duplicate/stud snap + `brickInstances[]` persistence
+  - D3: full parametric catalog (~200 bucket entries) — **not LCA-derived**
+  - D4: `customCreations[]` → main world placement (runtime Group)
+- [ ] Fix save game menu styling (MyModels — further polish, optional)
 
 ### Deferred
 
@@ -179,12 +185,12 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | Area | Issue |
 |------|-------|
 | SnapShot / screenshot menu | ✅ Layout restored from original CRA styles |
-| WorkShop / workshop menu | Toolbar and panel layout need polish (backlog) |
+| WorkShop / workshop menu | ✅ Layout complete (`WorkshopStageLayout`, `workshopStageMetrics.js`) |
 | MyModels / save UI | Further layout polish needed (backlog) |
 | Shared worlds | No `filePath` / engine assets |
 | Worlds 2–10 | Reuse `map1` GLB until unique maps added |
 | ESLint | Minor unused-vars in some components (non-blocking) |
-| Workshop | Brick tools visual only; no 3D brick editor yet |
+| Workshop 3D editor | No engine in workshop viewport yet; brick tools are UI-only |
 
 ### Resolved (was open)
 
@@ -217,16 +223,20 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | `src/Components/.../context/sceneSchema.js` | Save/load schema |
 | `src/api/worldSave.js` | Save/snapshot CRUD |
 | `src/data/worlds/` | World catalogs |
+| `grok/WORKSHOP_3D.md` | **Phase 11 plan** — workshop 3D editor gaps, options, D1 steps |
+| `WorkShop/WorkShop.jsx` | Workshop screen (UI done; no engine yet) |
+| `WorkShop/.../BucketBottomResourceStack/` | ~200 brick `.lca` + catalog `index.js` |
+| `Common/WorkshopStageLayout/` | Pixel-anchored workshop layout metrics |
 
 ---
 
 ## Session Prompt Templates
 
-**Continue Phase 10:**
-> Read `grok/ROADMAP.md` Phase 10. On `grok-dev`, extract `userService.js` and add lazy loading for main-game routes.
+**Continue workshop 3D editor (Phase 11):**
+> Read `grok/WORKSHOP_3D.md`. On `grok-dev`, implement Phase D1: `WorkshopEngineCore`, procedural bricks, wire toolbar to workshop context. User chose Option D.
 
-**Fix styling:**
-> Fix save game menu styling in MyModels on `grok-dev`. Match SnapShot/WorldBody layout patterns.
+**Expand brick catalog (Phase D3):**
+> Read `grok/WORKSHOP_3D.md`. Map bucket entries to parametric `brickCatalog.js` recipes. Do NOT use LCA conversion.
 
 **Code review:**
 > Read `grok/CHANGELOG.md` and review latest commits on `grok-dev`.
@@ -241,3 +251,4 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | [ROADMAP.md](./ROADMAP.md) | Full phased plan (Phases 0–10) |
 | [CHANGELOG.md](./CHANGELOG.md) | Detailed completed changes |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Deeper codebase breakdown |
+| [WORKSHOP_3D.md](./WORKSHOP_3D.md) | Phase 11 — workshop 3D editor plan & handoff |

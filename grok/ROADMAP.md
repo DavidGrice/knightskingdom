@@ -4,7 +4,7 @@ Phased cleanup and modernization plan for **`src/` game code only**.
 RE work (`resources/`, `tools/`) is out of scope unless requested.
 
 **Branch:** `grok-dev`  
-**Last updated:** 2026-06-28
+**Last updated:** 2026-06-30
 
 ---
 
@@ -32,7 +32,8 @@ flowchart LR
     p8[Phase8_Engine]
     p9[Phase9_Features]
     p10[Phase10_Infra]
-    p0 --> p1 --> p2 --> p3 --> p4 --> p5 --> p6 --> p7 --> p8 --> p9 --> p10
+    p11[Phase11_Workshop3D]
+    p0 --> p1 --> p2 --> p3 --> p4 --> p5 --> p6 --> p7 --> p8 --> p9 --> p10 --> p11
 ```
 
 | Phase | Status | Focus |
@@ -48,6 +49,7 @@ flowchart LR
 | 8 | ✅ Done | Engine hardening (Core, hydrate, cleanup) |
 | 9 | ✅ Done | Snapshot gallery, workshop, dark weather, worlds |
 | 10 | ✅ Done | `userService`, code splitting, ESLint |
+| 11 | ⬜ Active | Workshop 3D brick editor (see `grok/WORKSHOP_3D.md`) |
 
 ### Deferred / user-owned
 
@@ -55,7 +57,8 @@ flowchart LR
 |------|--------|-------|
 | Lego Clock loading modal | ✅ Done | `GameLoadingProvider` + portal modal across `(game)` routes |
 | Screenshot menu (SnapShot) | ✅ Done | Restored original CRA grid layout (90px gap, holder frame) |
-| Workshop menu (WorkShop) | ⬜ Pending | Toolbar/panel UI/layout polish |
+| Workshop menu (WorkShop) | ✅ Done | `WorkshopStageLayout`, pixel-anchored metrics, holder grid |
+| Workshop 3D brick editor | ⬜ Active (D1) | Procedural bricks only — **LCA→GLB abandoned** |
 | Save game menu styling (MyModels) | ✅ Done | `wh_selection` frame, holder fit, snapshot thumbnails |
 | R3F migration | ⬜ Deferred | Plain Three.js retained; `GameEngineCore` instead |
 | Unique GLB per world 2–10 | ⬜ Deferred | All worlds use `map1` placeholder for now |
@@ -214,6 +217,33 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 
 ---
 
+## Phase 11 — Workshop 3D Brick Editor ⬜
+
+**Goal:** Build custom LEGO creations in the workshop viewport; save and place them in the main world as grouped models (original game behavior).
+
+**Full plan:** [`grok/WORKSHOP_3D.md`](./WORKSHOP_3D.md)
+
+### Prerequisites ✅
+- [x] Workshop UI/layout (`WorkshopStageLayout`, `workshopStageMetrics.js`, holder grid)
+- [x] Brick bucket catalog UI (~200 `.lca` + PNGs in `BucketBottomResourceStack/`)
+- [x] Main game engine interaction modes (reuse, not rewrite)
+
+### Approach: Option D confirmed — procedural bricks (no LCA pipeline)
+
+**Constraint:** LCA/VCA → GLB conversion failed after ~2 years RE; offsets/meshes unusable. Do **not** plan on extracting game meshes from `.lca` files.
+
+| Sub-phase | Status | Deliverable |
+|-----------|--------|-------------|
+| D1 | ⬜ **NEXT** | `WorkshopEngineCore` + `BrickFactory` + ~12 parametric bricks + basic tools |
+| D2 | ⬜ | Paint, duplicate, stud snap, `brickInstances[]` save/load on profile |
+| D3 | ⬜ | Full `brickCatalog.js` — map ~200 bucket entries to parametric shape recipes |
+| D4 | ⬜ | `customCreations[]` → main world bucket → runtime `Group` placement |
+| D5 | ⬜ | Challenges + instructions + optional hand-authored GLBs (optional) |
+
+See [`grok/WORKSHOP_3D.md`](./WORKSHOP_3D.md) for D1 file checklist and data model.
+
+---
+
 ## Per-Stack Reference
 
 ### AuthenticationStack
@@ -228,7 +258,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 
 ### MainGameStack
 - **Fixed:** shared UI, GameContext, engine core, snapshots, workshop context
-- **Future:** save menu styling (user), brick workshop 3D (out of scope)
+- **Future:** workshop 3D brick editor + workshop→world model transfer
 
 ### GameEngine
 - Plain Three.js via `GameEngineCore` (no R3F)

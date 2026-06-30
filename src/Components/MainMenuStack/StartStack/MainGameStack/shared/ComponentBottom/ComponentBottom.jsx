@@ -15,6 +15,7 @@ const ComponentBottom = ({
     navigateToWorkshop,
     handleNavigateToSnapShot,
     handleMusicChange,
+    onSweep,
 }) => {
     const styles = mode === 'workshop' ? workshopStyles : gameStyles;
     const config = getBottomToolbarConfig(mode);
@@ -46,7 +47,7 @@ const ComponentBottom = ({
                     break;
             }
         } else if (type === 'sweep' && !isToggleOff) {
-            console.log('Sweep');
+            onSweep?.();
         }
 
         setActiveIcon(isToggleOff ? null : type);

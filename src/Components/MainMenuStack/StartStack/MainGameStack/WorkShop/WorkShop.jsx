@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useMemo, useRef, useState } from 'react';
 import styles from './WorkShop.module.css';
 import {
@@ -6,31 +8,39 @@ import {
   useWorkshopCanvasScale,
 } from '../../../../Common';
 import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
+import { WorkshopProvider, useWorkshopContext } from './context';
+import { WorkshopEngine } from './WorkshopEngine';
 
-const WorkShop = ({ navigateToMainGame, mapData }) => {
+const WorkShopContent = ({ navigateToMainGame, mapData }) => {
   const scalerRef = useRef(null);
-  const [showBucket, setShowBucket] = useState(false);
-  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const [activeIcon, setActiveIcon] = useState(null);
+  const {
+    state,
+    engineRef,
+    resetModes,
+    handleBucket,
+    handleBrickSelect,
+    handleMove,
+    handleRotate,
+    handleDelete,
+    handleDuplicate,
+    handlePalette,
+    handleColor,
+    handleSweep,
+  } = useWorkshopContext();
+
+  const {
+    mode,
+    selectedBrickId,
+    color,
+    showBucket,
+    isPaletteOpen,
+  } = state;
 
   useWorkshopCanvasScale(scalerRef);
 
-  const handleBucket = () => {
-    setShowBucket(!showBucket);
-  };
-
   const handleSave = () => {
     navigateToMainGame(mapData);
-  };
-
-  const handlePaint = () => {
-    if (isPaletteOpen) {
-      setIsPaletteOpen(false);
-    }
-  };
-
-  const handlePalette = () => {
-    setIsPaletteOpen(!isPaletteOpen);
   };
 
   const stageStyle = useMemo(() => workshopStageToCssVars(), []);
@@ -45,10 +55,16 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
           <ComponentTop
             mode="workshop"
             handleBucket={handleBucket}
-            handlePaint={handlePaint}
+            handleMove={handleMove}
+            handleRotate={handleRotate}
+            handleDelete={handleDelete}
+            handleDuplicate={handleDuplicate}
             handlePalette={handlePalette}
             handleSave={handleSave}
+            resetModes={resetModes}
             navigateToMainGame={() => navigateToMainGame(mapData)}
+            activeToolbarIcon={activeIcon}
+            setActiveToolbarIcon={setActiveIcon}
           />
         )}
         bottom={(
@@ -56,12 +72,19 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
             mode="workshop"
             activeIcon={activeIcon}
             setActiveIcon={setActiveIcon}
+            onSweep={handleSweep}
           />
         )}
       >
         <div ref={scalerRef} className={styles.workshopScaler}>
           <div className={styles.canvas}>
             <div className={styles.stage}>
+              <WorkshopEngine
+                ref={engineRef}
+                mode={mode}
+                selectedBrickId={selectedBrickId}
+                color={color}
+              />
               {showWorldTitle && (
                 <div
                   className={styles.worldLabel}
@@ -70,18 +93,26 @@ const WorkShop = ({ navigateToMainGame, mapData }) => {
                   {mapData.name}
                 </div>
               )}
-              {isPaletteOpen && <Palette variant="workshop" />}
+              {isPaletteOpen && (
+                <Palette variant="workshop" onColorSelect={handleColor} />
+              )}
             </div>
           </div>
         </div>
       </GameShell>
       {showBucket && (
         <div className={styles.bucketLayer}>
-          <Bucket dataSource="bricks" />
+          <Bucket dataSource="bricks" onBrickSelect={handleBrickSelect} />
         </div>
       )}
     </div>
   );
 };
+
+const WorkShop = (props) => (
+  <WorkshopProvider>
+    <WorkShopContent {...props} />
+  </WorkshopProvider>
+);
 
 export default WorkShop;
