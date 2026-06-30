@@ -4,6 +4,7 @@ import { Drive } from './ComponentTop/Drive/index';
 import { Climate } from './ComponentBottom/Climate/index';
 import { Music } from './ComponentBottom/Music/index';
 import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
+import { GAME_CREATIONS_TAB_INDEX } from '../shared/toolbarConfig/creationsBucket';
 import { useGameContext } from '../context';
 
 const MainGameContent = ({
@@ -128,6 +129,7 @@ const MainGameContent = ({
             dataSource="models"
             handleLoadModel={handleLoadModel}
             customCreations={customCreations}
+            initialTab={mapData?.openCreationsBucket ? GAME_CREATIONS_TAB_INDEX : undefined}
           />
         </div>
       )}

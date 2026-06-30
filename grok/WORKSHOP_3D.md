@@ -278,7 +278,7 @@ MainGame (D4):
 ## Phase D4 — Main World Placement ✅
 
 - [x] `customCreations` on profile + `customCreations.js` helpers (max 20)
-- [x] Game bucket: dynamic **"My Creations" tab 0** (top-left icon when creations exist) — each tile shows the **workshop camera screenshot** captured on save (`captureFrame` → `thumbnail` data URL); bucket auto-opens after workshop save
+- [x] Game bucket: **tab 6 / bottom-right** (hand+brick `challenges_2` icon — original game slot) shows saved creations when present; workshop screenshot per tile; bucket auto-opens on that tab after workshop save
 - [x] `CreationLoader` + `buildGroupFromBrickInstances()` with selection box wireframe
 - [x] `sceneSchema` serializes/restores `CREATION_<id>` entries
 - [x] Workshop save → exports to `customCreations` + links `workshopDraft.creationId`

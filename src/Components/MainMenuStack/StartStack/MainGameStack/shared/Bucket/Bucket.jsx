@@ -1,13 +1,19 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import gameStyles from './Bucket.module.css';
 import workshopStyles from './Bucket.workshop.module.css';
 import BucketTop from './BucketTop/BucketTop';
 import BucketBottom from './BucketBottom/BucketBottom';
 import { workshopBucketTabVars } from '../../../../../Common';
 import { getBucketConfig } from '../toolbarConfig';
-import { buildCreationsBucketTab } from '../toolbarConfig/creationsBucket';
+import { mergeCreationsIntoGameBucket } from '../toolbarConfig/creationsBucket';
 
-const Bucket = ({ dataSource = 'models', handleLoadModel, onBrickSelect, customCreations }) => {
+const Bucket = ({
+  dataSource = 'models',
+  handleLoadModel,
+  onBrickSelect,
+  customCreations,
+  initialTab,
+}) => {
     const isWorkshop = dataSource === 'bricks';
     const styles = isWorkshop ? workshopStyles : gameStyles;
     const variant = isWorkshop ? 'workshop' : 'game';
@@ -21,21 +27,20 @@ const Bucket = ({ dataSource = 'models', handleLoadModel, onBrickSelect, customC
         if (dataSource !== 'models') {
             return base;
         }
-        const creationsTab = buildCreationsBucketTab(customCreations);
-        if (!creationsTab) {
-            return base;
-        }
-        // Prepend so "My Creations" is tab 0 (top-left). Appending as tab 7
-        // clipped off-screen — game bucket grid only fits ~2 icon rows.
-        return {
-            tabIcons: [creationsTab.tabIcon, ...base.tabIcons],
-            tabData: [creationsTab.tabData, ...base.tabData],
-            arrowImages: base.arrowImages,
-        };
+        return mergeCreationsIntoGameBucket(base, customCreations);
     }, [dataSource, customCreations]);
-    const [activeIcon, setActiveIcon] = useState(0);
-    const [activeBucket, setActiveBucket] = useState(0);
+    const [activeIcon, setActiveIcon] = useState(initialTab ?? 0);
+    const [activeBucket, setActiveBucket] = useState(initialTab ?? 0);
     const [resetKey, setResetKey] = useState(0);
+
+    useEffect(() => {
+        if (initialTab == null) {
+            return;
+        }
+        setActiveIcon(initialTab);
+        setActiveBucket(initialTab);
+        setResetKey((key) => key + 1);
+    }, [initialTab]);
 
     const handleIconClick = (icon) => {
         setActiveIcon(icon);

@@ -88,6 +88,15 @@ Workshop save captures workshop camera screenshot (`captureFrame`) → stored as
 
 **Next: D2b** backlog polish.
 
+## 2026-06-30 — My Creations: original tab 6 (hand+brick icon)
+
+| File | Change |
+|------|--------|
+| `creationsBucket.js` | `GAME_CREATIONS_TAB_INDEX = 5` — bottom-right challenges/hand+brick slot |
+| `Bucket.jsx` | Merge creations into tab 6; `initialTab` selects hand+brick after workshop save |
+
+Reverts mistaken tab-0 prepend; matches original game bucket layout.
+
 ## 2026-06-30 — Fix My Creations not visible in main-game bucket
 
 | File | Change |

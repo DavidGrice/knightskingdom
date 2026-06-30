@@ -1,22 +1,20 @@
-import Building2 from '../../MainGame/ComponentTop/Bucket/BucketTop/BucketTopResourceStack/buildings_2.png';
-import Building5 from '../../MainGame/ComponentTop/Bucket/BucketTop/BucketTopResourceStack/buildings_5.png';
+import Challenge1 from '../../MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c2_bricks1/c2_wall.png';
 import { toCreationModelId } from '@/api/customCreations';
 
-const creationsTabIcon = {
-  passive: Building2,
-  active: Building5,
-};
+/**
+ * Main-game bucket tab index for workshop exports (original game slot).
+ * 3×2 grid: index 5 = bottom-right — challenges_2 / challenges_5 tab icon
+ * (hand holding LEGO brick).
+ */
+export const GAME_CREATIONS_TAB_INDEX = 5;
 
-const FALLBACK_THUMB = Building2;
+const FALLBACK_THUMB = Challenge1;
 
 /**
- * Build the main-game bucket "My Creations" tab from saved workshop exports.
- * Each item uses the workshop camera screenshot (`creation.thumbnail` from
- * `WorkshopEngineCore.captureFrame()` on save) as its bucket tile image.
- *
  * @param {Record<string, { id: string, name?: string, thumbnail?: string | null }>} customCreations
+ * @returns {Array | null}
  */
-export const buildCreationsBucketTab = (customCreations = {}) => {
+export const buildCreationsBucketItems = (customCreations = {}) => {
   const entries = Object.values(customCreations)
     .sort((a, b) => new Date(b.updatedAt || b.createdAt).getTime()
       - new Date(a.updatedAt || a.createdAt).getTime());
@@ -25,15 +23,32 @@ export const buildCreationsBucketTab = (customCreations = {}) => {
     return null;
   }
 
-  const items = entries.map((creation) => ({
+  return entries.map((creation) => ({
     name: `Creation_${creation.id}`,
     image: creation.thumbnail || FALLBACK_THUMB,
     SelectedModel: toCreationModelId(creation.id),
     creationId: creation.id,
   }));
+};
+
+/**
+ * Inject saved creations into the original game bucket tab (hand+brick icon).
+ * Replaces challenges tab content when the player has workshop exports.
+ *
+ * @param {object} baseConfig - from getBucketConfig('models')
+ * @param {Record<string, object>} customCreations
+ */
+export const mergeCreationsIntoGameBucket = (baseConfig, customCreations = {}) => {
+  const items = buildCreationsBucketItems(customCreations);
+  if (!items?.length) {
+    return baseConfig;
+  }
+
+  const tabData = [...baseConfig.tabData];
+  tabData[GAME_CREATIONS_TAB_INDEX] = items;
 
   return {
-    tabIcon: creationsTabIcon,
-    tabData: items,
+    ...baseConfig,
+    tabData,
   };
 };
