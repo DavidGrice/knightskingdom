@@ -7,6 +7,9 @@
  * For that asset, horizontal facing is chest_front bbox center minus
  * chest_back bbox center, flattened to the XZ plane.
  *
+ * Camera anchors use mesh bounding-box centers in world space, so drive views
+ * follow the champ wherever it is placed — not relative to scene 0,0,0.
+ *
  * When adding a new driveable model:
  * 1. Add a profile here (or reuse ARCHER if the rig matches).
  * 2. Set gltf.scene.userData.driveCameraProfileId on load (ModelLoader does this).

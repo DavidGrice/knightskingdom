@@ -24,6 +24,8 @@ export const defaultPlayableModels = [
     isLocked: false,
     isCompleted: false,
     filePath: Archer,
+    // Map placement in world units. Y is ground height; ModelLoader snaps the
+    // GLB hitbox feet to this Y (archer root is not centered at 0,0,0 in the file).
     position: { x: 0, y: 0, z: 0 },
   },
 ];

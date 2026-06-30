@@ -189,6 +189,8 @@ export class DriveCameraRig {
   }
 
   applyToCamera(camera, view) {
+    this.champRoot.updateWorldMatrix(true, true);
+
     if (!getFaceForward(this.champRoot, this.profile, _faceForward)) {
       return false;
     }

@@ -70,6 +70,23 @@ const registerDriveSubject = (gltf, cameraController, { driveId, isDefault = fal
     cameraController.registerSubject(gltf.scene, driveId, { isDefault, profileId });
 };
 
+const placementBox = new THREE.Box3();
+
+/** GLB roots are not centered at the origin — align hitbox feet to the requested world Y. */
+const alignPlayableRootToWorldPosition = (root, worldPosition = {}) => {
+    const x = worldPosition.x ?? 0;
+    const surfaceY = worldPosition.y ?? 0;
+    const z = worldPosition.z ?? 0;
+
+    root.position.set(x, surfaceY, z);
+    root.updateMatrixWorld(true);
+
+    const footprint = root.userData.transparentBox ?? root;
+    placementBox.setFromObject(footprint);
+    root.position.y += surfaceY - placementBox.min.y;
+    root.updateMatrixWorld(true);
+};
+
 const setupMapGltfScene = (gltf, mapModel) => {
     gltf.scene.name = mapModel.name;
     gltf.scene.isMovable = false;
@@ -79,10 +96,10 @@ const setupMapGltfScene = (gltf, mapModel) => {
 
     configureGltfMeshNodes(gltf);
     attachDriveCameraProfile(gltf, null, mapModel.name);
-    gltf.scene.position.set(mapModel.position.x, mapModel.position.y, mapModel.position.z);
+    alignPlayableRootToWorldPosition(gltf.scene, mapModel.position);
 };
 
-const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color }) => {
+const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, skipGroundAlign = false }) => {
     const modelConfig = SelectedModels[modelKey];
     if (!modelConfig) {
         return;
@@ -98,11 +115,19 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color }) =
     attachDriveCameraProfile(gltf, modelKey, modelConfig.name);
 
     if (position) {
-        if (position.isVector3) {
-            gltf.scene.position.copy(position);
+        if (skipGroundAlign) {
+            if (position.isVector3) {
+                gltf.scene.position.copy(position);
+            } else {
+                gltf.scene.position.set(position.x, position.y, position.z);
+            }
+        } else if (position.isVector3) {
+            alignPlayableRootToWorldPosition(gltf.scene, position);
         } else {
-            gltf.scene.position.set(position.x, position.y, position.z);
+            alignPlayableRootToWorldPosition(gltf.scene, position);
         }
+    } else if (!skipGroundAlign) {
+        alignPlayableRootToWorldPosition(gltf.scene);
     }
     if (rotation) {
         gltf.scene.rotation.set(rotation.x, rotation.y, rotation.z);
@@ -154,7 +179,12 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
             loader.load(
                 SelectedModels[modelData]?.model,
                 (gltf) => {
-                    setupPlayableGltfScene(gltf, modelData, position || {});
+                    setupPlayableGltfScene(gltf, modelData, {
+                        position: position?.position,
+                        rotation: position?.rotation,
+                        color: position?.color,
+                        skipGroundAlign: true,
+                    });
                     scene.add(gltf.scene);
                     const restoredId = position?.driveId ?? `champ-restored-${modelData}`;
                     registerDriveSubject(gltf, cameraController, {
