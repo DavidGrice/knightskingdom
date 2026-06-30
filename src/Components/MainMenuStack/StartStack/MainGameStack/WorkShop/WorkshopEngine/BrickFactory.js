@@ -368,6 +368,15 @@ export const buildGroupFromBrickInstances = (instances = [], options = {}) => {
   attachSelectionBox(group);
   alignGroupFeetToOrigin(group);
 
+  const groupBox = group.userData.transparentBox;
+  if (groupBox) {
+    groupBox.visible = false;
+    const groupWireframe = groupBox.getObjectByName('wireframe');
+    if (groupWireframe) {
+      groupWireframe.visible = false;
+    }
+  }
+
   group.isModel = true;
   group.isMovable = true;
   group.isRotatable = true;
@@ -377,7 +386,14 @@ export const buildGroupFromBrickInstances = (instances = [], options = {}) => {
   group.userData.creationId = options.creationId || null;
 
   group.traverse((child) => {
-    if (child !== group.userData.transparentBox && child.name !== 'wireframe') {
+    if (child.name === 'transparentBox' && child !== groupBox) {
+      child.visible = false;
+      const brickWireframe = child.getObjectByName('wireframe');
+      if (brickWireframe) {
+        brickWireframe.visible = false;
+      }
+    }
+    if (child !== groupBox && child.name !== 'wireframe') {
       child.isMovable = true;
       child.isRotatable = true;
       child.isDeletable = true;

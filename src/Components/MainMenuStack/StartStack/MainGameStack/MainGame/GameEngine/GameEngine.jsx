@@ -7,6 +7,11 @@ import { Modes } from './GameEngineResourceStack/index';
 import { serializeSceneFromThree } from '../../context/sceneSchema';
 import { GameEngineCore } from './GameEngineCore';
 import { disposeObject3D } from './sceneDispose';
+import {
+  hideSelectionOutline,
+  resolveMoveSelection,
+  showSelectionOutline,
+} from './selectionOutline';
 
 const DRAG_SMOOTHING = 0.35;
 
@@ -75,6 +80,7 @@ const GameEngine = forwardRef(({
   const hasHydratedRef = useRef(false);
   const [assetsReady, setAssetsReady] = useState(false);
   const selectedObject = useRef(null);
+  const moveRoot = useRef(null);
   const isDragging = useRef(false);
   const mouse = useRef(new THREE.Vector2());
   const raycaster = useRef(new THREE.Raycaster());
@@ -268,10 +274,12 @@ const GameEngine = forwardRef(({
       switch (currentMode) {
         case Modes.MOVING: {
           const movable = findMovableFromIntersects(intersects);
-          if (movable) {
-            selectedObject.current = movable;
+          const { selectionBox, moveRoot: root } = resolveMoveSelection(movable);
+          if (selectionBox && root) {
+            selectedObject.current = selectionBox;
+            moveRoot.current = root;
             isDragging.current = true;
-            movable.visible = true;
+            showSelectionOutline(selectionBox);
             setControlsEnabled(false);
           }
           break;
@@ -338,7 +346,7 @@ const GameEngine = forwardRef(({
       }
 
       const intersectionPoint = intersects[0].point;
-      const modelRoot = selectedObject.current.parent;
+      const modelRoot = moveRoot.current;
       if (!modelRoot) {
         return;
       }
@@ -348,12 +356,13 @@ const GameEngine = forwardRef(({
     };
 
     const endDrag = () => {
-      if (!selectedObject.current?.isMovable) {
+      if (!selectedObject.current) {
         return;
       }
       isDragging.current = false;
-      selectedObject.current.visible = false;
+      hideSelectionOutline(selectedObject.current);
       selectedObject.current = null;
+      moveRoot.current = null;
       setControlsEnabled(true);
       updateSceneState();
     };

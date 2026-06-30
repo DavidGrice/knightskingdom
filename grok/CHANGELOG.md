@@ -6,6 +6,14 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Main game: white outline when moving creations
+
+| File | Change |
+|------|--------|
+| `selectionOutline.js` | **New** — show/hide wireframe; resolve creation group hitbox |
+| `GameEngine.jsx` | Move mode shows white outline box; moves whole creation group |
+| `BrickFactory.js` | Hide per-brick boxes on grouped creations; outline only while dragging |
+
 ## 2026-06-30 — Workshop build plate grid aligned to stud cells
 
 | File | Change |
