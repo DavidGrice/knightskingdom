@@ -2,7 +2,7 @@
 
 **Branch:** `grok-dev`  
 **Last updated:** 2026-06-30  
-**Status:** **D2 implemented** (2026-06-30) — D3 catalog expansion next  
+**Status:** **D3 implemented** (2026-06-30) — D4 world placement next
 **Prior work:** Workshop UI/layout ✅ complete (`WorkshopStageLayout`, `workshopStageMetrics.js`, `HolderGridLayout`)
 
 ---
@@ -265,13 +265,13 @@ MainGame (D4):
 
 ---
 
-## Phase D3 — Map Full Bucket UI to Parametric Catalog
+## Phase D3 — Map Full Bucket UI to Parametric Catalog ✅
 
-- Parse `BucketBottomResourceStack/index.js` entries → generate `brickCatalog.js` entries
-- Use `l<number>` filename + category folder to pick shape recipe
-- Cross-check proportions against PNG thumbnails (visual QA, not LCA geometry)
-- Categories: basic, slim, wedge, cylindrical, arches, castle_components, windows_doors_fences, castle_accessories, tiles, challenges
-- **~200 catalog entries** — many share the same shape recipe with different stud sizes
+- [x] Parse `BucketBottomResourceStack/index.js` entries → `grok/generate-brick-catalog.mjs` → `brickCatalog.generated.js`
+- [x] Use `l<number>` filename + category folder to pick shape recipe
+- [x] Shape approximations: BOX, PLATE, TILE, SLOPE, CYLINDER, ARCH, COMPOSITE (+ optional GLB override)
+- [x] Categories: basic, slim, wedge, cylindrical, arches, castle_components, windows_doors_fences, castle_accessories, tiles, challenges
+- [x] **141 catalog entries** — regenerate via `npm run generate:brick-catalog`
 
 ---
 
@@ -337,7 +337,8 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 | 2026-06-30 | **User confirmed Option D.** LCA→GLB abandoned. Plan revised. |
 | 2026-06-30 | **D1 shipped:** WorkshopEngine, BrickFactory, WorkshopContext, toolbar wired. |
 | 2026-06-30 | **Backlog added:** bucket stay-open, straight camera, finite build bounds. |
-| 2026-06-30 | **D2 shipped:** `workshopSave.js`, hydrate on enter, save on save/leave + thumbnail. **Next: D3** catalog + backlog fixes. |
+| 2026-06-30 | **D2 shipped:** `workshopSave.js`, hydrate on enter, save on save/leave + thumbnail. |
+| 2026-06-30 | **D3 shipped:** `generate-brick-catalog.mjs` → 141 parametric recipes; SLOPE/CYLINDER/ARCH/COMPOSITE/TILE in `BrickFactory`. **Next: D4** or D2b backlog. |
 
 ---
 

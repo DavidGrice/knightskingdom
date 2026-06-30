@@ -237,8 +237,8 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 | D1 | ✅ | `WorkshopEngineCore` + `BrickFactory` + basic tools |
 | D2 | ✅ | `workshopSave.js`, `brickInstances[]` save/load + thumbnail |
 | D2b | ⬜ **Backlog** | Bucket stay-open; straight camera; finite build bounds |
-| D3 | ⬜ **NEXT** | Full `brickCatalog.js` — map ~200 bucket entries to parametric shape recipes |
-| D4 | ⬜ | `customCreations[]` → main world bucket → runtime `Group` placement |
+| D3 | ✅ | `brickCatalog.generated.js` — 141 bucket entries → parametric shape recipes (`generate-brick-catalog.mjs`) |
+| D4 | ⬜ **NEXT** | `customCreations[]` → main world bucket → runtime `Group` placement |
 | D5 | ⬜ | Challenges + instructions + optional hand-authored GLBs (optional) |
 
 See [`grok/WORKSHOP_3D.md`](./WORKSHOP_3D.md) for D1 file checklist and data model.

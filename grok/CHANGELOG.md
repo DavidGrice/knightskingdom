@@ -53,6 +53,21 @@ Draft stored at `profile.savedWorlds[worldId].workshopDraft`.
 
 **Next: D3** — expand `brickCatalog.js`; address backlog items.
 
+## 2026-06-30 — Phase 11 D3: full parametric brick catalog
+
+| File | Change |
+|------|--------|
+| `grok/generate-brick-catalog.mjs` | **New** — parses bucket `index.js`; maps LEGO part numbers + category fallbacks to shape recipes |
+| `brickCatalog.generated.js` | **New** — 141 auto-generated catalog entries |
+| `brickCatalog.js` | Imports generated catalog; exports `catalogEntryCount` |
+| `BrickFactory.js` | SLOPE, CYLINDER, ARCH, COMPOSITE, TILE parametric shapes |
+| `WorkshopEngine/index.js` | Export `catalogEntryCount` |
+| `package.json` | `npm run generate:brick-catalog` script |
+
+Unknown bucket ids still fall back to 2×2 brick. Build passes.
+
+**Next: D4** — `customCreations[]` → main world placement; or D2b backlog fixes.
+
 ---
 
 ## 2026-06-28 — MyModels: fix grid metrics (restore 50ecb12 layout)

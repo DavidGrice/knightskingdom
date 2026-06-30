@@ -8,7 +8,8 @@
     "dev:clean": "npm run clean && npx --yes kill-port 3000 3001 && next dev --port 3000",
     "build": "next build",
     "start": "next start --port 3000",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:brick-catalog": "node grok/generate-brick-catalog.mjs"
   },
   "dependencies": {
     "next": "^15.5.19",
