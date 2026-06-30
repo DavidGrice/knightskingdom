@@ -154,10 +154,21 @@ const getEyePosition = (champRoot, anchors, offsets, faceForward, target) => {
     return getHeadCenter(champRoot, anchors, target);
   }
 
-  if (offsets.eyeBehindFace != null || offsets.eyeForwardOffset != null) {
-    const eyeMesh = headFront ?? head;
-    if (!getMeshBBoxCenter(eyeMesh, target)) {
-      return getHeadCenter(champRoot, anchors, target);
+  if (
+    offsets.eyeBehindFace != null
+    || offsets.eyeForwardOffset != null
+    || offsets.eyeHeightLift != null
+  ) {
+    if (offsets.firstPersonUseHeadCenter) {
+      getHeadCenter(champRoot, anchors, target);
+    } else {
+      const eyeMesh = headFront ?? head;
+      if (!getMeshBBoxCenter(eyeMesh, target)) {
+        return getHeadCenter(champRoot, anchors, target);
+      }
+    }
+    if (offsets.eyeHeightLift != null) {
+      target.y += offsets.eyeHeightLift;
     }
     if (offsets.eyeBehindFace != null) {
       target.addScaledVector(faceForward, -offsets.eyeBehindFace);
