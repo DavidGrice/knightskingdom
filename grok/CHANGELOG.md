@@ -6,6 +6,14 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Workshop build plate grid aligned to stud cells
+
+| File | Change |
+|------|--------|
+| `WorkshopEngineCore.js` | `GridHelper` offset by `HALF_STUD` so floor squares match stud pitch |
+
+Grid cell centers now line up with brick stud positions (no more half-square visual offset).
+
 ## 2026-06-30 — Workshop footprint-aware stud grid alignment
 
 | File | Change |

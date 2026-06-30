@@ -8,7 +8,9 @@ import { getRecipeStudFootprint, resolveStackPlacement } from './brickStuds';
 import {
   BRICK_HEIGHT,
   BUILD_PLATE_SIZE,
+  BUILD_PLATE_STUDS,
   EXPORT_PLATE_SIZE,
+  HALF_STUD,
   clampBrickCenterToExport,
   footprintWithinExportBounds,
   snapBrickCenterXZ,
@@ -79,8 +81,10 @@ export class WorkshopEngineCore {
     this.buildPlate.name = 'BuildPlate';
     this.scene.add(this.buildPlate);
 
-    const grid = new THREE.GridHelper(BUILD_PLATE_SIZE, BUILD_PLATE_SIZE / STUD, 0x3d6b3d, 0x254025);
-    grid.position.y = 0.01;
+    // Offset by half a stud so each cell is one stud pitch and centers sit on stud lines.
+    const grid = new THREE.GridHelper(BUILD_PLATE_SIZE, BUILD_PLATE_STUDS, 0x3d6b3d, 0x254025);
+    grid.position.set(HALF_STUD, 0.01, HALF_STUD);
+    grid.name = 'BuildPlateGrid';
     this.scene.add(grid);
 
     const exportBorder = new THREE.LineSegments(
