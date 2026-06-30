@@ -41,6 +41,27 @@ const findMovableFromIntersects = (intersects) => {
   return null;
 };
 
+const findDriveIdFromObject = (object) => {
+  let node = object;
+  while (node) {
+    if (node.userData?.driveId) {
+      return node.userData.driveId;
+    }
+    node = node.parent;
+  }
+  return null;
+};
+
+const findDriveIdFromIntersects = (intersects) => {
+  for (const intersect of intersects) {
+    const driveId = findDriveIdFromObject(intersect.object);
+    if (driveId) {
+      return driveId;
+    }
+  }
+  return null;
+};
+
 const GameEngine = forwardRef(({
   mapData, hydrationScene, color, mode, driveView, isFollowing, addModel,
   selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating,
@@ -275,6 +296,13 @@ const GameEngine = forwardRef(({
             updateSceneState();
           }
           break;
+        case Modes.DRIVING: {
+          const driveId = findDriveIdFromIntersects(intersects);
+          if (driveId) {
+            core.cameraController.selectSubject(driveId);
+          }
+          break;
+        }
         default:
           break;
       }
@@ -350,6 +378,7 @@ const GameEngine = forwardRef(({
         canvas.addEventListener('mousedown', onMouseDown);
         break;
       case Modes.DRIVING:
+        canvas.addEventListener('mousedown', onMouseDown);
         break;
       default:
         setControlsEnabled(true);

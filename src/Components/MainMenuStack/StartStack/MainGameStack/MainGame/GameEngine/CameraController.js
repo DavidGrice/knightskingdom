@@ -60,8 +60,7 @@ export class CameraController {
       this.exitDrive();
     } else if (shouldDrive) {
       this.driveView = driveView ?? 'third';
-      this.activeDriveId = this.defaultDriveId;
-      if (this.isDriveActive) {
+      if (this.activeDriveId) {
         this.applyDriveView();
       }
     }
@@ -81,13 +80,26 @@ export class CameraController {
 
     this.isDriveActive = true;
     this.driveView = view;
-    this.activeDriveId = this.defaultDriveId;
+    this.activeDriveId = null;
+
+    if (this.core.controls) {
+      this.core.controls.enabled = true;
+    }
+  }
+
+  selectSubject(driveId) {
+    if (!this.isDriveActive || !this.subjects.has(driveId)) {
+      return false;
+    }
+
+    this.activeDriveId = driveId;
 
     if (this.core.controls) {
       this.core.controls.enabled = false;
     }
 
     this.applyDriveView();
+    return true;
   }
 
   exitDrive() {
@@ -129,10 +141,9 @@ export class CameraController {
   }
 
   update() {
-    if (!this.isDriveActive) {
+    if (!this.isDriveActive || !this.activeDriveId) {
       return;
     }
-    this.activeDriveId = this.defaultDriveId;
     this.applyDriveView();
   }
 }
