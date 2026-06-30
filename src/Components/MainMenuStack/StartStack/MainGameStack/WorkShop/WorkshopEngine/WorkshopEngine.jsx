@@ -34,6 +34,7 @@ const WorkshopEngine = forwardRef(({
   const showBucketRef = useRef(showBucket);
   const colorRef = useRef(color);
   const selectedObject = useRef(null);
+  const dragGroup = useRef([]);
   const isDragging = useRef(false);
   const verticalDragStart = useRef({ clientY: 0, brickY: 0 });
   const shiftVerticalDragActive = useRef(false);
@@ -156,16 +157,19 @@ const WorkshopEngine = forwardRef(({
 
       switch (currentMode) {
         case WorkshopModes.MOVING: {
-          const brick = findBrickFromIntersects(intersects);
-          if (brick) {
-            selectedObject.current = brick;
+          const hitBrick = findBrickFromIntersects(intersects);
+          if (hitBrick) {
+            const group = core.getBrickMoveGroup(hitBrick);
+            const anchor = group[0] ?? hitBrick;
+            selectedObject.current = anchor;
+            dragGroup.current = group;
             isDragging.current = true;
             verticalDragStart.current = {
               clientY: event.clientY,
-              brickY: brick.position.y,
+              brickY: anchor.position.y,
             };
             shiftVerticalDragActive.current = event.shiftKey;
-            setBrickWireframeVisible(brick, true);
+            group.forEach((brick) => setBrickWireframeVisible(brick, true));
           }
           break;
         }
@@ -228,7 +232,7 @@ const WorkshopEngine = forwardRef(({
         const deltaY = verticalDragStart.current.clientY - event.clientY;
         const heightSteps = Math.round(deltaY / VERTICAL_DRAG_PIXELS_PER_STEP);
         const targetY = Math.max(0, verticalDragStart.current.brickY + heightSteps * brickHeight);
-        core.trySetBrickPosition(brick, {
+        core.tryMoveBrickGroup(brick, {
           x: brick.position.x,
           y: targetY,
           z: brick.position.z,
@@ -244,7 +248,7 @@ const WorkshopEngine = forwardRef(({
       }
       const clamped = clampXZToExportBounds(plateHit.point.x, plateHit.point.z);
       const snapped = snapXZToStud(clamped.x, clamped.z);
-      core.trySetBrickPosition(brick, {
+      core.tryMoveBrickGroup(brick, {
         x: snapped.x,
         y: brick.position.y,
         z: snapped.z,
@@ -255,10 +259,11 @@ const WorkshopEngine = forwardRef(({
       if (selectedObject.current) {
         const brick = selectedObject.current;
         core.moveBrickRoot(brick, brick.position);
-        setBrickWireframeVisible(brick, false);
+        dragGroup.current.forEach((groupBrick) => setBrickWireframeVisible(groupBrick, false));
       }
       isDragging.current = false;
       shiftVerticalDragActive.current = false;
+      dragGroup.current = [];
       selectedObject.current = null;
     };
 

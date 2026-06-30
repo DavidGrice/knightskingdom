@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Workshop stack move (lift base brick)
+
+| File | Change |
+|------|--------|
+| `brickStack.js` | **New** — detect stacked bricks; resolve stack anchor |
+| `WorkshopEngineCore.js` | `getBrickMoveGroup`, `tryMoveBrickGroup` moves anchor + stack together |
+| `WorkshopEngine.jsx` | Move drag lifts entire stack; wireframe on all grouped bricks |
+| `brickCollision.js` | Collision ignore supports brick groups (Set/array) |
+
+Clicking any brick in a stack resolves to the bottom brick and moves the whole column together (real LEGO lift behavior).
+
 ## 2026-06-30 — Workshop brick collision + Shift vertical move
 
 | File | Change |

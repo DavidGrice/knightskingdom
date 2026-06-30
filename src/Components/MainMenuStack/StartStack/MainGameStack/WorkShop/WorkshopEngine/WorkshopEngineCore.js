@@ -3,6 +3,7 @@ import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
 import { createBrickSync, paintBrick } from './BrickFactory';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import { brickCollidesWithAny } from './brickCollision';
+import { getBrickMoveGroup } from './brickStack';
 import {
   BRICK_HEIGHT,
   BUILD_PLATE_SIZE,
@@ -137,6 +138,59 @@ export class WorkshopEngineCore {
     return brickCollidesWithAny(brick, this.#allBricks(), ignore);
   }
 
+  getBrickMoveGroup(hitBrick) {
+    if (!hitBrick?.isBrick) {
+      return [];
+    }
+    return getBrickMoveGroup(hitBrick, this.#allBricks());
+  }
+
+  tryMoveBrickGroup(anchorBrick, { x, y, z }) {
+    if (!anchorBrick?.isBrick) {
+      return false;
+    }
+
+    const group = getBrickMoveGroup(anchorBrick, this.#allBricks());
+    const groupSet = new Set(group);
+    const previous = group.map((brick) => brick.position.clone());
+    const anchorPrev = anchorBrick.position.clone();
+
+    const recipe = resolveBrickRecipe(anchorBrick.userData.brickId);
+    const brickHeight = recipeHeight(recipe);
+    const clamped = clampXZToExportBounds(x, z);
+    const snapped = snapPositionToStud({
+      x: clamped.x,
+      y: snapYToHeight(y ?? anchorBrick.position.y, brickHeight),
+      z: clamped.z,
+    });
+
+    const delta = new THREE.Vector3(
+      snapped.x - anchorPrev.x,
+      snapped.y - anchorPrev.y,
+      snapped.z - anchorPrev.z,
+    );
+
+    if (delta.lengthSq() === 0) {
+      return true;
+    }
+
+    group.forEach((brick) => {
+      brick.position.add(delta);
+    });
+
+    const outOfBounds = group.some((brick) => !this.#brickWithinExportBounds(brick));
+    const collides = group.some((brick) => this.#brickCollides(brick, groupSet));
+
+    if (outOfBounds || collides) {
+      group.forEach((brick, index) => {
+        brick.position.copy(previous[index]);
+      });
+      return false;
+    }
+
+    return true;
+  }
+
   addBrick(brickId, worldPoint, colorHex) {
     if (!brickId || !worldPoint) {
       return null;
@@ -256,7 +310,7 @@ export class WorkshopEngineCore {
     if (!brickRoot?.isBrick || !worldPoint) {
       return false;
     }
-    return this.trySetBrickPosition(brickRoot, {
+    return this.tryMoveBrickGroup(brickRoot, {
       x: worldPoint.x,
       y: worldPoint.y ?? brickRoot.position.y,
       z: worldPoint.z,

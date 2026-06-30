@@ -67,13 +67,29 @@ export const bricksOverlap = (a, b) => {
   return xzBoundsOverlap(getBrickXZBounds(a), getBrickXZBounds(b));
 };
 
+const shouldIgnoreBrick = (other, ignore) => {
+  if (!ignore) {
+    return false;
+  }
+  if (ignore === other) {
+    return true;
+  }
+  if (ignore instanceof Set) {
+    return ignore.has(other);
+  }
+  if (Array.isArray(ignore)) {
+    return ignore.includes(other);
+  }
+  return false;
+};
+
 /**
  * @param {import('three').Object3D} candidate
  * @param {import('three').Object3D[]} others
- * @param {import('three').Object3D | null} [ignore]
+ * @param {import('three').Object3D | import('three').Object3D[] | Set<import('three').Object3D> | null} [ignore]
  */
 export const brickCollidesWithAny = (candidate, others, ignore = null) =>
   others.some((other) => other !== candidate
-    && other !== ignore
+    && !shouldIgnoreBrick(other, ignore)
     && other?.isBrick
     && bricksOverlap(candidate, other));
