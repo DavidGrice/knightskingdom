@@ -34,9 +34,10 @@ export const DRIVE_CAMERA_PROFILES = {
     },
     offsets: {
       thirdPersonDistance: 4.5,
+      thirdPersonDistanceSign: -1,
       thirdPersonHeight: 0.1,
       firstLookAhead: 14,
-      eyeBehindFace: 0.15,
+      eyeForwardOffset: 0.2,
       lookAtHeightBoost: 0,
       levelFirstPersonPitch: true,
     },

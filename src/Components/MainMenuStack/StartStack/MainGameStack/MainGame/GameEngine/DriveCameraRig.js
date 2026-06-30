@@ -154,12 +154,17 @@ const getEyePosition = (champRoot, anchors, offsets, faceForward, target) => {
     return getHeadCenter(champRoot, anchors, target);
   }
 
-  if (offsets.eyeBehindFace != null) {
+  if (offsets.eyeBehindFace != null || offsets.eyeForwardOffset != null) {
     const eyeMesh = headFront ?? head;
     if (!getMeshBBoxCenter(eyeMesh, target)) {
       return getHeadCenter(champRoot, anchors, target);
     }
-    target.addScaledVector(faceForward, -offsets.eyeBehindFace);
+    if (offsets.eyeBehindFace != null) {
+      target.addScaledVector(faceForward, -offsets.eyeBehindFace);
+    }
+    if (offsets.eyeForwardOffset != null) {
+      target.addScaledVector(faceForward, offsets.eyeForwardOffset);
+    }
     return target;
   }
 
@@ -191,11 +196,11 @@ export class DriveCameraRig {
     const { offsets, anchors } = this.profile;
 
     if (view === 'third') {
-      getThirdPersonLookAt(this.champRoot, anchors, _lookAt);
+      getHeadCenter(this.champRoot, anchors, _lookAt);
       _lookAt.y += offsets.lookAtHeightBoost ?? 0;
       _position.copy(_lookAt).addScaledVector(
         _faceForward,
-        offsets.thirdPersonDistance * (offsets.thirdPersonDistanceSign ?? 1),
+        offsets.thirdPersonDistance * (offsets.thirdPersonDistanceSign ?? -1),
       );
       _position.y += offsets.thirdPersonHeight ?? 0;
       camera.position.copy(_position);
