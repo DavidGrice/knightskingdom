@@ -30,61 +30,18 @@ export const isStackedOn = (upper, lower) => {
 };
 
 /**
- * Brick directly under `upper` (highest supporting surface).
- * @param {import('three').Object3D} upper
+ * All bricks stacked above `base` (transitive).
+ * @param {import('three').Object3D} base
  * @param {import('three').Object3D[]} allBricks
  */
-export const findDirectSupport = (upper, allBricks) => {
-  let support = null;
-  let supportTop = -Infinity;
-
-  allBricks.forEach((candidate) => {
-    if (candidate === upper || !candidate?.isBrick) {
-      return;
-    }
-    if (!isStackedOn(upper, candidate)) {
-      return;
-    }
-    const top = getBrickVerticalRange(candidate).top;
-    if (top > supportTop) {
-      supportTop = top;
-      support = candidate;
-    }
-  });
-
-  return support;
-};
-
-/**
- * Bottom brick of the stack containing `hitBrick` (walk down supports).
- * @param {import('three').Object3D} hitBrick
- * @param {import('three').Object3D[]} allBricks
- */
-export const findStackAnchor = (hitBrick, allBricks) => {
-  let anchor = hitBrick;
-  let support = findDirectSupport(anchor, allBricks);
-
-  while (support) {
-    anchor = support;
-    support = findDirectSupport(anchor, allBricks);
-  }
-
-  return anchor;
-};
-
-/**
- * All bricks stacked above `anchor` (transitive).
- * @param {import('three').Object3D} anchor
- * @param {import('three').Object3D[]} allBricks
- */
-export const getBricksStackedAbove = (anchor, allBricks) => {
+export const getBricksStackedAbove = (base, allBricks) => {
   const above = new Set();
-  const queue = [anchor];
+  const queue = [base];
 
   while (queue.length > 0) {
     const current = queue.pop();
     allBricks.forEach((candidate) => {
-      if (candidate === anchor || candidate === current || above.has(candidate)) {
+      if (candidate === base || candidate === current || above.has(candidate)) {
         return;
       }
       if (isStackedOn(candidate, current)) {
@@ -98,11 +55,14 @@ export const getBricksStackedAbove = (anchor, allBricks) => {
 };
 
 /**
- * Anchor + every brick stacked on it — the group to move together.
+ * Selected brick + anything stacked on it. Top brick alone moves solo;
+ * bottom brick with a stack above moves the whole column.
  * @param {import('three').Object3D} hitBrick
  * @param {import('three').Object3D[]} allBricks
  */
 export const getBrickMoveGroup = (hitBrick, allBricks) => {
-  const anchor = findStackAnchor(hitBrick, allBricks);
-  return [anchor, ...getBricksStackedAbove(anchor, allBricks)];
+  if (!hitBrick?.isBrick) {
+    return [];
+  }
+  return [hitBrick, ...getBricksStackedAbove(hitBrick, allBricks)];
 };

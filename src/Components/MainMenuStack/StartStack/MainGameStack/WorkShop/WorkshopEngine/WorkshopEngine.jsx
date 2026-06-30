@@ -160,13 +160,12 @@ const WorkshopEngine = forwardRef(({
           const hitBrick = findBrickFromIntersects(intersects);
           if (hitBrick) {
             const group = core.getBrickMoveGroup(hitBrick);
-            const anchor = group[0] ?? hitBrick;
-            selectedObject.current = anchor;
+            selectedObject.current = hitBrick;
             dragGroup.current = group;
             isDragging.current = true;
             verticalDragStart.current = {
               clientY: event.clientY,
-              brickY: anchor.position.y,
+              brickY: hitBrick.position.y,
             };
             shiftVerticalDragActive.current = event.shiftKey;
             group.forEach((brick) => setBrickWireframeVisible(brick, true));
