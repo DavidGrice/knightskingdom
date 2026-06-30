@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { GameEngine } from './index';
 import { Drive } from './ComponentTop/Drive/index';
 import { Climate } from './ComponentBottom/Climate/index';
@@ -6,7 +6,12 @@ import { Music } from './ComponentBottom/Music/index';
 import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
 import { useGameContext } from '../context';
 
-const MainGameContent = ({ navigateToStartMenu, mapData, customCreations }) => {
+const MainGameContent = ({
+  navigateToStartMenu,
+  mapData,
+  customCreations,
+  clearWorkshopBucketHint,
+}) => {
   const {
     state,
     hydrationScene,
@@ -59,6 +64,28 @@ const MainGameContent = ({ navigateToStartMenu, mapData, customCreations }) => {
     driveView,
     cameraNeedsReset,
   } = state;
+
+  const openedCreationsBucketRef = useRef(false);
+
+  useEffect(() => {
+    if (!mapData?.openCreationsBucket || openedCreationsBucketRef.current) {
+      return;
+    }
+    if (!customCreations || Object.keys(customCreations).length === 0) {
+      return;
+    }
+    openedCreationsBucketRef.current = true;
+    if (!showBucket) {
+      handleBucket();
+    }
+    clearWorkshopBucketHint?.();
+  }, [
+    mapData?.openCreationsBucket,
+    customCreations,
+    showBucket,
+    handleBucket,
+    clearWorkshopBucketHint,
+  ]);
 
   return (
     <GameShell

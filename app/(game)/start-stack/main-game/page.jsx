@@ -14,6 +14,7 @@ export default function MainGamePage() {
     onSaveWorldProgress,
     onAppendSnapshot,
     customCreations,
+    clearWorkshopBucketHint,
   } = useWorldSession();
 
   return (
@@ -27,6 +28,7 @@ export default function MainGamePage() {
       navigateToMyModels={navigateToMyModels}
       navigateToStartMenu={navigateToStartMenu}
       customCreations={customCreations}
+      clearWorkshopBucketHint={clearWorkshopBucketHint}
     />
   );
 }

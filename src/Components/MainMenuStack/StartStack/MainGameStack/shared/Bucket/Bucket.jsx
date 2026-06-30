@@ -25,9 +25,11 @@ const Bucket = ({ dataSource = 'models', handleLoadModel, onBrickSelect, customC
         if (!creationsTab) {
             return base;
         }
+        // Prepend so "My Creations" is tab 0 (top-left). Appending as tab 7
+        // clipped off-screen — game bucket grid only fits ~2 icon rows.
         return {
-            tabIcons: [...base.tabIcons, creationsTab.tabIcon],
-            tabData: [...base.tabData, creationsTab.tabData],
+            tabIcons: [creationsTab.tabIcon, ...base.tabIcons],
+            tabData: [creationsTab.tabData, ...base.tabData],
             arrowImages: base.arrowImages,
         };
     }, [dataSource, customCreations]);

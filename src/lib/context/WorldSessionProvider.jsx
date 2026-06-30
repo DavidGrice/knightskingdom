@@ -40,7 +40,10 @@ export const WorldSessionProvider = ({ children }) => {
   const navigateToMainGame = useCallback(
     (mapData) => {
       if (mapData) {
-        setWorldData(mapData);
+        setWorldData((prev) => ({
+          ...prev,
+          ...mapData,
+        }));
       }
       beginNavigationLoading(['world-assets']);
       router.push(ROUTES.startStack.mainGame);
@@ -162,10 +165,13 @@ export const WorldSessionProvider = ({ children }) => {
     [currentProfile, worldData],
   );
 
-  const customCreations = useMemo(
-    () => getCustomCreations(currentProfile),
-    [currentProfile],
-  );
+  const customCreations = useMemo(() => {
+    const fromProfile = getCustomCreations(currentProfile);
+    if (Object.keys(fromProfile).length > 0) {
+      return fromProfile;
+    }
+    return worldData?.sessionCustomCreations ?? {};
+  }, [currentProfile, worldData?.sessionCustomCreations]);
 
   const onSaveWorkshopExport = useCallback(
     (profileId, worldId, payload) => {
@@ -188,6 +194,9 @@ export const WorldSessionProvider = ({ children }) => {
       });
       updateUserData(updated);
 
+      const savedProfile = updated.find((p) => String(p.id) === String(profileId));
+      const sessionCustomCreations = getCustomCreations(savedProfile);
+
       const draft = {
         brickInstances: payload.brickInstances || [],
         thumbnail: payload.thumbnail ?? null,
@@ -197,12 +206,20 @@ export const WorldSessionProvider = ({ children }) => {
       setWorldData((prev) => ({
         ...prev,
         workshopDraft: draft,
+        sessionCustomCreations,
+        openCreationsBucket: true,
       }));
 
       return creationId;
     },
     [userData, updateUserData],
   );
+
+  const clearWorkshopBucketHint = useCallback(() => {
+    setWorldData((prev) => (prev?.openCreationsBucket
+      ? { ...prev, openCreationsBucket: false }
+      : prev));
+  }, []);
 
   const onRemoveSnapshot = useCallback(
     (worldId, snapshotId) => {
@@ -249,12 +266,14 @@ export const WorldSessionProvider = ({ children }) => {
       onSaveWorkshopExport,
       workshopDraft,
       customCreations,
+      clearWorkshopBucketHint,
     }),
     [
       worldData,
       currentProfile,
       workshopDraft,
       customCreations,
+      clearWorkshopBucketHint,
       navigateToStartMenu,
       navigateToMainGame,
       navigateToWorkshop,

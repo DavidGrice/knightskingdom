@@ -4,6 +4,9 @@ export const MAX_CUSTOM_CREATIONS = 20;
 
 const creationKey = (id) => String(id);
 
+const profileMatches = (profile, profileId) =>
+  String(profile?.id) === String(profileId);
+
 /**
  * @param {object | null | undefined} profile
  * @returns {Record<string, object>}
@@ -46,7 +49,7 @@ export const saveCustomCreation = (userData, profileId, payload) => {
   const id = creationKey(payload.id || crypto.randomUUID());
 
   return userData.map((profile) => {
-    if (profile.id !== profileId) {
+    if (!profileMatches(profile, profileId)) {
       return profile;
     }
 
@@ -78,7 +81,7 @@ export const saveCustomCreation = (userData, profileId, payload) => {
 
 export const deleteCustomCreation = (userData, profileId, creationId) =>
   userData.map((profile) => {
-    if (profile.id !== profileId) {
+    if (!profileMatches(profile, profileId)) {
       return profile;
     }
 

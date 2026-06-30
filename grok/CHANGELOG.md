@@ -88,6 +88,15 @@ Workshop save captures workshop camera screenshot (`captureFrame`) → stored as
 
 **Next: D2b** backlog polish.
 
+## 2026-06-30 — Fix My Creations not visible in main-game bucket
+
+| File | Change |
+|------|--------|
+| `Bucket.jsx` | Prepend My Creations as **tab 0** (was tab 7, clipped off-screen) |
+| `BucketTop.module.css` | Fit 3 icon rows for 7 tabs |
+| `WorldSessionProvider.jsx` | Session cache for `customCreations`; merge `worldData` on navigate; auto-open bucket after workshop save |
+| `customCreations.js` | Robust profile id matching (`String` compare) |
+
 ## 2026-06-30 — D4 docs + bucket screenshot thumbnails
 
 | File | Change |
