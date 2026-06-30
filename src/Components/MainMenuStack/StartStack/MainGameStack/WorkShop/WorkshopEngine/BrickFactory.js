@@ -271,12 +271,13 @@ export const createBrick = async (brickId, options = {}) => {
   }
 
   configureBrickRoot(root, brickId, recipe);
+  attachSelectionBox(root);
   return root;
 };
 
 /**
  * @param {string} brickId
- * @param {{ color?: number | string }} [options]
+ * @param {{ color?: number | string }} [options}
  */
 export const createBrickSync = (brickId, options = {}) => {
   const recipe = resolveBrickRecipe(brickId);
@@ -286,6 +287,7 @@ export const createBrickSync = (brickId, options = {}) => {
 
   const root = createParametricBrick(recipe, colorHex);
   configureBrickRoot(root, brickId, recipe);
+  attachSelectionBox(root);
   return root;
 };
 
@@ -319,7 +321,7 @@ const attachSelectionBox = (root) => {
   wireframe.isRotatable = true;
   wireframe.isPaintable = true;
   wireframe.isDeletable = true;
-  wireframe.visible = true;
+  wireframe.visible = false;
 
   hitbox.isMovable = true;
   hitbox.isRotatable = true;

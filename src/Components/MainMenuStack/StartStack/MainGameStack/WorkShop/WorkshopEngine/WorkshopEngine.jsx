@@ -10,21 +10,15 @@ import React, {
 import * as THREE from 'three';
 import { WorkshopEngineCore } from './WorkshopEngineCore';
 import { WorkshopModes } from './workshopModes';
-import { snapXZToStud } from './studGrid';
+import { clampXZToExportBounds } from './studGrid';
+import {
+  findBrickFromIntersects,
+  findPaintBrickFromIntersects,
+  setBrickWireframeVisible,
+} from './workshopInteraction';
 import styles from './WorkshopEngine.module.css';
 
 const DRAG_SMOOTHING = 0.4;
-
-const findBrickRoot = (object) => {
-  let node = object;
-  while (node) {
-    if (node.isBrick) {
-      return node;
-    }
-    node = node.parent;
-  }
-  return null;
-};
 
 const WorkshopEngine = forwardRef(({
   mode,
@@ -52,7 +46,7 @@ const WorkshopEngine = forwardRef(({
   useImperativeHandle(ref, () => ({
     clearAllBricks: () => coreRef.current?.clearAllBricks(),
     setDefaultColor: (hex) => coreRef.current?.setDefaultColor(hex),
-    getBrickInstances: () => coreRef.current?.getBrickInstances() ?? [],
+    getBrickInstances: () => coreRef.current?.getBrickInstances({ forExport: true }) ?? [],
     loadBrickInstances: (instances) => coreRef.current?.loadBrickInstances(instances),
     captureFrame: () => coreRef.current?.captureFrame() ?? null,
   }), []);
@@ -110,7 +104,7 @@ const WorkshopEngine = forwardRef(({
 
     const raycast = () => {
       raycaster.current.setFromCamera(mouse.current, camera);
-      return raycaster.current.intersectObjects(core.getRaycastTargets(), false);
+      return raycaster.current.intersectObjects(core.getRaycastTargets(), true);
     };
 
     const raycastBuildPlate = () => {
@@ -124,8 +118,23 @@ const WorkshopEngine = forwardRef(({
       }
       event.preventDefault();
       setMouseFromEvent(event);
+      if (!selectedBrickIdRef.current) {
+        return;
+      }
+
+      const hits = raycast();
+      const stackTarget = findBrickFromIntersects(hits);
+      if (stackTarget) {
+        core.stackBrickOn(
+          selectedBrickIdRef.current,
+          stackTarget,
+          colorRef.current,
+        );
+        return;
+      }
+
       const plateHit = raycastBuildPlate();
-      if (!plateHit || !selectedBrickIdRef.current) {
+      if (!plateHit) {
         return;
       }
       core.addBrick(selectedBrickIdRef.current, plateHit.point, colorRef.current);
@@ -139,36 +148,51 @@ const WorkshopEngine = forwardRef(({
         return;
       }
 
-      const brick = findBrickRoot(intersects[0].object);
       const currentMode = modeRef.current;
 
       switch (currentMode) {
-        case WorkshopModes.MOVING:
+        case WorkshopModes.MOVING: {
+          const brick = findBrickFromIntersects(intersects);
           if (brick) {
             selectedObject.current = brick;
             isDragging.current = true;
+            setBrickWireframeVisible(brick, true);
           }
           break;
-        case WorkshopModes.ROTATING:
+        }
+        case WorkshopModes.ROTATING: {
+          const brick = findBrickFromIntersects(intersects);
           if (brick) {
+            setBrickWireframeVisible(brick, true);
             core.rotateBrick(brick);
           }
           break;
-        case WorkshopModes.PAINTING:
+        }
+        case WorkshopModes.PAINTING: {
+          const brick = findPaintBrickFromIntersects(intersects);
           if (brick) {
+            setBrickWireframeVisible(brick, true);
             core.paintBrickRoot(brick, colorRef.current);
           }
           break;
-        case WorkshopModes.DELETING:
+        }
+        case WorkshopModes.DELETING: {
+          const brick = findBrickFromIntersects(intersects);
           if (brick) {
             core.removeBrick(brick);
           }
           break;
-        case WorkshopModes.DUPLICATING:
+        }
+        case WorkshopModes.DUPLICATING: {
+          const brick = findBrickFromIntersects(intersects);
           if (brick) {
-            core.duplicateBrick(brick);
+            const duplicate = core.duplicateBrick(brick);
+            if (duplicate) {
+              setBrickWireframeVisible(duplicate, true);
+            }
           }
           break;
+        }
         default:
           break;
       }
@@ -184,20 +208,17 @@ const WorkshopEngine = forwardRef(({
       if (!plateHit) {
         return;
       }
-      const point = plateHit.point;
+      const clamped = clampXZToExportBounds(plateHit.point.x, plateHit.point.z);
       const brick = selectedObject.current;
-      brick.position.x += (point.x - brick.position.x) * DRAG_SMOOTHING;
-      brick.position.z += (point.z - brick.position.z) * DRAG_SMOOTHING;
+      brick.position.x += (clamped.x - brick.position.x) * DRAG_SMOOTHING;
+      brick.position.z += (clamped.z - brick.position.z) * DRAG_SMOOTHING;
     };
 
     const endDrag = () => {
       if (selectedObject.current) {
-        const snapped = snapXZToStud(
-          selectedObject.current.position.x,
-          selectedObject.current.position.z,
-        );
-        selectedObject.current.position.x = snapped.x;
-        selectedObject.current.position.z = snapped.z;
+        const brick = selectedObject.current;
+        core.moveBrickRoot(brick, brick.position);
+        setBrickWireframeVisible(brick, false);
       }
       isDragging.current = false;
       selectedObject.current = null;

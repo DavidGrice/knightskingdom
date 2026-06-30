@@ -49,7 +49,6 @@ export const WorkshopProvider = ({
     }
     const brickId = extractBrickId(item.modelPath);
     dispatch({ type: 'SELECT_BRICK', payload: brickId });
-    dispatch({ type: 'TOGGLE_BUCKET', payload: false });
   }, []);
 
   const handleMove = useCallback(() => {

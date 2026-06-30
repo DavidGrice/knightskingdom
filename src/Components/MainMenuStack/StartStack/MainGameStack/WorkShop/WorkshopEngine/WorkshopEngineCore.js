@@ -1,11 +1,15 @@
 import * as THREE from 'three';
 import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
 import { createBrickSync, paintBrick } from './BrickFactory';
-import { resolveBrickRecipe } from './brickCatalog';
+import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import {
+  BRICK_HEIGHT,
   BUILD_PLATE_SIZE,
+  EXPORT_HALF,
+  EXPORT_PLATE_SIZE,
+  clampXZToExportBounds,
+  isWithinExportBounds,
   snapPositionToStud,
-  snapStud,
   snapXZToStud,
   STUD,
 } from './studGrid';
@@ -16,7 +20,7 @@ export class WorkshopEngineCore {
     this.scene.background = new THREE.Color(0x111111);
 
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
-    this.camera.position.set(14, 11, 14);
+    this.camera.position.set(0, 5, 10);
     this.camera.lookAt(0, 0, 0);
 
     this.renderer = new THREE.WebGLRenderer({
@@ -75,6 +79,15 @@ export class WorkshopEngineCore {
     const grid = new THREE.GridHelper(BUILD_PLATE_SIZE, BUILD_PLATE_SIZE / STUD, 0x3d6b3d, 0x254025);
     grid.position.y = 0.01;
     this.scene.add(grid);
+
+    const exportBorder = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.PlaneGeometry(EXPORT_PLATE_SIZE, EXPORT_PLATE_SIZE)),
+      new THREE.LineBasicMaterial({ color: 0xffcc00, transparent: true, opacity: 0.65 }),
+    );
+    exportBorder.rotation.x = -Math.PI / 2;
+    exportBorder.position.y = 0.02;
+    exportBorder.name = 'ExportBounds';
+    this.scene.add(exportBorder);
   }
 
   animate() {
@@ -99,18 +112,17 @@ export class WorkshopEngineCore {
     }
   }
 
+  #brickWithinExportBounds(brick) {
+    return isWithinExportBounds(brick.position.x, brick.position.z);
+  }
+
   #snapPlacementPoint(point, brickId) {
-    const recipe = resolveBrickRecipe(brickId);
-    const { w, d } = recipe.studs;
-    const halfW = (w * STUD) / 2;
-    const halfD = (d * STUD) / 2;
-    const snapped = snapXZToStud(point.x, point.z);
+    const clamped = clampXZToExportBounds(point.x, point.z);
+    const snapped = snapXZToStud(clamped.x, clamped.z);
     return {
       x: snapped.x,
-      y: 0,
+      y: point.y ?? 0,
       z: snapped.z,
-      offsetX: halfW,
-      offsetZ: halfD,
     };
   }
 
@@ -120,17 +132,31 @@ export class WorkshopEngineCore {
     }
 
     const placement = this.#snapPlacementPoint(worldPoint, brickId);
+    if (!isWithinExportBounds(placement.x, placement.z)) {
+      return null;
+    }
+
     const brick = createBrickSync(brickId, { color: colorHex || this.defaultColor });
-    brick.position.set(
-      placement.x,
-      placement.y,
-      placement.z,
-    );
+    brick.position.set(placement.x, placement.y, placement.z);
     brick.userData.instanceId = `${brickId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     brick.userData.color = (colorHex || this.defaultColor).replace('#', '');
 
     this.bricksGroup.add(brick);
     return brick;
+  }
+
+  stackBrickOn(brickId, baseBrick, colorHex) {
+    if (!brickId || !baseBrick?.isBrick) {
+      return null;
+    }
+
+    const baseRecipe = resolveBrickRecipe(baseBrick.userData.brickId);
+    const stackY = baseBrick.position.y + recipeHeight(baseRecipe);
+    return this.addBrick(
+      brickId,
+      { x: baseBrick.position.x, y: stackY, z: baseBrick.position.z },
+      colorHex,
+    );
   }
 
   removeBrick(brickRoot) {
@@ -153,10 +179,22 @@ export class WorkshopEngineCore {
       return null;
     }
 
-    const clone = brickRoot.clone(true);
-    clone.userData.instanceId = `${brickRoot.userData.brickId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-    clone.position.x = snapStud(brickRoot.position.x + STUD);
-    clone.position.z = snapStud(brickRoot.position.z);
+    const brickId = brickRoot.userData.brickId;
+    const recipe = resolveBrickRecipe(brickId);
+    const sourceHeight = recipeHeight(recipe);
+    const newY = brickRoot.position.y + sourceHeight + BRICK_HEIGHT;
+
+    const clone = createBrickSync(brickId, { color: brickRoot.userData.color || this.defaultColor });
+    clone.position.set(brickRoot.position.x, newY, brickRoot.position.z);
+    clone.rotation.copy(brickRoot.rotation);
+    clone.userData.instanceId = `${brickId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    clone.userData.color = brickRoot.userData.color || this.defaultColor;
+
+    if (!this.#brickWithinExportBounds(clone)) {
+      disposeObject3D(clone);
+      return null;
+    }
+
     this.bricksGroup.add(clone);
     return clone;
   }
@@ -172,7 +210,8 @@ export class WorkshopEngineCore {
     if (!brickRoot?.isBrick || !worldPoint) {
       return;
     }
-    const snapped = snapPositionToStud(worldPoint);
+    const clamped = clampXZToExportBounds(worldPoint.x, worldPoint.z);
+    const snapped = snapPositionToStud({ x: clamped.x, y: brickRoot.position.y, z: clamped.z });
     brickRoot.position.x = snapped.x;
     brickRoot.position.z = snapped.z;
   }
@@ -185,21 +224,19 @@ export class WorkshopEngineCore {
   }
 
   getRaycastTargets() {
-    const targets = [this.buildPlate];
-    this.bricksGroup.children.forEach((brick) => {
-      targets.push(brick);
-    });
-    return targets;
+    return [this.buildPlate, ...this.bricksGroup.children];
   }
 
-  getBrickInstances() {
-    return this.bricksGroup.children.map((brick) => ({
-      instanceId: brick.userData.instanceId,
-      brickId: brick.userData.brickId,
-      position: { x: brick.position.x, y: brick.position.y, z: brick.position.z },
-      rotation: { x: brick.rotation.x, y: brick.rotation.y, z: brick.rotation.z },
-      color: brick.userData.color || this.defaultColor,
-    }));
+  getBrickInstances({ forExport = false } = {}) {
+    return this.bricksGroup.children
+      .filter((brick) => !forExport || this.#brickWithinExportBounds(brick))
+      .map((brick) => ({
+        instanceId: brick.userData.instanceId,
+        brickId: brick.userData.brickId,
+        position: { x: brick.position.x, y: brick.position.y, z: brick.position.z },
+        rotation: { x: brick.rotation.x, y: brick.rotation.y, z: brick.rotation.z },
+        color: brick.userData.color || this.defaultColor,
+      }));
   }
 
   loadBrickInstances(instances = []) {

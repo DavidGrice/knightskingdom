@@ -81,13 +81,16 @@ Each phase must pass `npm run build`.
 
 ---
 
-## Backlog (user-reported, post-D1)
+## Backlog (user-reported, post-D1) ✅ D2b shipped 2026-06-30
 
-| Priority | Issue | Notes |
-|----------|-------|-------|
-| High | **Bucket closes on brick select** | `handleBrickSelect` sets `TOGGLE_BUCKET false` — keep bucket open while placing (original game behavior) |
-| High | **Fixed straight camera** | Match main game: fixed camera facing straight at build area, not current diagonal isometric `(14, 11, 14)` |
-| Medium | **Finite build bounds vs full viewport** | Viewport/canvas can span full width; actual **model/build plate** for save-to-world should be a **finite stud region** (define export bounds separate from visual plate) |
+| Priority | Issue | Status |
+|----------|-------|--------|
+| High | **Bucket stays open on brick select** | ✅ Removed `TOGGLE_BUCKET false` on select |
+| High | **Fixed straight camera** | ✅ `(0, 5, 10)` — matches main game |
+| Medium | **Finite export bounds** | ✅ 16×16 stud yellow border; save/export clamped |
+| Medium | **Top-bar tools** | ✅ Recursive raycast + selection boxes + stack-on-place |
+| Medium | **Duplicate above** | ✅ One brick-height gap above source |
+| Medium | **Selector box per brick** | ✅ `transparentBox` + wireframe on each brick |
 
 ---
 
@@ -283,11 +286,14 @@ MainGame (D4):
 - [x] `sceneSchema` serializes/restores `CREATION_<id>` entries
 - [x] Workshop save → exports to `customCreations` + links `workshopDraft.creationId`
 
-### D2b backlog (user-requested, not D4)
+### D2b backlog ✅ (2026-06-30)
 
-- Top-bar move / rotate / paint / delete tools — wire fully like main game toolbar
-- Duplicate — copy brick and place new one **above** original (one brick-height gap), not beside
-- Selector box — transparent hitbox + wireframe around each brick/creation for collisions and picking
+- [x] Bucket stays open on brick select; other toolbar icons still close bucket
+- [x] Straight fixed camera `(0, 5, 10)`
+- [x] Finite 16×16 stud export region (yellow border on plate)
+- [x] Move / rotate / paint / delete / duplicate via selection-box raycast
+- [x] Duplicate places copy above with one brick-height gap
+- [x] Per-brick `transparentBox` + wireframe selector
 
 ---
 

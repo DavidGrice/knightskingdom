@@ -88,6 +88,23 @@ Workshop save captures workshop camera screenshot (`captureFrame`) → stored as
 
 **Next: D2b** backlog polish.
 
+## 2026-06-30 — Phase 11 D2b: workshop backlog
+
+| File | Change |
+|------|--------|
+| `WorkshopContext.jsx` | Bucket stays open on brick select |
+| `WorkshopEngineCore.js` | Straight camera `(0,5,10)`; 16×16 export bounds; duplicate-above; stack placement |
+| `WorkshopEngine.jsx` | Tool raycast via selection boxes; export-filtered instances |
+| `workshopInteraction.js` | **New** — brick hit resolution + wireframe helpers |
+| `BrickFactory.js` | Per-brick `transparentBox` + wireframe on create |
+| `studGrid.js` | `EXPORT_PLATE_STUDS`, `clampXZToExportBounds` |
+
+## 2026-06-30 — fix: close bucket when selecting other toolbar tools
+
+| File | Change |
+|------|--------|
+| `WorkshopContext.jsx`, `GameContext.jsx` | Move/rotate/paint/etc. close bucket (brick select keeps it open in workshop) |
+
 ## 2026-06-30 — My Creations: original tab 6 (hand+brick icon)
 
 | File | Change |

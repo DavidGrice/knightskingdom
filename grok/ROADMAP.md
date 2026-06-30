@@ -236,7 +236,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 |-----------|--------|-------------|
 | D1 | ✅ | `WorkshopEngineCore` + `BrickFactory` + basic tools |
 | D2 | ✅ | `workshopSave.js`, `brickInstances[]` save/load + thumbnail |
-| D2b | ⬜ **Backlog** | Bucket stay-open; straight camera; finite build bounds; top-bar tools; duplicate-above; brick selector box |
+| D2b | ✅ | Bucket stay-open; straight camera; export bounds; tools; duplicate-above; selector box |
 | D3 | ✅ | `brickCatalog.generated.js` — 141 bucket entries → parametric shape recipes (`generate-brick-catalog.mjs`) |
 | D4 | ✅ | `customCreations` + workshop screenshot → My Creations main-game bucket tab → `CreationLoader` |
 | D5 | ⬜ | Challenges + instructions + optional hand-authored GLBs (optional) |
