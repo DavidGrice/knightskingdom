@@ -4,6 +4,7 @@ import { createBrickSync, paintBrick } from './BrickFactory';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import { brickCollidesWithAny } from './brickCollision';
 import { getBrickMoveGroup } from './brickStack';
+import { resolveStackPlacement } from './brickStuds';
 import {
   BRICK_HEIGHT,
   BUILD_PLATE_SIZE,
@@ -191,12 +192,20 @@ export class WorkshopEngineCore {
     return true;
   }
 
-  addBrick(brickId, worldPoint, colorHex) {
+  addBrick(brickId, worldPoint, colorHex, { exactPlacement = false } = {}) {
     if (!brickId || !worldPoint) {
       return null;
     }
 
-    const placement = this.#snapPlacementPoint(worldPoint, brickId);
+    const recipe = resolveBrickRecipe(brickId);
+    const placement = exactPlacement
+      ? {
+        x: worldPoint.x,
+        y: snapYToHeight(worldPoint.y ?? 0, recipeHeight(recipe)),
+        z: worldPoint.z,
+      }
+      : this.#snapPlacementPoint(worldPoint, brickId);
+
     if (!isWithinExportBounds(placement.x, placement.z)) {
       return null;
     }
@@ -215,18 +224,17 @@ export class WorkshopEngineCore {
     return brick;
   }
 
-  stackBrickOn(brickId, baseBrick, colorHex) {
+  stackBrickOn(brickId, baseBrick, colorHex, hitPoint = null) {
     if (!brickId || !baseBrick?.isBrick) {
       return null;
     }
 
-    const baseRecipe = resolveBrickRecipe(baseBrick.userData.brickId);
-    const stackY = baseBrick.position.y + recipeHeight(baseRecipe);
-    return this.addBrick(
-      brickId,
-      { x: baseBrick.position.x, y: stackY, z: baseBrick.position.z },
-      colorHex,
-    );
+    const placement = resolveStackPlacement(baseBrick, brickId, hitPoint);
+    if (!placement) {
+      return null;
+    }
+
+    return this.addBrick(brickId, placement, colorHex, { exactPlacement: true });
   }
 
   removeBrick(brickRoot) {

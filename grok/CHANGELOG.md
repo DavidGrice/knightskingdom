@@ -6,6 +6,17 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-06-30 — Workshop stud-aware stack placement
+
+| File | Change |
+|------|--------|
+| `brickStuds.js` | **New** — top-stud positions; valid stack centers from click point |
+| `WorkshopEngineCore.js` | `stackBrickOn` snaps to nearest stud; `exactPlacement` preserves offset |
+| `WorkshopEngine.jsx` | Passes raycast hit point when stacking on a brick |
+| `workshopInteraction.js` | `findBrickHitFromIntersects` returns brick + intersection point |
+
+1×1 (and other bricks) now land on individual studs of a wider base (e.g. 2×2), not the base center.
+
 ## 2026-06-30 — Workshop stack move (lift base brick)
 
 | File | Change |

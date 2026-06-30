@@ -37,13 +37,22 @@ export const resolveBrickFromHit = (object) => {
  * @param {Array<{ object: THREE.Object3D }>} intersects
  */
 export const findBrickFromIntersects = (intersects = []) => {
+  const hit = findBrickHitFromIntersects(intersects);
+  return hit?.brick ?? null;
+};
+
+/**
+ * First brick raycast hit with world intersection point.
+ * @param {Array<{ object: THREE.Object3D, point?: THREE.Vector3 }>} intersects
+ */
+export const findBrickHitFromIntersects = (intersects = []) => {
   for (const intersect of intersects) {
     if (SKIP_SCENE_NAMES.has(intersect.object?.name) || isGridHit(intersect.object)) {
       continue;
     }
     const brick = resolveBrickFromHit(intersect.object);
     if (brick) {
-      return brick;
+      return { brick, point: intersect.point ?? null };
     }
   }
   return null;

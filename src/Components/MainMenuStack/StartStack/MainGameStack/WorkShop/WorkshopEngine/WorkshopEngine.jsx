@@ -14,6 +14,7 @@ import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import { clampXZToExportBounds, snapXZToStud } from './studGrid';
 import {
   findBrickFromIntersects,
+  findBrickHitFromIntersects,
   findPaintBrickFromIntersects,
   setBrickWireframeVisible,
 } from './workshopInteraction';
@@ -128,12 +129,13 @@ const WorkshopEngine = forwardRef(({
       setMouseFromEvent(event);
 
       const hits = raycast();
-      const stackTarget = findBrickFromIntersects(hits);
-      if (stackTarget) {
+      const stackHit = findBrickHitFromIntersects(hits);
+      if (stackHit) {
         core.stackBrickOn(
           selectedBrickIdRef.current,
-          stackTarget,
+          stackHit.brick,
           colorRef.current,
+          stackHit.point,
         );
         return;
       }
