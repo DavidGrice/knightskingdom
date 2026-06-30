@@ -1,4 +1,16 @@
 const SKIP_PICK_NAMES = new Set(['wireframe', 'transparentBox']);
+const SKIP_SCENE_NAMES = new Set(['BuildPlate', 'ExportBounds', 'GridHelper']);
+
+const isGridHit = (object) => {
+  let node = object;
+  while (node) {
+    if (node.type === 'GridHelper' || node.name === 'GridHelper') {
+      return true;
+    }
+    node = node.parent;
+  }
+  return false;
+};
 
 /**
  * Resolve a raycast hit to the brick root (via selection box or mesh).
@@ -26,11 +38,7 @@ export const resolveBrickFromHit = (object) => {
  */
 export const findBrickFromIntersects = (intersects = []) => {
   for (const intersect of intersects) {
-    if (SKIP_PICK_NAMES.has(intersect.object?.name)) {
-      const brick = resolveBrickFromHit(intersect.object);
-      if (brick) {
-        return brick;
-      }
+    if (SKIP_SCENE_NAMES.has(intersect.object?.name) || isGridHit(intersect.object)) {
       continue;
     }
     const brick = resolveBrickFromHit(intersect.object);

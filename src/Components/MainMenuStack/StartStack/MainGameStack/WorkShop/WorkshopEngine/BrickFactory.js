@@ -327,7 +327,8 @@ const attachSelectionBox = (root) => {
   hitbox.isRotatable = true;
   hitbox.isPaintable = true;
   hitbox.isDeletable = true;
-  hitbox.visible = false;
+  hitbox.visible = true;
+  hitbox.material.depthWrite = false;
 
   hitbox.add(wireframe);
   root.add(hitbox);

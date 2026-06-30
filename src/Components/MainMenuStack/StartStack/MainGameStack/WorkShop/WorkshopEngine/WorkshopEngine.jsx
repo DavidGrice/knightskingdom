@@ -10,7 +10,7 @@ import React, {
 import * as THREE from 'three';
 import { WorkshopEngineCore } from './WorkshopEngineCore';
 import { WorkshopModes } from './workshopModes';
-import { clampXZToExportBounds } from './studGrid';
+import { clampXZToExportBounds, snapXZToStud } from './studGrid';
 import {
   findBrickFromIntersects,
   findPaintBrickFromIntersects,
@@ -18,11 +18,10 @@ import {
 } from './workshopInteraction';
 import styles from './WorkshopEngine.module.css';
 
-const DRAG_SMOOTHING = 0.4;
-
 const WorkshopEngine = forwardRef(({
   mode,
   selectedBrickId,
+  showBucket,
   color,
   workshopDraft,
 }, ref) => {
@@ -31,6 +30,7 @@ const WorkshopEngine = forwardRef(({
   const canvasRef = useRef(null);
   const modeRef = useRef(mode);
   const selectedBrickIdRef = useRef(selectedBrickId);
+  const showBucketRef = useRef(showBucket);
   const colorRef = useRef(color);
   const selectedObject = useRef(null);
   const isDragging = useRef(false);
@@ -41,6 +41,7 @@ const WorkshopEngine = forwardRef(({
 
   modeRef.current = mode;
   selectedBrickIdRef.current = selectedBrickId;
+  showBucketRef.current = showBucket;
   colorRef.current = color;
 
   useImperativeHandle(ref, () => ({
@@ -116,11 +117,11 @@ const WorkshopEngine = forwardRef(({
       if (modeRef.current !== WorkshopModes.ADDING) {
         return;
       }
-      event.preventDefault();
-      setMouseFromEvent(event);
-      if (!selectedBrickIdRef.current) {
+      if (!showBucketRef.current || !selectedBrickIdRef.current) {
         return;
       }
+      event.preventDefault();
+      setMouseFromEvent(event);
 
       const hits = raycast();
       const stackTarget = findBrickFromIntersects(hits);
@@ -209,9 +210,10 @@ const WorkshopEngine = forwardRef(({
         return;
       }
       const clamped = clampXZToExportBounds(plateHit.point.x, plateHit.point.z);
+      const snapped = snapXZToStud(clamped.x, clamped.z);
       const brick = selectedObject.current;
-      brick.position.x += (clamped.x - brick.position.x) * DRAG_SMOOTHING;
-      brick.position.z += (clamped.z - brick.position.z) * DRAG_SMOOTHING;
+      brick.position.x = snapped.x;
+      brick.position.z = snapped.z;
     };
 
     const endDrag = () => {
@@ -267,7 +269,7 @@ const WorkshopEngine = forwardRef(({
       removeListeners();
       endDrag();
     };
-  }, [mode, selectedBrickId, color]);
+  }, [mode, selectedBrickId, showBucket, color]);
 
   return <div ref={mountRef} className={styles.engineMount} />;
 });

@@ -82,6 +82,7 @@ const WorkShopContent = () => {
                 ref={engineRef}
                 mode={mode}
                 selectedBrickId={selectedBrickId}
+                showBucket={showBucket}
                 color={color}
                 workshopDraft={workshopDraft}
               />
