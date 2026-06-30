@@ -25,6 +25,14 @@ export const snapPositionToStud = (position) => ({
 
 export const snapYToPlate = (y) => Math.max(0, Math.round(y / PLATE_HEIGHT) * PLATE_HEIGHT);
 
+/** Snap Y to multiples of a brick's own height (minimum 0). */
+export const snapYToHeight = (y, height) => {
+  if (!height || height <= 0) {
+    return Math.max(0, y);
+  }
+  return Math.max(0, Math.round(y / height) * height);
+};
+
 export const snapXZToStud = (x, z) => ({
   x: snapStud(x),
   z: snapStud(z),

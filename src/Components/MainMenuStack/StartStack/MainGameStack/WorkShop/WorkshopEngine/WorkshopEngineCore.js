@@ -12,7 +12,7 @@ import {
   isWithinExportBounds,
   snapPositionToStud,
   snapXZToStud,
-  snapYToPlate,
+  snapYToHeight,
   STUD,
 } from './studGrid';
 
@@ -121,9 +121,10 @@ export class WorkshopEngineCore {
   #snapPlacementPoint(point, brickId) {
     const clamped = clampXZToExportBounds(point.x, point.z);
     const snapped = snapXZToStud(clamped.x, clamped.z);
+    const recipe = resolveBrickRecipe(brickId);
     return {
       x: snapped.x,
-      y: snapYToPlate(point.y ?? 0),
+      y: snapYToHeight(point.y ?? 0, recipeHeight(recipe)),
       z: snapped.z,
     };
   }
@@ -231,10 +232,12 @@ export class WorkshopEngineCore {
       return false;
     }
 
+    const recipe = resolveBrickRecipe(brickRoot.userData.brickId);
+    const brickHeight = recipeHeight(recipe);
     const clamped = clampXZToExportBounds(x, z);
     const snapped = snapPositionToStud({
       x: clamped.x,
-      y: snapYToPlate(y ?? brickRoot.position.y),
+      y: snapYToHeight(y ?? brickRoot.position.y, brickHeight),
       z: clamped.z,
     });
 

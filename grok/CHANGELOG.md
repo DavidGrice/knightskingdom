@@ -15,7 +15,7 @@ All changes made on branch `grok-dev` via Grok sessions.
 | `WorkshopEngine.jsx` | Shift+drag moves brick on Y-axis (mouse up = higher); collision-aware drag |
 | `studGrid.js` | `snapYToPlate` for plate-height vertical snapping |
 
-Bricks can no longer overlap when adjacent. Hold **Shift** while dragging in move mode to raise/lower a brick in plate-height steps.
+Bricks can no longer overlap when adjacent. Hold **Shift** while dragging in move mode to raise/lower a brick in steps of that brick's own height (not fixed plate intervals).
 
 ## 2026-06-30 — Workshop menu complete; Phase 11 planning docs
 

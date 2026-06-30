@@ -10,7 +10,8 @@ import React, {
 import * as THREE from 'three';
 import { WorkshopEngineCore } from './WorkshopEngineCore';
 import { WorkshopModes } from './workshopModes';
-import { clampXZToExportBounds, PLATE_HEIGHT, snapXZToStud, snapYToPlate } from './studGrid';
+import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
+import { clampXZToExportBounds, snapXZToStud } from './studGrid';
 import {
   findBrickFromIntersects,
   findPaintBrickFromIntersects,
@@ -206,7 +207,7 @@ const WorkshopEngine = forwardRef(({
       }
     };
 
-    const VERTICAL_DRAG_PIXELS_PER_PLATE = 16;
+    const VERTICAL_DRAG_PIXELS_PER_STEP = 16;
 
     const onMouseMove = (event) => {
       if (modeRef.current !== WorkshopModes.MOVING || !isDragging.current || !selectedObject.current) {
@@ -223,9 +224,10 @@ const WorkshopEngine = forwardRef(({
           };
           shiftVerticalDragActive.current = true;
         }
+        const brickHeight = recipeHeight(resolveBrickRecipe(brick.userData.brickId));
         const deltaY = verticalDragStart.current.clientY - event.clientY;
-        const plateSteps = Math.round(deltaY / VERTICAL_DRAG_PIXELS_PER_PLATE);
-        const targetY = snapYToPlate(verticalDragStart.current.brickY + plateSteps * PLATE_HEIGHT);
+        const heightSteps = Math.round(deltaY / VERTICAL_DRAG_PIXELS_PER_STEP);
+        const targetY = Math.max(0, verticalDragStart.current.brickY + heightSteps * brickHeight);
         core.trySetBrickPosition(brick, {
           x: brick.position.x,
           y: targetY,
