@@ -32,10 +32,10 @@ import StandAlone16Model from '../../ComponentTop/Bucket/BucketBottom/BucketBott
 import StandAlone17Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/buildings/oc6098-6.glb';
 import StandAlone18Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/buildings/oc6098b1.glb';
 import StandAlone19Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/buildings/oc6098b3.glb';
-import Challenge1Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c2_wall.glb';
-import Challenge2Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c3_cannon.glb';
-import Challenge3Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c6_cedric.glb';
-import Challenge4Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c6_storm.glb';
+import Challenge1Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c2_bricks1/c2_wall.glb';
+import Challenge2Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c3_bricks1/c3_cannon.glb';
+import Challenge3Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c6_bricks1/c6_cedric.glb';
+import Challenge4Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/challenges/c6_bricks2/c6_storm.glb';
 import Explosives1Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/explosives/l248901.glb';
 import Explosives2Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/explosives/l394101.glb';
 import Explosives3Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/explosives/l473801.glb';

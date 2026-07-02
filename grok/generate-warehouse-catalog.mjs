@@ -91,7 +91,10 @@ function scanEntries(source) {
         end,
         imageVar: imageMatch && imageMatch[1],
         name: nameMatch && nameMatch[1],
-        hasSelected: /SelectedModel:/.test(entryText),
+        // a WH_-prefixed SelectedModel is one we generated ourselves on a
+        // previous run -- safe (and desired) to regenerate/overwrite, so it
+        // does NOT count as "foreign" the way a hand-set one (Archer) does
+        hasForeignSelected: /SelectedModel:\s*'(?!WH_)/.test(entryText),
       });
     } else {
       i += 1;
@@ -102,11 +105,16 @@ function scanEntries(source) {
 
 const scannedEntries = scanEntries(indexSrc);
 const alreadyWiredVars = new Set(
-  scannedEntries.filter((e) => e.hasSelected && e.imageVar).map((e) => e.imageVar),
+  scannedEntries.filter((e) => e.hasForeignSelected && e.imageVar).map((e) => e.imageVar),
 );
 
 // 2) build the model-import list + catalog entries for every converted id
-//    that has a matching PNG-imported bucket entry and isn't already wired
+//    that has a matching PNG-imported bucket entry and isn't already wired.
+//    modelImports only gets entries not already imported in index.js
+//    (idempotent re-runs must not duplicate import statements).
+const existingModelImportVars = new Set(
+  [...indexSrc.matchAll(/^import\s+(\w+)\s+from\s+'\.\/[^']+\.glb';/gm)].map((x) => x[1]),
+);
 const modelImports = [];
 const catalogEntries = [];
 const usedImportVars = new Set();
@@ -118,8 +126,10 @@ for (const [varName, relPath] of varToRelPath.entries()) {
   const importVar = `${varName}Model`;
   if (usedImportVars.has(importVar)) continue;
   usedImportVars.add(importVar);
-  modelImports.push(`import ${importVar} from './${relPath}.glb';`);
-  catalogEntries.push({ varName, importVar, key, category, id });
+  if (!existingModelImportVars.has(importVar)) {
+    modelImports.push(`import ${importVar} from './${relPath}.glb';`);
+  }
+  catalogEntries.push({ varName, importVar, key, category, id, relPath });
 }
 
 // 3) rewrite index.js's data-array entries: add model/SelectedModel, drop
@@ -147,9 +157,9 @@ function transformDataArrays(source) {
       const entryText = entryLines.join('\n');
       const nameMatch = entryText.match(/name:\s*'([^']+)'/);
       const imageMatch = entryText.match(/image:\s*(\w+)/);
-      const hasSelected = /SelectedModel:/.test(entryText);
+      const hasForeignSelected = /SelectedModel:\s*'(?!WH_)/.test(entryText);
 
-      if (hasSelected || !nameMatch || !imageMatch) {
+      if (hasForeignSelected || !nameMatch || !imageMatch) {
         out.push(...entryLines, closeLine);
         continue;
       }
@@ -172,12 +182,15 @@ function transformDataArrays(source) {
 
 const { text: rewrittenBody, transformed } = transformDataArrays(indexSrc);
 
-// insert the model imports right after the last existing png/gltf import so
-// they sit with the rest of the file's imports
-const importInsertion = `${modelImports.join('\n')}\n`;
-const lastImportMatch = [...rewrittenBody.matchAll(/^import .+;\r?\n/gm)].pop();
-const insertAt = lastImportMatch.index + lastImportMatch[0].length;
-const finalIndex = rewrittenBody.slice(0, insertAt) + importInsertion + rewrittenBody.slice(insertAt);
+// insert any NEW model imports right after the last existing png/gltf
+// import so they sit with the rest of the file's imports
+let finalIndex = rewrittenBody;
+if (modelImports.length) {
+  const importInsertion = `${modelImports.join('\n')}\n`;
+  const lastImportMatch = [...rewrittenBody.matchAll(/^import .+;\r?\n/gm)].pop();
+  const insertAt = lastImportMatch.index + lastImportMatch[0].length;
+  finalIndex = rewrittenBody.slice(0, insertAt) + importInsertion + rewrittenBody.slice(insertAt);
+}
 
 fs.writeFileSync(INDEX, finalIndex);
 console.log(`Rewrote ${INDEX}: ${transformed} entries wired to a model, ${modelImports.length} model imports added.`);
@@ -186,7 +199,7 @@ console.log(`Rewrote ${INDEX}: ${transformed} entries wired to a model, ${modelI
 //    re-imports each glb directly so this file is self-contained and
 //    doesn't depend on index.js re-exporting anything.
 const directImports = catalogEntries
-  .map((e) => `import ${e.varName}Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/${e.category}/${e.id}.glb';`)
+  .map((e) => `import ${e.varName}Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/${e.relPath}.glb';`)
   .join('\n');
 
 const entriesSrc = catalogEntries
