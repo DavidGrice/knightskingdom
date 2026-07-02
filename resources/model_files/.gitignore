@@ -19,6 +19,10 @@ models/
 # per-user saved game path
 config.json
 
+# pilot verification scratch output (screenshots + throwaway GLBs)
+pilot_out/
+pilot_out_bricks/
+
 # Python
 __pycache__/
 *.pyc
