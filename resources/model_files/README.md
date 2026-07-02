@@ -13,13 +13,19 @@ palettes, textures, and audio — can be exported to open formats
 
 ## Quick start
 
-1. Install [Python 3.8+](https://www.python.org) and Pillow:
+1. Install [Python 3.8+](https://www.python.org).
+2. Clone this repo, open **`run.py`**, and press **Run** (VS Code) — or:
 
    ```
-   pip install pillow
+   python run.py
    ```
 
-2. Clone this repo, then run the bootstrap against your game folder:
+   That's it. `run.py` finds your game install automatically (or asks
+   once and remembers), installs its one dependency (Pillow) if
+   missing, runs the whole pipeline, and **resumes** if interrupted —
+   re-running skips finished steps.
+
+   Prefer explicit control? The same pipeline is available as:
 
    ```
    python extract_all.py "C:\Program Files (x86)\LEGO Media\Constructive\LEGO Creator Knights Kingdom"
@@ -35,12 +41,28 @@ palettes, textures, and audio — can be exported to open formats
    | `extracted/pak/` | contents of `system.pak` (challenge voice-overs, help text, UI art) and `warehouse.pak` |
    | `extracted/sound_map.csv` | object → sound association manifest |
 
+## What a full extraction produces
+
+Verified against a retail install (one run of `run.py`, 100% success):
+
+```
+  Models (textured OBJ+MTL) : 264     the complete warehouse library
+  Textures (PNG)            : 304     the game's global texture bank
+  World sounds (WAV)        : 92      named minifig/action/ambience sounds
+  Voice-overs (WAV)         : 371     challenge dialogue lines
+  Images & thumbnails       : 287     model previews + UI art
+  Help / text files         : 392
+  Object-sound associations : 1,587   auto-generated manifest
+  Total                     : 256 MB  of open-format assets
+```
+
 ## Repository layout
 
 ```
 knightskingdom/
 ├── README.md
-├── extract_all.py          ← one-command bootstrap (start here)
+├── run.py                  ← ONE-CLICK runner (start here: just press Run)
+├── extract_all.py          ← the same pipeline, path passed explicitly
 ├── .gitignore              ← keeps extracted assets out of git
 ├── tools/
 │   ├── lca_parser.py            core .lca container/SHP/PAL/WLD parser
@@ -53,7 +75,10 @@ knightskingdom/
 │   ├── xvr_extract.py           .XVR/.SVR decompressor + sub-file splitter
 │   ├── sprite_dump.py           SPRT texture banks → PNG
 │   ├── snd_dump.py              SOUN sound banks → named WAV
-│   └── associate_sounds.py      object → sound manifest builder
+│   ├── associate_sounds.py      object → sound manifest builder
+│   ├── scl_dump.py              SCL script "gleaner" (strings + calls)
+│   ├── scl_grammar.py           SCL bytecode tokeniser (shared)
+│   └── scl_decompile.py         SCL disassembler (readable listings)
 └── docs/
     └── FORMAT_SPEC.md           reverse-engineered format documentation
 ```
@@ -86,10 +111,17 @@ version of what was reverse-engineered:
 - **`.xvr`** — 3-byte magic + a raw DEFLATE stream; a whole VRT world
   bound into one file, including the global texture and sound banks.
 - **Textures** — 8-bit sprites in a SPRT bank; facet UVs live on world
-  objects; texture references are 1-based indices into the global bank.
+  objects; texture references are DIRECT indices into the global bank
+  (ref 0 = untextured), with `vt = (tu, 1-tv)`.
+- **Two colour systems** — plain `COLOURS` chunks index each file's own
+  embedded palette, while minifig body parts use `LITCOLS` chunks that
+  index the game's *global runtime palette* (from creator2000.xvr).
 - **Sounds** — 8-bit PCM records in a SOUN bank with a symbol table
   naming all 92 (the engine pitch-shifts them for variety — that's why
   minifig chatter never sounds quite the same twice).
+
+Full byte-level detail, including the traps that cost us real debugging
+time, lives in [`docs/FORMAT_SPEC.md`](docs/FORMAT_SPEC.md).
 
 ## Acknowledgements
 

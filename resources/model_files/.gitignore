@@ -16,6 +16,9 @@ textures/
 sounds/
 models/
 
+# per-user saved game path
+config.json
+
 # Python
 __pycache__/
 *.pyc
