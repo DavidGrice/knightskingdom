@@ -5,6 +5,7 @@ import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 import Archer from '../GameEngineResourceStack/models/archer_with_box2.glb';
 import { resolveDriveCameraProfile } from '../driveCameraProfiles';
 import { updateSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
+import { WAREHOUSE_MODEL_CATALOG } from './warehouseModelCatalog.generated';
 
 const SelectedModels = {
     NONE: 'NONE',
@@ -18,6 +19,7 @@ const SelectedModels = {
         isRotatable: true,
         isModel: true,
     },
+    ...WAREHOUSE_MODEL_CATALOG,
 };
 
 let addedChampCounter = 0;
@@ -202,9 +204,14 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                 },
             );
             break;
-        case 'add':
+        case 'add': {
+            const modelUrl = SelectedModels[modelData]?.model;
+            if (!modelUrl) {
+                console.error(`ModelLoader: no model registered for "${modelData}"`);
+                break;
+            }
             loader.load(
-                SelectedModels[modelData]['model'],
+                modelUrl,
                 (gltf) => {
                     setupPlayableGltfScene(gltf, modelData, { position });
                     scene.add(gltf.scene);
@@ -221,6 +228,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                 },
             );
             break;
+        }
         default:
             break;
     }
