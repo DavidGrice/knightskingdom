@@ -15,7 +15,30 @@ Tell Grok:
 
 ---
 
-## ⚠️ Critical Constraint — LCA → GLB Is Out of Scope
+## ⚠️ 2026-07-02 update — LCA → GLB reversed for a subset of bricks
+
+**User decision (2026-07-02):** the 2026-06-30 verdict below was reached using
+the old legacy RE converter scripts (`resources/convert_brick.py` era). The
+`resources/model_files/` toolchain was substantially reworked since (real
+materials, LITCOLS/palette handling, world templates) and produces correct
+OBJ/MTL geometry — confirmed by rendering pilot conversions before trusting
+the batch run (see the "Wire real 3D models" plan / session log for
+2026-07-02). A batch pipeline (`resources/model_files/convert_bricks.mjs`)
+now converts every brick to `public/workshop/bricks/<id>.glb` (uniform 0.1x
+scale correction: the toolchain's coordinates are true LEGO mm, and 8mm
+stud * 0.1 = the Workshop's `STUD=0.8`), and `generate-brick-catalog.mjs`
+enables `shape:'GLB'` only where the converted mesh's measured bounding box
+matches its catalog stud footprint within tolerance -- **42 of 141** bricks
+so far. The other 99 mismatch because `brickCatalog.generated.js`'s
+`studs`/`heightPlates` were themselves guessed via fuzzy digit-matching
+against a small ~60-part reference table and are wrong for parts outside it
+(confirmed visually, e.g. `l420100` is a large multi-stud baseplate, not the
+small composite the guesser assumed) -- not a mesh defect. Those keep their
+existing parametric shape unchanged: no regression versus before this
+pipeline existed. The procedural `BrickFactory` path below remains the
+fallback/default for everything not GLB-validated.
+
+## Original 2026-06-30 constraint (superseded above for the 42 validated bricks)
 
 **User decision (2026-06-30):** After ~2 years of RE work, LCA/VCA → GLB/OBJ conversion **does not produce usable meshes**. Offset parsing is unreliable; output is consistently wrong.
 
@@ -23,11 +46,11 @@ Tell Grok:
 |----------|--------|
 | Legacy RE converter scripts | ❌ Not viable for game assets |
 | `resources/convert_brick.py` | ❌ Not viable for game assets |
-| Batch model-file → `.glb` pipeline | ❌ **Removed from plan** |
+| Batch model-file → `.glb` pipeline | ⚠️ Reworked toolchain + per-brick validation reversed this 2026-07-02 for 42/141 bricks — see above |
 | Raw model files in `BucketBottomResourceStack/` | ✅ Keep for RE reference + UI thumbnails only |
 | PNG bucket thumbnails | ✅ Keep — UI already uses these |
 
-**Do not block workshop implementation on mesh extraction.** Build the editor with **procedural/parametric Three.js geometry** keyed to catalog entries. Optional: hand-authored GLBs added one-at-a-time later (not a pipeline).
+**Do not block workshop implementation on mesh extraction.** Build the editor with **procedural/parametric Three.js geometry** keyed to catalog entries, with validated GLBs overlaid where available (see 2026-07-02 update above).
 
 ---
 
@@ -351,6 +374,7 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 | 2026-06-30 | **D2 shipped:** `workshopSave.js`, hydrate on enter, save on save/leave + thumbnail. |
 | 2026-06-30 | **D3 shipped:** `generate-brick-catalog.mjs` → 141 parametric recipes; SLOPE/CYLINDER/ARCH/COMPOSITE/TILE in `BrickFactory`. |
 | 2026-06-30 | **D4 shipped:** `customCreations.js`, `CreationLoader`, My Creations bucket tab, workshop save exports to main world. **Next: D2b** backlog. |
+| 2026-07-02 | **User reversed the LCA→GLB verdict** for the reworked `resources/model_files/` toolchain (also wired real GLB models into the MainGame warehouse bucket, previously non-functional). Pilot-verified conversion + a per-brick stud-footprint validation gate enabled `shape:'GLB'` for 42/141 bricks; the other 99 keep their parametric shape unchanged (bad catalog metadata, not bad meshes). See `resources/model_files/convert_bricks.mjs`. |
 
 ---
 
