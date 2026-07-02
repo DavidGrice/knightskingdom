@@ -21,10 +21,10 @@ Tell Grok:
 
 | Approach | Status |
 |----------|--------|
-| `tools/lca2obj/lca2obj.py` | ❌ Not viable for game assets |
+| Legacy RE converter scripts | ❌ Not viable for game assets |
 | `resources/convert_brick.py` | ❌ Not viable for game assets |
-| Batch `.lca` → `.glb` pipeline | ❌ **Removed from plan** |
-| `.lca` files in `BucketBottomResourceStack/` | ✅ Keep for RE reference + UI thumbnails only |
+| Batch model-file → `.glb` pipeline | ❌ **Removed from plan** |
+| Raw model files in `BucketBottomResourceStack/` | ✅ Keep for RE reference + UI thumbnails only |
 | PNG bucket thumbnails | ✅ Keep — UI already uses these |
 
 **Do not block workshop implementation on mesh extraction.** Build the editor with **procedural/parametric Three.js geometry** keyed to catalog entries. Optional: hand-authored GLBs added one-at-a-time later (not a pipeline).
@@ -141,7 +141,7 @@ One factory builds Three.js meshes from a **shape recipe** + **stud dimensions**
 
 | Asset | Use |
 |-------|-----|
-| `.lca` files | RE archive only; do not parse at runtime |
+| Raw model files | RE archive only; do not parse at runtime |
 | PNG thumbnails | Bucket UI (unchanged) |
 | `l<number>` in filenames | Catalog ID → map to public LEGO part dimensions (Rebrickable/LDraw reference for stud size, not mesh) |
 
@@ -334,10 +334,9 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 
 | Path | Role |
 |------|------|
-| `tools/lca2obj/` | RE experiment (broken for production) |
 | `resources/convert_brick.py` | RE experiment (broken for production) |
 | `resources/research/` | Format documentation |
-| `BucketBottomResourceStack/*.lca` | Archive + UI companion to PNGs |
+| `BucketBottomResourceStack/` | Archive + UI companion to PNGs |
 
 ---
 
