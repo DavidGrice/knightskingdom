@@ -26,3 +26,15 @@ yarn-error.log*
 
 # local session artifacts
 /terminals
+
+# Extraction-derived 3D model assets (LEGO Creator: Knights' Kingdom) --
+# regenerate locally from your own game install via
+# resources/model_files/convert_warehouse.mjs, convert_bricks.mjs, and
+# copy_obj_assets.mjs. Matches resources/model_files/'s existing "don't
+# commit extracted game assets" policy. Hand-authored assets (Archer,
+# map1.glb, etc.) are NOT covered by these patterns and stay tracked.
+src/Components/MainMenuStack/StartStack/MainGameStack/MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/**/*.glb
+public/workshop/bricks/*.glb
+public/models/**/*.obj
+public/models/**/*.mtl
+public/models/textures/
