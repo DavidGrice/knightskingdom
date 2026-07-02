@@ -23,7 +23,7 @@ the old legacy RE converter scripts (`resources/convert_brick.py` era). The
 materials, LITCOLS/palette handling, world templates) and produces correct
 OBJ/MTL geometry — confirmed by rendering pilot conversions before trusting
 the batch run (see the "Wire real 3D models" plan / session log for
-2026-07-02). A batch pipeline (`resources/model_files/convert_bricks.mjs`)
+2026-07-02). A batch pipeline (`resources/model_pipeline/convert_bricks.mjs`)
 now converts every brick to `public/workshop/bricks/<id>.glb` (uniform 0.1x
 scale correction: the toolchain's coordinates are true LEGO mm, and 8mm
 stud * 0.1 = the Workshop's `STUD=0.8`), and `generate-brick-catalog.mjs`
@@ -374,7 +374,7 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 | 2026-06-30 | **D2 shipped:** `workshopSave.js`, hydrate on enter, save on save/leave + thumbnail. |
 | 2026-06-30 | **D3 shipped:** `generate-brick-catalog.mjs` → 141 parametric recipes; SLOPE/CYLINDER/ARCH/COMPOSITE/TILE in `BrickFactory`. |
 | 2026-06-30 | **D4 shipped:** `customCreations.js`, `CreationLoader`, My Creations bucket tab, workshop save exports to main world. **Next: D2b** backlog. |
-| 2026-07-02 | **User reversed the LCA→GLB verdict** for the reworked `resources/model_files/` toolchain (also wired real GLB models into the MainGame warehouse bucket, previously non-functional). Pilot-verified conversion + a per-brick stud-footprint validation gate enabled `shape:'GLB'` for 42/141 bricks; the other 99 keep their parametric shape unchanged (bad catalog metadata, not bad meshes). See `resources/model_files/convert_bricks.mjs`. |
+| 2026-07-02 | **User reversed the LCA→GLB verdict** for the reworked `resources/model_files/` toolchain (also wired real GLB models into the MainGame warehouse bucket, previously non-functional). Pilot-verified conversion + a per-brick stud-footprint validation gate enabled `shape:'GLB'` for 42/141 bricks; the other 99 keep their parametric shape unchanged (bad catalog metadata, not bad meshes). See `resources/model_pipeline/convert_bricks.mjs`. |
 
 ---
 

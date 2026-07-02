@@ -163,7 +163,7 @@ for (const entry of entries) {
   catalog[entry.brickId] = recipeForEntry(entry);
 }
 
-// Overlay real, LCA-derived GLB geometry (see resources/model_files/
+// Overlay real, LCA-derived GLB geometry (see resources/model_pipeline/
 // convert_bricks.mjs) for bricks whose converted mesh matches its declared
 // stud footprint within tolerance. Parts the fuzzy digit-matched LEGO_PARTS
 // lookup guessed wrong (a real, common case -- e.g. l420100 is actually a
@@ -173,7 +173,7 @@ for (const entry of entries) {
 // even for GLB-shaped entries -- BrickFactory's stacking/height math reads
 // them regardless of shape, and they still describe the catalog's intended
 // footprint.
-const REPORT_PATH = path.join(ROOT, 'resources/model_files/brick_conversion_report.json');
+const REPORT_PATH = path.join(ROOT, 'resources/model_pipeline/brick_conversion_report.json');
 const BRICKS_DIR = path.join(ROOT, 'public/workshop/bricks');
 // OBJ/MTL is the live path (see BrickFactory.js) -- sidesteps whatever the
 // obj2gltf GLB conversion above was doing to orientation/winding. GLB stays

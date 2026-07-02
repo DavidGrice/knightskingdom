@@ -5,7 +5,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 /**
  * Runtime OBJ/MTL loader for models extracted by resources/model_files/ --
  * loads .obj+.mtl directly (public/models/, populated by
- * resources/model_files/copy_obj_assets.mjs) instead of the GLB conversion
+ * resources/model_pipeline/copy_obj_assets.mjs) instead of the GLB conversion
  * pipeline (obj2gltfHelper.mjs / ModelLoader.jsx's warehouseModelCatalog /
  * BrickFactory's GLB path, all of which still exist and still work, just
  * aren't the live path any more -- see the "Wire real 3D models" plan).
