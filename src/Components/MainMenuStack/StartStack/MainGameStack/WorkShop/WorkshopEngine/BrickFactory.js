@@ -1,5 +1,11 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import {
+  alignObjMtlBottomToOrigin,
+  getCachedObjMtlTemplate,
+  loadObjMtl,
+  preloadObjMtlAssets,
+} from '../../shared/objMtlLoader';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import {
   attachSelectionBox,
@@ -269,6 +275,14 @@ export const preloadGlbBricks = (glbUrls) => {
 };
 
 /**
+ * Warm the OBJ/MTL cache for a set of {objUrl, mtlUrl} pairs ahead of time
+ * (see preloadGlbBricks above -- same idea, live path). Thin re-export of
+ * the shared helper so callers only need one import from BrickFactory.
+ * @param {{ objUrl: string, mtlUrl: string }[]} entries
+ */
+export const preloadObjMtlBricks = (entries) => preloadObjMtlAssets(entries);
+
+/**
  * Shift the loaded GLB's own children (not root) so their bottom sits at
  * local y=0, matching the parametric bricks' convention (their geometry is
  * authored bottom-aligned to begin with). Placement code (WorkshopEngineCore
@@ -299,7 +313,19 @@ export const createBrick = async (brickId, options = {}) => {
 
   let root;
 
-  if (recipe.shape === 'GLB' && recipe.glbUrl) {
+  if (recipe.shape === 'GLB' && recipe.objUrl && recipe.mtlUrl) {
+    // OBJ/MTL is the live path -- see the "Wire real 3D models" plan's
+    // OBJ/MTL pivot. Sidesteps whatever the obj2gltf GLB conversion below
+    // was doing to orientation/winding.
+    try {
+      root = await loadObjMtl(recipe.objUrl, recipe.mtlUrl);
+      applyColor(root, colorHex);
+      alignObjMtlBottomToOrigin(root);
+    } catch (error) {
+      console.warn(`OBJ/MTL load failed for ${brickId}, using parametric fallback:`, error);
+      root = createParametricBrick(recipe, colorHex);
+    }
+  } else if (recipe.shape === 'GLB' && recipe.glbUrl) {
     try {
       root = await loadGlbBrick(recipe.glbUrl);
       applyColor(root, colorHex);
@@ -328,7 +354,19 @@ export const createBrickSync = (brickId, options = {}) => {
     : (options.color ?? DEFAULT_COLOR);
 
   let root = null;
-  if (recipe.shape === 'GLB' && recipe.glbUrl) {
+  if (recipe.shape === 'GLB' && recipe.objUrl && recipe.mtlUrl) {
+    // OBJ/MTL is the live path -- see createBrick above.
+    const cached = getCachedObjMtlTemplate(recipe.objUrl, recipe.mtlUrl);
+    if (cached) {
+      root = cached.clone(true);
+      applyColor(root, colorHex);
+      alignObjMtlBottomToOrigin(root);
+    } else {
+      // not warmed yet -- kick off a load for next time and fall back to
+      // parametric for this placement so the click still feels instant
+      loadObjMtl(recipe.objUrl, recipe.mtlUrl).catch(() => {});
+    }
+  } else if (recipe.shape === 'GLB' && recipe.glbUrl) {
     const cached = getCachedGlbScene(recipe.glbUrl);
     if (cached) {
       root = cached.clone(true);

@@ -103,7 +103,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×1",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300500.glb"
+    "glbUrl": "/workshop/bricks/l300500.glb",
+    "objUrl": "/models/bricks/l300500.obj",
+    "mtlUrl": "/models/bricks/l300500.mtl"
   },
   "l245300": {
     "shape": "BOX",
@@ -124,7 +126,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×2",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300400.glb"
+    "glbUrl": "/workshop/bricks/l300400.glb",
+    "objUrl": "/models/bricks/l300400.obj",
+    "mtlUrl": "/models/bricks/l300400.mtl"
   },
   "l324500": {
     "shape": "BOX",
@@ -155,7 +159,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×3",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l362200.glb"
+    "glbUrl": "/workshop/bricks/l362200.glb",
+    "objUrl": "/models/bricks/l362200.obj",
+    "mtlUrl": "/models/bricks/l362200.mtl"
   },
   "l301000": {
     "shape": "GLB",
@@ -166,7 +172,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×4",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l301000.glb"
+    "glbUrl": "/workshop/bricks/l301000.glb",
+    "objUrl": "/models/bricks/l301000.obj",
+    "mtlUrl": "/models/bricks/l301000.mtl"
   },
   "l300900": {
     "shape": "GLB",
@@ -177,7 +185,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×6",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300900.glb"
+    "glbUrl": "/workshop/bricks/l300900.glb",
+    "objUrl": "/models/bricks/l300900.obj",
+    "mtlUrl": "/models/bricks/l300900.mtl"
   },
   "l375400": {
     "shape": "BOX",
@@ -198,7 +208,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×8",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300800.glb"
+    "glbUrl": "/workshop/bricks/l300800.glb",
+    "objUrl": "/models/bricks/l300800.obj",
+    "mtlUrl": "/models/bricks/l300800.mtl"
   },
   "l611100": {
     "shape": "BOX",
@@ -239,7 +251,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 2×2",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300300.glb"
+    "glbUrl": "/workshop/bricks/l300300.glb",
+    "objUrl": "/models/bricks/l300300.obj",
+    "mtlUrl": "/models/bricks/l300300.mtl"
   },
   "l3014500": {
     "shape": "GLB",
@@ -250,7 +264,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "basic l3014500",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l3014500.glb"
+    "glbUrl": "/workshop/bricks/l3014500.glb",
+    "objUrl": "/models/bricks/l3014500.obj",
+    "mtlUrl": "/models/bricks/l3014500.mtl"
   },
   "l300200": {
     "shape": "GLB",
@@ -261,7 +277,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 2×3",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300200.glb"
+    "glbUrl": "/workshop/bricks/l300200.glb",
+    "objUrl": "/models/bricks/l300200.obj",
+    "mtlUrl": "/models/bricks/l300200.mtl"
   },
   "l621500": {
     "shape": "BOX",
@@ -282,7 +300,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 2×4",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300100.glb"
+    "glbUrl": "/workshop/bricks/l300100.glb",
+    "objUrl": "/models/bricks/l300100.obj",
+    "mtlUrl": "/models/bricks/l300100.mtl"
   },
   "l245600": {
     "shape": "GLB",
@@ -293,7 +313,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 2×6",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l245600.glb"
+    "glbUrl": "/workshop/bricks/l245600.glb",
+    "objUrl": "/models/bricks/l245600.obj",
+    "mtlUrl": "/models/bricks/l245600.mtl"
   },
   "l300700": {
     "shape": "BOX",
@@ -314,7 +336,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 2×10",
     "category": "basic",
-    "glbUrl": "/workshop/bricks/l300600.glb"
+    "glbUrl": "/workshop/bricks/l300600.glb",
+    "objUrl": "/models/bricks/l300600.obj",
+    "mtlUrl": "/models/bricks/l300600.mtl"
   },
   "l235600": {
     "shape": "BOX",
@@ -475,7 +499,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Headlight",
     "category": "castle_components",
-    "glbUrl": "/workshop/bricks/l407000.glb"
+    "glbUrl": "/workshop/bricks/l407000.glb",
+    "objUrl": "/models/bricks/l407000.obj",
+    "mtlUrl": "/models/bricks/l407000.mtl"
   },
   "l3013600": {
     "shape": "COMPOSITE",
@@ -526,7 +552,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "castle_components l235700",
     "category": "castle_components",
-    "glbUrl": "/workshop/bricks/l235700.glb"
+    "glbUrl": "/workshop/bricks/l235700.glb",
+    "objUrl": "/models/bricks/l235700.obj",
+    "mtlUrl": "/models/bricks/l235700.mtl"
   },
   "l3027400": {
     "shape": "COMPOSITE",
@@ -607,7 +635,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Challenge 2×4",
     "category": "challenges",
-    "glbUrl": "/workshop/bricks/c5_2x4.glb"
+    "glbUrl": "/workshop/bricks/c5_2x4.glb",
+    "objUrl": "/models/bricks/c5_2x4.obj",
+    "mtlUrl": "/models/bricks/c5_2x4.mtl"
   },
   "c5_door": {
     "shape": "COMPOSITE",
@@ -648,7 +678,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Round 1×1",
     "category": "cylindrical",
-    "glbUrl": "/workshop/bricks/l306200.glb"
+    "glbUrl": "/workshop/bricks/l306200.glb",
+    "objUrl": "/models/bricks/l306200.obj",
+    "mtlUrl": "/models/bricks/l306200.mtl"
   },
   "l458900": {
     "shape": "GLB",
@@ -659,7 +691,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "cylindrical l458900",
     "category": "cylindrical",
-    "glbUrl": "/workshop/bricks/l458900.glb"
+    "glbUrl": "/workshop/bricks/l458900.glb",
+    "objUrl": "/models/bricks/l458900.obj",
+    "mtlUrl": "/models/bricks/l458900.mtl"
   },
   "l614100": {
     "shape": "GLB",
@@ -670,7 +704,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "cylindrical l614100",
     "category": "cylindrical",
-    "glbUrl": "/workshop/bricks/l614100.glb"
+    "glbUrl": "/workshop/bricks/l614100.glb",
+    "objUrl": "/models/bricks/l614100.obj",
+    "mtlUrl": "/models/bricks/l614100.mtl"
   },
   "l394100": {
     "shape": "CYLINDER",
@@ -741,7 +777,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 1×1",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l302400.glb"
+    "glbUrl": "/workshop/bricks/l302400.glb",
+    "objUrl": "/models/bricks/l302400.obj",
+    "mtlUrl": "/models/bricks/l302400.mtl"
   },
   "l302300": {
     "shape": "GLB",
@@ -752,7 +790,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 1×2",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l302300.glb"
+    "glbUrl": "/workshop/bricks/l302300.glb",
+    "objUrl": "/models/bricks/l302300.obj",
+    "mtlUrl": "/models/bricks/l302300.mtl"
   },
   "l379400": {
     "shape": "GLB",
@@ -763,7 +803,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "slim l379400",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l379400.glb"
+    "glbUrl": "/workshop/bricks/l379400.glb",
+    "objUrl": "/models/bricks/l379400.obj",
+    "mtlUrl": "/models/bricks/l379400.mtl"
   },
   "l362300": {
     "shape": "GLB",
@@ -774,7 +816,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 1×3",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l362300.glb"
+    "glbUrl": "/workshop/bricks/l362300.glb",
+    "objUrl": "/models/bricks/l362300.obj",
+    "mtlUrl": "/models/bricks/l362300.mtl"
   },
   "l371000": {
     "shape": "GLB",
@@ -785,7 +829,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 1×4",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l371000.glb"
+    "glbUrl": "/workshop/bricks/l371000.glb",
+    "objUrl": "/models/bricks/l371000.obj",
+    "mtlUrl": "/models/bricks/l371000.mtl"
   },
   "l366600": {
     "shape": "PLATE",
@@ -816,7 +862,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 2×2",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l302200.glb"
+    "glbUrl": "/workshop/bricks/l302200.glb",
+    "objUrl": "/models/bricks/l302200.obj",
+    "mtlUrl": "/models/bricks/l302200.mtl"
   },
   "l302100": {
     "shape": "GLB",
@@ -827,7 +875,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 2×3",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l302100.glb"
+    "glbUrl": "/workshop/bricks/l302100.glb",
+    "objUrl": "/models/bricks/l302100.obj",
+    "mtlUrl": "/models/bricks/l302100.mtl"
   },
   "l302000": {
     "shape": "GLB",
@@ -838,7 +888,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 2×4",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l302000.glb"
+    "glbUrl": "/workshop/bricks/l302000.glb",
+    "objUrl": "/models/bricks/l302000.obj",
+    "mtlUrl": "/models/bricks/l302000.mtl"
   },
   "l379500": {
     "shape": "PLATE",
@@ -859,7 +911,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 2×8",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l303400.glb"
+    "glbUrl": "/workshop/bricks/l303400.glb",
+    "objUrl": "/models/bricks/l303400.obj",
+    "mtlUrl": "/models/bricks/l303400.mtl"
   },
   "l383200": {
     "shape": "PLATE",
@@ -920,7 +974,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 1,
     "name": "Plate 4×4",
     "category": "slim",
-    "glbUrl": "/workshop/bricks/l303100.glb"
+    "glbUrl": "/workshop/bricks/l303100.glb",
+    "objUrl": "/models/bricks/l303100.obj",
+    "mtlUrl": "/models/bricks/l303100.mtl"
   },
   "l303200": {
     "shape": "PLATE",
@@ -1022,7 +1078,9 @@ export const GENERATED_BRICK_CATALOG = {
     "showStuds": false,
     "name": "Tile 1×1",
     "category": "tiles",
-    "glbUrl": "/workshop/bricks/l307000.glb"
+    "glbUrl": "/workshop/bricks/l307000.glb",
+    "objUrl": "/models/bricks/l307000.obj",
+    "mtlUrl": "/models/bricks/l307000.mtl"
   },
   "l306900": {
     "shape": "GLB",
@@ -1034,7 +1092,9 @@ export const GENERATED_BRICK_CATALOG = {
     "showStuds": false,
     "name": "Tile 1×2",
     "category": "tiles",
-    "glbUrl": "/workshop/bricks/l306900.glb"
+    "glbUrl": "/workshop/bricks/l306900.glb",
+    "objUrl": "/models/bricks/l306900.obj",
+    "mtlUrl": "/models/bricks/l306900.mtl"
   },
   "l243100": {
     "shape": "GLB",
@@ -1046,7 +1106,9 @@ export const GENERATED_BRICK_CATALOG = {
     "showStuds": false,
     "name": "Tile 1×4",
     "category": "tiles",
-    "glbUrl": "/workshop/bricks/l243100.glb"
+    "glbUrl": "/workshop/bricks/l243100.glb",
+    "objUrl": "/models/bricks/l243100.obj",
+    "mtlUrl": "/models/bricks/l243100.mtl"
   },
   "l663600": {
     "shape": "GLB",
@@ -1058,7 +1120,9 @@ export const GENERATED_BRICK_CATALOG = {
     "showStuds": false,
     "name": "Tile 1×6",
     "category": "tiles",
-    "glbUrl": "/workshop/bricks/l663600.glb"
+    "glbUrl": "/workshop/bricks/l663600.glb",
+    "objUrl": "/models/bricks/l663600.obj",
+    "mtlUrl": "/models/bricks/l663600.mtl"
   },
   "l416200": {
     "shape": "TILE",
@@ -1081,7 +1145,9 @@ export const GENERATED_BRICK_CATALOG = {
     "showStuds": false,
     "name": "Tile 2×2",
     "category": "tiles",
-    "glbUrl": "/workshop/bricks/l306800.glb"
+    "glbUrl": "/workshop/bricks/l306800.glb",
+    "objUrl": "/models/bricks/l306800.obj",
+    "mtlUrl": "/models/bricks/l306800.mtl"
   },
   "l304000": {
     "shape": "GLB",
@@ -1092,7 +1158,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 2,
     "name": "Slope 45° 2×1",
     "category": "wedge",
-    "glbUrl": "/workshop/bricks/l304000.glb"
+    "glbUrl": "/workshop/bricks/l304000.glb",
+    "objUrl": "/models/bricks/l304000.obj",
+    "mtlUrl": "/models/bricks/l304000.mtl"
   },
   "l304800": {
     "shape": "SLOPE",
@@ -1113,7 +1181,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 2,
     "name": "wedge l366500",
     "category": "wedge",
-    "glbUrl": "/workshop/bricks/l366500.glb"
+    "glbUrl": "/workshop/bricks/l366500.glb",
+    "objUrl": "/models/bricks/l366500.obj",
+    "mtlUrl": "/models/bricks/l366500.mtl"
   },
   "l244900": {
     "shape": "GLB",
@@ -1124,7 +1194,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 2,
     "name": "wedge l244900",
     "category": "wedge",
-    "glbUrl": "/workshop/bricks/l244900.glb"
+    "glbUrl": "/workshop/bricks/l244900.glb",
+    "objUrl": "/models/bricks/l244900.obj",
+    "mtlUrl": "/models/bricks/l244900.mtl"
   },
   "l446000": {
     "shape": "GLB",
@@ -1135,7 +1207,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 2,
     "name": "wedge l446000",
     "category": "wedge",
-    "glbUrl": "/workshop/bricks/l446000.glb"
+    "glbUrl": "/workshop/bricks/l446000.glb",
+    "objUrl": "/models/bricks/l446000.obj",
+    "mtlUrl": "/models/bricks/l446000.mtl"
   },
   "l428600": {
     "shape": "SLOPE",
@@ -1166,7 +1240,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 2,
     "name": "Slope 45° 2×2",
     "category": "wedge",
-    "glbUrl": "/workshop/bricks/l303900.glb"
+    "glbUrl": "/workshop/bricks/l303900.glb",
+    "objUrl": "/models/bricks/l303900.obj",
+    "mtlUrl": "/models/bricks/l303900.mtl"
   },
   "l304300": {
     "shape": "GLB",
@@ -1177,7 +1253,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 2,
     "name": "Slope 45° 2×2",
     "category": "wedge",
-    "glbUrl": "/workshop/bricks/l304300.glb"
+    "glbUrl": "/workshop/bricks/l304300.glb",
+    "objUrl": "/models/bricks/l304300.obj",
+    "mtlUrl": "/models/bricks/l304300.mtl"
   },
   "l366000": {
     "shape": "SLOPE",
@@ -1298,7 +1376,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 2,
     "name": "Slope 45° 2×4",
     "category": "wedge",
-    "glbUrl": "/workshop/bricks/l303700.glb"
+    "glbUrl": "/workshop/bricks/l303700.glb",
+    "objUrl": "/models/bricks/l303700.obj",
+    "mtlUrl": "/models/bricks/l303700.mtl"
   },
   "l329900": {
     "shape": "SLOPE",
@@ -1379,7 +1459,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×2",
     "category": "windows_doors_fences",
-    "glbUrl": "/workshop/bricks/l3004400.glb"
+    "glbUrl": "/workshop/bricks/l3004400.glb",
+    "objUrl": "/models/bricks/l3004400.obj",
+    "mtlUrl": "/models/bricks/l3004400.mtl"
   },
   "l3004500": {
     "shape": "GLB",
@@ -1390,7 +1472,9 @@ export const GENERATED_BRICK_CATALOG = {
     "heightPlates": 3,
     "name": "Brick 1×2",
     "category": "windows_doors_fences",
-    "glbUrl": "/workshop/bricks/l3004500.glb"
+    "glbUrl": "/workshop/bricks/l3004500.glb",
+    "objUrl": "/models/bricks/l3004500.obj",
+    "mtlUrl": "/models/bricks/l3004500.mtl"
   },
   "l3005500": {
     "shape": "BOX",

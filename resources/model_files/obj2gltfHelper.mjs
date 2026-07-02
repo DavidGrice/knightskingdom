@@ -56,12 +56,19 @@ export async function convertObjToGlb(objPath, outPath, options = {}) {
     console.log = originalLog;
   }
 
-  if (scale !== 1) {
+  {
     const document = await io.readBinary(glb);
     for (const scene of document.getRoot().listScenes()) {
       for (const node of scene.listChildren()) {
         const [sx, sy, sz] = node.getScale();
-        node.setScale([sx * scale, sy * scale, sz * scale]);
+        // The extraction toolchain's source coordinates are Y-down; negate
+        // Y to stand models upright in three.js's Y-up convention. A single
+        // negated axis flips the mesh's handedness, which is why the
+        // un-corrected GLBs showed missing/culled back faces -- three.js
+        // detects a negative-determinant transform and automatically
+        // reverses the front-face winding to compensate, so this one
+        // change fixes both the orientation and the culling artifact.
+        node.setScale([sx * scale, sy * scale * -1, sz * scale]);
       }
     }
     glb = Buffer.from(await io.writeBinary(document));

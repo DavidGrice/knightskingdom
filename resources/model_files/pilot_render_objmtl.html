@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>pilot render obj/mtl</title>
+<style>html,body{margin:0;background:#3a3a3a;}canvas{display:block;}</style>
+<script type="importmap">
+{ "imports": { "three": "/node_modules/three/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="c" width="512" height="512"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { MTLLoader } from '/node_modules/three/examples/jsm/loaders/MTLLoader.js';
+import { OBJLoader } from '/node_modules/three/examples/jsm/loaders/OBJLoader.js';
+
+const params = new URLSearchParams(location.search);
+const objUrl = params.get('obj');
+const mtlUrl = params.get('mtl');
+const texBase = params.get('texBase') || '/public/models/';
+const angle = parseFloat(params.get('angle') || '0.6');
+const scaleFactor = parseFloat(params.get('scale') || '0.1');
+const flipY = params.get('flip') !== '0';
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(512, 512);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x3a3a3a);
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const dir = new THREE.DirectionalLight(0xffffff, 1.0);
+dir.position.set(3, 5, 4);
+scene.add(dir);
+const dir2 = new THREE.DirectionalLight(0xffffff, 0.4);
+dir2.position.set(-3, 2, -4);
+scene.add(dir2);
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 10000);
+
+window.__pilotStatus = 'loading';
+
+const mtlLoader = new MTLLoader();
+mtlLoader.setResourcePath(texBase);
+mtlLoader.setPath(mtlUrl.slice(0, mtlUrl.lastIndexOf('/') + 1));
+mtlLoader.load(
+  mtlUrl.slice(mtlUrl.lastIndexOf('/') + 1),
+  (materials) => {
+    materials.preload();
+    const objLoader = new OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath(objUrl.slice(0, objUrl.lastIndexOf('/') + 1));
+    objLoader.load(
+      objUrl.slice(objUrl.lastIndexOf('/') + 1),
+      (root) => {
+        root.scale.set(scaleFactor, scaleFactor * (flipY ? -1 : 1), scaleFactor);
+        const box = new THREE.Box3().setFromObject(root);
+        root.position.y -= box.min.y;
+        root.updateMatrixWorld(true);
+
+        scene.add(root);
+
+        const box2 = new THREE.Box3().setFromObject(root);
+        const size = new THREE.Vector3();
+        const center = new THREE.Vector3();
+        box2.getSize(size);
+        box2.getCenter(center);
+
+        window.__pilotBBox = { size: size.toArray(), center: center.toArray() };
+
+        const radius = Math.max(size.x, size.y, size.z, 0.001) * 0.75;
+        camera.position.set(
+          center.x + radius * Math.sin(angle) * 2.2,
+          center.y + radius * 1.2,
+          center.z + radius * Math.cos(angle) * 2.2,
+        );
+        camera.lookAt(center);
+        camera.near = radius * 0.01;
+        camera.far = radius * 100;
+        camera.updateProjectionMatrix();
+
+        renderer.render(scene, camera);
+        window.__pilotStatus = 'done';
+      },
+      undefined,
+      (err) => {
+        window.__pilotStatus = 'error';
+        window.__pilotError = 'OBJ: ' + String(err && err.message ? err.message : err);
+      },
+    );
+  },
+  undefined,
+  (err) => {
+    window.__pilotStatus = 'error';
+    window.__pilotError = 'MTL: ' + String(err && err.message ? err.message : err);
+  },
+);
+</script>
+</body>
+</html>

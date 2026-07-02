@@ -205,6 +205,8 @@ const directImports = catalogEntries
 const entriesSrc = catalogEntries
   .map((e) => `  ${e.key}: {
     model: ${e.varName}Model,
+    objUrl: '/models/warehouse/${e.relPath}.obj',
+    mtlUrl: '/models/warehouse/${e.relPath}.mtl',
     name: '${e.category} ${e.id}',
     isMovable: true,
     isDeletable: true,

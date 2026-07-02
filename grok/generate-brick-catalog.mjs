@@ -175,6 +175,10 @@ for (const entry of entries) {
 // footprint.
 const REPORT_PATH = path.join(ROOT, 'resources/model_files/brick_conversion_report.json');
 const BRICKS_DIR = path.join(ROOT, 'public/workshop/bricks');
+// OBJ/MTL is the live path (see BrickFactory.js) -- sidesteps whatever the
+// obj2gltf GLB conversion above was doing to orientation/winding. GLB stays
+// generated too (non-live fallback/reference), same footprint-validated set.
+const OBJ_MTL_DIR = path.join(ROOT, 'public/models/bricks');
 let glbOverlayCount = 0;
 if (fs.existsSync(REPORT_PATH)) {
   const report = JSON.parse(fs.readFileSync(REPORT_PATH, 'utf8'));
@@ -189,6 +193,13 @@ if (fs.existsSync(REPORT_PATH)) {
       shape: 'GLB',
       glbUrl: `/workshop/bricks/${brickId}.glb`,
     };
+    if (
+      fs.existsSync(path.join(OBJ_MTL_DIR, `${brickId}.obj`))
+      && fs.existsSync(path.join(OBJ_MTL_DIR, `${brickId}.mtl`))
+    ) {
+      catalog[brickId].objUrl = `/models/bricks/${brickId}.obj`;
+      catalog[brickId].mtlUrl = `/models/bricks/${brickId}.mtl`;
+    }
     glbOverlayCount += 1;
   }
 }

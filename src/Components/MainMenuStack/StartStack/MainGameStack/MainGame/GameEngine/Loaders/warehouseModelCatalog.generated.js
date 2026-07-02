@@ -114,6 +114,8 @@ import Vehicles7Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomR
 export const WAREHOUSE_MODEL_CATALOG = {
   WH_BUILDINGS_MC001: {
     model: Castle1Model,
+    objUrl: '/models/warehouse/buildings/mc001.obj',
+    mtlUrl: '/models/warehouse/buildings/mc001.mtl',
     name: 'buildings mc001',
     isMovable: true,
     isDeletable: true,
@@ -124,6 +126,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC002: {
     model: Castle2Model,
+    objUrl: '/models/warehouse/buildings/mc002.obj',
+    mtlUrl: '/models/warehouse/buildings/mc002.mtl',
     name: 'buildings mc002',
     isMovable: true,
     isDeletable: true,
@@ -134,6 +138,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC003: {
     model: Castle3Model,
+    objUrl: '/models/warehouse/buildings/mc003.obj',
+    mtlUrl: '/models/warehouse/buildings/mc003.mtl',
     name: 'buildings mc003',
     isMovable: true,
     isDeletable: true,
@@ -144,6 +150,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC004: {
     model: Castle4Model,
+    objUrl: '/models/warehouse/buildings/mc004.obj',
+    mtlUrl: '/models/warehouse/buildings/mc004.mtl',
     name: 'buildings mc004',
     isMovable: true,
     isDeletable: true,
@@ -154,6 +162,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC005: {
     model: Wall1Model,
+    objUrl: '/models/warehouse/buildings/mc005.obj',
+    mtlUrl: '/models/warehouse/buildings/mc005.mtl',
     name: 'buildings mc005',
     isMovable: true,
     isDeletable: true,
@@ -164,6 +174,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC006: {
     model: wall2Model,
+    objUrl: '/models/warehouse/buildings/mc006.obj',
+    mtlUrl: '/models/warehouse/buildings/mc006.mtl',
     name: 'buildings mc006',
     isMovable: true,
     isDeletable: true,
@@ -174,6 +186,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC007: {
     model: Wall3Model,
+    objUrl: '/models/warehouse/buildings/mc007.obj',
+    mtlUrl: '/models/warehouse/buildings/mc007.mtl',
     name: 'buildings mc007',
     isMovable: true,
     isDeletable: true,
@@ -184,6 +198,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC008: {
     model: Wall4Model,
+    objUrl: '/models/warehouse/buildings/mc008.obj',
+    mtlUrl: '/models/warehouse/buildings/mc008.mtl',
     name: 'buildings mc008',
     isMovable: true,
     isDeletable: true,
@@ -194,6 +210,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC009: {
     model: Wall5Model,
+    objUrl: '/models/warehouse/buildings/mc009.obj',
+    mtlUrl: '/models/warehouse/buildings/mc009.mtl',
     name: 'buildings mc009',
     isMovable: true,
     isDeletable: true,
@@ -204,6 +222,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_MC010: {
     model: Wall6Model,
+    objUrl: '/models/warehouse/buildings/mc010.obj',
+    mtlUrl: '/models/warehouse/buildings/mc010.mtl',
     name: 'buildings mc010',
     isMovable: true,
     isDeletable: true,
@@ -214,6 +234,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6032B1: {
     model: StandAlone1Model,
+    objUrl: '/models/warehouse/buildings/oc6032b1.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6032b1.mtl',
     name: 'buildings oc6032b1',
     isMovable: true,
     isDeletable: true,
@@ -224,6 +246,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6032B4: {
     model: StandAlone2Model,
+    objUrl: '/models/warehouse/buildings/oc6032b4.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6032b4.mtl',
     name: 'buildings oc6032b4',
     isMovable: true,
     isDeletable: true,
@@ -234,6 +258,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6094_1: {
     model: StandAlone3Model,
+    objUrl: '/models/warehouse/buildings/oc6094-1.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6094-1.mtl',
     name: 'buildings oc6094-1',
     isMovable: true,
     isDeletable: true,
@@ -244,6 +270,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6094_2: {
     model: StandAlone4Model,
+    objUrl: '/models/warehouse/buildings/oc6094-2.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6094-2.mtl',
     name: 'buildings oc6094-2',
     isMovable: true,
     isDeletable: true,
@@ -254,6 +282,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6094B5: {
     model: StandAlone5Model,
+    objUrl: '/models/warehouse/buildings/oc6094b5.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6094b5.mtl',
     name: 'buildings oc6094b5',
     isMovable: true,
     isDeletable: true,
@@ -264,6 +294,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6095_1: {
     model: StandAlone6Model,
+    objUrl: '/models/warehouse/buildings/oc6095-1.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6095-1.mtl',
     name: 'buildings oc6095-1',
     isMovable: true,
     isDeletable: true,
@@ -274,6 +306,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6095_2: {
     model: StandAlone7Model,
+    objUrl: '/models/warehouse/buildings/oc6095-2.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6095-2.mtl',
     name: 'buildings oc6095-2',
     isMovable: true,
     isDeletable: true,
@@ -284,6 +318,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6095B4: {
     model: StandAlone8Model,
+    objUrl: '/models/warehouse/buildings/oc6095b4.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6095b4.mtl',
     name: 'buildings oc6095b4',
     isMovable: true,
     isDeletable: true,
@@ -294,6 +330,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6095B5: {
     model: StandAlone9Model,
+    objUrl: '/models/warehouse/buildings/oc6095b5.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6095b5.mtl',
     name: 'buildings oc6095b5',
     isMovable: true,
     isDeletable: true,
@@ -304,6 +342,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6096_5: {
     model: StandAlone10Model,
+    objUrl: '/models/warehouse/buildings/oc6096-5.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6096-5.mtl',
     name: 'buildings oc6096-5',
     isMovable: true,
     isDeletable: true,
@@ -314,6 +354,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6096B5: {
     model: StandAlone11Model,
+    objUrl: '/models/warehouse/buildings/oc6096b5.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6096b5.mtl',
     name: 'buildings oc6096b5',
     isMovable: true,
     isDeletable: true,
@@ -324,6 +366,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098_1: {
     model: StandAlone12Model,
+    objUrl: '/models/warehouse/buildings/oc6098-1.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098-1.mtl',
     name: 'buildings oc6098-1',
     isMovable: true,
     isDeletable: true,
@@ -334,6 +378,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098_2: {
     model: StandAlone13Model,
+    objUrl: '/models/warehouse/buildings/oc6098-2.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098-2.mtl',
     name: 'buildings oc6098-2',
     isMovable: true,
     isDeletable: true,
@@ -344,6 +390,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098_3: {
     model: StandAlone14Model,
+    objUrl: '/models/warehouse/buildings/oc6098-3.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098-3.mtl',
     name: 'buildings oc6098-3',
     isMovable: true,
     isDeletable: true,
@@ -354,6 +402,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098_4: {
     model: StandAlone15Model,
+    objUrl: '/models/warehouse/buildings/oc6098-4.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098-4.mtl',
     name: 'buildings oc6098-4',
     isMovable: true,
     isDeletable: true,
@@ -364,6 +414,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098_5: {
     model: StandAlone16Model,
+    objUrl: '/models/warehouse/buildings/oc6098-5.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098-5.mtl',
     name: 'buildings oc6098-5',
     isMovable: true,
     isDeletable: true,
@@ -374,6 +426,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098_6: {
     model: StandAlone17Model,
+    objUrl: '/models/warehouse/buildings/oc6098-6.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098-6.mtl',
     name: 'buildings oc6098-6',
     isMovable: true,
     isDeletable: true,
@@ -384,6 +438,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098B1: {
     model: StandAlone18Model,
+    objUrl: '/models/warehouse/buildings/oc6098b1.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098b1.mtl',
     name: 'buildings oc6098b1',
     isMovable: true,
     isDeletable: true,
@@ -394,6 +450,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_BUILDINGS_OC6098B3: {
     model: StandAlone19Model,
+    objUrl: '/models/warehouse/buildings/oc6098b3.obj',
+    mtlUrl: '/models/warehouse/buildings/oc6098b3.mtl',
     name: 'buildings oc6098b3',
     isMovable: true,
     isDeletable: true,
@@ -404,6 +462,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_CHALLENGES_C2_WALL: {
     model: Challenge1Model,
+    objUrl: '/models/warehouse/challenges/c2_bricks1/c2_wall.obj',
+    mtlUrl: '/models/warehouse/challenges/c2_bricks1/c2_wall.mtl',
     name: 'challenges c2_wall',
     isMovable: true,
     isDeletable: true,
@@ -414,6 +474,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_CHALLENGES_C3_CANNON: {
     model: Challenge2Model,
+    objUrl: '/models/warehouse/challenges/c3_bricks1/c3_cannon.obj',
+    mtlUrl: '/models/warehouse/challenges/c3_bricks1/c3_cannon.mtl',
     name: 'challenges c3_cannon',
     isMovable: true,
     isDeletable: true,
@@ -424,6 +486,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_CHALLENGES_C6_CEDRIC: {
     model: Challenge3Model,
+    objUrl: '/models/warehouse/challenges/c6_bricks1/c6_cedric.obj',
+    mtlUrl: '/models/warehouse/challenges/c6_bricks1/c6_cedric.mtl',
     name: 'challenges c6_cedric',
     isMovable: true,
     isDeletable: true,
@@ -434,6 +498,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_CHALLENGES_C6_STORM: {
     model: Challenge4Model,
+    objUrl: '/models/warehouse/challenges/c6_bricks2/c6_storm.obj',
+    mtlUrl: '/models/warehouse/challenges/c6_bricks2/c6_storm.mtl',
     name: 'challenges c6_storm',
     isMovable: true,
     isDeletable: true,
@@ -444,6 +510,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_L248901: {
     model: Explosives1Model,
+    objUrl: '/models/warehouse/explosives/l248901.obj',
+    mtlUrl: '/models/warehouse/explosives/l248901.mtl',
     name: 'explosives l248901',
     isMovable: true,
     isDeletable: true,
@@ -454,6 +522,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_L394101: {
     model: Explosives2Model,
+    objUrl: '/models/warehouse/explosives/l394101.obj',
+    mtlUrl: '/models/warehouse/explosives/l394101.mtl',
     name: 'explosives l394101',
     isMovable: true,
     isDeletable: true,
@@ -464,6 +534,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_L473801: {
     model: Explosives3Model,
+    objUrl: '/models/warehouse/explosives/l473801.obj',
+    mtlUrl: '/models/warehouse/explosives/l473801.mtl',
     name: 'explosives l473801',
     isMovable: true,
     isDeletable: true,
@@ -474,6 +546,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_L4105278: {
     model: Explosives4Model,
+    objUrl: '/models/warehouse/explosives/l4105278.obj',
+    mtlUrl: '/models/warehouse/explosives/l4105278.mtl',
     name: 'explosives l4105278',
     isMovable: true,
     isDeletable: true,
@@ -484,6 +558,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC1289: {
     model: Explosives5Model,
+    objUrl: '/models/warehouse/explosives/oc1289.obj',
+    mtlUrl: '/models/warehouse/explosives/oc1289.mtl',
     name: 'explosives oc1289',
     isMovable: true,
     isDeletable: true,
@@ -494,6 +570,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC4801: {
     model: Explosives6Model,
+    objUrl: '/models/warehouse/explosives/oc4801.obj',
+    mtlUrl: '/models/warehouse/explosives/oc4801.mtl',
     name: 'explosives oc4801',
     isMovable: true,
     isDeletable: true,
@@ -504,6 +582,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC4806B1: {
     model: Explosives7Model,
+    objUrl: '/models/warehouse/explosives/oc4806b1.obj',
+    mtlUrl: '/models/warehouse/explosives/oc4806b1.mtl',
     name: 'explosives oc4806b1',
     isMovable: true,
     isDeletable: true,
@@ -514,6 +594,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC4806B2: {
     model: Explosives8Model,
+    objUrl: '/models/warehouse/explosives/oc4806b2.obj',
+    mtlUrl: '/models/warehouse/explosives/oc4806b2.mtl',
     name: 'explosives oc4806b2',
     isMovable: true,
     isDeletable: true,
@@ -524,6 +606,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC4806B3: {
     model: Explosives9Model,
+    objUrl: '/models/warehouse/explosives/oc4806b3.obj',
+    mtlUrl: '/models/warehouse/explosives/oc4806b3.mtl',
     name: 'explosives oc4806b3',
     isMovable: true,
     isDeletable: true,
@@ -534,6 +618,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC6032B2: {
     model: Explosives10Model,
+    objUrl: '/models/warehouse/explosives/oc6032b2.obj',
+    mtlUrl: '/models/warehouse/explosives/oc6032b2.mtl',
     name: 'explosives oc6032b2',
     isMovable: true,
     isDeletable: true,
@@ -544,6 +630,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC6096_3: {
     model: Explosives11Model,
+    objUrl: '/models/warehouse/explosives/oc6096-3.obj',
+    mtlUrl: '/models/warehouse/explosives/oc6096-3.mtl',
     name: 'explosives oc6096-3',
     isMovable: true,
     isDeletable: true,
@@ -554,6 +642,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC6096_4: {
     model: Explosives12Model,
+    objUrl: '/models/warehouse/explosives/oc6096-4.obj',
+    mtlUrl: '/models/warehouse/explosives/oc6096-4.mtl',
     name: 'explosives oc6096-4',
     isMovable: true,
     isDeletable: true,
@@ -564,6 +654,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC6096B3: {
     model: Explosives13Model,
+    objUrl: '/models/warehouse/explosives/oc6096b3.obj',
+    mtlUrl: '/models/warehouse/explosives/oc6096b3.mtl',
     name: 'explosives oc6096b3',
     isMovable: true,
     isDeletable: true,
@@ -574,6 +666,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_EXPLOSIVES_OC6096B4: {
     model: Explosives14Model,
+    objUrl: '/models/warehouse/explosives/oc6096b4.obj',
+    mtlUrl: '/models/warehouse/explosives/oc6096b4.mtl',
     name: 'explosives oc6096b4',
     isMovable: true,
     isDeletable: true,
@@ -584,6 +678,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L254600: {
     model: MinifigureAnimals1Model,
+    objUrl: '/models/warehouse/minifigures_animals/l254600.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l254600.mtl',
     name: 'minifigures_animals l254600',
     isMovable: true,
     isDeletable: true,
@@ -594,6 +690,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L3010300: {
     model: MinifigureAnimals2Model,
+    objUrl: '/models/warehouse/minifigures_animals/l3010300.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l3010300.mtl',
     name: 'minifigures_animals l3010300',
     isMovable: true,
     isDeletable: true,
@@ -604,6 +702,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L3010301: {
     model: MinifigureAnimals3Model,
+    objUrl: '/models/warehouse/minifigures_animals/l3010301.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l3010301.mtl',
     name: 'minifigures_animals l3010301',
     isMovable: true,
     isDeletable: true,
@@ -614,6 +714,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7339200: {
     model: MinifigureAnimals4Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7339200.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7339200.mtl',
     name: 'minifigures_animals l7339200',
     isMovable: true,
     isDeletable: true,
@@ -624,6 +726,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7339211: {
     model: MinifigureAnimals5Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7339211.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7339211.mtl',
     name: 'minifigures_animals l7339211',
     isMovable: true,
     isDeletable: true,
@@ -634,6 +738,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7339212: {
     model: MinifigureAnimals6Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7339212.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7339212.mtl',
     name: 'minifigures_animals l7339212',
     isMovable: true,
     isDeletable: true,
@@ -644,6 +750,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7339221: {
     model: MinifigureAnimals7Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7339221.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7339221.mtl',
     name: 'minifigures_animals l7339221',
     isMovable: true,
     isDeletable: true,
@@ -654,6 +762,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7339231: {
     model: MinifigureAnimals8Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7339231.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7339231.mtl',
     name: 'minifigures_animals l7339231',
     isMovable: true,
     isDeletable: true,
@@ -664,6 +774,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7339232: {
     model: MinifigureAnimals9Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7339232.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7339232.mtl',
     name: 'minifigures_animals l7339232',
     isMovable: true,
     isDeletable: true,
@@ -674,6 +786,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7517400: {
     model: MinifigureAnimals10Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7517400.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7517400.mtl',
     name: 'minifigures_animals l7517400',
     isMovable: true,
     isDeletable: true,
@@ -684,6 +798,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_L7517401: {
     model: MinifigureAnimals11Model,
+    objUrl: '/models/warehouse/minifigures_animals/l7517401.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/l7517401.mtl',
     name: 'minifigures_animals l7517401',
     isMovable: true,
     isDeletable: true,
@@ -694,6 +810,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGCEDRICBULL00: {
     model: MinifigureAnimals12Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigcedricbull00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigcedricbull00.mtl',
     name: 'minifigures_animals minifigcedricbull00',
     isMovable: true,
     isDeletable: true,
@@ -704,6 +822,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGCEDRICBULL01: {
     model: MinifigureAnimals13Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigcedricbull01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigcedricbull01.mtl',
     name: 'minifigures_animals minifigcedricbull01',
     isMovable: true,
     isDeletable: true,
@@ -714,6 +834,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGCEDRICBULL02: {
     model: MinifigureAnimals14Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigcedricbull02.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigcedricbull02.mtl',
     name: 'minifigures_animals minifigcedricbull02',
     isMovable: true,
     isDeletable: true,
@@ -724,6 +846,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGCEDRICBULL03: {
     model: MinifigureAnimals15Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigcedricbull03.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigcedricbull03.mtl',
     name: 'minifigures_animals minifigcedricbull03',
     isMovable: true,
     isDeletable: true,
@@ -734,6 +858,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGCEDRICBULL04: {
     model: MinifigureAnimals16Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigcedricbull04.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigcedricbull04.mtl',
     name: 'minifigures_animals minifigcedricbull04',
     isMovable: true,
     isDeletable: true,
@@ -744,6 +870,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGGENERICBAD00: {
     model: MinifigureAnimals17Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifiggenericbad00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifiggenericbad00.mtl',
     name: 'minifigures_animals minifiggenericbad00',
     isMovable: true,
     isDeletable: true,
@@ -754,6 +882,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGGENERICGOOD00: {
     model: MinifigureAnimals18Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifiggenericgood00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifiggenericgood00.mtl',
     name: 'minifigures_animals minifiggenericgood00',
     isMovable: true,
     isDeletable: true,
@@ -764,6 +894,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGGILBERTBAD00: {
     model: MinifigureAnimals19Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad00.mtl',
     name: 'minifigures_animals minifiggilbertbad00',
     isMovable: true,
     isDeletable: true,
@@ -774,6 +906,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGGILBERTBAD01: {
     model: MinifigureAnimals20Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad01.mtl',
     name: 'minifigures_animals minifiggilbertbad01',
     isMovable: true,
     isDeletable: true,
@@ -784,6 +918,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGGILBERTBAD02: {
     model: MinifigureAnimals21Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad02.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad02.mtl',
     name: 'minifigures_animals minifiggilbertbad02',
     isMovable: true,
     isDeletable: true,
@@ -794,6 +930,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGGILBERTBAD03: {
     model: MinifigureAnimals22Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad03.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifiggilbertbad03.mtl',
     name: 'minifigures_animals minifiggilbertbad03',
     isMovable: true,
     isDeletable: true,
@@ -804,6 +942,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGJOHNMAYNE00: {
     model: MinifigureAnimals23Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigjohnmayne00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigjohnmayne00.mtl',
     name: 'minifigures_animals minifigjohnmayne00',
     isMovable: true,
     isDeletable: true,
@@ -814,6 +954,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGJOHNMAYNE01: {
     model: MinifigureAnimals24Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigjohnmayne01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigjohnmayne01.mtl',
     name: 'minifigures_animals minifigjohnmayne01',
     isMovable: true,
     isDeletable: true,
@@ -824,6 +966,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGJOHNMAYNE02: {
     model: MinifigureAnimals25Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigjohnmayne02.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigjohnmayne02.mtl',
     name: 'minifigures_animals minifigjohnmayne02',
     isMovable: true,
     isDeletable: true,
@@ -834,6 +978,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGKINGLEO00: {
     model: MinifigureAnimals26Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigkingleo00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigkingleo00.mtl',
     name: 'minifigures_animals minifigkingleo00',
     isMovable: true,
     isDeletable: true,
@@ -844,6 +990,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGKINGLEO01: {
     model: MinifigureAnimals27Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigkingleo01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigkingleo01.mtl',
     name: 'minifigures_animals minifigkingleo01',
     isMovable: true,
     isDeletable: true,
@@ -854,6 +1002,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGPRINCESSSTORM00: {
     model: MinifigureAnimals28Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigprincessstorm00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigprincessstorm00.mtl',
     name: 'minifigures_animals minifigprincessstorm00',
     isMovable: true,
     isDeletable: true,
@@ -864,6 +1014,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGPRINCESSSTORM01: {
     model: MinifigureAnimals29Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigprincessstorm01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigprincessstorm01.mtl',
     name: 'minifigures_animals minifigprincessstorm01',
     isMovable: true,
     isDeletable: true,
@@ -874,6 +1026,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGQUEENLEONORA00: {
     model: MinifigureAnimals30Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigqueenleonora00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigqueenleonora00.mtl',
     name: 'minifigures_animals minifigqueenleonora00',
     isMovable: true,
     isDeletable: true,
@@ -884,6 +1038,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGQUEENLEONORA01: {
     model: MinifigureAnimals31Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigqueenleonora01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigqueenleonora01.mtl',
     name: 'minifigures_animals minifigqueenleonora01',
     isMovable: true,
     isDeletable: true,
@@ -894,6 +1050,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGRICHARDSTRONG00: {
     model: MinifigureAnimals32Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong00.mtl',
     name: 'minifigures_animals minifigrichardstrong00',
     isMovable: true,
     isDeletable: true,
@@ -904,6 +1062,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGRICHARDSTRONG01: {
     model: MinifigureAnimals33Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong01.mtl',
     name: 'minifigures_animals minifigrichardstrong01',
     isMovable: true,
     isDeletable: true,
@@ -914,6 +1074,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGRICHARDSTRONG02: {
     model: MinifigureAnimals34Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong02.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong02.mtl',
     name: 'minifigures_animals minifigrichardstrong02',
     isMovable: true,
     isDeletable: true,
@@ -924,6 +1086,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGRICHARDSTRONG03: {
     model: MinifigureAnimals35Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong03.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigrichardstrong03.mtl',
     name: 'minifigures_animals minifigrichardstrong03',
     isMovable: true,
     isDeletable: true,
@@ -934,6 +1098,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGSKELETON00: {
     model: MinifigureAnimals36Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigskeleton00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigskeleton00.mtl',
     name: 'minifigures_animals minifigskeleton00',
     isMovable: true,
     isDeletable: true,
@@ -944,6 +1110,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGWEEZIL00: {
     model: MinifigureAnimals37Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigweezil00.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigweezil00.mtl',
     name: 'minifigures_animals minifigweezil00',
     isMovable: true,
     isDeletable: true,
@@ -954,6 +1122,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_MINIFIGWEEZIL01: {
     model: MinifigureAnimals38Model,
+    objUrl: '/models/warehouse/minifigures_animals/minifigweezil01.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/minifigweezil01.mtl',
     name: 'minifigures_animals minifigweezil01',
     isMovable: true,
     isDeletable: true,
@@ -964,6 +1134,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_MINIFIGURES_ANIMALS_OC6095B3: {
     model: MinifigureAnimals39Model,
+    objUrl: '/models/warehouse/minifigures_animals/oc6095b3.obj',
+    mtlUrl: '/models/warehouse/minifigures_animals/oc6095b3.mtl',
     name: 'minifigures_animals oc6095b3',
     isMovable: true,
     isDeletable: true,
@@ -974,6 +1146,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L243500: {
     model: Scenery1Model,
+    objUrl: '/models/warehouse/scenery/l243500.obj',
+    mtlUrl: '/models/warehouse/scenery/l243500.mtl',
     name: 'scenery l243500',
     isMovable: true,
     isDeletable: true,
@@ -984,6 +1158,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L248900: {
     model: Scenery2Model,
+    objUrl: '/models/warehouse/scenery/l248900.obj',
+    mtlUrl: '/models/warehouse/scenery/l248900.mtl',
     name: 'scenery l248900',
     isMovable: true,
     isDeletable: true,
@@ -994,6 +1170,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L301500: {
     model: Scenery3Model,
+    objUrl: '/models/warehouse/scenery/l301500.obj',
+    mtlUrl: '/models/warehouse/scenery/l301500.mtl',
     name: 'scenery l301500',
     isMovable: true,
     isDeletable: true,
@@ -1004,6 +1182,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L347100: {
     model: Scenery4Model,
+    objUrl: '/models/warehouse/scenery/l347100.obj',
+    mtlUrl: '/models/warehouse/scenery/l347100.mtl',
     name: 'scenery l347100',
     isMovable: true,
     isDeletable: true,
@@ -1014,6 +1194,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L374100: {
     model: Scenery5Model,
+    objUrl: '/models/warehouse/scenery/l374100.obj',
+    mtlUrl: '/models/warehouse/scenery/l374100.mtl',
     name: 'scenery l374100',
     isMovable: true,
     isDeletable: true,
@@ -1024,6 +1206,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L473800: {
     model: Scenery6Model,
+    objUrl: '/models/warehouse/scenery/l473800.obj',
+    mtlUrl: '/models/warehouse/scenery/l473800.mtl',
     name: 'scenery l473800',
     isMovable: true,
     isDeletable: true,
@@ -1034,6 +1218,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L606400: {
     model: Scenery7Model,
+    objUrl: '/models/warehouse/scenery/l606400.obj',
+    mtlUrl: '/models/warehouse/scenery/l606400.mtl',
     name: 'scenery l606400',
     isMovable: true,
     isDeletable: true,
@@ -1044,6 +1230,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L606500: {
     model: Scenery8Model,
+    objUrl: '/models/warehouse/scenery/l606500.obj',
+    mtlUrl: '/models/warehouse/scenery/l606500.mtl',
     name: 'scenery l606500',
     isMovable: true,
     isDeletable: true,
@@ -1054,6 +1242,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L607900: {
     model: Scenery9Model,
+    objUrl: '/models/warehouse/scenery/l607900.obj',
+    mtlUrl: '/models/warehouse/scenery/l607900.mtl',
     name: 'scenery l607900',
     isMovable: true,
     isDeletable: true,
@@ -1064,6 +1254,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L625500: {
     model: Scenery10Model,
+    objUrl: '/models/warehouse/scenery/l625500.obj',
+    mtlUrl: '/models/warehouse/scenery/l625500.mtl',
     name: 'scenery l625500',
     isMovable: true,
     isDeletable: true,
@@ -1074,6 +1266,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L4109610: {
     model: Scenery11Model,
+    objUrl: '/models/warehouse/scenery/l4109610.obj',
+    mtlUrl: '/models/warehouse/scenery/l4109610.mtl',
     name: 'scenery l4109610',
     isMovable: true,
     isDeletable: true,
@@ -1084,6 +1278,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L4109611: {
     model: Scenery12Model,
+    objUrl: '/models/warehouse/scenery/l4109611.obj',
+    mtlUrl: '/models/warehouse/scenery/l4109611.mtl',
     name: 'scenery l4109611',
     isMovable: true,
     isDeletable: true,
@@ -1094,6 +1290,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L4109612: {
     model: Scenery13Model,
+    objUrl: '/models/warehouse/scenery/l4109612.obj',
+    mtlUrl: '/models/warehouse/scenery/l4109612.mtl',
     name: 'scenery l4109612',
     isMovable: true,
     isDeletable: true,
@@ -1104,6 +1302,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_SCENERY_L4109613: {
     model: Scenery14Model,
+    objUrl: '/models/warehouse/scenery/l4109613.obj',
+    mtlUrl: '/models/warehouse/scenery/l4109613.mtl',
     name: 'scenery l4109613',
     isMovable: true,
     isDeletable: true,
@@ -1114,6 +1314,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_VEHICLES_OC4806: {
     model: Vehicles1Model,
+    objUrl: '/models/warehouse/vehicles/oc4806.obj',
+    mtlUrl: '/models/warehouse/vehicles/oc4806.mtl',
     name: 'vehicles oc4806',
     isMovable: true,
     isDeletable: true,
@@ -1124,6 +1326,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_VEHICLES_OC4807: {
     model: Vehicles2Model,
+    objUrl: '/models/warehouse/vehicles/oc4807.obj',
+    mtlUrl: '/models/warehouse/vehicles/oc4807.mtl',
     name: 'vehicles oc4807',
     isMovable: true,
     isDeletable: true,
@@ -1134,6 +1338,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_VEHICLES_OC6032: {
     model: Vehicles3Model,
+    objUrl: '/models/warehouse/vehicles/oc6032.obj',
+    mtlUrl: '/models/warehouse/vehicles/oc6032.mtl',
     name: 'vehicles oc6032',
     isMovable: true,
     isDeletable: true,
@@ -1144,6 +1350,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_VEHICLES_OC6032B3: {
     model: Vehicles4Model,
+    objUrl: '/models/warehouse/vehicles/oc6032b3.obj',
+    mtlUrl: '/models/warehouse/vehicles/oc6032b3.mtl',
     name: 'vehicles oc6032b3',
     isMovable: true,
     isDeletable: true,
@@ -1154,6 +1362,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_VEHICLES_OC6096_1: {
     model: Vehicles5Model,
+    objUrl: '/models/warehouse/vehicles/oc6096-1.obj',
+    mtlUrl: '/models/warehouse/vehicles/oc6096-1.mtl',
     name: 'vehicles oc6096-1',
     isMovable: true,
     isDeletable: true,
@@ -1164,6 +1374,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_VEHICLES_OC6096_2: {
     model: Vehicles6Model,
+    objUrl: '/models/warehouse/vehicles/oc6096-2.obj',
+    mtlUrl: '/models/warehouse/vehicles/oc6096-2.mtl',
     name: 'vehicles oc6096-2',
     isMovable: true,
     isDeletable: true,
@@ -1174,6 +1386,8 @@ export const WAREHOUSE_MODEL_CATALOG = {
   },
   WH_VEHICLES_OC6098_7: {
     model: Vehicles7Model,
+    objUrl: '/models/warehouse/vehicles/oc6098-7.obj',
+    mtlUrl: '/models/warehouse/vehicles/oc6098-7.mtl',
     name: 'vehicles oc6098-7',
     isMovable: true,
     isDeletable: true,

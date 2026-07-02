@@ -1,11 +1,13 @@
 import * as THREE from 'three';
 import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
-import { createBrickSync, paintBrick, preloadGlbBricks, updateSelectionBox } from './BrickFactory';
+import {
+  createBrickSync,
+  paintBrick,
+  preloadGlbBricks,
+  preloadObjMtlBricks,
+  updateSelectionBox,
+} from './BrickFactory';
 import { BRICK_CATALOG, resolveBrickRecipe, recipeHeight } from './brickCatalog';
-
-const GLB_BRICK_URLS = Object.values(BRICK_CATALOG)
-  .filter((recipe) => recipe.shape === 'GLB' && recipe.glbUrl)
-  .map((recipe) => recipe.glbUrl);
 import { brickCollidesWithAny, getOrientedStuds } from './brickCollision';
 import { getBrickMoveGroup } from './brickStack';
 import { getRecipeStudFootprint, resolveStackPlacement } from './brickStuds';
@@ -22,6 +24,15 @@ import {
   snapYToHeight,
   STUD,
 } from './studGrid';
+
+const VALIDATED_BRICK_RECIPES = Object.values(BRICK_CATALOG)
+  .filter((recipe) => recipe.shape === 'GLB');
+const OBJ_MTL_BRICK_ENTRIES = VALIDATED_BRICK_RECIPES
+  .filter((recipe) => recipe.objUrl && recipe.mtlUrl)
+  .map((recipe) => ({ objUrl: recipe.objUrl, mtlUrl: recipe.mtlUrl }));
+const GLB_BRICK_URLS = VALIDATED_BRICK_RECIPES
+  .filter((recipe) => recipe.glbUrl)
+  .map((recipe) => recipe.glbUrl);
 
 export class WorkshopEngineCore {
   constructor() {
@@ -50,10 +61,12 @@ export class WorkshopEngineCore {
     this.handleResize = this.handleResize.bind(this);
     this.animate = this.animate.bind(this);
 
-    // warm the GLB cache up front so createBrickSync's synchronous
-    // cache-hit path (BrickFactory.js) can use real geometry on the
-    // user's first click instead of always falling back to parametric
-    // while the fetch is still in flight
+    // warm the OBJ/MTL cache (the live path) up front so createBrickSync's
+    // synchronous cache-hit path (BrickFactory.js) can use real geometry on
+    // the user's first click instead of always falling back to parametric
+    // while the fetch is still in flight. GLB stays available (preloaded
+    // too) as a non-live fallback/reference -- see BrickFactory.js.
+    preloadObjMtlBricks(OBJ_MTL_BRICK_ENTRIES);
     preloadGlbBricks(GLB_BRICK_URLS);
   }
 
