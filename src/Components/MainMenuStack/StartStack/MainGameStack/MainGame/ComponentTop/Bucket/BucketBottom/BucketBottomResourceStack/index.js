@@ -236,6 +236,7 @@ import Vehicles4Model from './vehicles/oc6032b3.glb';
 import Vehicles5Model from './vehicles/oc6096-1.glb';
 import Vehicles6Model from './vehicles/oc6096-2.glb';
 import Vehicles7Model from './vehicles/oc6098-7.glb';
+import MinifigureAnimals12Model from './minifigures_animals/minifigcedricbull00.glb';
 //endregion vehicles
 
 export const images = {
@@ -606,9 +607,8 @@ export const minifigureAnimalsData = [
     {
         name: 'MinifigureAnimals12',
         image: MinifigureAnimals12,
-        modelPath: './GameEngineResourceStack/models/archer2.gltf',
-        SelectedModel: 'ARCHER',
-        // modelPath: './minifigures_animals/minifigcedricbull00.glb',
+        model: MinifigureAnimals12Model,
+        SelectedModel: 'WH_MINIFIGURES_ANIMALS_MINIFIGCEDRICBULL00',
     },
     {
         name: 'MinifigureAnimals13',
