@@ -1,0 +1,27 @@
+/* Workshop brick previews — smaller thumbs with padding inside recess slots */
+.brickItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: 76% 76%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.brickHighlight {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: none;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.brickHighlight img {
+    width: 76%;
+    height: 76%;
+    object-fit: contain;
+}

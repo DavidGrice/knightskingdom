@@ -1,116 +1,167 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './SnapShotBody.module.css';
-import { HelpComponent, IconComponent } from "../../../../../../Common/index";
-import { snapshotData } from "./SnapShotBodyResourceStack/index";
+import { HelpComponent, IconComponent, PaginatedGrid, usePaginatedGrid } from '../../../../../../Common';
+import { createHolderGridStyles, footerPositionStyle, HOLDER_VARIANTS } from '../../../../../../Common/HolderGridLayout';
+import { mergeSnapshotLists, normalizeSnapshotEntry, resolveSnapshotImage } from '@/api/worldSave';
+import { snapshotData } from './SnapShotBodyResourceStack/index';
 import selectedImage from './SnapShotBodyResourceStack/selected.png';
 
-const SnapShotBody = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [downArrowImage, setDownArrowImage] = useState(snapshotData.downArrowGold);
-    const [upArrowImage, setUpArrowImage] = useState(snapshotData.upArrowGold);
-    const [displayedItems, setDisplayedItems] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const items = snapshotData.body;
-    const itemsPerPage = 9;
-    const totalPages = Math.ceil(items.length / itemsPerPage);
+const ITEMS_PER_PAGE = 9;
 
-    useEffect(() => {
-        setWorldsTheme();
-    }, [currentPage, items]);
+const paginatedStyles = createHolderGridStyles(HOLDER_VARIANTS.SNAPSHOT, {
+  item: styles.item,
+  itemInteractive: styles.itemInteractive,
+  iconComponentHolder: styles.iconComponentHolder,
+});
 
-    const setWorldsTheme = () => {
-        const theme = snapshotData;
-        if (items.length > 9 && items.length % 9 !== 0) {
-            if (currentPage === totalPages) {
-                setDownArrowImage(theme.downArrowGold);
-            } else {
-                setDownArrowImage(theme.downArrowGreen);
-            }
-        } else {
-            setDownArrowImage(theme.downArrowGold);
-        }
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        setDisplayedItems(items.slice(startIndex, endIndex));
-    };
-    
-    const handleDownArrowClick = () => {
-        const theme = snapshotData;
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-            setUpArrowImage(theme.upArrowGreen);
-            if (currentPage + 1 === totalPages) {
-                setDownArrowImage(theme.downArrowGold);
-            }
-        } else {
-            setDownArrowImage(theme.downArrowGold);
-        }
-    };
+const footerStyle = footerPositionStyle(HOLDER_VARIANTS.SNAPSHOT);
 
-    const handleUpArrowClick = () => {
-        const theme = snapshotData;
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-            setUpArrowImage(theme.upArrowGreen);
-            if (currentPage - 1 === 1) {
-                setUpArrowImage(theme.upArrowGold);
-            }
-        } else {
-            setUpArrowImage(theme.upArrowGold);
-        }
-    };
+const SnapShotBody = ({
+  selectedProfile,
+  mapData,
+  onRemoveSnapshot,
+}) => {
+  const snapshotItems = useMemo(() => {
+    const profileSnapshots = selectedProfile?.savedWorlds?.[String(mapData?.id)]?.snapshots || [];
+    const sessionSnapshots = mapData?.snapshots || [];
+    const latestSnapshot = mapData?.sceneSnapshot ? [mapData.sceneSnapshot] : [];
+    const merged = mergeSnapshotLists(
+      profileSnapshots,
+      sessionSnapshots,
+      latestSnapshot,
+    );
 
-    const handleItemClick = (item) => {
-        setSelectedItem(item);
-    };
+    return merged
+      .map((entry) => normalizeSnapshotEntry(entry))
+      .filter(Boolean);
+  }, [selectedProfile, mapData?.id, mapData?.snapshots, mapData?.sceneSnapshot]);
 
-    const printImage = () => {
-        console.log(selectedItem.image);
-    };
+  const {
+    displayedItems,
+    upArrowImage,
+    downArrowImage,
+    selectedItem,
+    setSelectedItem,
+    handleDownArrowClick,
+    handleUpArrowClick,
+  } = usePaginatedGrid({
+    items: snapshotItems,
+    itemsPerPage: ITEMS_PER_PAGE,
+    arrows: {
+      upSolid: snapshotData.upArrowGold,
+      upGreen: snapshotData.upArrowGreen,
+      downSolid: snapshotData.downArrowGold,
+      downGreen: snapshotData.downArrowGreen,
+    },
+  });
 
+  useEffect(() => {
+    if (snapshotItems.length === 0) {
+      setSelectedItem(null);
+      return;
+    }
+    const stillValid = selectedItem
+      && snapshotItems.some((entry) => entry.id === selectedItem.id);
+    if (!stillValid) {
+      setSelectedItem(snapshotItems[0]);
+    }
+  }, [snapshotItems, selectedItem, setSelectedItem]);
+
+  const handleItemClick = (item) => {
+    if (!item?.image) {
+      return;
+    }
+    setSelectedItem(item);
+  };
+
+  const handleDelete = () => {
+    if (!selectedItem || !mapData?.id || !onRemoveSnapshot) {
+      return;
+    }
+    onRemoveSnapshot(mapData.id, selectedItem.id);
+    setSelectedItem(null);
+  };
+
+  const handlePrint = () => {
+    const imageSrc = resolveSnapshotImage(selectedItem);
+    if (!imageSrc) {
+      return;
+    }
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      return;
+    }
+    printWindow.document.write(
+      `<html><head><title>Snapshot</title></head><body style="margin:0">`
+      + `<img src="${imageSrc}" style="width:100%" onload="window.print();window.close()" />`
+      + `</body></html>`,
+    );
+    printWindow.document.close();
+  };
+
+  const footer = (
+    <div className={paginatedStyles.lowerContent} style={footerStyle}>
+      <div className={paginatedStyles.iconComponentHolder} onClick={handlePrint}>
+        <IconComponent
+          type="print"
+          placeholderImage={snapshotData.placeHolderPrint}
+          frames={snapshotData.print}
+        />
+      </div>
+      <div className={paginatedStyles.iconComponentHolder}>
+        <IconComponent
+          type="destroy"
+          placeholderImage={snapshotData.placeHolderDestroy}
+          frames={snapshotData.destroy}
+        />
+      </div>
+      <div className={paginatedStyles.iconComponentHolder} onClick={handleDelete}>
+        <IconComponent
+          type="delete"
+          placeholderImage={snapshotData.placeHolderDelete}
+          frames={snapshotData.delete}
+        />
+      </div>
+    </div>
+  );
+
+  const helpCorner = (
+    <div className={paginatedStyles.helpComponentHolder}>
+      <HelpComponent
+        placeholderImage={snapshotData.placeholderHelper}
+        frames={snapshotData.helperFrames}
+      />
+    </div>
+  );
+
+  if (snapshotItems.length === 0) {
     return (
-        <div className={styles.snapshotBody}>
-            <div className={styles.upArrowHolder} onClick={handleUpArrowClick}>
-                <div className={styles.upArrow}
-                style={{ backgroundImage: `url(${upArrowImage})`}}></div>
-            </div>
-            <div className={styles.body}>
-                {displayedItems.map((item, index) => (
-                    <div 
-                        key={index} 
-                        className={styles.item} 
-                        style={{ backgroundImage: `url(${item.image})` }}
-                        onClick={() => handleItemClick(item)}
-                        >
-                            {selectedItem === item && (
-                                <div className={styles.highlightedImage} > 
-                                    <img src={selectedImage} alt="Highlighted" />
-                                </div>
-                            )}
-                    </div>
-                ))}
-            </div>
-            <div className={styles.downArrowHolder} onClick={handleDownArrowClick}>
-                <div className={styles.downArrow}
-                style={{ backgroundImage: `url(${downArrowImage})`}}></div>
-            </div>
-            <div className={styles.lowerContent}>
-                <div className={styles.iconComponentHolder}
-                onClick={printImage}>
-                    <IconComponent type={'print'} placeholderImage={snapshotData.placeHolderPrint} frames={snapshotData.print} />
-                </div>
-                <div className={styles.iconComponentHolder}>
-                    <IconComponent type={'destroy'} placeholderImage={snapshotData.placeHolderDestroy} frames={snapshotData.destroy} />
-                </div>
-                <div className={styles.iconComponentHolder}>
-                    <IconComponent type={'delete'} placeholderImage={snapshotData.placeHolderDelete} frames={snapshotData.delete} />
-                </div>
-            </div>
-            <div className={styles.helpComponentHolder}>
-                <HelpComponent placeholderImage={snapshotData.placeholderHelper} frames={snapshotData.helperFrames} />
-            </div>
+      <div className={paginatedStyles.gridRoot} style={paginatedStyles.rootLayoutStyle}>
+        <div className={styles.emptyMessage}>
+          No snapshots yet. Use the camera icon in-game to capture your world.
         </div>
-    )
-}
+        {helpCorner}
+      </div>
+    );
+  }
+
+  return (
+    <PaginatedGrid
+      styles={paginatedStyles}
+      displayedItems={displayedItems}
+      upArrowImage={upArrowImage}
+      downArrowImage={downArrowImage}
+      selectedItem={selectedItem}
+      selectionOverlay={selectedImage}
+      onUpArrowClick={handleUpArrowClick}
+      onDownArrowClick={handleDownArrowClick}
+      onItemClick={handleItemClick}
+      isItemInteractive={(item) => Boolean(item?.image)}
+      getItemKey={(item) => item.id}
+      footer={footer}
+      helpCorner={helpCorner}
+    />
+  );
+};
 
 export default SnapShotBody;

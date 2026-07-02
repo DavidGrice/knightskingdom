@@ -1,0 +1,17 @@
+.componentHolder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 519px;
+    height: 587px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-52%);
+    top: 5%;
+    z-index: 2;
+    background-image: url('../MyModelsResourceStack/drop_down.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

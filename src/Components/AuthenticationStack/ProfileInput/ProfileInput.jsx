@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
-import styles from './ProfileInput.module.css'; // Import the CSS file for styling
+import React, { useRef } from 'react';
+import styles from './ProfileInput.module.css';
 
-const ProfileInput = ({ text, setText, setShowEnterNameImage, handleAddProfile, setSelectedProfile }) => {
-  const [isSelected, setIsSelected] = useState(false);
+const ProfileInput = ({ text, setText, setShowEnterNameImage, handleAddProfile }) => {
   const inputRef = useRef(null);
 
   const handleInputChange = (e) => {
@@ -10,17 +9,19 @@ const ProfileInput = ({ text, setText, setShowEnterNameImage, handleAddProfile, 
   };
 
   const handleClick = () => {
-      setShowEnterNameImage(true);
+    setShowEnterNameImage(true);
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      console.log('Profile name updated to:', text);
+      const trimmed = text.trim();
+      if (!trimmed) {
+        return;
+      }
+
       setShowEnterNameImage(false);
       setText('');
-      handleAddProfile(text);
-      setIsSelected(true);
-      setSelectedProfile(true);
+      handleAddProfile(trimmed);
       inputRef.current.blur();
     }
   };
@@ -33,7 +34,7 @@ const ProfileInput = ({ text, setText, setShowEnterNameImage, handleAddProfile, 
         type="text"
         value={text}
         onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyDown}
         maxLength={33}
       />
     </div>

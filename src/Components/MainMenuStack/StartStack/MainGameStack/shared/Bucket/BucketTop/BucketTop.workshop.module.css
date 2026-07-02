@@ -1,0 +1,26 @@
+.bucketTop {
+    position: absolute;
+    top: var(--wkb-tab-top, 22px);
+    left: var(--wkb-tab-left, 14px);
+    width: var(--wkb-tab-w, 210px);
+    height: var(--wkb-tab-h, 214px);
+    z-index: 3;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    pointer-events: auto;
+}
+
+.bucketTopRow {
+    display: grid;
+    grid-template-columns: repeat(3, var(--wkb-tab-cell, 70px));
+    grid-template-rows: repeat(3, var(--wkb-tab-cell, 70px));
+    column-gap: var(--wkb-tab-col-gap, 0px);
+    row-gap: var(--wkb-tab-row-gap, 2px);
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}

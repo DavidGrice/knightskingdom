@@ -1,24 +1,68 @@
-.mainDiv {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* Top/bottom bars + bucket unscaled on 800px anchor; stage alone scales */
+.workshopRoot {
+    position: relative;
     width: 100vw;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
 }
 
-.topComponent {
+.workshopScaler {
+    width: 800px;
+    height: 600px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    transform: scale(var(--wsl-scale, 1));
+    transform-origin: center center;
+}
+
+.canvas {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background: #000;
+    overflow: visible;
+}
+
+.stage {
+    position: absolute;
+    inset: 0;
+    width: 800px;
+    height: 600px;
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* Same 800px center anchor as GameShell toolbars — no canvas scale */
+.bucketLayer {
     position: absolute;
     top: 0;
+    left: 50%;
+    transform: translateX(calc(-50% + var(--wsl-bar-offset-x, 0px)));
     width: 800px;
-    height: 103px;
-    z-index: 3;
+    height: 100vh;
+    z-index: 5;
+    pointer-events: none;
+    overflow: visible;
 }
 
-.bottomComponent {
+.bucketLayer > * {
+    pointer-events: auto;
+}
+
+.stage > * {
+    pointer-events: auto;
+}
+
+.worldLabel {
     position: absolute;
-    bottom: 0;
-    width: 800px;
-    height: 126px;
-    z-index: 3;
+    transform: translateX(-50%);
+    z-index: 4;
+    color: #f0e6c8;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+    white-space: nowrap;
 }

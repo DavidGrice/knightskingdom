@@ -1,62 +1,133 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useMemo, useRef, useState } from 'react';
 import styles from './WorkShop.module.css';
-import { ComponentTop, ComponentBottom } from './index';
-import { Bucket } from './ComponentTop/Bucket/index';
-import { Palette } from './ComponentTop/Palette/index';
+import {
+  workshopStageToCssVars,
+  WORKSHOP_STAGE_METRICS,
+  useWorkshopCanvasScale,
+} from '../../../../Common';
+import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
+import { WorkshopProvider, useWorkshopContext } from './context';
+import { WorkshopEngine } from './WorkshopEngine';
 
-const WorkShop = ({ navigateToMainGame }) => {
-  const [showBucket, setShowBucket] = useState(false);
-  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const [isSaveOpen, setIsSaveOpen] = useState(false);
+const WorkShopContent = () => {
+  const scalerRef = useRef(null);
   const [activeIcon, setActiveIcon] = useState(null);
+  const {
+    state,
+    engineRef,
+    workshopDraft,
+    resetModes,
+    handleBucket,
+    handleBrickSelect,
+    handleMove,
+    handleRotate,
+    handleDelete,
+    handleDuplicate,
+    handlePalette,
+    handleColor,
+    handleSweep,
+    handleSave,
+    mapData,
+  } = useWorkshopContext();
 
-  const handleBucket = () => {
-    setShowBucket(!showBucket);
-  }
+  const {
+    mode,
+    selectedBrickId,
+    color,
+    showBucket,
+    isPaletteOpen,
+  } = state;
 
-  const handleSave = () => {
-    setIsSaveOpen(!isSaveOpen);
-  }
+  useWorkshopCanvasScale(scalerRef);
 
-  const handlePaint = () => {
-    if (isPaletteOpen) {
-      setIsPaletteOpen(false);
-    }
-  }
+  const stageStyle = useMemo(() => workshopStageToCssVars(), []);
+  const { worldTitle } = WORKSHOP_STAGE_METRICS;
+  const showWorldTitle = worldTitle.visible && mapData?.name;
 
-  const handlePalette = () => {
-    setIsPaletteOpen(!isPaletteOpen);
-  }
-
-
-    return (
-        <div className={styles.mainDiv}>
-            <div className={styles.topComponent}>
-                <ComponentTop
-                    handleBucket={handleBucket}
-                    handlePaint={handlePaint}
-                    handlePalette={handlePalette}
-                    handleSave={handleSave}
-                    navigateToMainGame={navigateToMainGame} />
-            </div>
-            {
-            showBucket && (<div>
-                <Bucket />
-            </div>)
-            }
-            {
-            isPaletteOpen && (<div>
-                <Palette />
-            </div>)
-            }
-            <div className={styles.bottomComponent}>
-              <ComponentBottom
-                activeIcon={activeIcon}
-                setActiveIcon={setActiveIcon}
+  return (
+    <div className={styles.workshopRoot} style={stageStyle}>
+      <GameShell
+        mode="workshop"
+        top={(
+          <ComponentTop
+            mode="workshop"
+            handleBucket={handleBucket}
+            handleMove={handleMove}
+            handleRotate={handleRotate}
+            handleDelete={handleDelete}
+            handleDuplicate={handleDuplicate}
+            handlePalette={handlePalette}
+            handleSave={handleSave}
+            resetModes={resetModes}
+            navigateToMainGame={handleSave}
+            activeToolbarIcon={activeIcon}
+            setActiveToolbarIcon={setActiveIcon}
+          />
+        )}
+        bottom={(
+          <ComponentBottom
+            mode="workshop"
+            activeIcon={activeIcon}
+            setActiveIcon={setActiveIcon}
+            onSweep={handleSweep}
+          />
+        )}
+      >
+        <div ref={scalerRef} className={styles.workshopScaler}>
+          <div className={styles.canvas}>
+            <div className={styles.stage}>
+              <WorkshopEngine
+                ref={engineRef}
+                mode={mode}
+                selectedBrickId={selectedBrickId}
+                showBucket={showBucket}
+                color={color}
+                workshopDraft={workshopDraft}
               />
+              {showWorldTitle && (
+                <div
+                  className={styles.worldLabel}
+                  style={{ left: `${worldTitle.x}px`, top: `${worldTitle.y}px` }}
+                >
+                  {mapData.name}
+                </div>
+              )}
+              {isPaletteOpen && (
+                <Palette variant="workshop" onColorSelect={handleColor} />
+              )}
+            </div>
           </div>
         </div>
-    );
-}
+      </GameShell>
+      {showBucket && (
+        <div className={styles.bucketLayer}>
+          <Bucket dataSource="bricks" onBrickSelect={handleBrickSelect} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const WorkShop = ({
+  mapData,
+  navigateToMainGame,
+  currentProfile,
+  workshopDraft,
+  onSaveWorkshopDraft,
+  onSaveWorkshopExport,
+}) => (
+  <WorkshopProvider
+    mapData={mapData}
+    currentProfile={currentProfile}
+    workshopDraft={workshopDraft}
+    onSaveWorkshopDraft={onSaveWorkshopDraft}
+    onSaveWorkshopExport={onSaveWorkshopExport}
+    navigateToMainGame={navigateToMainGame}
+  >
+    <WorkShopContent />
+  </WorkshopProvider>
+);
 
 export default WorkShop;

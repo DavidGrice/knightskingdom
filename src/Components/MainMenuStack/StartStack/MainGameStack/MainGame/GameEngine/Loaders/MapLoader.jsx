@@ -6,6 +6,7 @@ const MapLoader = (mapData, scene, setModelLoaded) => {
         mapData.filePath,
         (gltf) => {
             const map = gltf.scene;
+            map.name = 'GameMap';
             map.isMovable = false;
             scene.add(map);
             setModelLoaded(true);

@@ -1,34 +1,58 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './LoadingComponent.module.css';
+import legoClockVideo from './LoadingComponentResourceStack/lego_clock.mp4';
 
-const LoadingComponent = ({ isLoading }) => {
+const isBenignPlaybackError = (error) =>
+  error?.name === 'AbortError'
+  || error?.name === 'NotAllowedError';
+
+const LoadingComponent = ({ isLoading = true }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      if (isLoading) {
-        videoRef.current.play().catch(error => {
-          console.error('Error attempting to play the video:', error);
-        });
-      } else {
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0; // Reset to start
-      }
+    const video = videoRef.current;
+    if (!video) {
+      return undefined;
     }
+
+    if (isLoading) {
+      const playAttempt = video.play();
+      if (playAttempt?.catch) {
+        playAttempt.catch((error) => {
+          if (!isBenignPlaybackError(error)) {
+            console.warn('Loading video playback failed:', error);
+          }
+        });
+      }
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+
+    return () => {
+      video.pause();
+    };
   }, [isLoading]);
 
-  const handleVideoError = (event) => {
-    console.error('Error loading video:', event);
+  const handleVideoError = () => {
+    console.warn('Loading video failed to load:', legoClockVideo);
   };
 
   return (
-    <div className={styles.mainDiv}>
-      <video ref={videoRef} width="120" height="120" loop muted onError={handleVideoError}>
-        <source src="lego_clock.mp4" type="video/mp4" />
+    <div className={styles.videoWrapper}>
+      <video
+        ref={videoRef}
+        width="120"
+        height="120"
+        loop
+        muted
+        playsInline
+        onError={handleVideoError}
+      >
+        <source src={legoClockVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </div>
-    
   );
 };
 

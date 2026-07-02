@@ -1,0 +1,9 @@
+export const WorkshopModes = {
+  NONE: 'NONE',
+  ADDING: 'ADDING',
+  MOVING: 'MOVING',
+  ROTATING: 'ROTATING',
+  PAINTING: 'PAINTING',
+  DELETING: 'DELETING',
+  DUPLICATING: 'DUPLICATING',
+};

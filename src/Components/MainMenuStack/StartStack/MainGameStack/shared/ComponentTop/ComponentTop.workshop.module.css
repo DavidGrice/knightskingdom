@@ -1,0 +1,42 @@
+.mainDiv {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    background-image: url('../../WorkShop/ComponentTop/ComponentTopResourceStack/overlay_top.png');
+    background-size: cover;
+}
+
+.bucketButton {
+    width: 45px;
+    height: 63px;
+    margin-left: var(--wsl-toolbar-bucket-x, 195px);
+    margin-top: var(--wsl-toolbar-bucket-y, 5px);
+    flex-shrink: 0;
+}
+
+.saveButton {
+    width: 56px;
+    height: 58px;
+    margin-top: var(--wsl-toolbar-save-y, 13px);
+    margin-left: var(--wsl-toolbar-save-gap, 8px);
+    flex-shrink: 0;
+}
+
+.middleDiv {
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: var(--wsl-toolbar-middle-gap, 58px);
+    margin-top: 19px;
+    flex-shrink: 0;
+}
+
+.goodBye {
+    width: 91px;
+    height: 72px;
+    margin-top: 5px;
+    margin-left: 15px;
+}
