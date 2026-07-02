@@ -1,0 +1,21 @@
+# Never commit game assets — users extract from their own copy
+extracted/
+*.pak
+*.lca
+*.xvr
+*.vrt
+*.shp
+*.wld
+*.pal
+*.spr
+*.snd
+*.obj
+*.mtl
+*.wav
+textures/
+sounds/
+models/
+
+# Python
+__pycache__/
+*.pyc
