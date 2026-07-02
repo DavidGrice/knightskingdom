@@ -10,13 +10,13 @@
  *
  * For every converted brick, measures its footprint/height against the
  * catalog's declared studs/heightPlates (same check as the Phase 1B pilot)
- * and writes resources/model_files/brick_conversion_report.json so the
+ * and writes resources/model_pipeline/brick_conversion_report.json so the
  * Phase 4B catalog generator can enable `shape: 'GLB'` only for bricks whose
  * measured geometry actually matches their declared stud footprint --
  * mismatches (usually a wrong catalog guess, not a bad conversion, per the
  * pilot findings) keep their current parametric shape.
  *
- * Usage: node resources/model_files/convert_bricks.mjs
+ * Usage: node resources/model_pipeline/convert_bricks.mjs
  */
 import fs from 'fs';
 import path from 'path';
@@ -27,7 +27,7 @@ import { startServer } from './static_server.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..', '..');
-const MODELS_DIR = path.join(__dirname, 'extracted', 'models');
+const MODELS_DIR = path.join(ROOT, 'resources', 'model_files', 'extracted', 'models');
 const BUCKET_ROOT = path.join(
   ROOT,
   'src/Components/MainMenuStack/StartStack/MainGameStack/WorkShop/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack',
@@ -135,7 +135,7 @@ async function main() {
     const page = await browser.newPage();
     await page.setViewport({ width: 256, height: 256 });
     const relGlb = `/public/workshop/bricks/${r.brickId}.glb`;
-    const url = `http://127.0.0.1:${port}/resources/model_files/pilot_render.html?model=${encodeURIComponent(relGlb)}&angle=0.6`;
+    const url = `http://127.0.0.1:${port}/resources/model_pipeline/pilot_render.html?model=${encodeURIComponent(relGlb)}&angle=0.6`;
     try {
       await page.goto(url, { waitUntil: 'load' });
       await page.waitForFunction(

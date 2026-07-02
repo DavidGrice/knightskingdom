@@ -6,7 +6,7 @@
  * the "Wire real 3D models" plan). Same category/id, same filenames --
  * no import statements or code need to change.
  *
- * Usage: node resources/model_files/refresh_warehouse_thumbnails.mjs
+ * Usage: node resources/model_pipeline/refresh_warehouse_thumbnails.mjs
  */
 import fs from 'fs';
 import path from 'path';
@@ -16,7 +16,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..', '..');
 
 const SRC_ROOT = path.join(
-  __dirname, 'extracted', 'pak', 'warehouse', 'main_interface',
+  ROOT, 'resources', 'model_files', 'extracted', 'pak', 'warehouse', 'main_interface',
 );
 const DEST_ROOT = path.join(
   ROOT,

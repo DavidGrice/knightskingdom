@@ -9,7 +9,7 @@
  * Idempotent: skips any id whose .glb already exists and is newer than its
  * .obj/.mtl source.
  *
- * Usage: node resources/model_files/convert_warehouse.mjs
+ * Usage: node resources/model_pipeline/convert_warehouse.mjs
  */
 import fs from 'fs';
 import path from 'path';
@@ -18,8 +18,9 @@ import { convertObjToGlb, isUpToDate } from './obj2gltfHelper.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..', '..');
-const MODELS_DIR = path.join(__dirname, 'extracted', 'models');
-const PAK_ROOT = path.join(__dirname, 'extracted', 'pak', 'warehouse', 'main_interface');
+const MODEL_FILES = path.join(ROOT, 'resources', 'model_files');
+const MODELS_DIR = path.join(MODEL_FILES, 'extracted', 'models');
+const PAK_ROOT = path.join(MODEL_FILES, 'extracted', 'pak', 'warehouse', 'main_interface');
 const BUCKET_ROOT = path.join(
   ROOT,
   'src/Components/MainMenuStack/StartStack/MainGameStack/MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack',

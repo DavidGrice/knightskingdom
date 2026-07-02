@@ -12,7 +12,7 @@
  *   public/models/bricks/<brickId>.{obj,mtl}                          Track B
  *
  * Idempotent: skips a copy if the destination is already newer than source.
- * Usage: node resources/model_files/copy_obj_assets.mjs
+ * Usage: node resources/model_pipeline/copy_obj_assets.mjs
  */
 import fs from 'fs';
 import path from 'path';
@@ -20,9 +20,10 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..', '..');
-const MODELS_DIR = path.join(__dirname, 'extracted', 'models');
+const MODEL_FILES = path.join(ROOT, 'resources', 'model_files');
+const MODELS_DIR = path.join(MODEL_FILES, 'extracted', 'models');
 const TEXTURES_SRC = path.join(MODELS_DIR, 'textures');
-const PAK_ROOT = path.join(__dirname, 'extracted', 'pak', 'warehouse', 'main_interface');
+const PAK_ROOT = path.join(MODEL_FILES, 'extracted', 'pak', 'warehouse', 'main_interface');
 const WORKSHOP_BUCKET_DIR = path.join(
   ROOT,
   'src/Components/MainMenuStack/StartStack/MainGameStack/WorkShop/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack',

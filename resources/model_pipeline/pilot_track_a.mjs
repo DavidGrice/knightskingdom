@@ -5,7 +5,7 @@
  * output only, does not touch src/) and screenshots each from 2 angles so
  * the output can be visually reviewed before batch-converting all 108.
  *
- * Usage: node resources/model_files/pilot_track_a.mjs
+ * Usage: node resources/model_pipeline/pilot_track_a.mjs
  */
 import fs from 'fs';
 import path from 'path';
@@ -15,7 +15,7 @@ import { convertObjToGlb } from './obj2gltfHelper.mjs';
 import { startServer } from './static_server.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const MODELS_DIR = path.join(__dirname, 'extracted', 'models');
+const MODELS_DIR = path.join(__dirname, '..', 'model_files', 'extracted', 'models');
 const OUT_DIR = path.join(__dirname, 'pilot_out');
 
 const PILOTS = [
@@ -54,10 +54,10 @@ async function main() {
     if (r.error) continue;
     const page = await browser.newPage();
     await page.setViewport({ width: 512, height: 512 });
-    const relGlb = `/resources/model_files/pilot_out/${r.id}.glb`;
+    const relGlb = `/resources/model_pipeline/pilot_out/${r.id}.glb`;
 
     for (const [viewName, angle] of [['view1', 0.6], ['view2', 2.4]]) {
-      const url = `http://127.0.0.1:${port}/resources/model_files/pilot_render.html?model=${encodeURIComponent(relGlb)}&angle=${angle}`;
+      const url = `http://127.0.0.1:${port}/resources/model_pipeline/pilot_render.html?model=${encodeURIComponent(relGlb)}&angle=${angle}`;
       await page.goto(url, { waitUntil: 'load' });
       await page.waitForFunction(
         () => window.__pilotStatus === 'done' || window.__pilotStatus === 'error',

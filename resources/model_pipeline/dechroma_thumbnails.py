@@ -5,7 +5,7 @@ the MainGame warehouse bucket's PNG thumbnails (extracted/pak/warehouse/
 main_interface/, refreshed into the bucket by refresh_warehouse_thumbnails.mjs),
 converting the green to transparency so only the model/character shows.
 
-Usage: python3 resources/model_files/dechroma_thumbnails.py [--dry-run]
+Usage: python3 resources/model_pipeline/dechroma_thumbnails.py [--dry-run]
 """
 import sys
 from pathlib import Path
