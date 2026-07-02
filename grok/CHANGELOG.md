@@ -6,6 +6,77 @@ All changes made on branch `grok-dev` via Grok sessions.
 
 ---
 
+## 2026-07-02 — Real 3D models in MainGame warehouse bucket + WorkShop bricks
+
+**Reverses the 2026-06-30 "LCA→GLB abandoned" verdict** for the MainGame
+warehouse bucket entirely, and for 42/141 WorkShop bricks — the reworked
+`resources/model_files/` extraction toolchain (materials/LITCOLS/palette
+handling rewritten the same day) produces correct geometry; the earlier
+verdict was reached against the old legacy converter scripts. See
+`grok/WORKSHOP_3D.md`'s 2026-07-02 entry for the full brick-side history.
+
+### Track A — MainGame warehouse bucket (108 items, previously non-functional)
+
+| File | Change |
+|------|--------|
+| `MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/` | 108 `.lca` (unused at runtime) → real geometry; PNG thumbnails refreshed from the extraction toolchain and de-chromakeyed |
+| `grok/generate-warehouse-catalog.mjs` | **New** — regenerates bucket `index.js` `SelectedModel`/`model` fields + `warehouseModelCatalog.generated.js`, keyed off the bucket's own PNG imports (not the previously-dead `modelPath` field, which was wrong for the 4 challenges entries) |
+| `MainGame/GameEngine/Loaders/warehouseModelCatalog.generated.js` | **New** — 106 catalog entries (`WH_<CATEGORY>_<ID>` keys) |
+| `MainGame/GameEngine/Loaders/ModelLoader.jsx` | `SelectedModels` spreads the warehouse catalog; `'add'`/`'restore'` try `objUrl`/`mtlUrl` (live path) before falling back to `model` (glb); fixed a pre-existing uncaught-`TypeError` on unknown keys |
+| `context/sceneSchema.js` | `PLAYABLE_MODEL_IDS` (misnomer — actually gates "needs reload via loader on restore" vs. "part of the preloaded static map") now includes every warehouse id, or placed props would vanish on save/restore |
+| Bucket slot `MinifigureAnimals12` | Was a hand-authored "Archer" placeholder (`archer_with_box2.glb`) standing in for the real `minifigcedricbull00` thumbnail/model — now wired to its own real model |
+
+### Track B — WorkShop brick bucket (141 items, previously 100% parametric)
+
+| File | Change |
+|------|--------|
+| `resources/model_pipeline/convert_bricks.mjs` | **New** — converts + measures each brick's footprint against its catalog `studs`/`heightPlates`; only bricks matching within tolerance get real geometry |
+| `grok/generate-brick-catalog.mjs` | Overlays `shape:'GLB'` + `objUrl`/`mtlUrl`/`glbUrl` onto the 42 validated entries; the other 99 keep their existing parametric shape (bad catalog metadata from the original fuzzy digit-matched `LEGO_PARTS` guess, not a mesh defect — e.g. `l420100` is a large multi-stud baseplate, not the small composite guessed) |
+| `WorkShop/WorkshopEngine/BrickFactory.js` | `createBrick`/`createBrickSync` try `objUrl`/`mtlUrl` (live) → `glbUrl` (fallback) → parametric; **found and fixed two real bugs while verifying live:** (1) the live placement path (`createBrickSync`) never checked `recipe.shape` at all, so GLB-shaped bricks always fell back to parametric regardless of catalog data; (2) once loading was fixed, bricks rendered as a barely-visible sliver because the ground-alignment offset was silently discarded by the caller's absolute `position.set(...)` right after creation, sinking ~96% of the brick below the plate |
+| `WorkShop/WorkshopEngine/WorkshopEngineCore.js` | Preloads both OBJ/MTL and GLB caches on mount so the first click renders real geometry, not a placeholder |
+
+### OBJ/MTL pivot (both tracks) — the actual live rendering path
+
+The `obj2gltf` GLB conversion pipeline (above) shipped first, but its output
+had an inverted Y axis (source coordinates are Y-down) and, because a single
+flipped axis inverts mesh handedness, back faces three.js's default culling
+treated as missing geometry. Rather than keep debugging that conversion,
+models now load directly via `OBJLoader`+`MTLLoader` at runtime:
+
+| File | Change |
+|------|--------|
+| `MainMenuStack/shared/objMtlLoader.js` | **New** — shared loader; a single negated Y-scale component both uprights the model and fixes the culling (three.js auto-reverses front-face winding for a negative-determinant transform) |
+| `resources/model_pipeline/copy_obj_assets.mjs` | **New** — populates `public/models/` (shared 305-file texture bank + per-model `.obj`/`.mtl`) from the extraction toolchain, mirroring the `public/workshop/bricks/` GLB convention |
+| `ModelLoader.jsx`, `BrickFactory.js` | Both now prefer `objUrl`/`mtlUrl` over the GLB fields |
+
+The GLB pipeline (`obj2gltfHelper.mjs`, `convert_warehouse.mjs`,
+`convert_bricks.mjs`, generated `glbUrl`/`model` catalog fields) is
+**unchanged and still functions** — it's just not the path the live game
+takes any more. Verified end-to-end in the running app: models render
+upright, solid, and correctly textured in both buckets.
+
+### Housekeeping
+
+| File | Change |
+|------|--------|
+| `.gitignore` | Extraction-derived `.glb`/`.obj`/`.mtl`/texture assets are no longer tracked (matches `resources/model_files/README.md`'s existing "don't commit game assets" policy); regenerate locally against your own game install |
+| `resources/model_pipeline/` | **New** — all of this session's tooling (conversion scripts, pilot verification harnesses, the thumbnail dechroma script) moved out of `resources/model_files/`, which is back to exactly its pre-session file list |
+| `resources/model_pipeline/dechroma_thumbnails.py` | **New** — the pak-sourced warehouse thumbnails render on a solid `(0,255,0)` chroma-key background; keys it to transparency (tight tolerance so green model parts, e.g. tree foliage, survive) |
+
+**Known follow-up (started, not complete):** the `/start-stack/start` world
+selector's 9 slots should each load a distinct world built from the
+extraction toolchain's `template-01`…`template-09` models (already
+identified: `resources/model_files/extracted/models/template-0N.obj` +
+matching thumbnails at `.../pak/warehouse/worlds/templates/`) instead of
+all ten worlds sharing the same `map1.glb` placeholder. Piloting one
+template through the same OBJ/MTL loader renders almost entirely black —
+ruled out winding/culling (`DoubleSide` didn't fix it) and pure ambient
+light with no directional lights also didn't fix it, so this is a
+different, unsolved problem specific to these larger multi-hundred-facet
+world-scale meshes. Needs its own investigation before wiring in.
+
+---
+
 ## 2026-06-30 — Centered selection box + group rotation fix
 
 | File | Change |

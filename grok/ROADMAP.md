@@ -4,7 +4,7 @@ Phased cleanup and modernization plan for **`src/` game code only**.
 RE work (`resources/`, `tools/`) is out of scope unless requested.
 
 **Branch:** `grok-dev`  
-**Last updated:** 2026-06-30
+**Last updated:** 2026-07-02
 
 ---
 
@@ -58,10 +58,11 @@ flowchart LR
 | Lego Clock loading modal | ✅ Done | `GameLoadingProvider` + portal modal across `(game)` routes |
 | Screenshot menu (SnapShot) | ✅ Done | Restored original CRA grid layout (90px gap, holder frame) |
 | Workshop menu (WorkShop) | ✅ Done | `WorkshopStageLayout`, pixel-anchored metrics, holder grid |
-| Workshop 3D brick editor | ⬜ Active (D1) | Procedural bricks only — **LCA→GLB abandoned** |
+| MainGame warehouse bucket real models | ✅ Done (2026-07-02) | 108/108 items — was 100% non-functional; see `grok/CHANGELOG.md` |
+| Workshop 3D brick editor | 🔄 D1–D4 done, D5 optional | Parametric bricks by default; **42/141 now use real geometry** (2026-07-02, reverses the D3-era LCA→GLB abandonment for those 42 — see `WORKSHOP_3D.md`) |
 | Save game menu styling (MyModels) | ✅ Done | `wh_selection` frame, holder fit, snapshot thumbnails |
 | R3F migration | ⬜ Deferred | Plain Three.js retained; `GameEngineCore` instead |
-| Unique GLB per world 2–10 | ⬜ Deferred | All worlds use `map1` placeholder for now |
+| Unique models per world 2–10 | 🔄 Started, blocked | `template-01`…`09` identified in the extraction toolchain; renders black through the OBJ/MTL loader for reasons not yet found — see `grok/CHANGELOG.md` 2026-07-02 |
 | Shared worlds playability | ⬜ Deferred | No `filePath` on shared catalog yet |
 
 ---
@@ -228,9 +229,16 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 - [x] Brick bucket catalog UI (~200 raw model files + PNGs in `BucketBottomResourceStack/`)
 - [x] Main game engine interaction modes (reuse, not rewrite)
 
-### Approach: Option D confirmed — procedural bricks (no LCA pipeline)
+### Approach: Option D confirmed — procedural bricks by default, real geometry where validated
 
-**Constraint:** LCA/VCA → GLB conversion failed after ~2 years RE; offsets/meshes unusable. Do **not** plan on extracting game meshes from raw model files.
+**Constraint (2026-06-30, partially reversed 2026-07-02):** the legacy LCA/VCA → GLB
+converter scripts produced unusable meshes. The reworked
+`resources/model_files/` toolchain does not have that problem — 42/141 bricks
+now render real, LCA-derived geometry (loaded via OBJ/MTL at runtime, not the
+GLB conversion). The other 99 keep the procedural fallback because their
+catalog `studs`/footprint metadata is a guess that doesn't match the real
+part, not because the mesh itself is bad. See `WORKSHOP_3D.md` and
+`grok/CHANGELOG.md`'s 2026-07-02 entries for the full story.
 
 | Sub-phase | Status | Deliverable |
 |-----------|--------|-------------|
