@@ -25,6 +25,8 @@ import shutil
 import subprocess
 import sys
 
+KEEP_BMP = '--keep-bmp' in sys.argv          # skip PNG conversion if set
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = os.path.join(HERE, 'tools')
 sys.path.insert(0, TOOLS)
@@ -42,7 +44,7 @@ def find(root, name):
 
 
 def main():
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2 or sys.argv[1].startswith('--'):
         raise SystemExit(__doc__)
     game = sys.argv[1]
     out = os.path.join(HERE, 'extracted')
@@ -61,6 +63,21 @@ def main():
                       f'its first 16 bytes on the issue tracker')
         else:
             print(f'-- {pak} not found under {game} (skipping)')
+
+    # 1b) convert extracted .bmp images to .png (originals removed unless
+    #     --keep-bmp is passed); covers system.pak UI art & warehouse art
+    bmps = glob.glob(os.path.join(pak_out, '**', '*.bmp'), recursive=True)
+    if bmps:
+        try:
+            from PIL import Image
+            for b in bmps:
+                Image.open(b).save(b[:-4] + '.png')
+                if not KEEP_BMP:
+                    os.remove(b)
+            print(f'converted {len(bmps)} BMP -> PNG')
+        except ImportError:
+            print('-- Pillow not installed; leaving BMPs as-is '
+                  '(pip install pillow)')
 
     # 2) the bound master world (textures, sounds, palette live inside)
     xvr = find(game, 'creator2000.xvr') or find(pak_out, 'creator2000.xvr')
