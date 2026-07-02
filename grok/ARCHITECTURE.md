@@ -253,7 +253,7 @@ Page shells stay ~300–400 B; heavy chunks load on demand.
 | `BrickFactory` | ⬜ planned | Parametric Three.js meshes from `brickCatalog.js` stud recipes |
 | `sceneSchema` extensions | ⬜ planned | `brickInstances[]` + `customCreations[]` on profile |
 
-**Brick assets:** PNG thumbnails for UI; 3D from **parametric factory** (not LCA). `.lca` files are RE archive only — LCA→GLB pipeline abandoned (unusable offsets/meshes after years of RE).
+**Brick assets:** PNG thumbnails for UI; 3D from **parametric factory** (not LCA). Raw model files are RE archive only — LCA→GLB pipeline abandoned (unusable offsets/meshes after years of RE).
 
 ---
 
@@ -267,6 +267,5 @@ Page shells stay ~300–400 B; heavy chunks load on demand.
 
 ## Original Superscape / RE Context (Read-Only)
 
-- `.lca` files = wrapper over VCA (SHP, PAL, WRLD chunks)
-- `tools/lca2obj/lca2obj.py` — 16-bit chunk parser → OBJ/MTL
+- LCA files = wrapper over VCA (SHP, PAL, WRLD chunks)
 - Not needed for React game work

@@ -107,7 +107,7 @@ This is what an example script looks like when pulling from VRT 5.60. They updat
 
 Here is an example of the modified VCA file. I simply added one new point and you can see the difference the HEX file saves it as.
 
-### [lca_file](./resources/model_files/workshop_slim_00_l307000.lca)
+### lca_file
 
 Consists of LCA (24 or 27 bit wrapper over VCA file format containing model data).
 

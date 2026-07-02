@@ -225,12 +225,12 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 
 ### Prerequisites ✅
 - [x] Workshop UI/layout (`WorkshopStageLayout`, `workshopStageMetrics.js`, holder grid)
-- [x] Brick bucket catalog UI (~200 `.lca` + PNGs in `BucketBottomResourceStack/`)
+- [x] Brick bucket catalog UI (~200 raw model files + PNGs in `BucketBottomResourceStack/`)
 - [x] Main game engine interaction modes (reuse, not rewrite)
 
 ### Approach: Option D confirmed — procedural bricks (no LCA pipeline)
 
-**Constraint:** LCA/VCA → GLB conversion failed after ~2 years RE; offsets/meshes unusable. Do **not** plan on extracting game meshes from `.lca` files.
+**Constraint:** LCA/VCA → GLB conversion failed after ~2 years RE; offsets/meshes unusable. Do **not** plan on extracting game meshes from raw model files.
 
 | Sub-phase | Status | Deliverable |
 |-----------|--------|-------------|

@@ -226,7 +226,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | `src/data/worlds/` | World catalogs |
 | `grok/WORKSHOP_3D.md` | **Phase 11 plan** — workshop 3D editor gaps, options, D1 steps |
 | `WorkShop/WorkShop.jsx` | Workshop screen (UI done; no engine yet) |
-| `WorkShop/.../BucketBottomResourceStack/` | ~200 brick `.lca` + catalog `index.js` |
+| `WorkShop/.../BucketBottomResourceStack/` | ~200 brick raw model files + catalog `index.js` |
 | `Common/WorkshopStageLayout/` | Pixel-anchored workshop layout metrics |
 
 ---
