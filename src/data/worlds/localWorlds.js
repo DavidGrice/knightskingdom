@@ -16,7 +16,7 @@ const playableWorld = (id, name, description, image) => ({
   image,
   isLocked: false,
   isCompleted: false,
-  filePath: mapAssets.map1,
+  ...(mapAssets[`map${id}`] || mapAssets.map1),
   skyBoxes: grassSkybox,
   models: defaultPlayableModels,
 });

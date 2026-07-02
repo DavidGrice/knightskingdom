@@ -1,4 +1,3 @@
-import Map1 from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/maps/map1/map1.glb';
 import GrassRight from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/right.png';
 import GrassLeft from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/left.png';
 import GrassTop from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/top.png';
@@ -30,6 +29,22 @@ export const defaultPlayableModels = [
   },
 ];
 
+const templateMap = (n) => ({
+  objUrl: `/models/maps/template-0${n}.obj`,
+  mtlUrl: `/models/maps/template-0${n}.mtl`,
+});
+
+// Only 9 extracted world templates exist; World 10 reuses the last one
+// (matching the existing precedent of World 10 reusing Template9's thumbnail).
 export const mapAssets = {
-  map1: Map1,
+  map1: templateMap(1),
+  map2: templateMap(2),
+  map3: templateMap(3),
+  map4: templateMap(4),
+  map5: templateMap(5),
+  map6: templateMap(6),
+  map7: templateMap(7),
+  map8: templateMap(8),
+  map9: templateMap(9),
+  map10: templateMap(9),
 };
