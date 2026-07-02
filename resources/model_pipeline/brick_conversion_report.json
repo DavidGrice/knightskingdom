@@ -1,0 +1,2681 @@
+[
+  {
+    "brickId": "l449000",
+    "objId": "00_l449000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l365900",
+    "objId": "02_l365900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        3.2
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l618200",
+    "objId": "04_l618200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        1.9200000762939453,
+        3.2
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "l233900",
+    "objId": "06_l233900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        3.8400001525878906,
+        4
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 3.8400001525878906
+  },
+  {
+    "brickId": "l345500",
+    "objId": "08_l345500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        4.800000000000001
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l330700",
+    "objId": "10_l330700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        1.9200000762939453,
+        4.800000000000001
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "l330800",
+    "objId": "12_l330800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        1.9200000762939453,
+        6.4
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "l302720",
+    "objId": "14_l302720",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        5.760702896118165,
+        9.600000000000001
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 5.760702896118165
+  },
+  {
+    "brickId": "l302721",
+    "objId": "16_l302721",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        9.920604705810547,
+        9.600000000000001
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 9.920604705810547
+  },
+  {
+    "brickId": "l300500",
+    "objId": "00_l300500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8008299827575684,
+        0.9601759910583496,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l245300",
+    "objId": "02_l245300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        4.800000000000001,
+        0.8
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 4.800000000000001
+  },
+  {
+    "brickId": "l300400",
+    "objId": "04_l300400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9602339744567872,
+        1.6008789062500002
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9602339744567872
+  },
+  {
+    "brickId": "l324500",
+    "objId": "06_l324500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        1.9202339172363283,
+        1.6008789062500002
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9202339172363283
+  },
+  {
+    "brickId": "l245400",
+    "objId": "08_l245400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        4.800000000000001,
+        0.8
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 4.800000000000001
+  },
+  {
+    "brickId": "l362200",
+    "objId": "10_l362200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        2.4000000000000004
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        2.4000000000000004
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l301000",
+    "objId": "12_l301000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9601759910583496,
+        3.2
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l300900",
+    "objId": "14_l300900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9602339744567872,
+        4.800000000000001
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        4.800000000000001
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9602339744567872
+  },
+  {
+    "brickId": "l375400",
+    "objId": "16_l375400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.800000000000001,
+        4.800000000000001,
+        0.8
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 4.800000000000001
+  },
+  {
+    "brickId": "l300800",
+    "objId": "18_l300800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9701950073242188,
+        6.4
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        6.4
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9701950073242188
+  },
+  {
+    "brickId": "l611100",
+    "objId": "20_l611100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        8.000977325439454
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l611200",
+    "objId": "22_l611200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        9.6005859375
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l246500",
+    "objId": "24_l246500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9602339744567872,
+        12.8
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9602339744567872
+  },
+  {
+    "brickId": "l300300",
+    "objId": "26_l300300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6006839752197266,
+        0.9602339744567872,
+        1.6000980377197267
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9602339744567872
+  },
+  {
+    "brickId": "l3014500",
+    "objId": "28_l3014500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6006839752197266,
+        2.880352020263672,
+        1.6000980377197267
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 2.880352020263672
+  },
+  {
+    "brickId": "l300200",
+    "objId": "30_l300200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9601759910583496,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        2.4000000000000004
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l621500",
+    "objId": "32_l621500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9600000381469727,
+        2.40029296875
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l300100",
+    "objId": "34_l300100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9601759910583496,
+        3.2
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l245600",
+    "objId": "36_l245600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6000980377197267,
+        0.9602339744567872,
+        4.800000000000001
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        4.800000000000001
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9602339744567872
+  },
+  {
+    "brickId": "l300700",
+    "objId": "38_l300700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6001949310302734,
+        0.9602339744567872,
+        6.4
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        6.4
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9602339744567872
+  },
+  {
+    "brickId": "l300600",
+    "objId": "40_l300600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6001949310302734,
+        0.9602339744567872,
+        8.000977325439454
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9602339744567872
+  },
+  {
+    "brickId": "l235600",
+    "objId": "42_l235600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.9600000381469727,
+        4.80029296875
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l3018100",
+    "objId": "44_l3018100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.9600000381469727,
+        8
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l621200",
+    "objId": "46_l621200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.9601759910583496,
+        8.000977325439454
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l420100",
+    "objId": "48_l420100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.4,
+        0.9600000381469727,
+        6.400390625
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l420400",
+    "objId": "50_l420400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.4,
+        0.9600000381469727,
+        12.80078125
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l3015300",
+    "objId": "00_l3015300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.880604998813942,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.880604998813942
+  },
+  {
+    "brickId": "l626900",
+    "objId": "02_l626900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        1.6,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.6
+  },
+  {
+    "brickId": "l395700",
+    "objId": "04_l395700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.6399909913539887,
+        3.745547103881836,
+        0.6390139877796174
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 3.745547103881836
+  },
+  {
+    "brickId": "l449500",
+    "objId": "06_l449500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.111325025558472,
+        3.745547103881836,
+        0.639892989397049
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 3.745547103881836
+  },
+  {
+    "brickId": "l7253400",
+    "objId": "08_l7253400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.95078125,
+        7.360938262939453,
+        0.8009770393371582
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 7.360938262939453
+  },
+  {
+    "brickId": "l407900",
+    "objId": "10_l407900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        1.9200000762939453,
+        1.8009029388427735
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "l3207401",
+    "objId": "12_l3207401",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        4.4798439025878904,
+        6.7821530774235725
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 4.4798439025878904
+  },
+  {
+    "brickId": "l415100",
+    "objId": "14_l415100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.4,
+        0.3200000047683716,
+        6.4
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l244401",
+    "objId": "16_l244401",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.4,
+        1.2800000190734864,
+        11.200684356689454
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.2800000190734864
+  },
+  {
+    "brickId": "l7196300",
+    "objId": "18_l7196300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        12.80029296875,
+        12.8,
+        2.673071002960205
+      ],
+      "expected": [
+        0.8,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 12.8
+  },
+  {
+    "brickId": "l407000",
+    "objId": "00_l407000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9601759910583496,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l3013600",
+    "objId": "02_l3013600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l609100",
+    "objId": "04_l609100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        1.2800000190734864,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.2800000190734864
+  },
+  {
+    "brickId": "l3013700",
+    "objId": "06_l3013700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        3.2
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l3009900",
+    "objId": "08_l3009900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        3.8400001525878906,
+        4
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        4.800000000000001
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 3.8400001525878906
+  },
+  {
+    "brickId": "l235700",
+    "objId": "10_l235700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9609379768371582,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9609379768371582
+  },
+  {
+    "brickId": "l3027400",
+    "objId": "12_l3027400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        2.879999923706055,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 2.879999923706055
+  },
+  {
+    "brickId": "l444400",
+    "objId": "14_l444400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        5.75999984741211,
+        4
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 5.75999984741211
+  },
+  {
+    "brickId": "l246200",
+    "objId": "16_l246200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        2.4000000000000004,
+        0.9600000381469727,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l3024600",
+    "objId": "18_l3024600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        5.75999984741211,
+        2.4000000000000004
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 5.75999984741211
+  },
+  {
+    "brickId": "l606600",
+    "objId": "20_l606600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.4,
+        2.240957069396973,
+        3.2
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 2.240957069396973
+  },
+  {
+    "brickId": "l610700",
+    "objId": "22_l610700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.000976943969727,
+        0.9600000381469727,
+        4.000732040405274
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l607200",
+    "objId": "24_l607200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        5.600683975219727,
+        2.240957069396973,
+        5.600683975219727
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 2.240957069396973
+  },
+  {
+    "brickId": "c5_2x4",
+    "objId": "c5_2x4",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.9601759910583496,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.8,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "c5_door",
+    "objId": "c5_door",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.800000000000001,
+        6.719999694824219,
+        1.9200000762939453
+      ],
+      "expected": [
+        1.6,
+        1.6,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 6.719999694824219
+  },
+  {
+    "brickId": "c5_window",
+    "objId": "c5_window",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        1.9200000762939453,
+        0.8
+      ],
+      "expected": [
+        1.6,
+        1.0666666666666667,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "c5_roof",
+    "objId": "c5_roof",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.9600000381469727,
+        4.80029296875
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l306200",
+    "objId": "00_l306200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.7850099965929985,
+        0.9600000381469727,
+        0.7850099965929985
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l458900",
+    "objId": "02_l458900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.9600000381469727,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l614100",
+    "objId": "04_l614100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.7850099965929985,
+        0.3200000047683716,
+        0.7850099965929985
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l394100",
+    "objId": "06_l394100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9609379768371582,
+        1.6
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9609379768371582
+  },
+  {
+    "brickId": "l474000",
+    "objId": "08_l474000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        1.6
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l394200",
+    "objId": "10_l394200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        1.9200000762939453,
+        1.6
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "l603700",
+    "objId": "12_l603700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        3.2007720947265628,
+        1.6
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 3.2007720947265628
+  },
+  {
+    "brickId": "l257700",
+    "objId": "14_l257700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.9600000381469727,
+        3.2
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l622200",
+    "objId": "16_l622200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.9600000381469727,
+        3.2
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l302400",
+    "objId": "00_l302400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.3200000047683716,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l302300",
+    "objId": "02_l302300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.3200000047683716,
+        1.6006839999929072
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l379400",
+    "objId": "04_l379400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6006839752197266,
+        0.3200000047683716,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l362300",
+    "objId": "06_l362300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.3200000047683716,
+        2.4000000000000004
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        2.4000000000000004
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l371000",
+    "objId": "08_l371000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.3200000047683716,
+        3.2
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l366600",
+    "objId": "10_l366600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.3200000047683716,
+        4.800000000000001
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l346000",
+    "objId": "12_l346000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        0.3200000047683716,
+        6.4
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        2.4000000000000004
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l302200",
+    "objId": "14_l302200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.60029296875,
+        0.3200000047683716,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l302100",
+    "objId": "16_l302100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        2.4000000000000004
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l302000",
+    "objId": "18_l302000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        3.2
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l379500",
+    "objId": "20_l379500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        4.800000000000001
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l303400",
+    "objId": "22_l303400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        6.4
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        6.4
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l383200",
+    "objId": "24_l383200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        8.000977325439454
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l244500",
+    "objId": "26_l244500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        9.6005859375
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l428200",
+    "objId": "28_l428200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.3200000047683716,
+        12.8
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l245000",
+    "objId": "30_l245000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        2.4000000000000004,
+        0.3200000047683716,
+        2.4000000000000004
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l241900",
+    "objId": "32_l241900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.800000000000001,
+        0.3200000047683716,
+        2.4000000000000004
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l303100",
+    "objId": "34_l303100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2001949310302735,
+        0.3200000047683716,
+        3.2
+      ],
+      "expected": [
+        3.2,
+        0.26666666666666666,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l303200",
+    "objId": "36_l303200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2001949310302735,
+        0.3200000047683716,
+        4.800000000000001
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        4.800000000000001
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l303500",
+    "objId": "38_l303500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.3200000047683716,
+        6.400390625
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l303000",
+    "objId": "40_l303000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.3200000047683716,
+        8.000977325439454
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l302900",
+    "objId": "42_l302900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.3200000047683716,
+        9.6005859375
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l395800",
+    "objId": "44_l395800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.80029296875,
+        0.3200000047683716,
+        4.800000000000001
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l303600",
+    "objId": "46_l303600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.80029296875,
+        0.3200000047683716,
+        6.4
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        4.800000000000001
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l303300",
+    "objId": "48_l303300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.80029296875,
+        0.3200000047683716,
+        8
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l302800",
+    "objId": "50_l302800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.80029296875,
+        0.3200000047683716,
+        9.6005859375
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l345600",
+    "objId": "52_l345600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.80029296875,
+        0.3200000047683716,
+        11.200684356689454
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l307000",
+    "objId": "00_l307000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8008299827575684,
+        0.3200000047683716,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l306900",
+    "objId": "02_l306900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6006839752197266,
+        0.3200000047683716,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l243100",
+    "objId": "04_l243100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        0.3200000047683716,
+        0.8000490188598633
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l663600",
+    "objId": "06_l663600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.800000000000001,
+        0.3200000047683716,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.26666666666666666,
+        4.800000000000001
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l416200",
+    "objId": "08_l416200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.4,
+        0.3200000047683716,
+        0.8
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l306800",
+    "objId": "10_l306800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.60029296875,
+        0.3200000047683716,
+        1.6000980377197267
+      ],
+      "expected": [
+        1.6,
+        0.26666666666666666,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.3200000047683716
+  },
+  {
+    "brickId": "l304000",
+    "objId": "00_l304000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9601759910583496,
+        0.8009280204772949
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l304800",
+    "objId": "02_l304800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9429490089416505,
+        0.8000490188598633
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9429490089416505
+  },
+  {
+    "brickId": "l366500",
+    "objId": "04_l366500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8001950263977051,
+        0.9600000381469727,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l244900",
+    "objId": "06_l244900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        2.8801759719848636,
+        1.5995109310373663
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 2.8801759719848636
+  },
+  {
+    "brickId": "l446000",
+    "objId": "08_l446000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        2.8807029724121094,
+        0.8006349563598634
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 2.8807029724121094
+  },
+  {
+    "brickId": "l428600",
+    "objId": "10_l428600",
+    "skipped": true,
+    "measured": {
+      "size": [
+        2.4000000000000004,
+        0.9608200073242188,
+        0.8001950263977051
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9608200073242188
+  },
+  {
+    "brickId": "l428700",
+    "objId": "12_l428700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8004879951477051,
+        0.9600000381469727,
+        2.40029296875
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l303900",
+    "objId": "14_l303900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9608200073242188,
+        1.6008789062500002
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9608200073242188
+  },
+  {
+    "brickId": "l304300",
+    "objId": "16_l304300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9429490089416505,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9429490089416505
+  },
+  {
+    "brickId": "l366000",
+    "objId": "18_l366000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6003910064697267,
+        0.9600000381469727,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l367800",
+    "objId": "20_l367800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6005859375,
+        1.9200000762939453,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "l368800",
+    "objId": "22_l368800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        1.920469093322754,
+        1.6009769439697266
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.920469093322754
+  },
+  {
+    "brickId": "l330000",
+    "objId": "24_l330000",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.6286330223083496,
+        1.6
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.6286330223083496
+  },
+  {
+    "brickId": "l368400",
+    "objId": "26_l368400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        2.8807029724121094,
+        1.6009769439697266
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 2.8807029724121094
+  },
+  {
+    "brickId": "l368500",
+    "objId": "28_l368500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        2.8807029724121094,
+        1.6009769439697266
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 2.8807029724121094
+  },
+  {
+    "brickId": "l303800",
+    "objId": "30_l303800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9601759910583496,
+        2.40087890625
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l329800",
+    "objId": "32_l329800",
+    "skipped": true,
+    "measured": {
+      "size": [
+        2.4000000000000004,
+        0.9608200073242188,
+        1.6005859375
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9608200073242188
+  },
+  {
+    "brickId": "l374700",
+    "objId": "34_l374700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6003910064697267,
+        0.9600000381469727,
+        2.40029296875
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l656400",
+    "objId": "36_l656400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9601759910583496,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l656500",
+    "objId": "38_l656500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6007810592651368,
+        0.9601759910583496,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l303700",
+    "objId": "40_l303700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.59980500000529,
+        0.9608200073242188,
+        3.2007808685302734
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        3.2
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 0.9608200073242188
+  },
+  {
+    "brickId": "l329900",
+    "objId": "42_l329900",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.6286330223083496,
+        3.2007808685302734
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.6286330223083496
+  },
+  {
+    "brickId": "l444500",
+    "objId": "44_l444500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.6,
+        0.9601759910583496,
+        6.4007812500000005
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9601759910583496
+  },
+  {
+    "brickId": "l367500",
+    "objId": "46_l367500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        2.4000000000000004,
+        0.9600000381469727,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9600000381469727
+  },
+  {
+    "brickId": "l416100",
+    "objId": "48_l416100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        2.4000000000000004,
+        0.9608200073242188,
+        2.40087890625
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9608200073242188
+  },
+  {
+    "brickId": "l329700",
+    "objId": "50_l329700",
+    "skipped": true,
+    "measured": {
+      "size": [
+        2.4000000000000004,
+        0.9608200073242188,
+        3.2007808685302734
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9608200073242188
+  },
+  {
+    "brickId": "l3018200",
+    "objId": "52_l3018200",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2007808685302734,
+        0.9608200073242188,
+        3.19980500000529
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9608200073242188
+  },
+  {
+    "brickId": "l451500",
+    "objId": "54_l451500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        6.4,
+        0.9609959602355957,
+        4.800000000000001
+      ],
+      "expected": [
+        1.6,
+        0.5333333333333333,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 0.9609959602355957
+  },
+  {
+    "brickId": "l3004400",
+    "objId": "00_l3004400",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8000490188598633,
+        2.56093807220459,
+        1.6
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 2.56093807220459
+  },
+  {
+    "brickId": "l3004500",
+    "objId": "02_l3004500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8000490188598633,
+        2.56093807220459,
+        1.6
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        1.6
+      ]
+    },
+    "validation": "footprint-ok",
+    "measuredHeight": 2.56093807220459
+  },
+  {
+    "brickId": "l3005500",
+    "objId": "04_l3005500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        1.9200000762939453,
+        0.8
+      ],
+      "expected": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9200000762939453
+  },
+  {
+    "brickId": "l318500",
+    "objId": "06_l318500",
+    "skipped": true,
+    "measured": {
+      "size": [
+        3.2,
+        1.9209379196166994,
+        0.8
+      ],
+      "expected": [
+        1.6,
+        1.0666666666666667,
+        4.800000000000001
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9209379196166994
+  },
+  {
+    "brickId": "l403300",
+    "objId": "08_l403300",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        2.879999923706055,
+        3.2
+      ],
+      "expected": [
+        1.6,
+        1.0666666666666667,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 2.879999923706055
+  },
+  {
+    "brickId": "l403301",
+    "objId": "10_l403301",
+    "skipped": true,
+    "measured": {
+      "size": [
+        0.8,
+        2.879999923706055,
+        3.2
+      ],
+      "expected": [
+        1.6,
+        1.0666666666666667,
+        1.6
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 2.879999923706055
+  },
+  {
+    "brickId": "l407100",
+    "objId": "12_l407100",
+    "skipped": true,
+    "measured": {
+      "size": [
+        4.800000000000001,
+        6.719999694824219,
+        1.9200000762939453
+      ],
+      "expected": [
+        1.6,
+        1.3333333333333333,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 6.719999694824219
+  },
+  {
+    "brickId": "l453201",
+    "objId": "14_l453201",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.7600000381469727,
+        1.9198830762994477,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        1.3333333333333333,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9198830762994477
+  },
+  {
+    "brickId": "l453202",
+    "objId": "16_l453202",
+    "skipped": true,
+    "measured": {
+      "size": [
+        1.7600000381469727,
+        1.9198830762994477,
+        2.4000000000000004
+      ],
+      "expected": [
+        1.6,
+        1.3333333333333333,
+        3.2
+      ]
+    },
+    "validation": "footprint-mismatch",
+    "measuredHeight": 1.9198830762994477
+  }
+]

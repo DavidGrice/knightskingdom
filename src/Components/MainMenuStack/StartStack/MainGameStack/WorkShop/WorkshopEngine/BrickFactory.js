@@ -1,5 +1,11 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import {
+  alignObjMtlBottomToOrigin,
+  getCachedObjMtlTemplate,
+  loadObjMtl,
+  preloadObjMtlAssets,
+} from '../../shared/objMtlLoader';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import {
   attachSelectionBox,
@@ -247,9 +253,52 @@ const loadGlbBrick = (glbUrl) => {
   return promise;
 };
 
+/** Already-resolved cached GLB scene, or null if not loaded (or still loading). */
+const getCachedGlbScene = (glbUrl) => {
+  const cached = glbCache.get(glbUrl);
+  return cached && !(cached instanceof Promise) ? cached : null;
+};
+
+/**
+ * Warm the GLB cache for a set of urls ahead of time (fire-and-forget) so
+ * synchronous placement (createBrickSync) can use the real mesh on first
+ * click instead of always falling back to the parametric shape while the
+ * fetch is in flight. Safe to call repeatedly -- loadGlbBrick dedupes.
+ * @param {string[]} glbUrls
+ */
+export const preloadGlbBricks = (glbUrls) => {
+  glbUrls.forEach((url) => {
+    loadGlbBrick(url).catch((error) => {
+      console.warn(`GLB preload failed for ${url}:`, error);
+    });
+  });
+};
+
+/**
+ * Warm the OBJ/MTL cache for a set of {objUrl, mtlUrl} pairs ahead of time
+ * (see preloadGlbBricks above -- same idea, live path). Thin re-export of
+ * the shared helper so callers only need one import from BrickFactory.
+ * @param {{ objUrl: string, mtlUrl: string }[]} entries
+ */
+export const preloadObjMtlBricks = (entries) => preloadObjMtlAssets(entries);
+
+/**
+ * Shift the loaded GLB's own children (not root) so their bottom sits at
+ * local y=0, matching the parametric bricks' convention (their geometry is
+ * authored bottom-aligned to begin with). Placement code (WorkshopEngineCore
+ * .addBrick, buildGroupFromBrickInstances, etc.) always does an absolute
+ * `root.position.set(...)` after creation -- shifting root.position here
+ * instead of the children would just get silently overwritten, leaving the
+ * mesh's true (unaligned) local offset to sink the brick below the plate.
+ */
 const alignBrickBottomToOrigin = (root) => {
+  root.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(root);
-  root.position.y -= box.min.y;
+  const offsetY = -box.min.y;
+  root.children.forEach((child) => {
+    child.position.y += offsetY;
+  });
+  root.updateMatrixWorld(true);
 };
 
 /**
@@ -264,7 +313,19 @@ export const createBrick = async (brickId, options = {}) => {
 
   let root;
 
-  if (recipe.shape === 'GLB' && recipe.glbUrl) {
+  if (recipe.shape === 'GLB' && recipe.objUrl && recipe.mtlUrl) {
+    // OBJ/MTL is the live path -- see the "Wire real 3D models" plan's
+    // OBJ/MTL pivot. Sidesteps whatever the obj2gltf GLB conversion below
+    // was doing to orientation/winding.
+    try {
+      root = await loadObjMtl(recipe.objUrl, recipe.mtlUrl);
+      applyColor(root, colorHex);
+      alignObjMtlBottomToOrigin(root);
+    } catch (error) {
+      console.warn(`OBJ/MTL load failed for ${brickId}, using parametric fallback:`, error);
+      root = createParametricBrick(recipe, colorHex);
+    }
+  } else if (recipe.shape === 'GLB' && recipe.glbUrl) {
     try {
       root = await loadGlbBrick(recipe.glbUrl);
       applyColor(root, colorHex);
@@ -292,7 +353,40 @@ export const createBrickSync = (brickId, options = {}) => {
     ? parseInt(options.color, 16)
     : (options.color ?? DEFAULT_COLOR);
 
-  const root = createParametricBrick(recipe, colorHex);
+  let root = null;
+  if (recipe.shape === 'GLB' && recipe.objUrl && recipe.mtlUrl) {
+    // OBJ/MTL is the live path -- see createBrick above.
+    const cached = getCachedObjMtlTemplate(recipe.objUrl, recipe.mtlUrl);
+    if (cached) {
+      root = cached.clone(true);
+      applyColor(root, colorHex);
+      alignObjMtlBottomToOrigin(root);
+    } else {
+      // not warmed yet -- kick off a load for next time and fall back to
+      // parametric for this placement so the click still feels instant
+      loadObjMtl(recipe.objUrl, recipe.mtlUrl).catch(() => {});
+    }
+  } else if (recipe.shape === 'GLB' && recipe.glbUrl) {
+    const cached = getCachedGlbScene(recipe.glbUrl);
+    if (cached) {
+      root = cached.clone(true);
+      applyColor(root, colorHex);
+      alignBrickBottomToOrigin(root);
+      root.traverse((child) => {
+        if (child.isMesh) {
+          child.frustumCulled = false;
+        }
+      });
+    } else {
+      // not warmed yet -- kick off a load for next time and fall back to
+      // parametric for this placement so the click still feels instant
+      loadGlbBrick(recipe.glbUrl).catch(() => {});
+    }
+  }
+  if (!root) {
+    root = createParametricBrick(recipe, colorHex);
+  }
+
   configureBrickRoot(root, brickId, recipe);
   attachSelectionBox(root, { visible: true, wireframeVisible: false });
   return root;

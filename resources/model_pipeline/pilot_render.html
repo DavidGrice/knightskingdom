@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>pilot render</title>
+<style>html,body{margin:0;background:#3a3a3a;}canvas{display:block;}</style>
+<script type="importmap">
+{ "imports": { "three": "/node_modules/three/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="c" width="512" height="512"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from '/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+
+const params = new URLSearchParams(location.search);
+const modelUrl = params.get('model');
+const compareUrl = params.get('compare');
+const angle = parseFloat(params.get('angle') || '0.6');
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(512, 512);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x3a3a3a);
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const dir = new THREE.DirectionalLight(0xffffff, 1.0);
+dir.position.set(3, 5, 4);
+scene.add(dir);
+const dir2 = new THREE.DirectionalLight(0xffffff, 0.4);
+dir2.position.set(-3, 2, -4);
+scene.add(dir2);
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 10000);
+
+window.__pilotStatus = 'loading';
+window.__pilotBBox = null;
+
+const loader = new GLTFLoader();
+
+function loadOne(url) {
+  return new Promise((resolve, reject) => {
+    loader.load(url, (gltf) => resolve(gltf.scene), undefined, reject);
+  });
+}
+
+async function main() {
+  try {
+    const root = await loadOne(modelUrl);
+    scene.add(root);
+
+    let compareBox = null;
+    if (compareUrl) {
+      const cmp = await loadOne(compareUrl);
+      // place beside the primary model, feet aligned to y=0
+      const primaryBox = new THREE.Box3().setFromObject(root);
+      const cmpBox0 = new THREE.Box3().setFromObject(cmp);
+      cmp.position.x = primaryBox.max.x - cmpBox0.min.x + 1;
+      cmp.position.y = -cmpBox0.min.y;
+      root.position.y = -primaryBox.min.y;
+      scene.add(cmp);
+      compareBox = new THREE.Box3().setFromObject(cmp);
+    }
+
+    const box = new THREE.Box3().setFromObject(root);
+    if (compareBox) box.union(compareBox);
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+
+    window.__pilotBBox = {
+      min: [box.min.x, box.min.y, box.min.z],
+      max: [box.max.x, box.max.y, box.max.z],
+      size: [size.x, size.y, size.z],
+      center: [center.x, center.y, center.z],
+    };
+
+    window.__pilotChildren = [];
+    root.traverse((child) => {
+      if (!child.isMesh) return;
+      const cbox = new THREE.Box3().setFromObject(child);
+      const csize = new THREE.Vector3();
+      cbox.getSize(csize);
+      window.__pilotChildren.push({ name: child.name, size: [csize.x, csize.y, csize.z] });
+    });
+
+    const radius = Math.max(size.x, size.y, size.z, 0.001) * 0.75;
+    const camX = center.x + radius * Math.sin(angle) * 2.2;
+    const camY = center.y + radius * 1.2;
+    const camZ = center.z + radius * Math.cos(angle) * 2.2;
+    camera.position.set(camX, camY, camZ);
+    camera.lookAt(center);
+    camera.near = radius * 0.01;
+    camera.far = radius * 100;
+    camera.updateProjectionMatrix();
+
+    renderer.render(scene, camera);
+    window.__pilotStatus = 'done';
+  } catch (err) {
+    window.__pilotStatus = 'error';
+    window.__pilotError = String(err && err.message ? err.message : err);
+  }
+}
+
+main();
+</script>
+</body>
+</html>

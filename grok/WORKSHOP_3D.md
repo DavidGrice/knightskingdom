@@ -1,8 +1,8 @@
 # Workshop 3D Brick Editor — Plan & Session Handoff
 
 **Branch:** `grok-dev`  
-**Last updated:** 2026-06-30  
-**Status:** **D4 implemented** (2026-06-30) — D2b backlog polish next
+**Last updated:** 2026-07-02  
+**Status:** **D4 implemented** (2026-06-30), D2b backlog done. 42/141 bricks now use real geometry (2026-07-02) — D5 optional remains next.
 **Prior work:** Workshop UI/layout ✅ complete (`WorkshopStageLayout`, `workshopStageMetrics.js`, `HolderGridLayout`)
 
 ---
@@ -15,7 +15,46 @@ Tell Grok:
 
 ---
 
-## ⚠️ Critical Constraint — LCA → GLB Is Out of Scope
+## ⚠️ 2026-07-02 update — LCA → GLB reversed for a subset of bricks
+
+**User decision (2026-07-02):** the 2026-06-30 verdict below was reached using
+the old legacy RE converter scripts (`resources/convert_brick.py` era). The
+`resources/model_files/` toolchain was substantially reworked since (real
+materials, LITCOLS/palette handling, world templates) and produces correct
+OBJ/MTL geometry — confirmed by rendering pilot conversions before trusting
+the batch run (see the "Wire real 3D models" plan / session log for
+2026-07-02). A batch pipeline (`resources/model_pipeline/convert_bricks.mjs`)
+converts every brick to `public/workshop/bricks/<id>.glb` (uniform 0.1x
+scale correction: the toolchain's coordinates are true LEGO mm, and 8mm
+stud * 0.1 = the Workshop's `STUD=0.8`), and `generate-brick-catalog.mjs`
+enables `shape:'GLB'` only where the converted mesh's measured bounding box
+matches its catalog stud footprint within tolerance -- **42 of 141** bricks
+so far. The other 99 mismatch because `brickCatalog.generated.js`'s
+`studs`/`heightPlates` were themselves guessed via fuzzy digit-matching
+against a small ~60-part reference table and are wrong for parts outside it
+(confirmed visually, e.g. `l420100` is a large multi-stud baseplate, not the
+small composite the guesser assumed) -- not a mesh defect. Those keep their
+existing parametric shape unchanged: no regression versus before this
+pipeline existed. The procedural `BrickFactory` path below remains the
+fallback/default for everything not GLB-validated.
+
+**Later the same day:** the `obj2gltf` GLB conversion turned out to have an
+inverted Y axis (source coordinates are Y-down) and, because a single
+flipped axis inverts mesh handedness, back faces three.js's default culling
+treated as missing. Rather than debug the conversion further, the **live**
+rendering path was switched to loading `.obj`/`.mtl` directly at runtime
+(`MainMenuStack/shared/objMtlLoader.js`, `resources/model_pipeline/copy_obj_assets.mjs`
+→ `public/models/bricks/<id>.{obj,mtl}`) -- a single negated Y-scale
+component both uprights the model and fixes the culling (three.js
+auto-reverses front-face winding for a negative-determinant transform). The
+GLB pipeline above (`convert_bricks.mjs`, `shape:'GLB'`/`glbUrl`) is
+unchanged and still generated/loadable, it's just not what the running game
+actually uses any more -- `BrickFactory.js` checks `objUrl`/`mtlUrl` first.
+Same 42/141 validated set either way. Verified live: validated bricks render
+upright, solid, and correctly textured; unvalidated ones are unaffected
+(still parametric).
+
+## Original 2026-06-30 constraint (superseded above for the 42 validated bricks)
 
 **User decision (2026-06-30):** After ~2 years of RE work, LCA/VCA → GLB/OBJ conversion **does not produce usable meshes**. Offset parsing is unreliable; output is consistently wrong.
 
@@ -23,11 +62,11 @@ Tell Grok:
 |----------|--------|
 | Legacy RE converter scripts | ❌ Not viable for game assets |
 | `resources/convert_brick.py` | ❌ Not viable for game assets |
-| Batch model-file → `.glb` pipeline | ❌ **Removed from plan** |
+| Batch model-file → `.glb` pipeline | ⚠️ Reworked toolchain + per-brick validation reversed this 2026-07-02 for 42/141 bricks — see above |
 | Raw model files in `BucketBottomResourceStack/` | ✅ Keep for RE reference + UI thumbnails only |
 | PNG bucket thumbnails | ✅ Keep — UI already uses these |
 
-**Do not block workshop implementation on mesh extraction.** Build the editor with **procedural/parametric Three.js geometry** keyed to catalog entries. Optional: hand-authored GLBs added one-at-a-time later (not a pipeline).
+**Do not block workshop implementation on mesh extraction.** Build the editor with **procedural/parametric Three.js geometry** keyed to catalog entries, with validated GLBs overlaid where available (see 2026-07-02 update above).
 
 ---
 
@@ -351,6 +390,8 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 | 2026-06-30 | **D2 shipped:** `workshopSave.js`, hydrate on enter, save on save/leave + thumbnail. |
 | 2026-06-30 | **D3 shipped:** `generate-brick-catalog.mjs` → 141 parametric recipes; SLOPE/CYLINDER/ARCH/COMPOSITE/TILE in `BrickFactory`. |
 | 2026-06-30 | **D4 shipped:** `customCreations.js`, `CreationLoader`, My Creations bucket tab, workshop save exports to main world. **Next: D2b** backlog. |
+| 2026-07-02 | **User reversed the LCA→GLB verdict** for the reworked `resources/model_files/` toolchain (also wired real GLB models into the MainGame warehouse bucket, previously non-functional). Pilot-verified conversion + a per-brick stud-footprint validation gate enabled `shape:'GLB'` for 42/141 bricks; the other 99 keep their parametric shape unchanged (bad catalog metadata, not bad meshes). See `resources/model_pipeline/convert_bricks.mjs`. |
+| 2026-07-02 | **Switched live rendering to direct OBJ/MTL loading** (`shared/objMtlLoader.js`) after finding the `obj2gltf` GLB conversion had an inverted Y axis and, from the resulting handedness flip, back faces three.js was culling as missing. Same 42/141 validated set; GLB pipeline stays generated but unused. Also fixed two real bugs found by driving the app live: `createBrickSync` never checked `recipe.shape` at all (always parametric regardless of catalog data), and the ground-alignment offset was silently discarded by the placement caller's absolute `position.set(...)`, sinking bricks below the plate. Also de-chromakeyed the MainGame warehouse thumbnails (solid green background → transparent) and moved this session's tooling out of `resources/model_files/` into `resources/model_pipeline/`. **Started, blocked:** wiring the `/start-stack/start` world selector to `template-01`…`09` (all 9 exist in the toolchain) — piloting one through the same OBJ/MTL loader renders solid black; ruled out winding/culling and pure-ambient lighting, cause not yet found. |
 
 ---
 

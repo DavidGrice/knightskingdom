@@ -5,6 +5,8 @@ import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 import Archer from '../GameEngineResourceStack/models/archer_with_box2.glb';
 import { resolveDriveCameraProfile } from '../driveCameraProfiles';
 import { updateSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
+import { WAREHOUSE_MODEL_CATALOG } from './warehouseModelCatalog.generated';
+import { loadObjMtl } from '../../../shared/objMtlLoader';
 
 const SelectedModels = {
     NONE: 'NONE',
@@ -18,6 +20,7 @@ const SelectedModels = {
         isRotatable: true,
         isModel: true,
     },
+    ...WAREHOUSE_MODEL_CATALOG,
 };
 
 let addedChampCounter = 0;
@@ -146,6 +149,22 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, ski
     updateSelectionBox(gltf.scene);
 };
 
+/**
+ * Load one catalog entry's geometry, GLTF (hand-authored models, e.g.
+ * Archer) or OBJ/MTL (warehouse models -- the live path; see the "Wire real
+ * 3D models" plan's OBJ/MTL pivot). Resolves with a `{ scene }` shape either
+ * way so callers can treat the result like a GLTFLoader payload regardless
+ * of which loader actually ran.
+ */
+const loadModelEntry = (entry) => {
+    if (entry.objUrl && entry.mtlUrl) {
+        return loadObjMtl(entry.objUrl, entry.mtlUrl).then((root) => ({ scene: root }));
+    }
+    return new Promise((resolve, reject) => {
+        new GLTFLoader().load(entry.model, resolve, undefined, reject);
+    });
+};
+
 const ModelLoader = (type, modelData, position, mapData, scene, onComplete, cameraController) => {
     const loader = new GLTFLoader();
     switch (type) {
@@ -178,10 +197,14 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
             });
             break;
         }
-        case 'restore':
-            loader.load(
-                SelectedModels[modelData]?.model,
-                (gltf) => {
+        case 'restore': {
+            const entry = SelectedModels[modelData];
+            if (!entry) {
+                console.error(`ModelLoader: no model registered for "${modelData}"`);
+                break;
+            }
+            loadModelEntry(entry)
+                .then((gltf) => {
                     setupPlayableGltfScene(gltf, modelData, {
                         position: position?.position,
                         rotation: position?.rotation,
@@ -195,17 +218,20 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                         isDefault: false,
                         profileId: gltf.scene.userData.driveCameraProfileId,
                     });
-                },
-                undefined,
-                (error) => {
+                })
+                .catch((error) => {
                     console.error('An error happened while restoring a model', error);
-                },
-            );
+                });
             break;
-        case 'add':
-            loader.load(
-                SelectedModels[modelData]['model'],
-                (gltf) => {
+        }
+        case 'add': {
+            const entry = SelectedModels[modelData];
+            if (!entry) {
+                console.error(`ModelLoader: no model registered for "${modelData}"`);
+                break;
+            }
+            loadModelEntry(entry)
+                .then((gltf) => {
                     setupPlayableGltfScene(gltf, modelData, { position });
                     scene.add(gltf.scene);
                     addedChampCounter += 1;
@@ -214,13 +240,12 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                         isDefault: false,
                         profileId: gltf.scene.userData.driveCameraProfileId,
                     });
-                },
-                undefined,
-                (error) => {
+                })
+                .catch((error) => {
                     console.error('An error happened', error);
-                },
-            );
+                });
             break;
+        }
         default:
             break;
     }

@@ -38,22 +38,24 @@ npm run build
 
 ---
 
-## Current Status (2026-06-30)
+## Current Status (2026-07-02)
 
 | Area | State |
 |------|-------|
 | **Phases 0–10** | ✅ Complete |
 | **Phase 11** | 🔄 Workshop 3D — **D2b done**, D5 optional next |
-| **Working on** | D5 optional (challenges, instructions, hand GLBs) |
-| **Constraint** | **LCA→GLB abandoned** — use procedural/parametric meshes only |
+| **MainGame warehouse bucket** | ✅ Real models (108/108), was non-functional |
+| **WorkShop bricks** | 🔄 42/141 real geometry, rest parametric (bad catalog metadata, not mesh defects) |
+| **World selector templates** | 🔄 Started — blocked, see `grok/CHANGELOG.md` 2026-07-02 |
+| **Constraint (revised)** | LCA→GLB is viable again for the reworked toolchain — see `grok/CHANGELOG.md` / `WORKSHOP_3D.md` 2026-07-02 entries. Live rendering path is now direct OBJ/MTL loading (`shared/objMtlLoader.js`), not GLB conversion. |
 
 **Recent commits:**
 ```
-0117c9b Phase 9: snapshot gallery, workshop mapData, dark weather, worlds 2-10
-f15c48a Replace fog particles with atmospheric fog and low-lying mist layers
-6da68aa Phase 8c: engine cleanup
-5d6ace3 Phase 8b: GameEngineCore
-a430cc2 Phase 8a: hydrate saved scene state
+cbb5ed0 Move this session's new tooling out of resources/model_files/
+5d116bf Remove chroma-key green background from warehouse bucket thumbnails
+a369c9c Load OBJ/MTL directly at runtime instead of the GLB conversion
+8b42b9b Stop tracking extraction-derived 3D model assets in git
+5ab8feb Fix WorkShop GLB bricks: never loaded, and sank below the plate
 ```
 
 ---
@@ -128,7 +130,7 @@ Authentication → MainMenu → Start (world pick) → MainGame
 | File | Contents |
 |------|----------|
 | `engineAssets.js` | Map GLB, grass skybox, default models |
-| `localWorlds.js` | Worlds 1–10 (all playable; map1 placeholder for 2–10) |
+| `localWorlds.js` | Worlds 1–10 (all playable; **all 10 still share the `map1` placeholder** — see "Deferred" above for the blocked `template-01`…`09` swap-in) |
 | `sharedWorlds.js` | Shared worlds metadata (no engine assets yet) |
 
 ### API layer (`src/api/`)
@@ -176,8 +178,9 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 ### Deferred
 
 - [ ] React Three Fiber migration (optional; plain Three.js is working)
-- [ ] Unique GLB assets per world 2–10
+- [ ] Unique models per world 2–10 — **in progress, blocked**; `template-01`…`template-09` exist in the extraction toolchain but render black through the OBJ/MTL loader (see `grok/CHANGELOG.md` 2026-07-02)
 - [ ] Shared worlds engine playability
+- [ ] WorkShop: bring the remaining 99/141 non-validated bricks' catalog `studs`/footprint in line with their real measured geometry (currently based on a fuzzy digit-matched guess against a small reference table)
 
 ---
 
@@ -224,10 +227,12 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | `src/Components/.../context/sceneSchema.js` | Save/load schema |
 | `src/api/worldSave.js` | Save/snapshot CRUD |
 | `src/data/worlds/` | World catalogs |
-| `grok/WORKSHOP_3D.md` | **Phase 11 plan** — workshop 3D editor gaps, options, D1 steps |
+| `grok/WORKSHOP_3D.md` | **Phase 11 plan** — workshop 3D editor gaps, options, D1 steps, 2026-07-02 LCA→GLB reversal |
 | `WorkShop/WorkShop.jsx` | Workshop screen (UI done; no engine yet) |
 | `WorkShop/.../BucketBottomResourceStack/` | ~200 brick raw model files + catalog `index.js` |
 | `Common/WorkshopStageLayout/` | Pixel-anchored workshop layout metrics |
+| `MainMenuStack/shared/objMtlLoader.js` | Runtime OBJ/MTL loader (the live model-rendering path for both warehouse props and validated bricks) |
+| `resources/model_pipeline/` | This session's conversion/pilot/thumbnail tooling (kept separate from the original `resources/model_files/` toolchain) |
 
 ---
 

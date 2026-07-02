@@ -3,7 +3,7 @@
 Deep-dive breakdown of the **game codebase** (`src/` + `app/`).  
 For RE assets see `resources/` and root `README.md`.
 
-**Last updated:** 2026-06-30 (Phase 11 planning)
+**Last updated:** 2026-07-02 (real models in MainGame warehouse bucket + WorkShop bricks)
 
 ---
 
@@ -133,9 +133,28 @@ MainGame vs WorkShop duplication **merged** into `shared/` with `mode` config.
 | Loader | Role |
 |--------|------|
 | `MapLoader` | Terrain GLTF → `GameMap` |
-| `ModelLoader` | Preload / add / restore; shared `configureGltfMeshNodes` |
+| `ModelLoader` | Preload / add / restore; shared `configureGltfMeshNodes`. For catalog entries with `objUrl`/`mtlUrl` (the MainGame warehouse bucket, 2026-07-02), loads via the shared `objMtlLoader.js` instead of `GLTFLoader` — see below |
 | `SkyBoxLoader` | Cube skybox + climate shader uniforms |
 | `ClimateLoader` | Weather: snow, rain, wind particles; atmospheric fog + mist layers |
+
+### Model loading: GLTF vs. OBJ/MTL (2026-07-02)
+
+Two model formats coexist in `ModelLoader.jsx` / `BrickFactory.js`:
+
+- **GLTF/GLB** — hand-authored assets (`archer_with_box2.glb`, `map1.glb`) and
+  the generated `warehouseModelCatalog.generated.js` / `brickCatalog.generated.js`
+  `model`/`glbUrl` fields (from `resources/model_pipeline/convert_warehouse.mjs`
+  / `convert_bricks.mjs`, an `obj2gltf` conversion pipeline). Still generated,
+  still loadable, **not the live path** for extracted models any more.
+- **OBJ/MTL** (live path for extracted models) — `MainMenuStack/shared/objMtlLoader.js`
+  loads `.obj`/`.mtl` directly via `OBJLoader`/`MTLLoader` from `public/models/`
+  (populated by `resources/model_pipeline/copy_obj_assets.mjs`). Chosen because
+  the `obj2gltf` conversion had an orientation/culling bug; OBJ/MTL sidesteps
+  it entirely (a negated Y-scale component both uprights the model and lets
+  three.js's negative-determinant winding auto-correction fix the culling).
+
+Both catalogs carry both sets of fields; loaders check `objUrl`/`mtlUrl` first
+and fall back to `model`/`glbUrl` if absent.
 
 ### Climate modes (all wired)
 
@@ -253,7 +272,7 @@ Page shells stay ~300–400 B; heavy chunks load on demand.
 | `BrickFactory` | ⬜ planned | Parametric Three.js meshes from `brickCatalog.js` stud recipes |
 | `sceneSchema` extensions | ⬜ planned | `brickInstances[]` + `customCreations[]` on profile |
 
-**Brick assets:** PNG thumbnails for UI; 3D from **parametric factory** (not LCA). Raw model files are RE archive only — LCA→GLB pipeline abandoned (unusable offsets/meshes after years of RE).
+**Brick assets:** PNG thumbnails for UI; 3D from **parametric factory** by default. As of 2026-07-02, 42/141 bricks (the ones whose extracted geometry matches their catalog stud footprint within tolerance) instead load real geometry via `objMtlLoader.js` from `public/models/bricks/`; see "Model loading: GLTF vs. OBJ/MTL" above and `grok/WORKSHOP_3D.md`.
 
 ---
 
@@ -261,7 +280,13 @@ Page shells stay ~300–400 B; heavy chunks load on demand.
 
 - Some unused vars in game components
 - Workshop 3D editor — see `grok/WORKSHOP_3D.md`
-- Unique GLB assets per world 2–10
+- Unique models per world 2–10 — **in progress, blocked**: `template-01`…`09`
+  exist in the extraction toolchain but render solid black through
+  `objMtlLoader.js` for reasons not yet found (ruled out winding/culling and
+  pure-ambient lighting); see `grok/CHANGELOG.md` 2026-07-02
+- WorkShop: 99/141 bricks' catalog `studs`/footprint don't match their real
+  geometry (a guessed value, not measured) — only affects which bricks are
+  eligible for the real-geometry overlay, not correctness of what's shipped
 
 ---
 

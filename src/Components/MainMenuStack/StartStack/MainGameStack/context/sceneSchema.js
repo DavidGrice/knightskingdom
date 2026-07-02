@@ -1,11 +1,18 @@
 import * as THREE from 'three';
 import { isCreationModelId } from '@/api/customCreations';
+import { WAREHOUSE_MODEL_IDS } from '../MainGame/GameEngine/Loaders/warehouseModelCatalog.generated';
 
 const vector3ToPlain = (v) => ({ x: v.x, y: v.y, z: v.z });
 
 const eulerToPlain = (e) => ({ x: e.x, y: e.y, z: e.z });
 
-const PLAYABLE_MODEL_IDS = new Set(['ARCHER']);
+// Despite the name, this doesn't gate "driveable" -- it gates whether a
+// model was dynamically added via ModelLoader('add'/'restore', ...) and
+// therefore needs to be reloaded via GLTFLoader on restore, as opposed to
+// being part of the always-preloaded static map (which only needs a
+// transform update). Every warehouse catalog id is added dynamically, so
+// all of them belong here or they'll silently vanish on reload/restore.
+const PLAYABLE_MODEL_IDS = new Set(['ARCHER', ...WAREHOUSE_MODEL_IDS]);
 
 export const isPlayableModelEntry = (entry) => PLAYABLE_MODEL_IDS.has(entry?.modelId);
 
