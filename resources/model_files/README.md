@@ -125,7 +125,7 @@ time, lives in [`docs/FORMAT_SPEC.md`](docs/FORMAT_SPEC.md).
 
 ## Acknowledgements
 
-- An original developer of the game generously provided the Superscape
+- Richard Hill, an original developer of the game generously provided the Superscape
   SDK 5.71 documentation and VRT headers that anchored this work.
 - Superscape VRT © Superscape VR plc. LEGO® is a trademark of the LEGO
   Group, which does not sponsor, authorize, or endorse this project.
