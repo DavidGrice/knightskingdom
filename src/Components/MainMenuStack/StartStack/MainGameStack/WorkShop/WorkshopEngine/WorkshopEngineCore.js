@@ -1,7 +1,11 @@
 import * as THREE from 'three';
 import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
-import { createBrickSync, paintBrick, updateSelectionBox } from './BrickFactory';
-import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
+import { createBrickSync, paintBrick, preloadGlbBricks, updateSelectionBox } from './BrickFactory';
+import { BRICK_CATALOG, resolveBrickRecipe, recipeHeight } from './brickCatalog';
+
+const GLB_BRICK_URLS = Object.values(BRICK_CATALOG)
+  .filter((recipe) => recipe.shape === 'GLB' && recipe.glbUrl)
+  .map((recipe) => recipe.glbUrl);
 import { brickCollidesWithAny, getOrientedStuds } from './brickCollision';
 import { getBrickMoveGroup } from './brickStack';
 import { getRecipeStudFootprint, resolveStackPlacement } from './brickStuds';
@@ -45,6 +49,12 @@ export class WorkshopEngineCore {
 
     this.handleResize = this.handleResize.bind(this);
     this.animate = this.animate.bind(this);
+
+    // warm the GLB cache up front so createBrickSync's synchronous
+    // cache-hit path (BrickFactory.js) can use real geometry on the
+    // user's first click instead of always falling back to parametric
+    // while the fetch is still in flight
+    preloadGlbBricks(GLB_BRICK_URLS);
   }
 
   mount(mountNode) {
