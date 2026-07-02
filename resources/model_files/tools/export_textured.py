@@ -39,6 +39,8 @@ def texspecs(wld):
     o, cur = 12, None
     specs = collections.defaultdict(list)
     trans = {}
+    litcols = {}
+    materials = {}
     while o + 4 <= len(wld):
         t = struct.unpack_from('<H', wld, o)[0]
         if t == 0xFFFF:
@@ -71,14 +73,34 @@ def texspecs(wld):
             n = struct.unpack_from('<H', wld, o + 4)[0]
             n = min(n, (ln - 6) // 2)
             trans[cur] = list(struct.unpack_from('<%dH' % n, wld, o + 6))
+        elif t == 0x17 and cur is not None:                # LITCOLS
+            litcols[cur] = list(wld[o + 4:o + ln])
+        elif t == 0x23 and cur is not None:                # MATERIAL
+            shin, _is, tr, _it = struct.unpack_from('<4B', wld, o + 4)
+            fl, = struct.unpack_from('<I', wld, o + 8)
+            materials[cur] = (shin, tr, fl)
         o += ln
-    return specs, trans
+    return specs, trans, litcols, materials
 
 
 def export_textured(lca_path, out_dir, tex_dir=None, prefer_template=None):
     raw = open(lca_path, 'rb').read()
     _hdr, subs = L.split_container(raw)
-    specs, trans = texspecs(subs['WRLD']) if 'WRLD' in subs else ({}, {})
+    specs, trans, litcols, materials = texspecs(subs['WRLD']) \
+        if 'WRLD' in subs else ({}, {}, {}, {})
+    # LITCOLS index the game's GLOBAL runtime palette, not the .lca PALT
+    gpal = None
+    for cand in ([tex_dir] if tex_dir else []) + \
+            [os.path.join(out_dir, 'textures'),
+             os.path.join(out_dir, '..', 'xvr'),
+             os.path.dirname(os.path.abspath(lca_path))]:
+        p = os.path.join(cand, 'creator2000.pal')
+        if os.path.exists(p):
+            d = open(p, 'rb').read()
+            gg = d.find(b'PALT')
+            gpal = [tuple(d[gg + 16 + 3 * i:gg + 19 + 3 * i])
+                    for i in range(256)]
+            break
 
     if prefer_template is None:
         # world templates & challenges use category 'User' and need the
@@ -116,16 +138,19 @@ def export_textured(lca_path, out_dir, tex_dir=None, prefer_template=None):
 
     obj_lines = [f'# Converted from {os.path.basename(lca_path)} (textured)',
                  f'mtllib {name}.mtl', '']
-    used_pal, used_tex = set(), set()
+    used_pal, used_tex, used_glit = set(), set(), set()
     vbase = 1
     vtbase = 1
     stats = {'objects': 0, 'faces': 0, 'tex_faces': 0, 'skipped': 0,
              'missing_tex': set()}
 
-    def emit_object(ob, pM, pT):
+    def emit_object(ob, pM, pT, inh_mat=None):
         nonlocal vbase, vtbase
         if ob['oflags'] & (E_OFINVISIBLE | E_OFINVISDEF):
             return
+        own = materials.get(ob['number'])
+        eff = own if own is not None else inh_mat
+        child_inh = own if (own and own[2] & 1) else inh_mat
         rot = ob.get('rot')
         if rot and any(rot['brees']):
             R = E.rot_from_brees(rot['brees'])
@@ -137,12 +162,16 @@ def export_textured(lca_path, out_dir, tex_dir=None, prefer_template=None):
         T = [pT[i] + E.mat_vec(pM, base)[i] for i in range(3)]
         typ = ob['type']
         if typ != 0xFFFF and typ + 1 < len(shapes) and shapes[typ + 1]:
-            emit_shape(ob, shapes[typ + 1], typ, M, T)
+            emit_shape(ob, shapes[typ + 1], typ, M, T, eff)
         for ch in ob['children']:
-            emit_object(ch, M, T)
+            emit_object(ch, M, T, child_inh)
 
-    def emit_shape(ob, shape, typ, M, T):
+    def emit_shape(ob, shape, typ, M, T, eff_mat=None):
         nonlocal vbase, vtbase
+        shin, transp = (eff_mat[0], eff_mat[1]) if eff_mat else (0, 0)
+        sfx = ''
+        if shin or transp:
+            sfx = f'_s{shin}t{transp}'
         lines = shape.get('lines')
         fallback_pts = None
         if 'points' not in shape or lines is None:
@@ -172,6 +201,7 @@ def export_textured(lca_path, out_dir, tex_dir=None, prefer_template=None):
 
         myspecs = {s['facet']: s for s in specs.get(ob['number'], [])}
         mytrans = trans.get(ob['number'])
+        mylit = litcols.get(ob['number'])
         ocols = ob['chunks'].get('colours')
         scols = shape.get('colours') or []
         cur_mat = None
@@ -187,18 +217,20 @@ def export_textured(lca_path, out_dir, tex_dir=None, prefer_template=None):
                 gref = spec['tex']
                 if mytrans:
                     gref = mytrans[gref] if 0 <= gref < len(mytrans) else None
-                else:
-                    gref = gref - 1        # 1-based ref -> 0-based sprite
+                # refs are DIRECT global sprite indices (0 = untextured)
             if spec and gref is not None and gref in have_tex and len(spec['uv']) == len(loop):
-                mat = f'tex{gref:03d}'
+                mat = f'tex{gref:03d}{sfx}'
                 if mat != cur_mat:
                     obj_lines.append(f'usemtl {mat}')
-                    used_tex.add(gref)
+                    used_tex.add((gref, shin, transp))
                     cur_mat = mat
                 uvs = list(reversed(spec['uv']))
                 vts = []
                 for (tu, tv) in uvs:
-                    obj_lines.append(f'vt {tu:.5f} {tv:.5f}')   # VRT tv is bottom-up like OBJ
+                    # VRT tv is TOP-DOWN (D3D-style): OBJ vt v = 1 - tv.
+                    # (Do not trust tree billboards for this: their
+                    # textures are stored pre-flipped.)
+                    obj_lines.append(f'vt {tu:.5f} {1.0 - tv:.5f}')
                     vts.append(vtbase)
                     vtbase += 1
                 idxs = [vbase + p for p in reversed(loop)]
@@ -209,16 +241,22 @@ def export_textured(lca_path, out_dir, tex_dir=None, prefer_template=None):
                 if spec and gref not in have_tex:
                     stats['missing_tex'].add(gref)
                 ci = None
+                mat = None
                 if ocols and 1 <= num <= len(ocols):
                     ci = ocols[num - 1]
+                elif gpal is not None and mylit and 1 <= num <= len(mylit):
+                    gi = mylit[num - 1]        # global runtime palette
+                    mat = f'glit{gi:03d}{sfx}'
+                    used_glit.add((gi, shin, transp))
                 elif scols and 1 <= num <= len(scols):
                     ci = scols[num - 1]
-                if ci is None:
-                    ci = 7
-                mat = f'pal{ci:03d}'
+                if mat is None:
+                    if ci is None:
+                        ci = 7
+                    mat = f'pal{ci:03d}{sfx}'
+                    used_pal.add((ci, shin, transp))
                 if mat != cur_mat:
                     obj_lines.append(f'usemtl {mat}')
-                    used_pal.add(ci)
                     cur_mat = mat
                 idxs = [vbase + p for p in reversed(loop)]
                 obj_lines.append('f ' + ' '.join(map(str, idxs)))
@@ -228,20 +266,41 @@ def export_textured(lca_path, out_dir, tex_dir=None, prefer_template=None):
 
     if root:
         root = dict(root, pos=[0, 0, 0])
-        emit_object(root, E.mat_identity(), [0.0, 0.0, 0.0])
+        emit_object(root, E.mat_identity(), [0.0, 0.0, 0.0], None)
 
     os.makedirs(out_dir, exist_ok=True)
     obj_path = os.path.join(out_dir, name + '.obj')
     with open(obj_path, 'w') as fh:
         fh.write('\n'.join(obj_lines) + '\n')
     with open(os.path.join(out_dir, name + '.mtl'), 'w') as fh:
-        for ci in sorted(used_pal):
+        def phys(shin, transp):
+            ks = 0.06 + (shin / 255.0) * 0.85
+            ns = 24 + shin * 4
+            d = 1.0 - transp / 255.0
+            return ks, ns, d
+
+        def suffix(shin, transp):
+            return f'_s{shin}t{transp}' if (shin or transp) else ''
+
+        for ci, shin, transp in sorted(used_pal):
             rr, gg, bb = [c / 255.0 for c in pal[ci]]
-            fh.write(f'newmtl pal{ci:03d}\nKd {rr:.4f} {gg:.4f} {bb:.4f}\n'
-                     f'Ks 0.06 0.06 0.06\nNs 24\nd 1.0\n\n')
-        for tr in sorted(used_tex):
-            fh.write(f'newmtl tex{tr:03d}\nKd 1 1 1\nKs 0.06 0.06 0.06\n'
-                     f'Ns 24\nd 1.0\nmap_Kd textures/{have_tex[tr]}\n\n')
+            ks, ns, dd = phys(shin, transp)
+            fh.write(f'newmtl pal{ci:03d}{suffix(shin,transp)}\n'
+                     f'Kd {rr:.4f} {gg:.4f} {bb:.4f}\n'
+                     f'Ks {ks:.3f} {ks:.3f} {ks:.3f}\nNs {ns}\n'
+                     f'd {dd:.3f}\n\n')
+        for gi, shin, transp in sorted(used_glit):
+            rr, gg2, bb = [c / 255.0 for c in (gpal[gi] if gpal else (200,)*3)]
+            ks, ns, dd = phys(shin, transp)
+            fh.write(f'newmtl glit{gi:03d}{suffix(shin,transp)}\n'
+                     f'Kd {rr:.4f} {gg2:.4f} {bb:.4f}\n'
+                     f'Ks {ks:.3f} {ks:.3f} {ks:.3f}\nNs {ns}\n'
+                     f'd {dd:.3f}\n\n')
+        for tr, shin, transp in sorted(used_tex):
+            ks, ns, dd = phys(shin, transp)
+            fh.write(f'newmtl tex{tr:03d}{suffix(shin,transp)}\n'
+                     f'Kd 1 1 1\nKs {ks:.3f} {ks:.3f} {ks:.3f}\nNs {ns}\n'
+                     f'd {dd:.3f}\nmap_Kd textures/{have_tex[tr]}\n\n')
     stats['missing_tex'] = sorted(stats['missing_tex'])
     return obj_path, stats
 

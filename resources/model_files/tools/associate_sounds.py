@@ -142,7 +142,14 @@ def main():
         w.writerow(['lca_file', 'object_number', 'object_name', 'sound_id',
                     'sound_name', 'wav_file', 'match_rule'])
         total = 0
-        for path in sys.argv[3:]:
+        paths = []
+        for a in sys.argv[3:]:
+            if os.path.isdir(a):
+                paths += sorted(glob.glob(os.path.join(a, '**', '*.lca'),
+                                          recursive=True))
+            else:
+                paths.append(a)
+        for path in paths:
             total += associate(path, wavs, w)
     print(f'{out_csv}: {total} associations across {len(sys.argv)-3} files')
 
