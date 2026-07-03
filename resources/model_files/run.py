@@ -42,6 +42,9 @@ def tally(out):
     models = count(os.path.join(out, 'models', '*.obj'))
     textures = count(os.path.join(out, 'textures', '*.png'))
     sounds = count(os.path.join(out, 'sounds', '*.wav'))
+    animations = count(os.path.join(out, 'animations', '*.json'))
+    glbs = count(os.path.join(out, 'models', '*.glb')) + \
+        count(os.path.join(out, 'templates', '**', '*.glb'))
     pak = os.path.join(out, 'pak')
     voices = count(os.path.join(pak, '**', '*.wav'))
     images = count(os.path.join(pak, '**', '*.png')) + \
@@ -56,8 +59,10 @@ def tally(out):
     size = folder_size(out)
     banner('EXTRACTION TALLY')
     print(f'  Models (textured OBJ+MTL) : {models}')
+    print(f'  Models as GLB             : {glbs}')
     print(f'  Textures (PNG)            : {textures}')
     print(f'  World sounds (WAV)        : {sounds}')
+    print(f'  Character animations      : {animations}')
     print(f'  Voice-overs / pak audio   : {voices}')
     print(f'  Images & thumbnails (pak) : {images}')
     print(f'  Help / text files         : {texts}')
@@ -148,8 +153,10 @@ def main():
         print(f'Your assets are in:\n  {out}\n')
         print('  models/    textured OBJ+MTL (Blender: File > Import >')
         print('             Wavefront, viewport to Material Preview)')
+        print('             + self-contained .glb next to each (glTF)')
         print('  textures/  the texture bank as PNG')
         print('  sounds/    the 92 named world sounds as WAV')
+        print('  animations/  character animations (.smo) as JSON')
         print('  pak/       voice-overs, help text, UI art')
         print('  sound_map.csv  object > sound associations')
     else:
