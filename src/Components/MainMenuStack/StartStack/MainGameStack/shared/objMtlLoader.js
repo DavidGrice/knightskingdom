@@ -52,12 +52,15 @@ export function loadObjMtl(objUrl, mtlUrl, options = {}) {
   const scale = options.scale ?? MM_TO_WORLD_SCALE;
   const key = cacheKey(objUrl, mtlUrl);
 
+  // Every caller's chain ends in its own, independent `.clone(true)` off the
+  // never-mutated cached template -- never off a value another caller may
+  // already be mutating (concurrent callers during an in-flight load used to
+  // share and mutate the same clone via chained `.then()`s, so callers that
+  // scale/rotate the result, e.g. MapLoader, could double-apply on top of
+  // each other's changes).
   const cached = cache.get(key);
-  if (cached instanceof Promise) {
-    return cached.then((template) => template.clone(true));
-  }
   if (cached) {
-    return Promise.resolve(cached.clone(true));
+    return Promise.resolve(cached).then((template) => template.clone(true));
   }
 
   const promise = new Promise((resolve, reject) => {
@@ -83,8 +86,7 @@ export function loadObjMtl(objUrl, mtlUrl, options = {}) {
               }
             });
             root.updateMatrixWorld(true);
-            cache.set(key, root);
-            resolve(root.clone(true));
+            resolve(root);
           },
           undefined,
           (err) => reject(new Error(`OBJ load failed (${objUrl}): ${err?.message || err}`)),
@@ -96,7 +98,11 @@ export function loadObjMtl(objUrl, mtlUrl, options = {}) {
   });
 
   cache.set(key, promise);
-  return promise;
+  promise.then(
+    (template) => cache.set(key, template),
+    () => cache.delete(key),
+  );
+  return promise.then((template) => template.clone(true));
 }
 
 /** Already-resolved cached template, or null if not loaded (or still loading). */

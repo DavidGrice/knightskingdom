@@ -4,9 +4,11 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Authentication from '@/Components/AuthenticationStack/Authentication/Authentication';
 import { useUserData } from '@/lib/context/UserDataProvider';
+import { useScreenReady } from '@/lib/context/GameLoadingProvider';
 import { ROUTES } from '@/lib/routes';
 
 export default function AuthenticationPage() {
+  useScreenReady();
   const {
     userData,
     hydrated,

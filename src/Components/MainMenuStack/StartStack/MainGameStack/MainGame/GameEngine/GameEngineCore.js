@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { MapLoader, ModelLoader, CreationLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
+import { MapLoader, MapPlacementsLoader, ModelLoader, CreationLoader, SkyBoxLoader, ClimateLoader } from './Loaders/index';
 import { animateWeatherSystems } from './Loaders/ClimateLoader';
 import { applySavedSceneToThree, serializeSceneFromThree } from '../../context/sceneSchema';
 import { disposeObject3D, removeSceneChildrenExcept } from './sceneDispose';
@@ -44,10 +44,13 @@ export class GameEngineCore {
     this.mountNode = mountNode;
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     mountNode.appendChild(this.renderer.domElement);
+    // Dev/test-only: lets testing/ scripts and manual debugging inspect the
+    // live scene graph without a bespoke introspection API.
+    window.__gameScene = this.scene;
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
-    this.controls.enablePan = false;
+    this.controls.enablePan = true;
     this.controls.enableDamping = false;
     this.controls.enableRotate = false;
     this.camera.position.set(0, 5, 10);
@@ -111,7 +114,8 @@ export class GameEngineCore {
     this.loadedMapId = mapData.id;
     this.mapData = mapData;
 
-    MapLoader(mapData, this.scene, () => {
+    MapLoader(mapData, this.scene, (_loaded, transform) => {
+      MapPlacementsLoader(mapData, transform, this.scene);
       ModelLoader(
         'preload',
         null,

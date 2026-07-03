@@ -1,0 +1,1502 @@
+{
+  "2": {
+    "referenceSize": [
+      32000,
+      38400,
+      16000
+    ],
+    "representativeObjectNumber": 10,
+    "faceCount": 19,
+    "vertexCount": 28
+  },
+  "3": {
+    "referenceSize": [
+      32000,
+      16000,
+      48000
+    ],
+    "representativeObjectNumber": 12,
+    "faceCount": 34,
+    "vertexCount": 48
+  },
+  "5": {
+    "referenceSize": [
+      32000,
+      16000,
+      48000
+    ],
+    "representativeObjectNumber": 14,
+    "faceCount": 20,
+    "vertexCount": 32
+  },
+  "7": {
+    "referenceSize": [
+      32000,
+      54400,
+      64000
+    ],
+    "representativeObjectNumber": 17,
+    "faceCount": 186,
+    "vertexCount": 284
+  },
+  "11": {
+    "referenceSize": [
+      8000,
+      3200,
+      8000
+    ],
+    "representativeObjectNumber": 22,
+    "faceCount": 17,
+    "vertexCount": 28
+  },
+  "13": {
+    "referenceSize": [
+      3200,
+      6400,
+      8000
+    ],
+    "representativeObjectNumber": 25,
+    "faceCount": 33,
+    "vertexCount": 40
+  },
+  "18": {
+    "referenceSize": [
+      11200,
+      8000,
+      8000
+    ],
+    "representativeObjectNumber": 32,
+    "faceCount": 64,
+    "vertexCount": 113
+  },
+  "20": {
+    "referenceSize": [
+      8000,
+      9600,
+      64000
+    ],
+    "representativeObjectNumber": 34,
+    "faceCount": 45,
+    "vertexCount": 58
+  },
+  "23": {
+    "referenceSize": [
+      24000,
+      19200,
+      32000
+    ],
+    "representativeObjectNumber": 37,
+    "faceCount": 34,
+    "vertexCount": 52
+  },
+  "25": {
+    "referenceSize": [
+      24000,
+      19200,
+      32000
+    ],
+    "representativeObjectNumber": 39,
+    "faceCount": 22,
+    "vertexCount": 32
+  },
+  "26": {
+    "referenceSize": [
+      16000,
+      3200,
+      16000
+    ],
+    "representativeObjectNumber": 42,
+    "faceCount": 52,
+    "vertexCount": 80
+  },
+  "31": {
+    "referenceSize": [
+      32000,
+      9600,
+      32000
+    ],
+    "representativeObjectNumber": 48,
+    "faceCount": 144,
+    "vertexCount": 182
+  },
+  "32": {
+    "referenceSize": [
+      3200,
+      1600,
+      16000
+    ],
+    "representativeObjectNumber": 59,
+    "faceCount": 29,
+    "vertexCount": 44
+  },
+  "35": {
+    "referenceSize": [
+      32004,
+      8302,
+      32000
+    ],
+    "representativeObjectNumber": 146,
+    "faceCount": 101,
+    "vertexCount": 141
+  },
+  "36": {
+    "referenceSize": [
+      32000,
+      8300,
+      32000
+    ],
+    "representativeObjectNumber": 63,
+    "faceCount": 176,
+    "vertexCount": 218
+  },
+  "38": {
+    "referenceSize": [
+      23800,
+      25600,
+      25400
+    ],
+    "representativeObjectNumber": 92,
+    "faceCount": 320,
+    "vertexCount": 349
+  },
+  "44": {
+    "referenceSize": [
+      16000,
+      8000,
+      8000
+    ],
+    "representativeObjectNumber": 123,
+    "faceCount": 18,
+    "vertexCount": 38
+  },
+  "46": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 126,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "48": {
+    "referenceSize": [
+      8000,
+      3200,
+      8000
+    ],
+    "representativeObjectNumber": 128,
+    "faceCount": 6,
+    "vertexCount": 16
+  },
+  "49": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 130,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "50": {
+    "referenceSize": [
+      8000,
+      3200,
+      8000
+    ],
+    "representativeObjectNumber": 132,
+    "faceCount": 6,
+    "vertexCount": 16
+  },
+  "51": {
+    "referenceSize": [
+      16000,
+      12800,
+      8000
+    ],
+    "representativeObjectNumber": 133,
+    "faceCount": 8,
+    "vertexCount": 16
+  },
+  "53": {
+    "referenceSize": [
+      16000,
+      17600,
+      16000
+    ],
+    "representativeObjectNumber": 136,
+    "faceCount": 97,
+    "vertexCount": 149
+  },
+  "54": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 138,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "56": {
+    "referenceSize": [
+      8000,
+      6400,
+      8000
+    ],
+    "representativeObjectNumber": 141,
+    "faceCount": 40,
+    "vertexCount": 64
+  },
+  "58": {
+    "referenceSize": [
+      3200,
+      1600,
+      16000
+    ],
+    "representativeObjectNumber": 144,
+    "faceCount": 14,
+    "vertexCount": 23
+  },
+  "60": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 148,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "64": {
+    "referenceSize": [
+      16000,
+      8000,
+      8000
+    ],
+    "representativeObjectNumber": 164,
+    "faceCount": 18,
+    "vertexCount": 38
+  },
+  "66": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 167,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "68": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 171,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "69": {
+    "referenceSize": [
+      16000,
+      12800,
+      8000
+    ],
+    "representativeObjectNumber": 174,
+    "faceCount": 8,
+    "vertexCount": 16
+  },
+  "71": {
+    "referenceSize": [
+      24000,
+      16000,
+      24000
+    ],
+    "representativeObjectNumber": 177,
+    "faceCount": 109,
+    "vertexCount": 156
+  },
+  "73": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 180,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "74": {
+    "referenceSize": [
+      16000,
+      32000,
+      8000
+    ],
+    "representativeObjectNumber": 185,
+    "faceCount": 37,
+    "vertexCount": 54
+  },
+  "77": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 189,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "78": {
+    "referenceSize": [
+      16000,
+      19200,
+      12000
+    ],
+    "representativeObjectNumber": 194,
+    "faceCount": 53,
+    "vertexCount": 105
+  },
+  "82": {
+    "referenceSize": [
+      16000,
+      19200,
+      16000
+    ],
+    "representativeObjectNumber": 206,
+    "faceCount": 7,
+    "vertexCount": 12
+  },
+  "83": {
+    "referenceSize": [
+      16000,
+      12800,
+      8000
+    ],
+    "representativeObjectNumber": 207,
+    "faceCount": 11,
+    "vertexCount": 20
+  },
+  "84": {
+    "referenceSize": [
+      16000,
+      22400,
+      16000
+    ],
+    "representativeObjectNumber": 209,
+    "faceCount": 76,
+    "vertexCount": 118
+  },
+  "86": {
+    "referenceSize": [
+      8000,
+      16000,
+      8000
+    ],
+    "representativeObjectNumber": 216,
+    "faceCount": 82,
+    "vertexCount": 110
+  },
+  "90": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 237,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "92": {
+    "referenceSize": [
+      8000,
+      3200,
+      8000
+    ],
+    "representativeObjectNumber": 239,
+    "faceCount": 6,
+    "vertexCount": 16
+  },
+  "93": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 241,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "94": {
+    "referenceSize": [
+      8000,
+      3200,
+      8000
+    ],
+    "representativeObjectNumber": 243,
+    "faceCount": 6,
+    "vertexCount": 16
+  },
+  "95": {
+    "referenceSize": [
+      16000,
+      12800,
+      8000
+    ],
+    "representativeObjectNumber": 244,
+    "faceCount": 8,
+    "vertexCount": 16
+  },
+  "96": {
+    "referenceSize": [
+      16000,
+      9600,
+      16000
+    ],
+    "representativeObjectNumber": 246,
+    "faceCount": 36,
+    "vertexCount": 62
+  },
+  "98": {
+    "referenceSize": [
+      16000,
+      15900,
+      16000
+    ],
+    "representativeObjectNumber": 249,
+    "faceCount": 138,
+    "vertexCount": 176
+  },
+  "100": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 253,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "101": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 258,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "104": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 276,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "106": {
+    "referenceSize": [
+      8000,
+      12000,
+      8000
+    ],
+    "representativeObjectNumber": 280,
+    "faceCount": 17,
+    "vertexCount": 34
+  },
+  "107": {
+    "referenceSize": [
+      21980,
+      21980,
+      3200
+    ],
+    "representativeObjectNumber": 284,
+    "faceCount": 40,
+    "vertexCount": 68
+  },
+  "109": {
+    "referenceSize": [
+      4000,
+      6400,
+      24000
+    ],
+    "representativeObjectNumber": 299,
+    "faceCount": 15,
+    "vertexCount": 30
+  },
+  "110": {
+    "referenceSize": [
+      8000,
+      51200,
+      16000
+    ],
+    "representativeObjectNumber": 300,
+    "faceCount": 62,
+    "vertexCount": 82
+  },
+  "114": {
+    "referenceSize": [
+      16000,
+      8000,
+      8000
+    ],
+    "representativeObjectNumber": 315,
+    "faceCount": 18,
+    "vertexCount": 38
+  },
+  "116": {
+    "referenceSize": [
+      16000,
+      12800,
+      8000
+    ],
+    "representativeObjectNumber": 325,
+    "faceCount": 8,
+    "vertexCount": 16
+  },
+  "117": {
+    "referenceSize": [
+      16000,
+      20800,
+      28000
+    ],
+    "representativeObjectNumber": 327,
+    "faceCount": 134,
+    "vertexCount": 230
+  },
+  "119": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 330,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "121": {
+    "referenceSize": [
+      16000,
+      48800,
+      8000
+    ],
+    "representativeObjectNumber": 334,
+    "faceCount": 36,
+    "vertexCount": 56
+  },
+  "123": {
+    "referenceSize": [
+      3898,
+      7898,
+      10400
+    ],
+    "representativeObjectNumber": 339,
+    "faceCount": 31,
+    "vertexCount": 49
+  },
+  "125": {
+    "referenceSize": [
+      16000,
+      28800,
+      8000
+    ],
+    "representativeObjectNumber": 343,
+    "faceCount": 54,
+    "vertexCount": 115
+  },
+  "128": {
+    "referenceSize": [
+      16000,
+      24300,
+      21700
+    ],
+    "representativeObjectNumber": 371,
+    "faceCount": 149,
+    "vertexCount": 258
+  },
+  "130": {
+    "referenceSize": [
+      16000,
+      16000,
+      16000
+    ],
+    "representativeObjectNumber": 373,
+    "faceCount": 99,
+    "vertexCount": 143
+  },
+  "132": {
+    "referenceSize": [
+      24000,
+      72000,
+      8000
+    ],
+    "representativeObjectNumber": 380,
+    "faceCount": 80,
+    "vertexCount": 97
+  },
+  "138": {
+    "referenceSize": [
+      24000,
+      17600,
+      24000
+    ],
+    "representativeObjectNumber": 418,
+    "faceCount": 101,
+    "vertexCount": 143
+  },
+  "141": {
+    "referenceSize": [
+      24000,
+      9600,
+      3200
+    ],
+    "representativeObjectNumber": 463,
+    "faceCount": 34,
+    "vertexCount": 46
+  },
+  "145": {
+    "referenceSize": [
+      16000,
+      44800,
+      8000
+    ],
+    "representativeObjectNumber": 473,
+    "faceCount": 93,
+    "vertexCount": 110
+  },
+  "146": {
+    "referenceSize": [
+      7999,
+      6398,
+      8000
+    ],
+    "representativeObjectNumber": 474,
+    "faceCount": 40,
+    "vertexCount": 64
+  },
+  "150": {
+    "referenceSize": [
+      48000,
+      25800,
+      64000
+    ],
+    "representativeObjectNumber": 494,
+    "faceCount": 176,
+    "vertexCount": 256
+  },
+  "153": {
+    "referenceSize": [
+      22400,
+      22400,
+      68000
+    ],
+    "representativeObjectNumber": 514,
+    "faceCount": 61,
+    "vertexCount": 84
+  },
+  "157": {
+    "referenceSize": [
+      16000,
+      32000,
+      44000
+    ],
+    "representativeObjectNumber": 520,
+    "faceCount": 108,
+    "vertexCount": 209
+  },
+  "160": {
+    "referenceSize": [
+      23800,
+      25600,
+      25400
+    ],
+    "representativeObjectNumber": 527,
+    "faceCount": 181,
+    "vertexCount": 230
+  },
+  "163": {
+    "referenceSize": [
+      16000,
+      8000,
+      32000
+    ],
+    "representativeObjectNumber": 533,
+    "faceCount": 25,
+    "vertexCount": 48
+  },
+  "166": {
+    "referenceSize": [
+      16000,
+      28800,
+      8000
+    ],
+    "representativeObjectNumber": 538,
+    "faceCount": 62,
+    "vertexCount": 114
+  },
+  "170": {
+    "referenceSize": [
+      7100,
+      9600,
+      8000
+    ],
+    "representativeObjectNumber": 544,
+    "faceCount": 41,
+    "vertexCount": 70
+  },
+  "172": {
+    "referenceSize": [
+      24800,
+      6400,
+      8000
+    ],
+    "representativeObjectNumber": 546,
+    "faceCount": 24,
+    "vertexCount": 33
+  },
+  "174": {
+    "referenceSize": [
+      16000,
+      3200,
+      16000
+    ],
+    "representativeObjectNumber": 550,
+    "faceCount": 44,
+    "vertexCount": 64
+  },
+  "178": {
+    "referenceSize": [
+      32000,
+      9600,
+      32000
+    ],
+    "representativeObjectNumber": 555,
+    "faceCount": 76,
+    "vertexCount": 100
+  },
+  "179": {
+    "referenceSize": [
+      32000,
+      12800,
+      64000
+    ],
+    "representativeObjectNumber": 582,
+    "faceCount": 160,
+    "vertexCount": 161
+  },
+  "180": {
+    "referenceSize": [
+      8000,
+      12800,
+      88000
+    ],
+    "representativeObjectNumber": 586,
+    "faceCount": 86,
+    "vertexCount": 164
+  },
+  "183": {
+    "referenceSize": [
+      48000,
+      12800,
+      112000
+    ],
+    "representativeObjectNumber": 594,
+    "faceCount": 86,
+    "vertexCount": 126
+  },
+  "187": {
+    "referenceSize": [
+      72000,
+      76800,
+      56000
+    ],
+    "representativeObjectNumber": 600,
+    "faceCount": 70,
+    "vertexCount": 110
+  },
+  "191": {
+    "referenceSize": [
+      72000,
+      76800,
+      56000
+    ],
+    "representativeObjectNumber": 605,
+    "faceCount": 70,
+    "vertexCount": 110
+  },
+  "198": {
+    "referenceSize": [
+      384000,
+      60800,
+      256000
+    ],
+    "representativeObjectNumber": 613,
+    "faceCount": 496,
+    "vertexCount": 736
+  },
+  "200": {
+    "referenceSize": [
+      16000,
+      32000,
+      96000
+    ],
+    "representativeObjectNumber": 616,
+    "faceCount": 107,
+    "vertexCount": 136
+  },
+  "204": {
+    "referenceSize": [
+      7856,
+      25518,
+      237
+    ],
+    "representativeObjectNumber": 627,
+    "faceCount": 1,
+    "vertexCount": 48
+  },
+  "207": {
+    "referenceSize": [
+      8000,
+      3200,
+      8000
+    ],
+    "representativeObjectNumber": 637,
+    "faceCount": 39,
+    "vertexCount": 50
+  },
+  "208": {
+    "referenceSize": [
+      8000,
+      9600,
+      16000
+    ],
+    "representativeObjectNumber": 638,
+    "faceCount": 17,
+    "vertexCount": 28
+  },
+  "210": {
+    "referenceSize": [
+      16000,
+      44800,
+      8000
+    ],
+    "representativeObjectNumber": 649,
+    "faceCount": 93,
+    "vertexCount": 110
+  },
+  "212": {
+    "referenceSize": [
+      32000,
+      8300,
+      32000
+    ],
+    "representativeObjectNumber": 676,
+    "faceCount": 176,
+    "vertexCount": 218
+  },
+  "213": {
+    "referenceSize": [
+      128000,
+      128000,
+      1600
+    ],
+    "representativeObjectNumber": 686,
+    "faceCount": 16,
+    "vertexCount": 150
+  },
+  "214": {
+    "referenceSize": [
+      64000,
+      9600,
+      128000
+    ],
+    "representativeObjectNumber": 688,
+    "faceCount": 22,
+    "vertexCount": 32
+  },
+  "215": {
+    "referenceSize": [
+      16000,
+      6400,
+      16000
+    ],
+    "representativeObjectNumber": 692,
+    "faceCount": 91,
+    "vertexCount": 176
+  },
+  "216": {
+    "referenceSize": [
+      8000,
+      3200,
+      8000
+    ],
+    "representativeObjectNumber": 694,
+    "faceCount": 51,
+    "vertexCount": 88
+  },
+  "219": {
+    "referenceSize": [
+      32000,
+      22400,
+      32000
+    ],
+    "representativeObjectNumber": 698,
+    "faceCount": 118,
+    "vertexCount": 132
+  },
+  "221": {
+    "referenceSize": [
+      32000,
+      19200,
+      24000
+    ],
+    "representativeObjectNumber": 701,
+    "faceCount": 50,
+    "vertexCount": 76
+  },
+  "222": {
+    "referenceSize": [
+      96000,
+      9600,
+      192000
+    ],
+    "representativeObjectNumber": 703,
+    "faceCount": 22,
+    "vertexCount": 36
+  },
+  "224": {
+    "referenceSize": [
+      24000,
+      12800,
+      24000
+    ],
+    "representativeObjectNumber": 710,
+    "faceCount": 9,
+    "vertexCount": 20
+  },
+  "225": {
+    "referenceSize": [
+      32000,
+      3200,
+      80000
+    ],
+    "representativeObjectNumber": 712,
+    "faceCount": 22,
+    "vertexCount": 32
+  },
+  "226": {
+    "referenceSize": [
+      24000,
+      12800,
+      24000
+    ],
+    "representativeObjectNumber": 715,
+    "faceCount": 9,
+    "vertexCount": 20
+  },
+  "227": {
+    "referenceSize": [
+      9600,
+      9600,
+      12000
+    ],
+    "representativeObjectNumber": 720,
+    "faceCount": 62,
+    "vertexCount": 79
+  },
+  "230": {
+    "referenceSize": [
+      56000,
+      193600,
+      112000
+    ],
+    "representativeObjectNumber": 723,
+    "faceCount": 757,
+    "vertexCount": 1014
+  },
+  "234": {
+    "referenceSize": [
+      7100,
+      9600,
+      8000
+    ],
+    "representativeObjectNumber": 729,
+    "faceCount": 41,
+    "vertexCount": 70
+  },
+  "236": {
+    "referenceSize": [
+      7100,
+      9600,
+      8000
+    ],
+    "representativeObjectNumber": 731,
+    "faceCount": 21,
+    "vertexCount": 41
+  },
+  "237": {
+    "referenceSize": [
+      24800,
+      6400,
+      8000
+    ],
+    "representativeObjectNumber": 732,
+    "faceCount": 24,
+    "vertexCount": 33
+  },
+  "241": {
+    "referenceSize": [
+      56000,
+      193600,
+      112000
+    ],
+    "representativeObjectNumber": 739,
+    "faceCount": 757,
+    "vertexCount": 1012
+  },
+  "246": {
+    "referenceSize": [
+      80000,
+      115200,
+      32000
+    ],
+    "representativeObjectNumber": 753,
+    "faceCount": 93,
+    "vertexCount": 112
+  },
+  "250": {
+    "referenceSize": [
+      16000,
+      28800,
+      80000
+    ],
+    "representativeObjectNumber": 758,
+    "faceCount": 86,
+    "vertexCount": 152
+  },
+  "253": {
+    "referenceSize": [
+      2000,
+      40000,
+      32000
+    ],
+    "representativeObjectNumber": 761,
+    "faceCount": 192,
+    "vertexCount": 71
+  },
+  "255": {
+    "referenceSize": [
+      128000,
+      193600,
+      72000
+    ],
+    "representativeObjectNumber": 764,
+    "faceCount": 289,
+    "vertexCount": 392
+  },
+  "259": {
+    "referenceSize": [
+      64000,
+      3200,
+      64000
+    ],
+    "representativeObjectNumber": 777,
+    "faceCount": 22,
+    "vertexCount": 32
+  },
+  "260": {
+    "referenceSize": [
+      40000,
+      49600,
+      17600
+    ],
+    "representativeObjectNumber": 780,
+    "faceCount": 25,
+    "vertexCount": 53
+  },
+  "264": {
+    "referenceSize": [
+      8000,
+      9600,
+      8000
+    ],
+    "representativeObjectNumber": 789,
+    "faceCount": 36,
+    "vertexCount": 56
+  },
+  "266": {
+    "referenceSize": [
+      3200,
+      99200,
+      67200
+    ],
+    "representativeObjectNumber": 797,
+    "faceCount": 152,
+    "vertexCount": 220
+  },
+  "270": {
+    "referenceSize": [
+      24000,
+      72000,
+      8000
+    ],
+    "representativeObjectNumber": 851,
+    "faceCount": 80,
+    "vertexCount": 97
+  },
+  "271": {
+    "referenceSize": [
+      48000,
+      12800,
+      64000
+    ],
+    "representativeObjectNumber": 857,
+    "faceCount": 53,
+    "vertexCount": 76
+  },
+  "273": {
+    "referenceSize": [
+      16000,
+      9600,
+      32000
+    ],
+    "representativeObjectNumber": 860,
+    "faceCount": 14,
+    "vertexCount": 28
+  },
+  "275": {
+    "referenceSize": [
+      8000,
+      3200,
+      16000
+    ],
+    "representativeObjectNumber": 863,
+    "faceCount": 7,
+    "vertexCount": 20
+  },
+  "276": {
+    "referenceSize": [
+      16000,
+      9600,
+      32000
+    ],
+    "representativeObjectNumber": 865,
+    "faceCount": 36,
+    "vertexCount": 32
+  },
+  "278": {
+    "referenceSize": [
+      80000,
+      28800,
+      32000
+    ],
+    "representativeObjectNumber": 868,
+    "faceCount": 100,
+    "vertexCount": 208
+  },
+  "279": {
+    "referenceSize": [
+      80000,
+      28800,
+      32000
+    ],
+    "representativeObjectNumber": 869,
+    "faceCount": 211,
+    "vertexCount": 288
+  },
+  "282": {
+    "referenceSize": [
+      8000,
+      9600,
+      8000
+    ],
+    "representativeObjectNumber": 873,
+    "faceCount": 40,
+    "vertexCount": 52
+  },
+  "284": {
+    "referenceSize": [
+      48000,
+      9600,
+      48000
+    ],
+    "representativeObjectNumber": 876,
+    "faceCount": 136,
+    "vertexCount": 264
+  },
+  "289": {
+    "referenceSize": [
+      96000,
+      12800,
+      128000
+    ],
+    "representativeObjectNumber": 891,
+    "faceCount": 28,
+    "vertexCount": 44
+  },
+  "290": {
+    "referenceSize": [
+      19200,
+      32000,
+      32000
+    ],
+    "representativeObjectNumber": 922,
+    "faceCount": 92,
+    "vertexCount": 132
+  },
+  "293": {
+    "referenceSize": [
+      16000,
+      41600,
+      48000
+    ],
+    "representativeObjectNumber": 925,
+    "faceCount": 68,
+    "vertexCount": 94
+  },
+  "296": {
+    "referenceSize": [
+      8000,
+      9600,
+      128000
+    ],
+    "representativeObjectNumber": 939,
+    "faceCount": 6,
+    "vertexCount": 56
+  },
+  "297": {
+    "referenceSize": [
+      32000,
+      41600,
+      128000
+    ],
+    "representativeObjectNumber": 945,
+    "faceCount": 152,
+    "vertexCount": 233
+  },
+  "300": {
+    "referenceSize": [
+      32000,
+      41600,
+      128000
+    ],
+    "representativeObjectNumber": 950,
+    "faceCount": 152,
+    "vertexCount": 233
+  },
+  "304": {
+    "referenceSize": [
+      64000,
+      38400,
+      8000
+    ],
+    "representativeObjectNumber": 956,
+    "faceCount": 94,
+    "vertexCount": 41
+  },
+  "305": {
+    "referenceSize": [
+      8000,
+      73600,
+      8000
+    ],
+    "representativeObjectNumber": 959,
+    "faceCount": 52,
+    "vertexCount": 93
+  },
+  "308": {
+    "referenceSize": [
+      7100,
+      9600,
+      8000
+    ],
+    "representativeObjectNumber": 970,
+    "faceCount": 41,
+    "vertexCount": 70
+  },
+  "312": {
+    "referenceSize": [
+      8000,
+      38400,
+      8000
+    ],
+    "representativeObjectNumber": 987,
+    "faceCount": 26,
+    "vertexCount": 56
+  },
+  "315": {
+    "referenceSize": [
+      8000,
+      28800,
+      64000
+    ],
+    "representativeObjectNumber": 997,
+    "faceCount": 150,
+    "vertexCount": 200
+  },
+  "318": {
+    "referenceSize": [
+      16000,
+      28800,
+      8000
+    ],
+    "representativeObjectNumber": 1002,
+    "faceCount": 62,
+    "vertexCount": 114
+  },
+  "320": {
+    "referenceSize": [
+      23800,
+      25600,
+      25400
+    ],
+    "representativeObjectNumber": 1013,
+    "faceCount": 181,
+    "vertexCount": 224
+  },
+  "321": {
+    "referenceSize": [
+      64000,
+      28800,
+      104000
+    ],
+    "representativeObjectNumber": 1019,
+    "faceCount": 296,
+    "vertexCount": 428
+  },
+  "325": {
+    "referenceSize": [
+      16000,
+      19200,
+      88000
+    ],
+    "representativeObjectNumber": 1025,
+    "faceCount": 61,
+    "vertexCount": 116
+  },
+  "329": {
+    "referenceSize": [
+      16000,
+      9600,
+      16000
+    ],
+    "representativeObjectNumber": 1031,
+    "faceCount": 31,
+    "vertexCount": 46
+  },
+  "333": {
+    "referenceSize": [
+      96000,
+      108800,
+      128000
+    ],
+    "representativeObjectNumber": 1037,
+    "faceCount": 284,
+    "vertexCount": 319
+  },
+  "337": {
+    "referenceSize": [
+      80000,
+      9600,
+      8000
+    ],
+    "representativeObjectNumber": 1043,
+    "faceCount": 44,
+    "vertexCount": 88
+  },
+  "341": {
+    "referenceSize": [
+      48000,
+      9600,
+      64000
+    ],
+    "representativeObjectNumber": 1049,
+    "faceCount": 110,
+    "vertexCount": 216
+  },
+  "345": {
+    "referenceSize": [
+      48000,
+      9600,
+      80000
+    ],
+    "representativeObjectNumber": 1055,
+    "faceCount": 28,
+    "vertexCount": 64
+  },
+  "347": {
+    "referenceSize": [
+      96000,
+      22400,
+      32000
+    ],
+    "representativeObjectNumber": 1059,
+    "faceCount": 18,
+    "vertexCount": 32
+  },
+  "348": {
+    "referenceSize": [
+      112000,
+      6400,
+      112000
+    ],
+    "representativeObjectNumber": 1062,
+    "faceCount": 287,
+    "vertexCount": 398
+  },
+  "352": {
+    "referenceSize": [
+      128000,
+      9600,
+      96000
+    ],
+    "representativeObjectNumber": 1068,
+    "faceCount": 12,
+    "vertexCount": 16
+  },
+  "354": {
+    "referenceSize": [
+      919306,
+      391070,
+      1187213
+    ],
+    "representativeObjectNumber": 1073,
+    "faceCount": 128,
+    "vertexCount": 89
+  },
+  "358": {
+    "referenceSize": [
+      1364305,
+      1,
+      1075032
+    ],
+    "representativeObjectNumber": 1087,
+    "faceCount": 1,
+    "vertexCount": 28
+  },
+  "359": {
+    "referenceSize": [
+      1330913,
+      326197,
+      1018064
+    ],
+    "representativeObjectNumber": 1091,
+    "faceCount": 32,
+    "vertexCount": 33
+  },
+  "365": {
+    "referenceSize": [
+      1142252,
+      442212,
+      601922
+    ],
+    "representativeObjectNumber": 1121,
+    "faceCount": 16,
+    "vertexCount": 48
+  }
+}

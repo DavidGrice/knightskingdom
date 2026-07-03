@@ -10,6 +10,8 @@
  *   public/models/textures/                 shared 305-file texture bank
  *   public/models/warehouse/<category>/[<subfolder>/]<id>.{obj,mtl}  Track A
  *   public/models/bricks/<brickId>.{obj,mtl}                          Track B
+ *   public/models/maps/template-0N.{obj,mtl}                          Track C
+ *   public/models/maps/template-0N/parts/shapeNNNN.{obj,mtl}          Track D
  *
  * Idempotent: skips a copy if the destination is already newer than source.
  * Usage: node resources/model_pipeline/copy_obj_assets.mjs
@@ -24,6 +26,7 @@ const MODEL_FILES = path.join(ROOT, 'resources', 'model_files');
 const MODELS_DIR = path.join(MODEL_FILES, 'extracted', 'models');
 const TEXTURES_SRC = path.join(MODELS_DIR, 'textures');
 const PAK_ROOT = path.join(MODEL_FILES, 'extracted', 'pak', 'warehouse', 'main_interface');
+const TEMPLATES_PARTS_SRC = path.join(MODEL_FILES, 'extracted', 'templates');
 const WORKSHOP_BUCKET_DIR = path.join(
   ROOT,
   'src/Components/MainMenuStack/StartStack/MainGameStack/WorkShop/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack',
@@ -33,6 +36,8 @@ const PUBLIC_MODELS = path.join(ROOT, 'public', 'models');
 const TEXTURES_OUT = path.join(PUBLIC_MODELS, 'textures');
 const WAREHOUSE_OUT = path.join(PUBLIC_MODELS, 'warehouse');
 const BRICKS_OUT = path.join(PUBLIC_MODELS, 'bricks');
+const MAPS_OUT = path.join(PUBLIC_MODELS, 'maps');
+const TEMPLATE_COUNT = 9;
 
 function walk(dir, pred, base = dir) {
   const out = [];
@@ -109,6 +114,38 @@ function main() {
     }
   }
   console.log(`bricks (Track B): ${bricksCopied} files copied, ${bricksMissing} ids missing source, from ${brickLcaRels.length} ids`);
+
+  // 4) Track C -- world templates (map2..map10 in engineAssets.js)
+  let mapsCopied = 0;
+  for (let n = 1; n <= TEMPLATE_COUNT; n += 1) {
+    const id = `template-0${n}`;
+    for (const ext of ['obj', 'mtl']) {
+      const src = path.join(MODELS_DIR, `${id}.${ext}`);
+      const dest = path.join(MAPS_OUT, `${id}.${ext}`);
+      if (copyIfNewer(src, dest)) mapsCopied += 1;
+    }
+  }
+  console.log(`maps (Track C): ${mapsCopied} files copied, from ${TEMPLATE_COUNT} templates`);
+
+  // 5) Track D -- per-template individual parts (semi-vanilla placements)
+  let partsCopied = 0;
+  if (fs.existsSync(TEMPLATES_PARTS_SRC)) {
+    for (const entry of fs.readdirSync(TEMPLATES_PARTS_SRC, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const templateId = entry.name;
+      const partsSrcDir = path.join(TEMPLATES_PARTS_SRC, templateId, 'parts');
+      if (!fs.existsSync(partsSrcDir)) continue;
+      for (const f of fs.readdirSync(partsSrcDir)) {
+        const src = path.join(partsSrcDir, f);
+        const dest = path.join(MAPS_OUT, templateId, 'parts', f);
+        if (copyIfNewer(src, dest)) partsCopied += 1;
+      }
+      const manifestSrc = path.join(TEMPLATES_PARTS_SRC, templateId, 'parts_manifest.json');
+      const manifestDest = path.join(MAPS_OUT, templateId, 'parts_manifest.json');
+      if (copyIfNewer(manifestSrc, manifestDest)) partsCopied += 1;
+    }
+  }
+  console.log(`template parts (Track D): ${partsCopied} files copied`);
 }
 
 main();

@@ -1,5 +1,13 @@
 import * as THREE from 'three';
 import { removeSceneObjectByName } from '../sceneDispose';
+import { SKYBOX_REFERENCE_SIZE } from './MapLoader';
+
+// Generous multiple of the largest template's natural footprint so the
+// horizon sits well past the terrain's edges (a tight skybox visibly clips
+// into distant geometry) -- maps import at their own natural scale now, so
+// this can't be derived from a per-map target the way it used to be.
+const SKYBOX_MARGIN = 3;
+const SKYBOX_SIZE = SKYBOX_REFERENCE_SIZE * SKYBOX_MARGIN;
 
 const climateModeToInt = {
   SUNNY: 0,
@@ -25,7 +33,7 @@ const SkyBoxLoader = (mapData, scene, selectedClimateMode) => {
   removeSceneObjectByName(scene, 'SkyBox');
 
   const climateModeInt = resolveClimateMode(selectedClimateMode);
-    const skyboxGeometry = new THREE.BoxGeometry(600, 600, 600);
+    const skyboxGeometry = new THREE.BoxGeometry(SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE);
     const texLoader = new THREE.CubeTextureLoader();
     const texturePaths = mapData.skyBoxes.map((skyBox) => skyBox.filePath);
     const texture = texLoader.load(
@@ -103,7 +111,10 @@ const SkyBoxLoader = (mapData, scene, selectedClimateMode) => {
     });
 
     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-    skybox.position.set(0, 0, 0);
+    // Maps are grounded at y=0 (see MapLoader's fitMapToWorldScale) -- sit the
+    // skybox's bottom face there too instead of centering it through the
+    // terrain, so its floor (bot.png) never shows through above ground level.
+    skybox.position.set(0, SKYBOX_SIZE / 2, 0);
     skybox.isMovable = false;
     skybox.name = "SkyBox";
     scene.add(skybox);

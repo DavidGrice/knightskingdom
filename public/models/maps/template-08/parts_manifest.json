@@ -1,0 +1,62 @@
+{
+  "0": {
+    "referenceSize": [
+      1169263,
+      364200,
+      1525935
+    ],
+    "representativeObjectNumber": 2,
+    "faceCount": 128,
+    "vertexCount": 89
+  },
+  "1": {
+    "referenceSize": [
+      69999,
+      104999,
+      69999
+    ],
+    "representativeObjectNumber": 3,
+    "faceCount": 11,
+    "vertexCount": 29
+  },
+  "3": {
+    "referenceSize": [
+      69999,
+      104999,
+      69999
+    ],
+    "representativeObjectNumber": 5,
+    "faceCount": 6,
+    "vertexCount": 20
+  },
+  "9": {
+    "referenceSize": [
+      672875,
+      58337,
+      829045
+    ],
+    "representativeObjectNumber": 45,
+    "faceCount": 32,
+    "vertexCount": 33
+  },
+  "14": {
+    "referenceSize": [
+      360677,
+      98790,
+      344323
+    ],
+    "representativeObjectNumber": 89,
+    "faceCount": 24,
+    "vertexCount": 25
+  },
+  "16": {
+    "referenceSize": [
+      176429,
+      152309,
+      293950
+    ],
+    "representativeObjectNumber": 92,
+    "faceCount": 15,
+    "vertexCount": 19
+  }
+}
