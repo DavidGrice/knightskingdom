@@ -109,9 +109,10 @@ def main():
         run('snd_dump.py', os.path.join(xvr_out, 'creator2000.snd'), snddir)
 
     # 4) every .lca -> textured OBJ (models share one textures/ folder)
-    lcas = sorted(set(
+    all_lcas = sorted(set(
         glob.glob(os.path.join(game, '**', '*.lca'), recursive=True) +
         glob.glob(os.path.join(pak_out, '**', '*.lca'), recursive=True)))
+    lcas = all_lcas
     models = os.path.join(out, 'models')
     os.makedirs(models, exist_ok=True)
     tex_link = os.path.join(models, 'textures')
@@ -149,6 +150,13 @@ def main():
         print(f'{csv_path}: {total} associations')
     else:
         print('-- no .lca files found; models step skipped')
+
+    # 5) asset lineage manifest -- every shape's identity/provenance across
+    #    every .lca (standalone model *and* world template), the source of
+    #    truth downstream tooling (semi-vanilla per-part reconstruction)
+    #    reads from instead of re-deriving stats from merged OBJ output.
+    if all_lcas:
+        run('generate_asset_manifest.py', os.path.join(out, 'asset_manifest.json'), pak_out)
 
     print(f'\nDone. Everything is under {out}')
 

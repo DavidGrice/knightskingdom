@@ -9,7 +9,9 @@
     "build": "next build",
     "start": "next start --port 3000",
     "lint": "next lint",
-    "generate:brick-catalog": "node grok/generate-brick-catalog.mjs"
+    "generate:brick-catalog": "node grok/generate-brick-catalog.mjs",
+    "test:worlds": "node testing/world-load.test.mjs",
+    "test:placements": "node testing/placements.test.mjs"
   },
   "dependencies": {
     "next": "^15.5.19",

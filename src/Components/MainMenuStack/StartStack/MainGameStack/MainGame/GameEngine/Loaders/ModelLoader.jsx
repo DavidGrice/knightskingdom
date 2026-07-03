@@ -93,8 +93,14 @@ const alignPlayableRootToWorldPosition = (root, worldPosition = {}) => {
 
 const setupMapGltfScene = (gltf, mapModel) => {
     gltf.scene.name = mapModel.name;
-    gltf.scene.isMovable = false;
+    // Matches SelectedModels.ARCHER's flags -- preloaded map characters are
+    // playable content, not static scenery, and should be as movable/
+    // rotatable as any bucket-added copy of the same model.
+    gltf.scene.isMovable = true;
+    gltf.scene.isRotatable = true;
     gltf.scene.isDeletable = true;
+    gltf.scene.isPaintable = true;
+    gltf.scene.isDriveable = true;
     gltf.scene.isModel = true;
     gltf.scene.userData.modelId = mapModel.name;
 

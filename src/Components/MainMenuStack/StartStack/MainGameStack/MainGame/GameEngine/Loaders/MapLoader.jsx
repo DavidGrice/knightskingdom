@@ -1,41 +1,107 @@
 import * as THREE from 'three';
-import { loadObjMtl } from '../../../shared/objMtlLoader';
+import { loadObjMtl, MM_TO_WORLD_SCALE } from '../../../shared/objMtlLoader';
 
 /**
- * World-template OBJ exports (resources/model_files/extracted/models/
- * template-0N.obj) are on a wildly different scale than every other asset in
- * the game -- typically 1100-2000 world units across after the standard
- * MM_TO_WORLD_SCALE, versus ~5-16 for props/buildings -- because the game's
- * WLD (world layout) coordinate space isn't the same unit convention as its
- * SHP (part) space. Left unscaled, the camera (mounted at (0,5,10)) spawns
- * embedded inside the solid mesh, which is what previously read as "renders
- * almost entirely black" (not a material/lighting defect). Maps already
- * within range of this target are left untouched -- only outliers get
- * rescaled.
+ * World templates import at their natural scale -- just the shared
+ * MM_TO_WORLD_SCALE conversion every OBJ/MTL asset gets, no extra
+ * normalization. Earlier revisions force-rescaled every map to a fixed
+ * target size; that fought the source data instead of just importing it.
+ * The camera/ground-alignment logic below only needed the *ground
+ * detection* fix (raycasting for local surface height), not a size fit --
+ * grounding was the actual reason a too-small camera used to end up
+ * embedded in the terrain, not the map's absolute scale.
+ *
+ * SKYBOX_REFERENCE_SIZE is a safe upper bound covering every template's
+ * natural size (largest observed ~2000 world units) with margin, exported
+ * for SkyBoxLoader since it builds the skybox before the map's actual
+ * bounding box is known.
  */
-const TARGET_MAP_SIZE = 120;
-const RESCALE_THRESHOLD = TARGET_MAP_SIZE * 1.5;
+export const SKYBOX_REFERENCE_SIZE = 2500;
 
+/**
+ * The extraction toolchain's world layout faces the opposite way from the
+ * engine's default camera facing (-Z) -- template-01's castle sits behind
+ * the camera at spawn without this. A yaw (Y-axis) turn swaps front/back
+ * while leaving the upright correction from objMtlLoader.js untouched.
+ */
+const MAP_YAW_RADIANS = Math.PI;
+
+const groundRaycaster = new THREE.Raycaster();
+
+/**
+ * These templates are uneven terrain (crater-shaped valleys, mountain rims),
+ * not a flat plate -- the player/camera spawn at world (0,0,0), so "ground"
+ * has to mean the actual surface height under that point, not the map's
+ * global bbox minimum. Using the global min put the spawn point's y=0 on a
+ * mountain-base elevation while the actual playable valley floor sat well
+ * above it, embedding the camera in solid terrain. Falls back to the global
+ * minimum if the downward ray happens to miss (e.g. a genuine gap).
+ */
+const findGroundHeightAtOrigin = (root, box) => {
+    groundRaycaster.set(new THREE.Vector3(0, box.max.y + 1, 0), new THREE.Vector3(0, -1, 0));
+    const hits = groundRaycaster.intersectObject(root, true);
+    return hits.length > 0 ? hits[0].point.y : box.min.y;
+};
+
+/**
+ * Applies the exact same fit -- scale, yaw, XZ recenter, ground offset -- to
+ * `root`, and returns the transform's parameters so other loaders (namely
+ * MapPlacementsLoader) can carry a raw template-space point (the same
+ * millimetre space export_obj.py's own vertices/positions use) through the
+ * identical pipeline and land in the right spot relative to the map.
+ */
 const fitMapToWorldScale = (root) => {
     root.updateMatrixWorld(true);
+
+    root.rotation.y += MAP_YAW_RADIANS;
+    root.updateMatrixWorld(true);
+
     const box = new THREE.Box3().setFromObject(root);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const maxDimension = Math.max(size.x, size.y, size.z);
-
-    if (maxDimension > RESCALE_THRESHOLD) {
-        const scaleFactor = TARGET_MAP_SIZE / maxDimension;
-        root.scale.multiplyScalar(scaleFactor);
-        root.updateMatrixWorld(true);
-        box.setFromObject(root);
-    }
-
     const center = new THREE.Vector3();
     box.getCenter(center);
     root.position.x -= center.x;
     root.position.z -= center.z;
-    root.position.y -= box.min.y;
     root.updateMatrixWorld(true);
+
+    box.setFromObject(root);
+    const groundOffsetY = -findGroundHeightAtOrigin(root, box);
+    root.position.y += groundOffsetY;
+    root.updateMatrixWorld(true);
+
+    return {
+        scaleFactor: 1,
+        yawRadians: MAP_YAW_RADIANS,
+        offsetX: -center.x,
+        offsetY: groundOffsetY,
+        offsetZ: -center.z,
+    };
+};
+
+/**
+ * Carries a raw template-space point (loadObjMtl's own MM_TO_WORLD_SCALE +
+ * upright Y-negation already applied, same as any mesh vertex) through the
+ * map's fit transform: scale about the origin, yaw about the origin, then
+ * the map's own recenter/ground offsets, in that order -- matching how the
+ * mesh itself was transformed in fitMapToWorldScale.
+ */
+export const applyMapFitTransform = (point, transform) => {
+    const { scaleFactor, yawRadians, offsetX, offsetY, offsetZ } = transform;
+    const scaled = point.clone().multiplyScalar(scaleFactor);
+    const rotated = scaled.applyAxisAngle(new THREE.Vector3(0, 1, 0), yawRadians);
+    return new THREE.Vector3(
+        rotated.x + offsetX,
+        rotated.y + offsetY,
+        rotated.z + offsetZ,
+    );
+};
+
+const forceDoubleSided = (root) => {
+    root.traverse((child) => {
+        if (child.isMesh && child.material) {
+            const materials = Array.isArray(child.material) ? child.material : [child.material];
+            materials.forEach((mat) => { mat.side = THREE.DoubleSide; });
+        }
+    });
 };
 
 const MapLoader = (mapData, scene, setModelLoaded) => {
@@ -43,9 +109,12 @@ const MapLoader = (mapData, scene, setModelLoaded) => {
         .then((root) => {
             root.name = 'GameMap';
             root.isMovable = false;
-            fitMapToWorldScale(root);
+            // Double-sided first: fitMapToWorldScale's ground raycast needs to
+            // hit the same faces this fixes the visibility of.
+            forceDoubleSided(root);
+            const transform = fitMapToWorldScale(root);
             scene.add(root);
-            setModelLoaded(true);
+            setModelLoaded(true, transform);
         })
         .catch((error) => {
             console.error('An error occurred while loading the map:', error);

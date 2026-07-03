@@ -4,7 +4,6 @@ import GrassTop from '../../Components/MainMenuStack/StartStack/MainGameStack/Ma
 import GrassBot from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/bot.png';
 import GrassFront from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/front.png';
 import GrassBack from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/skyboxes/grass/back.png';
-import Archer from '../../Components/MainMenuStack/StartStack/MainGameStack/MainGame/GameEngine/GameEngineResourceStack/models/archer_with_box2.glb';
 
 export const grassSkybox = [
   { id: 1, name: 'right', description: 'Right side of skybox', filePath: GrassRight },
@@ -15,19 +14,13 @@ export const grassSkybox = [
   { id: 6, name: 'back', description: 'Back side of skybox', filePath: GrassBack },
 ];
 
-export const defaultPlayableModels = [
-  {
-    id: 1,
-    name: 'Archer',
-    description: 'Default archer model',
-    isLocked: false,
-    isCompleted: false,
-    filePath: Archer,
-    // Map placement in world units. Y is ground height; ModelLoader snaps the
-    // GLB hitbox feet to this Y (archer root is not centered at 0,0,0 in the file).
-    position: { x: 0, y: 0, z: 0 },
-  },
-];
+// The generic default Archer used to always spawn here on every map. Now
+// that each template's own real character(s) load via MapPlacementsLoader
+// (see the semi-vanilla placements work), an unconditional extra Archer
+// alongside them was confusing rather than useful -- removed. "Archer" is
+// still available as a bucket-placeable model (ModelLoader.jsx's
+// SelectedModels.ARCHER); this only removes the auto-spawn-on-every-map copy.
+export const defaultPlayableModels = [];
 
 const templateMap = (n) => ({
   objUrl: `/models/maps/template-0${n}.obj`,
