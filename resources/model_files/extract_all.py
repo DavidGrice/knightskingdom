@@ -10,7 +10,9 @@ open-format asset set under ./extracted/ :
     extracted/xvr/         decompressed creator2000.xvr sub-files
     extracted/textures/    all 300+ textures as PNG
     extracted/sounds/      the 92 named world sounds as WAV
-    extracted/models/      every .lca as textured OBJ + MTL
+    extracted/models/      every .lca as textured OBJ + MTL (+ GLB)
+    extracted/animations/  every .smo character animation as JSON
+    extracted/templates/*/parts/  per-shape template parts (OBJ+MTL+GLB)
     extracted/sound_map.csv  object -> sound association manifest
 
 Usage:
@@ -157,6 +159,42 @@ def main():
     #    reads from instead of re-deriving stats from merged OBJ output.
     if all_lcas:
         run('generate_asset_manifest.py', os.path.join(out, 'asset_manifest.json'), pak_out)
+
+    # 6) .smo character animations (Animation Files/ under the game install)
+    #    -> extracted/animations/<name>.json, one per rig (minifig bone
+    #    tracks: position + rotation per frame, no interpolation keys).
+    smos = sorted(glob.glob(os.path.join(game, '**', '*.smo'), recursive=True))
+    anim_out = os.path.join(out, 'animations')
+    todo_smos = [p for p in smos if not os.path.exists(os.path.join(
+        anim_out, os.path.splitext(os.path.basename(p))[0] + '.json'))]
+    if smos and not todo_smos:
+        print(f'== all {len(smos)} animations already parsed, skipping')
+    elif todo_smos:
+        os.makedirs(anim_out, exist_ok=True)
+        for i in range(0, len(todo_smos), 25):
+            run('smo_parser.py', anim_out, *todo_smos[i:i + 25])
+    else:
+        print('-- no .smo files found under the game install; animations step skipped')
+
+    # 7) GLB alongside every exported OBJ -- native Python, no Node/npm
+    #    dependency, so this tool's own output is glTF-ready standalone.
+    #    Covers extracted/models/*.obj (264 standalone models + the 9
+    #    template merged bakes, which share that dir) and, opportunistically,
+    #    extracted/templates/*/parts/*.obj if export_template_parts.py has
+    #    been run (that step isn't part of this pipeline yet -- see
+    #    export_template_parts.py's own docstring).
+    glb_targets = sorted(
+        glob.glob(os.path.join(models, '*.obj')) +
+        glob.glob(os.path.join(out, 'templates', '*', 'parts', '*.obj')))
+    todo_glb = [p for p in glb_targets
+                if not os.path.exists(p[:-4] + '.glb')]
+    if glb_targets and not todo_glb:
+        print(f'== all {len(glb_targets)} GLBs already built, skipping')
+    elif todo_glb:
+        for i in range(0, len(todo_glb), 25):
+            run('obj_to_glb.py', '--textures', out, *todo_glb[i:i + 25])
+    else:
+        print('-- no exported OBJ files found; GLB step skipped')
 
     print(f'\nDone. Everything is under {out}')
 

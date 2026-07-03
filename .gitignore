@@ -35,6 +35,8 @@ yarn-error.log*
 # map1.glb, etc.) are NOT covered by these patterns and stay tracked.
 src/Components/MainMenuStack/StartStack/MainGameStack/MainGame/ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/**/*.glb
 public/workshop/bricks/*.glb
+public/models/maps/template-*.glb
+public/models/maps/template-*/parts/*.glb
 public/models/**/*.obj
 public/models/**/*.mtl
 public/models/textures/

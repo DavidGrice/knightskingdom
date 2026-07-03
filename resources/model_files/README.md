@@ -35,7 +35,7 @@ palettes, textures, and audio — can be exported to open formats
 
    | Folder | Contents |
    |---|---|
-   | `extracted/models/` | every model as textured **OBJ + MTL** (open in Blender: File → Import → Wavefront, then switch the viewport to *Material Preview*) |
+   | `extracted/models/` | every model as textured **OBJ + MTL** (open in Blender: File → Import → Wavefront, then switch the viewport to *Material Preview*), plus a self-contained **.glb** next to each — no separate conversion step needed |
    | `extracted/textures/` | the game's global texture bank as **PNG** |
    | `extracted/sounds/` | the 92 named world sounds as **WAV** (minifig chatter, doors, portcullis…) |
    | `extracted/pak/` | contents of `system.pak` (challenge voice-overs, help text, UI art) and `warehouse.pak` |
@@ -70,6 +70,8 @@ knightskingdom/
 │   ├── export_obj_prefer_c.py   variant: prefer alternate-state "C" parts
 │   ├── export_template.py       world templates & challenge maps
 │   ├── export_textured.py       textured OBJ exporter (UVs + map_Kd)
+│   ├── gltf_writer.py           OBJ+MTL -> self-contained .glb (no npm)
+│   ├── obj_to_glb.py            CLI wrapping gltf_writer.py, batch-friendly
 │   ├── render_obj.py            quick PNG previews for QA
 │   ├── pak_extract.py           "DPAK" archives (system.pak, warehouse.pak)
 │   ├── xvr_extract.py           .XVR/.SVR decompressor + sub-file splitter
