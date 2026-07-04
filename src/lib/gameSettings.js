@@ -30,6 +30,7 @@ export const resolveGameSettings = (profile) => {
     shadows: hardware && quality !== 'low',
     fullPlacements: quality !== 'low',
     musicEnabled: options.music !== 'off',
+    soundEffectsEnabled: options.soundEffects !== 'off',
     helpEnabled: options.dialogue !== 'off',
     rendererKey: hardware ? 'hw' : 'sw',
   };

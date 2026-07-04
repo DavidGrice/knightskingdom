@@ -8,6 +8,9 @@ import { serializeSceneFromThree } from '../../context/sceneSchema';
 import { GameEngineCore } from './GameEngineCore';
 import { disposeModelInstance } from './sceneDispose';
 import { updateSelectionBox } from '../../WorkShop/WorkshopEngine/BrickFactory';
+import { computeContentBounds } from '../../WorkShop/WorkshopEngine/selectionBox';
+import { STUD } from '../../WorkShop/WorkshopEngine/studGrid';
+import { ambientSoundsForModel } from '../../shared/characterSounds';
 import {
   filterOutSelectionHelpers,
   findModelRoot,
@@ -19,9 +22,31 @@ import {
 } from './selectionOutline';
 
 const DRAG_SMOOTHING = 0.35;
+// Vertical (shift-drag) sensitivity: world units of Y per pixel of mouse
+// travel, mirroring the workshop's shift+drag lift.
+const VERTICAL_WORLD_PER_PIXEL = 0.03;
+// Grid models snap to on release/placement (the workshop stud grid).
+const snapToGrid = (v) => Math.round(v / STUD) * STUD;
 
 const placementBounds = new THREE.Box3();
 const groundProbe = new THREE.Raycaster();
+
+// Scratch objects reused across rotation/collision math (no per-frame alloc.)
+const centerBefore = new THREE.Vector3();
+const centerAfter = new THREE.Vector3();
+const candidateBox = new THREE.Box3();
+const dragDelta = new THREE.Vector3();
+
+/** Rotate a model 90deg about its content center so it spins in place
+ *  instead of swinging around its off-origin pivot. */
+const rotateAroundCenter = (root) => {
+  computeContentBounds(root).getCenter(centerBefore);
+  root.rotateY(Math.PI / 2);
+  root.updateMatrixWorld(true);
+  computeContentBounds(root).getCenter(centerAfter);
+  root.position.add(centerBefore.sub(centerAfter));
+  root.updateMatrixWorld(true);
+};
 
 /**
  * Placement point for ADDING when the click landed on an existing model:
@@ -97,6 +122,12 @@ const GameEngine = forwardRef(({
   const selectedObject = useRef(null);
   const moveRoot = useRef(null);
   const isDragging = useRef(false);
+  // Drag state for shift-vertical + collision (captured at grab).
+  const verticalAnchor = useRef({ clientY: 0, rootY: 0 });
+  const shiftVerticalActive = useRef(false);
+  const dragContentBox = useRef(new THREE.Box3());
+  const dragStartRootPos = useRef(new THREE.Vector3());
+  const otherModelBounds = useRef([]);
   const mouse = useRef(new THREE.Vector2());
   const raycaster = useRef(new THREE.Raycaster());
   const modeRef = useRef(mode);
@@ -224,6 +255,39 @@ const GameEngine = forwardRef(({
       }
     };
 
+    // Capture the dragged model's content box + every OTHER movable model's
+    // box once at grab time. `wasOverlapping` lets characters that spawned
+    // shoulder-to-shoulder still be separated (only NEW overlaps block).
+    const captureCollisionState = (root) => {
+      dragContentBox.current.copy(computeContentBounds(root));
+      dragStartRootPos.current.copy(root.position);
+      const others = [];
+      scene.children.forEach((child) => {
+        if (child === root || !child.isModel || !child.isMovable) {
+          return;
+        }
+        // Ground plates are walkable surfaces, not obstacles -- never block.
+        if (child.userData?.isGroundPlate) {
+          return;
+        }
+        const box = computeContentBounds(child).clone();
+        others.push({ box, wasOverlapping: dragContentBox.current.intersectsBox(box) });
+      });
+      otherModelBounds.current = others;
+    };
+
+    // Would the dragged model at absolute position (x,y,z) create a NEW
+    // overlap? Translates the grab-time content box by the total delta from
+    // the grab position.
+    const wouldCollideAt = (x, y, z) => {
+      const start = dragStartRootPos.current;
+      candidateBox.copy(dragContentBox.current)
+        .translate(dragDelta.set(x - start.x, y - start.y, z - start.z));
+      return otherModelBounds.current.some(
+        (entry) => !entry.wasOverlapping && candidateBox.intersectsBox(entry.box),
+      );
+    };
+
     const setMouseFromEvent = (event) => {
       const rect = canvas.getBoundingClientRect();
       mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -253,6 +317,10 @@ const GameEngine = forwardRef(({
       if (hitRoot) {
         placementPoint = adjacentGroundPoint(scene, hitRoot, placementPoint);
       }
+      // Snap the placement to the grid (keep Y from the terrain/adjacency).
+      placementPoint = placementPoint.clone();
+      placementPoint.x = snapToGrid(placementPoint.x);
+      placementPoint.z = snapToGrid(placementPoint.z);
 
       if (isCreationModelId(addModel)) {
         CreationLoader(
@@ -295,6 +363,10 @@ const GameEngine = forwardRef(({
             selectedObject.current = selectionBox;
             moveRoot.current = root;
             isDragging.current = true;
+            // Shift-drag vertical anchor + collision snapshot.
+            verticalAnchor.current = { clientY: event.clientY, rootY: root.position.y };
+            shiftVerticalActive.current = event.shiftKey;
+            captureCollisionState(root);
             showSelectionOutline(selectionBox);
             setControlsEnabled(false);
           }
@@ -305,7 +377,7 @@ const GameEngine = forwardRef(({
             ?? findModelRootFromIntersects(intersects, 'isMovable');
           const { selectionBox, moveRoot: root } = resolveMoveSelection(rotatable);
           if (root) {
-            root.rotateY(Math.PI / 2);
+            rotateAroundCenter(root);
             updateSelectionBox(root);
             if (selectionBox) {
               showSelectionOutline(selectionBox);
@@ -378,13 +450,30 @@ const GameEngine = forwardRef(({
       }
 
       event.preventDefault();
-      setMouseFromEvent(event);
-      raycaster.current.setFromCamera(mouse.current, camera);
       const modelRoot = moveRoot.current;
       if (!modelRoot) {
         return;
       }
 
+      // Shift + drag = vertical (up/down), mirroring the workshop. Freeze
+      // X/Z; re-baseline on the first shifted frame so pressing Shift
+      // mid-drag works.
+      if (event.shiftKey) {
+        if (!shiftVerticalActive.current) {
+          verticalAnchor.current = { clientY: event.clientY, rootY: modelRoot.position.y };
+          shiftVerticalActive.current = true;
+        }
+        const deltaY = (verticalAnchor.current.clientY - event.clientY) * VERTICAL_WORLD_PER_PIXEL;
+        const targetY = Math.max(0, verticalAnchor.current.rootY + deltaY);
+        if (!wouldCollideAt(modelRoot.position.x, targetY, modelRoot.position.z)) {
+          modelRoot.position.y = targetY;
+        }
+        return;
+      }
+      shiftVerticalActive.current = false;
+
+      setMouseFromEvent(event);
+      raycaster.current.setFromCamera(mouse.current, camera);
       // Follow real surfaces only: ignore the dragged model itself (else it
       // chases a point on its own geometry and creeps toward the camera)
       // and every selection helper (raycastable despite being invisible --
@@ -399,15 +488,33 @@ const GameEngine = forwardRef(({
         return;
       }
 
-      modelRoot.position.x += (groundHit.point.x - modelRoot.position.x) * DRAG_SMOOTHING;
-      modelRoot.position.z += (groundHit.point.z - modelRoot.position.z) * DRAG_SMOOTHING;
+      const nextX = modelRoot.position.x + (groundHit.point.x - modelRoot.position.x) * DRAG_SMOOTHING;
+      const nextZ = modelRoot.position.z + (groundHit.point.z - modelRoot.position.z) * DRAG_SMOOTHING;
+      // Block a move that would newly overlap another model.
+      if (!wouldCollideAt(nextX, modelRoot.position.y, nextZ)) {
+        modelRoot.position.x = nextX;
+        modelRoot.position.z = nextZ;
+      }
     };
 
     const endDrag = () => {
       if (!selectedObject.current) {
         return;
       }
+      // Snap XZ to the grid on release (dragging stays smooth). Keep the
+      // pre-snap position if the snapped spot would overlap a neighbour.
+      const root = moveRoot.current;
+      if (root) {
+        const snapX = snapToGrid(root.position.x);
+        const snapZ = snapToGrid(root.position.z);
+        if (!wouldCollideAt(snapX, root.position.y, snapZ)) {
+          root.position.x = snapX;
+          root.position.z = snapZ;
+        }
+        updateSelectionBox(root);
+      }
       isDragging.current = false;
+      shiftVerticalActive.current = false;
       hideSelectionOutline(selectedObject.current);
       selectedObject.current = null;
       moveRoot.current = null;
@@ -486,6 +593,64 @@ const GameEngine = forwardRef(({
 
     return undefined;
   }, [mode, isFollowing, driveView, assetsReady, cameraNeedsReset]);
+
+  // Ambient character sounds: once the world's assets are ready, play a
+  // random voice clip from a random on-map character at a randomized
+  // interval (~8-20s), mirroring the original's random-interval chatter.
+  // Gated by the profile's soundEffects option. One clip at a time.
+  useEffect(() => {
+    const core = coreRef.current;
+    if (!core || !assetsReady || !settings?.soundEffectsEnabled) {
+      return undefined;
+    }
+    const { scene } = core;
+    let timer = null;
+    let audio = null;
+    let stopped = false;
+
+    const playOne = () => {
+      const speakers = scene.children.filter(
+        (child) => child.isModel && child.visible && ambientSoundsForModel(child).length > 0,
+      );
+      if (speakers.length === 0) {
+        return;
+      }
+      const root = speakers[Math.floor(Math.random() * speakers.length)];
+      const sounds = ambientSoundsForModel(root);
+      const url = sounds[Math.floor(Math.random() * sounds.length)];
+      try {
+        audio?.pause();
+        audio = new Audio(url);
+        audio.volume = 0.6;
+        // Blocked autoplay (before any gesture) rejects -- ignore; the next
+        // tick after the user interacts will succeed.
+        audio.play().catch(() => {});
+      } catch {
+        // Audio construction can throw in rare environments; skip this tick.
+      }
+    };
+
+    const scheduleNext = () => {
+      const delay = 8000 + Math.random() * 12000;
+      timer = window.setTimeout(() => {
+        if (stopped) {
+          return;
+        }
+        playOne();
+        scheduleNext();
+      }, delay);
+    };
+    scheduleNext();
+
+    return () => {
+      stopped = true;
+      if (timer) {
+        window.clearTimeout(timer);
+      }
+      audio?.pause();
+      audio = null;
+    };
+  }, [assetsReady, settings?.soundEffectsEnabled]);
 
   return <div ref={mountRef} />;
 });

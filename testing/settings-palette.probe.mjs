@@ -87,9 +87,15 @@ const run = async () => {
             const rect = canvas.getBoundingClientRect();
             const root = scene.children.find((c) => c.isModel && c.isPaintable && c.userData?.transparentBox);
             if (!root) return null;
-            const p = root.userData.transparentBox.getWorldPosition(
-                new (root.position.constructor)(),
-            );
+            const V = camera.position.constructor;
+            const p = root.userData.transparentBox.getWorldPosition(new V());
+            // Aim the camera at the model so the click reliably hits it (the
+            // scene layout shifts between builds -- e.g. the plate Y-lift).
+            camera.position.set(p.x + 4, p.y + 3, p.z + 4);
+            camera.lookAt(p);
+            const ctrl = window.__gameControls;
+            if (ctrl) { ctrl.target.copy(p); ctrl.update(); }
+            camera.updateMatrixWorld(true);
             const ndc = p.clone().project(camera);
             window.__paintProbeRoot = root;
             return {

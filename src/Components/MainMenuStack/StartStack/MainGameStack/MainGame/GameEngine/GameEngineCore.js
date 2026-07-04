@@ -87,6 +87,11 @@ export class GameEngineCore {
     this.camera.position.set(0, 5, 10);
     window.__gameControls = this.controls;
 
+    // Suppress the browser right-click menu on the canvas so right-drag
+    // (orbit) and Shift-based interactions never pop it.
+    this.preventContextMenu = (event) => event.preventDefault();
+    this.renderer.domElement.addEventListener('contextmenu', this.preventContextMenu);
+
     window.addEventListener('resize', this.handleResize);
     this.unregisterWeatherCallback = this.registerFrameCallback(() => {
       animateWeatherSystems(this.scene);
@@ -227,6 +232,10 @@ export class GameEngineCore {
     this.cameraController.clearSubjects();
     this.cameraController.exitDrive();
     window.removeEventListener('resize', this.handleResize);
+    if (this.preventContextMenu) {
+      this.renderer.domElement.removeEventListener('contextmenu', this.preventContextMenu);
+      this.preventContextMenu = null;
+    }
     this.controls?.dispose();
     this.controls = null;
 

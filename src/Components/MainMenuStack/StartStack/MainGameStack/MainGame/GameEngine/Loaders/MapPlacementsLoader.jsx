@@ -129,6 +129,29 @@ const hideBakedTwin = (scene, placementNumber) => {
 const twinBox = new THREE.Box3();
 const twinCenter = new THREE.Vector3();
 const partCenter = new THREE.Vector3();
+const plateBox = new THREE.Box3();
+const plateSize = new THREE.Vector3();
+
+/**
+ * Flat baseplate placements (grass/path plates, e.g. l4109610) land almost
+ * coplanar with the single baked base plane (`543_shape207` at y=0) -- only
+ * ~0.1 world units above it -- so at grazing angles the base's texture
+ * (which carries the water/grass/beige regions) z-fights through them: the
+ * "water seeping through the grass" the user saw. Lifting flat, wide plates
+ * a clear gap above the base separates them in depth. Tall props/characters
+ * are unaffected.
+ */
+const liftFlatPlate = (root) => {
+    root.updateMatrixWorld(true);
+    plateBox.setFromObject(root);
+    plateBox.getSize(plateSize);
+    if (plateSize.y < 1.5 && Math.max(plateSize.x, plateSize.z) > 8) {
+        root.position.y += 0.35;
+        // Ground plates are walkable surfaces, not obstacles: characters
+        // stand ON them, so they must never block movement collisions.
+        root.userData.isGroundPlate = true;
+    }
+};
 
 /**
  * The placement export uses a coordinate frame offset from the map's vertex
@@ -218,6 +241,7 @@ const spawnPlacement = (templateId, placement, transform, scene, fallbackCorrect
                     root.position.add(fallbackCorrection);
                 }
             }
+            liftFlatPlate(root);
             configurePlacedObject(root, placement);
             hideBakedTwin(scene, placement.number);
             if (root.isMovable) {

@@ -8,6 +8,7 @@ export const defaultProfileOptions = {
   renderer: 'hardware',
   dialogue: 'on',
   music: 'on',
+  soundEffects: 'on',
 };
 
 export const getSeedUserData = () => seedUserData;
