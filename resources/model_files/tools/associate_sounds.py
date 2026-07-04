@@ -60,6 +60,13 @@ CHARACTERS = {
 MINIFIG_COMMON = [32, 33]                  # Step, Fart
 BRICK_GLOBAL = [3, 4, 5]                   # Link, Collide, Connect
 ENVIRONMENTALS = [0, 1, 2, 6, 85, 86, 87, 88, 89, 90]
+# 'SCL M/F : <CODE><nn>' object names use the character CODE, not the
+# character's spelled-out name -- map codes to the CHARACTERS sound sets.
+SCL_CODES = {
+    'KL': 'kingleo', 'QL': 'queen', 'PS': 'princess', 'RS': 'richard',
+    'CB': 'cedric', 'W': 'weezil', 'GB': 'gilbert', 'JM': 'john',
+}
+SCL_MF_RE = re.compile(r'SCL M/F\s*:\s*([A-Z]+)\d*', re.I)
 
 
 def load_sound_files(sounds_dir):
@@ -111,12 +118,19 @@ def associate(path, wavs, writer):
             continue
         seen.add(key)
         matched_char = False
-        for kw, ids in CHARACTERS.items():
-            if kw in low:
-                for sid in ids + MINIFIG_COMMON:
-                    emit(num, nm, sid, f'character:{kw}')
-                matched_char = True
-                break
+        m = SCL_MF_RE.search(nm)
+        if m and m.group(1).upper() in SCL_CODES:
+            kw = SCL_CODES[m.group(1).upper()]
+            for sid in CHARACTERS[kw] + MINIFIG_COMMON:
+                emit(num, nm, sid, f'scl-code:{m.group(1).upper()}')
+            matched_char = True
+        if not matched_char:
+            for kw, ids in CHARACTERS.items():
+                if kw in low:
+                    for sid in ids + MINIFIG_COMMON:
+                        emit(num, nm, sid, f'character:{kw}')
+                    matched_char = True
+                    break
         if not matched_char and 'minifig' in low:
             for sid in MINIFIG_COMMON:
                 emit(num, nm, sid, 'minifig-common')

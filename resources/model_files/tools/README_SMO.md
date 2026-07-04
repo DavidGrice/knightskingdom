@@ -1,7 +1,8 @@
 # SMO Format — Minifig Character Animations
 ### LEGO Creator: Knights' Kingdom (Superscape VRT 5.10 era)
 
-**Status:** fully decoded, byte-exact, zero unparsed bytes across all seven sample files.
+**Status:** fully decoded, byte-exact across all 92 retail files (2 carry
+stale trailing residue from LEGO's own re-export tooling — see §2).
 **Tool:** `smo_parser.py` (reads `.smo`, emits `.json`).
 **Date:** 2026-07-03.
 
@@ -45,8 +46,22 @@ Track record  (repeated numTracks times)
               [3..5]  rotation triplet   (DEGREES)
 ```
 
-File size check: `4 + Σ(2 + nameLen + 2 + numFrames×24)` — exact for all
-seven samples.
+File size check: `4 + Σ(2 + nameLen + 2 + numFrames×24)` — exact for 90
+of the 92 retail files.
+
+**Exception — stale residue (2 files).** `anim_r_explainleftreturn.smo`
+and `anim_r_think.smo` are larger than the size check predicts (by 5808
+and 1320 bytes). Verified 2026-07-03: both are shorter re-exports written
+**in place over an older, longer take without truncating the file** —
+LEGO's authoring tool's bug, shipped on the disc. The residue is the old
+version's tail: with the same 11 track names, an old take of 36 frames
+(vs 14) and 120 frames (vs 115) respectively lands on the actual file
+sizes *exactly*, and the old track-name strings (`rightarm`, `body`,
+`hips`, `rightfoot`, `righthand`, `lefthand`) appear at the byte offsets
+the old layout predicts. The header's frame count describes the live
+data correctly; parse the declared frames and ignore anything after
+them. (`smo_parser.py` prints a note and skips the residue; a file
+*shorter* than the layout demands is still an error.)
 
 Key properties:
 

@@ -13,6 +13,8 @@ open-format asset set under ./extracted/ :
     extracted/models/      every .lca as textured OBJ + MTL (+ GLB)
     extracted/animations/  every .smo character animation as JSON
     extracted/templates/*/parts/  per-shape template parts (OBJ+MTL+GLB)
+    extracted/catalog/     browsable catalog.html + model_catalog.json
+    extracted/ldraw/       every model as LDraw MPD (BrickLink Studio)
     extracted/sound_map.csv  object -> sound association manifest
 
 Usage:
@@ -158,7 +160,13 @@ def main():
     #    truth downstream tooling (semi-vanilla per-part reconstruction)
     #    reads from instead of re-deriving stats from merged OBJ output.
     if all_lcas:
-        run('generate_asset_manifest.py', os.path.join(out, 'asset_manifest.json'), pak_out)
+        mpath = os.path.join(out, 'asset_manifest.json')
+        if os.path.exists(mpath) and '--force-manifest' not in sys.argv:
+            print('== asset manifest already built, skipping '
+                  '(--force-manifest to rebuild)')
+        else:
+            roots = [game] + ([pak_out] if os.path.isdir(pak_out) else [])
+            run('generate_asset_manifest.py', mpath, *roots)
 
     # 6) .smo character animations (Animation Files/ under the game install)
     #    -> extracted/animations/<name>.json, one per rig (minifig bone
@@ -171,8 +179,30 @@ def main():
         print(f'== all {len(smos)} animations already parsed, skipping')
     elif todo_smos:
         os.makedirs(anim_out, exist_ok=True)
+        bad_smos = []
         for i in range(0, len(todo_smos), 25):
-            run('smo_parser.py', anim_out, *todo_smos[i:i + 25])
+            batch = todo_smos[i:i + 25]
+            try:
+                run('smo_parser.py', anim_out, *batch)
+            except subprocess.CalledProcessError:
+                # one malformed file (e.g. an unsupported per-object timing
+                # chunk) aborts its whole batch -- isolate the offender(s)
+                # so the rest of the batch, and the rest of the pipeline,
+                # aren't blocked by it.
+                for p in batch:
+                    jpath = os.path.join(anim_out, os.path.splitext(
+                        os.path.basename(p))[0] + '.json')
+                    if os.path.exists(jpath):
+                        continue
+                    try:
+                        run('smo_parser.py', anim_out, p)
+                    except subprocess.CalledProcessError:
+                        bad_smos.append(p)
+        if bad_smos:
+            print(f'!! {len(bad_smos)} .smo file(s) did not parse cleanly '
+                  f'-- skipped (see traceback above for each):')
+            for p in bad_smos:
+                print('   ', os.path.basename(p))
     else:
         print('-- no .smo files found under the game install; animations step skipped')
 
@@ -195,6 +225,33 @@ def main():
             run('obj_to_glb.py', '--textures', out, *todo_glb[i:i + 25])
     else:
         print('-- no exported OBJ files found; GLB step skipped')
+
+    # 8) browsable HTML catalog (+ model_catalog.json fingerprint index),
+    #    reusing the already-exported textured OBJs from step 4
+    cat_out = os.path.join(out, 'catalog')
+    if all_lcas:
+        if os.path.exists(os.path.join(cat_out, 'catalog.html')) and \
+                '--force-catalog' not in sys.argv:
+            print('== catalog already built, skipping (--force-catalog '
+                  'to rebuild)')
+        else:
+            args = [cat_out, tex_link, '--reuse', models]
+            csvp = os.path.join(out, 'sound_map.csv')
+            if os.path.exists(csvp):
+                args += ['--sounds', csvp]
+            roots = [game] + ([pak_out] if os.path.isdir(pak_out) else [])
+            run('catalog_build.py', *args, *roots)
+
+    # 9) LDraw / BrickLink Studio export (MPD per model)
+    ldraw_out = os.path.join(out, 'ldraw')
+    if all_lcas:
+        done = len(glob.glob(os.path.join(ldraw_out, '*.mpd')))
+        if done >= len(all_lcas):
+            print(f'== all {len(all_lcas)} LDraw models already exported,'
+                  ' skipping')
+        else:
+            for i in range(0, len(all_lcas), 25):
+                run('ldraw_bridge.py', ldraw_out, *all_lcas[i:i + 25])
 
     print(f'\nDone. Everything is under {out}')
 
