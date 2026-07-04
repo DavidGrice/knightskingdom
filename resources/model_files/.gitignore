@@ -19,6 +19,9 @@ models/
 # per-user saved game path
 config.json
 
+# archived raw tool-delivery drops (superseded once integrated)
+archive/
+
 # Python
 __pycache__/
 *.pyc

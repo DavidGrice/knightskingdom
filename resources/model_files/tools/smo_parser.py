@@ -45,7 +45,16 @@ def parse_smo(path):
             px, py, pz, rx, ry, rz = struct.unpack_from('<6f', d, off); off += 24
             frames.append({'pos': [px, py, pz], 'rot': [rx, ry, rz]})
         tracks.append({'name': name, 'reserved': reserved, 'frames': frames})
-    assert off == len(d), f'{path}: {len(d)-off} unparsed bytes'
+    assert off <= len(d), f'{path}: truncated ({off - len(d)} bytes short)'
+    if off < len(d):
+        # 2 of the 92 retail files (anim_r_explainleftreturn, anim_r_think)
+        # were re-exported shorter IN PLACE over an older, longer take
+        # without truncating the file; the tail is stale residue of the
+        # old version (verified: the old track-name strings sit at the
+        # exact offsets a 36-/120-frame layout predicts). The declared
+        # frames above are complete and valid -- ignore the residue.
+        print(f'  note: {os.path.basename(path)}: ignoring {len(d)-off} '
+              f'residual bytes from a pre-re-export version')
     return {'file': os.path.basename(path), 'num_tracks': ntracks,
             'num_frames': nframes, 'tracks': tracks}
 

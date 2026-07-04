@@ -45,7 +45,9 @@ def render(path, out_png, views=((20, -60), (30, 120), (75, -90))):
     if len(verts) == 0 or not faces:
         print('empty obj, skipping render:', path)
         return
-    verts = verts[:, [0, 2, 1]]                  # OBJ Y-up -> mpl Z-up
+    # KK OBJs carry model-up at NEGATIVE Y (frozen exporter's Y-flip
+    # vs +Y-up VRT content); negate for correct display (det +1).
+    verts = verts[:, [0, 2, 1]] * np.array([1.0, 1.0, -1.0])
     fig = plt.figure(figsize=(5 * len(views), 5))
     lo, hi = verts.min(0), verts.max(0)
     center, span = (lo + hi) / 2, (hi - lo).max() * 0.55

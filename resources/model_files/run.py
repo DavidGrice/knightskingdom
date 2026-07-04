@@ -157,6 +157,8 @@ def main():
         print('  textures/  the texture bank as PNG')
         print('  sounds/    the 92 named world sounds as WAV')
         print('  animations/  character animations (.smo) as JSON')
+        print('  catalog/   open catalog.html in a browser to explore')
+        print('  ldraw/     .mpd files for BrickLink Studio / LeoCAD')
         print('  pak/       voice-overs, help text, UI art')
         print('  sound_map.csv  object > sound associations')
     else:
