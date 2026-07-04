@@ -37,12 +37,13 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lca_parser import parse_lca, facet_to_loop
+from lca_parser import parse_lca, facet_to_loop, split_container
 from export_obj import (
     build_tree, rot_from_brees, mat_identity, mat_mul, mat_vec,
     resolve_points_scaled,
 )
 from export_template_parts import find_terrain_and_real_shapes
+from export_textured import texspecs
 
 SCALE = 0.001  # matches export_obj.py's default (VRT units -> mm)
 E_OFINVISIBLE = 0x80000000
@@ -51,6 +52,36 @@ E_OFINVISDEF = 0x40000000
 MODEL_METADATA_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     '..', '..', 'model_pipeline', 'model_metadata.generated.json')
+
+# The geometry-fingerprint metadata indexes all 264 extracted models, but the
+# game can only spawn the curated subset wired into the runtime warehouse
+# catalog (~107 models). Matching against models the loader can't resolve
+# produces broken placements (a wrong id -> missing asset -> a hole where a
+# castle wall should be). So the match set is intersected with this catalog.
+RUNTIME_CATALOG_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    '..', '..', '..', 'src', 'Components', 'MainMenuStack', 'StartStack',
+    'MainGameStack', 'MainGame', 'GameEngine', 'Loaders',
+    'warehouseModelCatalog.generated.js')
+
+_PREFIX_RE = re.compile(r'^\d+_')
+
+
+def normalize_catalog_id(model_id):
+    """The extracted-model ids carry a `NN_` warehouse-ordering prefix
+    (`04_l614100`) that the runtime catalog and public asset paths drop
+    (`l614100`). Strip it so a fingerprint match resolves to a loadable id."""
+    return _PREFIX_RE.sub('', model_id)
+
+
+def load_loadable_catalog_ids(path):
+    """The set of model ids the runtime warehouse catalog can actually spawn,
+    read as the `.obj` basenames of its objUrl entries. Returns None if the
+    catalog is unavailable, in which case matching stays unrestricted."""
+    if not os.path.exists(path):
+        return None
+    txt = open(path, encoding='utf-8').read()
+    return set(re.findall(r'/([A-Za-z0-9_.-]+)\.obj', txt)) or None
 
 # FORMAT_SPEC.md §6.1 character codes -> the minifig<name> id convention
 # already used in BucketBottomResourceStack/minifigures_animals/.
@@ -99,23 +130,53 @@ def resolve_named_model_id(name, models_dir):
     return None, 'unknown'
 
 
+SPR_RE = re.compile(r'spr(\d+)')
+
+
+def _catalog_texture_ids(materials):
+    """The set of global spr texture numbers a catalog model paints itself
+    with, read from each material's `map_Kd` (e.g. 'textures/spr164_...png'
+    -> 164). This is the same global texture id the template's per-facet
+    `spec['tex']` resolves to, so the two sets are directly comparable."""
+    ids = set()
+    for mat in materials or []:
+        ref = mat.get('map_Kd')
+        if not ref:
+            continue
+        hit = SPR_RE.search(ref)
+        if hit:
+            ids.add(int(hit.group(1)))
+    return ids
+
+
 class ShapeSignatureIndex:
     """Tier 2: nearest-fingerprint match against the standalone catalog's
     precomputed vertex/face/bbox signatures (model_metadata.generated.json).
+
+    Pure geometry (vertex/face/bbox) cannot separate a family of parts that
+    share a mould but differ only by printed decoration -- e.g. the green
+    path plates l4109610..l4109613 are byte-identical in shape and colour and
+    differ solely by their spr texture. So the printed-texture signature is
+    carried alongside the geometry one and used to break those ties.
     """
 
-    def __init__(self, metadata_path):
+    def __init__(self, metadata_path, loadable_ids=None):
         with open(metadata_path) as fh:
             report = json.load(fh)
-        self.models = [
-            {
-                'id': m['id'],
+        self.models = []
+        for m in report['models']:
+            norm = normalize_catalog_id(m['id'])
+            # Skip anything the runtime loader can't actually spawn, so a
+            # fingerprint match never resolves to a missing asset.
+            if loadable_ids is not None and norm not in loadable_ids:
+                continue
+            self.models.append({
+                'id': norm,
                 'vertexCount': m['vertexCount'],
                 'faceCount': m['faceCount'],
                 'size': m['bbox']['size'],
-            }
-            for m in report['models']
-        ]
+                'textures': _catalog_texture_ids(m.get('materials')),
+            })
         self.by_counts = {}
         for m in self.models:
             self.by_counts.setdefault((m['vertexCount'], m['faceCount']), []).append(m)
@@ -135,9 +196,33 @@ class ShapeSignatureIndex:
         rb += [0.0] * (n - len(rb))
         return sum(abs(a - b) for a, b in zip(ra, rb))
 
-    def match(self, vertex_count, face_count, size):
+    def match(self, vertex_count, face_count, size, texture_ids=None):
+        texture_ids = texture_ids or set()
         exact = self.by_counts.get((vertex_count, face_count))
         if exact:
+            if texture_ids:
+                # Placed shape is textured: the printed decoration is the
+                # discriminator. Prefer the geometry-tied candidate whose spr
+                # set overlaps it most (aspect distance only breaks further
+                # ties). If NOTHING in the bucket shares a texture, this is a
+                # bad geometry coincidence (a decorated part colliding with an
+                # undecorated brick of equal vertex/face count) -- refuse it so
+                # the caller falls back to the template's own local part
+                # rather than spawning a wrong, wrongly-skinned catalog model.
+                ranked = sorted(
+                    exact,
+                    key=lambda m: (
+                        -len(texture_ids & m['textures']),
+                        self._aspect_distance(size, m['size']),
+                    ),
+                )
+                best = ranked[0]
+                if not (texture_ids & best['textures']):
+                    return None, 'texture-mismatch'
+                tied = [m for m in ranked
+                        if len(texture_ids & m['textures'])
+                        == len(texture_ids & best['textures'])]
+                return best['id'], 'exact' if len(tied) == 1 else 'exact-ambiguous'
             if len(exact) == 1:
                 return exact[0]['id'], 'exact'
             best = min(exact, key=lambda m: self._aspect_distance(size, m['size']))
@@ -192,6 +277,29 @@ def shape_geometry(shapes, typ):
     return {'vertexCount': len(pts), 'faceCount': face_count, 'size': size}
 
 
+def shape_texture_ids(shape, ob, specs, trans):
+    """The set of global spr texture numbers this placed object paints its
+    facets with -- resolved exactly the way export_template_parts.export_part
+    resolves a facet's `usemtl tex{gref:03d}`: the per-facet `spec['tex']`,
+    remapped through the object's local texture-translation table. Directly
+    comparable to a catalog model's _catalog_texture_ids()."""
+    my_specs = {s['facet']: s for s in specs.get(ob['number'], [])}
+    if not my_specs:
+        return set()
+    my_trans = trans.get(ob['number'])
+    ids = set()
+    for f in shape.get('facets', []):
+        spec = my_specs.get(f['number'])
+        if not spec:
+            continue
+        gref = spec['tex']
+        if my_trans is not None:
+            gref = my_trans[gref] if 0 <= gref < len(my_trans) else None
+        if gref is not None:
+            ids.add(gref)
+    return ids
+
+
 CATALOG_CONFIDENCE = {'exact', 'exact-ambiguous'}
 
 
@@ -208,6 +316,14 @@ def extract_placements(lca_path, models_dir, sig_index, parts_manifest):
               if s.get('type') == 0 and s.get('name')}
     build_tree(objects)
     root = objects[0]
+
+    # Per-facet texture specs (same source export_template_parts.py bakes
+    # from) so a placed shape's printed decoration can break geometry ties in
+    # the catalog match. Absent on templates with no WRLD chunk -> no texture
+    # signal, matching falls back to geometry-only.
+    _hdr, subs = split_container(open(lca_path, 'rb').read())
+    tex_specs, tex_trans = (
+        texspecs(subs['WRLD'])[:2] if 'WRLD' in subs else ({}, {}))
 
     # find_terrain_and_real_shapes keeps one representative object per shape
     # type; terrain/real classification is per shape *type*, so any object
@@ -248,8 +364,14 @@ def extract_placements(lca_path, models_dir, sig_index, parts_manifest):
                 geometry = shape_geometry(shapes, typ) or {}
                 geometry_cache[typ] = geometry
             if geometry:
+                # Texture ids are per-object (facet specs key off the object
+                # number), so they can't share the per-type geometry cache.
+                shp = shapes[typ + 1] if typ + 1 < len(shapes) else None
+                texture_ids = (shape_texture_ids(shp, ob, tex_specs, tex_trans)
+                               if shp else set())
                 model_id, confidence = sig_index.match(
-                    geometry['vertexCount'], geometry['faceCount'], geometry['size'])
+                    geometry['vertexCount'], geometry['faceCount'],
+                    geometry['size'], texture_ids)
                 tier, kind = 2, 'prop'
                 if model_id and confidence in CATALOG_CONFIDENCE:
                     source = 'catalog'
@@ -292,6 +414,14 @@ def extract_placements(lca_path, models_dir, sig_index, parts_manifest):
                 'size': list(ob['size']),
             })
 
+        # A catalog-matched character (an "SCL M/F" minifig rig root) is
+        # spawned as a whole minifig from the warehouse catalog. Its child
+        # body-part objects must NOT also be emitted as local-parts, or they
+        # reassemble a duplicate character right on top of it (the "two
+        # queens" bug). Stop descending at the character root.
+        if kind == 'character' and source == 'catalog':
+            return
+
         for ch in ob['children']:
             walk(ch, M, T)
 
@@ -305,7 +435,8 @@ def main():
     lca_paths = sys.argv[3:]
     models_dir = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), '..', 'extracted', 'models')
-    sig_index = ShapeSignatureIndex(MODEL_METADATA_PATH)
+    loadable_ids = load_loadable_catalog_ids(RUNTIME_CATALOG_PATH)
+    sig_index = ShapeSignatureIndex(MODEL_METADATA_PATH, loadable_ids)
 
     manifest = {}
     for path in lca_paths:
