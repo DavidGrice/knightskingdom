@@ -36,10 +36,16 @@ export const computeContentBounds = (root) => {
 const applySelectionBoxGeometry = (hitbox, size, centerLocal) => {
   hitbox.position.copy(centerLocal);
   hitbox.geometry?.dispose();
+  // size is measured in world units but the geometry lives in the parent's
+  // local space -- OBJ/MTL model roots are scaled (MM_TO_WORLD_SCALE), so
+  // without this the box renders 10x too small on warehouse models.
+  const worldScale = hitbox.parent
+    ? hitbox.parent.getWorldScale(new THREE.Vector3())
+    : new THREE.Vector3(1, 1, 1);
   hitbox.geometry = new THREE.BoxGeometry(
-    Math.max(size.x, 1e-4),
-    Math.max(size.y, 1e-4),
-    Math.max(size.z, 1e-4),
+    Math.max(size.x / Math.max(Math.abs(worldScale.x), 1e-6), 1e-4),
+    Math.max(size.y / Math.max(Math.abs(worldScale.y), 1e-6), 1e-4),
+    Math.max(size.z / Math.max(Math.abs(worldScale.z), 1e-6), 1e-4),
   );
 
   const wireframe = hitbox.getObjectByName('wireframe');

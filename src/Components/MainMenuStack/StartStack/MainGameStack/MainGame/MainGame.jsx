@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GameEngine } from './index';
 import { Drive } from './ComponentTop/Drive/index';
 import { Climate } from './ComponentBottom/Climate/index';
@@ -11,10 +11,12 @@ const MainGameContent = ({
   navigateToStartMenu,
   mapData,
   customCreations,
+  openCreationsBucket,
   clearWorkshopBucketHint,
 }) => {
   const {
     state,
+    settings,
     hydrationScene,
     gameEngineRef,
     resetModes,
@@ -67,26 +69,36 @@ const MainGameContent = ({
   } = state;
 
   const openedCreationsBucketRef = useRef(false);
+  const [startOnCreationsTab, setStartOnCreationsTab] = useState(false);
 
   useEffect(() => {
-    if (!mapData?.openCreationsBucket || openedCreationsBucketRef.current) {
+    if (!openCreationsBucket || openedCreationsBucketRef.current) {
       return;
     }
+    // Consume the one-shot hint immediately -- even if there's nothing to
+    // show -- so it can't fire again on a later, unrelated return.
+    openedCreationsBucketRef.current = true;
+    clearWorkshopBucketHint?.();
     if (!customCreations || Object.keys(customCreations).length === 0) {
       return;
     }
-    openedCreationsBucketRef.current = true;
+    setStartOnCreationsTab(true);
     if (!showBucket) {
       handleBucket();
     }
-    clearWorkshopBucketHint?.();
   }, [
-    mapData?.openCreationsBucket,
+    openCreationsBucket,
     customCreations,
     showBucket,
     handleBucket,
     clearWorkshopBucketHint,
   ]);
+
+  useEffect(() => {
+    if (!showBucket && startOnCreationsTab) {
+      setStartOnCreationsTab(false);
+    }
+  }, [showBucket, startOnCreationsTab]);
 
   return (
     <GameShell
@@ -113,6 +125,7 @@ const MainGameContent = ({
       bottom={
         <ComponentBottom
           mode="game"
+          helpEnabled={settings.helpEnabled}
           handleClimate={handleClimate}
           handleMusic={handleMusic}
           activeIcon={activeIcon}
@@ -129,7 +142,7 @@ const MainGameContent = ({
             dataSource="models"
             handleLoadModel={handleLoadModel}
             customCreations={customCreations}
-            initialTab={mapData?.openCreationsBucket ? GAME_CREATIONS_TAB_INDEX : undefined}
+            initialTab={startOnCreationsTab ? GAME_CREATIONS_TAB_INDEX : undefined}
           />
         </div>
       )}
@@ -171,7 +184,9 @@ const MainGameContent = ({
         </div>
       )}
       <GameEngine
+        key={settings.rendererKey}
         ref={gameEngineRef}
+        settings={settings}
         mapData={mapData}
         hydrationScene={hydrationScene}
         color={color}

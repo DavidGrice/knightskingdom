@@ -40,6 +40,22 @@ export class CameraController {
     }
   }
 
+  /** Drop a deleted model's drive subject; exits drive if it was active. */
+  unregisterSubject(driveId) {
+    const subject = driveId ? this.subjects.get(driveId) : null;
+    if (!subject) {
+      return;
+    }
+    if (this.activeDriveId === driveId) {
+      this.exitDrive();
+    }
+    subject.rig.dispose();
+    this.subjects.delete(driveId);
+    if (this.defaultDriveId === driveId) {
+      this.defaultDriveId = this.subjects.keys().next().value ?? null;
+    }
+  }
+
   syncFromReact({
     mode,
     isFollowing,

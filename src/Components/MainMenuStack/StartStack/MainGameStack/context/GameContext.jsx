@@ -3,6 +3,7 @@ import { Modes } from '../MainGame/GameEngine/GameEngineResourceStack/index';
 import { musicTracks } from '../MainGame/MainGameResourceStack/index';
 import { createEmptySceneState, createSnapshotEntry } from './sceneSchema';
 import { gameReducer, initialGameState } from './gameReducer';
+import { resolveGameSettings } from '@/lib/gameSettings';
 
 const GameContext = createContext(null);
 
@@ -36,6 +37,11 @@ export const GameProvider = ({
   const audioRef = useRef(null);
   const audioPlayTokenRef = useRef(0);
 
+  // Engine + UI settings resolved from the profile's Options-menu choices.
+  const settings = useMemo(() => resolveGameSettings(selectedProfile), [selectedProfile]);
+  const musicEnabledRef = useRef(settings.musicEnabled);
+  musicEnabledRef.current = settings.musicEnabled;
+
   const stopMusicPlayback = useCallback(() => {
     audioPlayTokenRef.current += 1;
     if (audioRef.current) {
@@ -47,7 +53,9 @@ export const GameProvider = ({
 
   const startMusicPlayback = useCallback((track) => {
     const source = MUSIC_TRACK_SOURCES[track];
-    if (!source) {
+    // Profile option "music: off" (Options menu) silences playback while
+    // leaving the in-game music selector usable -- the choice still saves.
+    if (!source || !musicEnabledRef.current) {
       stopMusicPlayback();
       return;
     }
@@ -317,6 +325,7 @@ export const GameProvider = ({
 
   const value = useMemo(() => ({
     state,
+    settings,
     hydrationScene,
     gameEngineRef,
     resetModes,
@@ -356,6 +365,7 @@ export const GameProvider = ({
     setActiveMusic: (index) => handleMusicChange(index),
   }), [
     state,
+    settings,
     hydrationScene,
     resetModes,
     handleSave,

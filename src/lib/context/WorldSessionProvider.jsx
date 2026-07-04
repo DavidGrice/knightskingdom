@@ -26,6 +26,16 @@ export const WorldSessionProvider = ({ children }) => {
   const router = useRouter();
   const { userData, selectedProfile, updateUserData } = useUserData();
   const [worldData, setWorldData] = useState(null);
+  // One-shot "open the creations bucket" signal, set only when the workshop
+  // exports a creation and consumed (cleared) by MainGame on read. Lives
+  // OUTSIDE worldData on purpose: navigation used to merge stale worldData
+  // snapshots captured at workshop entry, resurrecting the flag and popping
+  // the bucket open on returns that shouldn't trigger it.
+  const [creationsBucketHint, setCreationsBucketHint] = useState(false);
+  if (typeof window !== 'undefined') {
+    // Dev/test-only introspection, matching the engines' window hooks.
+    window.__creationsBucketHint = creationsBucketHint;
+  }
 
   const currentProfile = useMemo(
     () => userData?.find((p) => p.id === selectedProfile?.id) || selectedProfile,
@@ -37,12 +47,22 @@ export const WorldSessionProvider = ({ children }) => {
     router.push(ROUTES.startStack.start);
   }, [router]);
 
+  // Legacy flag scrubber: openCreationsBucket must never ride along inside
+  // worldData snapshots (see creationsBucketHint above).
+  const stripBucketFlag = (data) => {
+    if (!data || data.openCreationsBucket === undefined) {
+      return data;
+    }
+    const { openCreationsBucket: _legacy, ...rest } = data;
+    return rest;
+  };
+
   const navigateToMainGame = useCallback(
     (mapData) => {
       if (mapData) {
         setWorldData((prev) => ({
-          ...prev,
-          ...mapData,
+          ...stripBucketFlag(prev),
+          ...stripBucketFlag(mapData),
         }));
       }
       beginNavigationLoading(['world-assets']);
@@ -54,7 +74,7 @@ export const WorldSessionProvider = ({ children }) => {
   const navigateToWorkshop = useCallback(
     (updatedWorldData) => {
       if (updatedWorldData) {
-        setWorldData(updatedWorldData);
+        setWorldData(stripBucketFlag(updatedWorldData));
       }
       beginNavigationLoading();
       router.push(ROUTES.startStack.workshop);
@@ -207,8 +227,8 @@ export const WorldSessionProvider = ({ children }) => {
         ...prev,
         workshopDraft: draft,
         sessionCustomCreations,
-        openCreationsBucket: true,
       }));
+      setCreationsBucketHint(true);
 
       return creationId;
     },
@@ -216,9 +236,7 @@ export const WorldSessionProvider = ({ children }) => {
   );
 
   const clearWorkshopBucketHint = useCallback(() => {
-    setWorldData((prev) => (prev?.openCreationsBucket
-      ? { ...prev, openCreationsBucket: false }
-      : prev));
+    setCreationsBucketHint(false);
   }, []);
 
   const onRemoveSnapshot = useCallback(
@@ -266,6 +284,7 @@ export const WorldSessionProvider = ({ children }) => {
       onSaveWorkshopExport,
       workshopDraft,
       customCreations,
+      creationsBucketHint,
       clearWorkshopBucketHint,
     }),
     [
@@ -273,6 +292,7 @@ export const WorldSessionProvider = ({ children }) => {
       currentProfile,
       workshopDraft,
       customCreations,
+      creationsBucketHint,
       clearWorkshopBucketHint,
       navigateToStartMenu,
       navigateToMainGame,

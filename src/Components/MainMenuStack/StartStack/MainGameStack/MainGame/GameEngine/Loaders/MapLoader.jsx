@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { loadObjMtl, MM_TO_WORLD_SCALE } from '../../../shared/objMtlLoader';
+import { MM_TO_WORLD_SCALE } from '../../../shared/objMtlLoader';
+import { loadGameModel } from '../../../shared/gameModelLoader';
 
 /**
  * World templates import at their natural scale -- just the shared
@@ -105,7 +106,7 @@ const forceDoubleSided = (root) => {
 };
 
 const MapLoader = (mapData, scene, setModelLoaded) => {
-    loadObjMtl(mapData.objUrl, mapData.mtlUrl)
+    loadGameModel('map', { objUrl: mapData.objUrl, mtlUrl: mapData.mtlUrl })
         .then((root) => {
             root.name = 'GameMap';
             root.isMovable = false;

@@ -16,6 +16,7 @@ const ComponentBottom = ({
     handleNavigateToSnapShot,
     handleMusicChange,
     onSweep,
+    helpEnabled = true,
 }) => {
     const styles = mode === 'workshop' ? workshopStyles : gameStyles;
     const config = getBottomToolbarConfig(mode);
@@ -72,12 +73,14 @@ const ComponentBottom = ({
                 <Ball mode={mode} />
             </div>
             {config.rightButtons && config.rightButtons.map(renderButton)}
-            <div className={styles.bottomRightCorner}>
-                <HelpComponent
-                    placeholderImage={config.images.placeholderImage}
-                    frames={config.images.frames}
-                />
-            </div>
+            {helpEnabled && (
+                <div className={styles.bottomRightCorner}>
+                    <HelpComponent
+                        placeholderImage={config.images.placeholderImage}
+                        frames={config.images.frames}
+                    />
+                </div>
+            )}
         </div>
     );
 };

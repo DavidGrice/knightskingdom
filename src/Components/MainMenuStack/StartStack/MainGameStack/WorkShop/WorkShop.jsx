@@ -16,6 +16,7 @@ const WorkShopContent = () => {
   const [activeIcon, setActiveIcon] = useState(null);
   const {
     state,
+    settings,
     engineRef,
     workshopDraft,
     resetModes,
@@ -29,6 +30,7 @@ const WorkShopContent = () => {
     handleColor,
     handleSweep,
     handleSave,
+    handleLeave,
     mapData,
   } = useWorkshopContext();
 
@@ -61,7 +63,7 @@ const WorkShopContent = () => {
             handlePalette={handlePalette}
             handleSave={handleSave}
             resetModes={resetModes}
-            navigateToMainGame={handleSave}
+            navigateToMainGame={handleLeave}
             activeToolbarIcon={activeIcon}
             setActiveToolbarIcon={setActiveIcon}
           />
@@ -79,7 +81,9 @@ const WorkShopContent = () => {
           <div className={styles.canvas}>
             <div className={styles.stage}>
               <WorkshopEngine
+                key={settings.rendererKey}
                 ref={engineRef}
+                settings={settings}
                 mode={mode}
                 selectedBrickId={selectedBrickId}
                 showBucket={showBucket}

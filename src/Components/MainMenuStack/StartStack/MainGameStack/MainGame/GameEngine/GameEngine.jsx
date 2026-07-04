@@ -6,46 +6,60 @@ import { isCreationModelId } from '@/api/customCreations';
 import { Modes } from './GameEngineResourceStack/index';
 import { serializeSceneFromThree } from '../../context/sceneSchema';
 import { GameEngineCore } from './GameEngineCore';
-import { disposeObject3D } from './sceneDispose';
+import { disposeModelInstance } from './sceneDispose';
 import { updateSelectionBox } from '../../WorkShop/WorkshopEngine/BrickFactory';
 import {
+  filterOutSelectionHelpers,
+  findModelRoot,
+  findModelRootFromIntersects,
   hideSelectionOutline,
+  isInSubtree,
   resolveMoveSelection,
   showSelectionOutline,
 } from './selectionOutline';
 
 const DRAG_SMOOTHING = 0.35;
 
-const promoteWireframeToBox = (node) => {
-  if (node?.name === 'wireframe' && node.parent?.isMovable) {
-    return node.parent;
-  }
-  return node;
-};
+const placementBounds = new THREE.Box3();
+const groundProbe = new THREE.Raycaster();
 
-const findInteractableTarget = (object, flag) => {
-  let node = object;
-  while (node) {
-    if (node[flag]) {
-      return promoteWireframeToBox(node);
-    }
-    node = node.parent;
-  }
-  return null;
-};
+/**
+ * Placement point for ADDING when the click landed on an existing model:
+ * instead of that model's surface (which left the new model floating at
+ * the hit height), step to the model's nearest free side -- left/right/
+ * front/behind, chosen from where on the model the user clicked -- and
+ * drop to the terrain there.
+ */
+const adjacentGroundPoint = (scene, hitRoot, hitPoint) => {
+  placementBounds.setFromObject(hitRoot);
+  const center = placementBounds.getCenter(new THREE.Vector3());
+  const size = placementBounds.getSize(new THREE.Vector3());
 
-const findMovableFromIntersects = (intersects) => {
-  for (const intersect of intersects) {
-    const parent = intersect.object.parent;
-    if (parent?.isMovable) {
-      return promoteWireframeToBox(parent);
-    }
-    const movable = findInteractableTarget(intersect.object, 'isMovable');
-    if (movable) {
-      return movable;
+  const dx = hitPoint.x - center.x;
+  const dz = hitPoint.z - center.z;
+  const clearance = Math.min(size.x, size.z) * 0.35 + 0.5;
+  const point = center.clone();
+  if (Math.abs(dx) >= Math.abs(dz)) {
+    point.x += (Math.sign(dx) || 1) * (size.x / 2 + clearance);
+  } else {
+    point.z += (Math.sign(dz) || 1) * (size.z / 2 + clearance);
+  }
+
+  // terrain height at the chosen spot; fall back to the clicked model's feet
+  point.y = placementBounds.min.y;
+  const mapRoot = scene.getObjectByName('GameMap');
+  if (mapRoot) {
+    groundProbe.set(
+      new THREE.Vector3(point.x, placementBounds.max.y + 100, point.z),
+      new THREE.Vector3(0, -1, 0),
+    );
+    const ground = groundProbe.intersectObject(mapRoot, true)
+      .find((intersect) => intersect.object.visible);
+    if (ground) {
+      point.y = ground.point.y;
     }
   }
-  return null;
+  return point;
 };
 
 const findDriveIdFromObject = (object) => {
@@ -71,7 +85,7 @@ const findDriveIdFromIntersects = (intersects) => {
 
 const GameEngine = forwardRef(({
   mapData, hydrationScene, color, mode, driveView, isFollowing, addModel,
-  customCreations,
+  customCreations, settings,
   selectedClimateMode, climateNeedsUpdating, setClimateNeedsUpdating,
   cameraNeedsReset, setCameraNeedsReset, isClimateOpen, onSceneChange,
 }, ref) => {
@@ -106,7 +120,10 @@ const GameEngine = forwardRef(({
       return undefined;
     }
 
-    const core = new GameEngineCore();
+    // Settings are renderer-construction level (antialias etc.); the host
+    // remounts this component (key=settings.rendererKey) when they change,
+    // so reading them once at mount is correct.
+    const core = new GameEngineCore(settings ?? {});
     coreRef.current = core;
     canvasRef.current = core.mount(mountNode);
 
@@ -117,6 +134,7 @@ const GameEngine = forwardRef(({
       setAssetsReady(false);
       hasHydratedRef.current = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- settings applied via remount, not re-run
   }, []);
 
   const mapId = mapData?.id;
@@ -206,20 +224,6 @@ const GameEngine = forwardRef(({
       }
     };
 
-    const hideWireframe = (object) => {
-      const wireframe = object.getObjectByName('wireframe');
-      if (wireframe) {
-        wireframe.visible = false;
-      }
-    };
-
-    const showWireframe = (object) => {
-      const wireframe = object.getObjectByName('wireframe');
-      if (wireframe) {
-        wireframe.visible = true;
-      }
-    };
-
     const setMouseFromEvent = (event) => {
       const rect = canvas.getBoundingClientRect();
       mouse.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -233,15 +237,28 @@ const GameEngine = forwardRef(({
       event.preventDefault();
       setMouseFromEvent(event);
       raycaster.current.setFromCamera(mouse.current, camera);
-      const intersects = raycaster.current.intersectObjects(scene.children, true);
+      // Selection boxes are raycastable despite being invisible; placing on
+      // a box surface left new models floating in the air.
+      const intersects = filterOutSelectionHelpers(
+        raycaster.current.intersectObjects(scene.children, true),
+      );
       if (intersects.length === 0 || addModel === 'NONE') {
         return;
       }
+
+      // Clicking terrain places at the click; clicking an existing model
+      // places beside it on the ground instead of on top of it.
+      let placementPoint = intersects[0].point;
+      const hitRoot = findModelRoot(intersects[0].object);
+      if (hitRoot) {
+        placementPoint = adjacentGroundPoint(scene, hitRoot, placementPoint);
+      }
+
       if (isCreationModelId(addModel)) {
         CreationLoader(
           'add',
           addModel,
-          intersects[0].point,
+          placementPoint,
           scene,
           customCreationsRef.current,
         );
@@ -249,7 +266,7 @@ const GameEngine = forwardRef(({
         ModelLoader(
           'add',
           addModel,
-          intersects[0].point,
+          placementPoint,
           null,
           scene,
           null,
@@ -268,13 +285,11 @@ const GameEngine = forwardRef(({
         return;
       }
 
-      const hitObject = intersects[0].object;
-      const intersectedObject = hitObject.parent;
       const currentMode = modeRef.current;
 
       switch (currentMode) {
         case Modes.MOVING: {
-          const movable = findMovableFromIntersects(intersects);
+          const movable = findModelRootFromIntersects(intersects, 'isMovable');
           const { selectionBox, moveRoot: root } = resolveMoveSelection(movable);
           if (selectionBox && root) {
             selectedObject.current = selectionBox;
@@ -286,9 +301,8 @@ const GameEngine = forwardRef(({
           break;
         }
         case Modes.ROTATING: {
-          const rotatable = findInteractableTarget(hitObject, 'isRotatable')
-            ?? findInteractableTarget(hitObject, 'isMovable')
-            ?? (intersectedObject?.isRotatable ? intersectedObject : null);
+          const rotatable = findModelRootFromIntersects(intersects, 'isRotatable')
+            ?? findModelRootFromIntersects(intersects, 'isMovable');
           const { selectionBox, moveRoot: root } = resolveMoveSelection(rotatable);
           if (root) {
             root.rotateY(Math.PI / 2);
@@ -302,29 +316,50 @@ const GameEngine = forwardRef(({
           break;
         }
         case Modes.PAINTING: {
-          const filteredIntersects = intersects.filter(
-            (intersect) => intersect.object.name !== 'transparentBox'
-              && intersect.object.name !== 'wireframe',
+          // Paint the whole model -- arms, helmet, every part -- exactly
+          // like restore-time color application (sceneSchema), and record
+          // the color so it persists through save/restore. Resolve from
+          // real geometry hits only: the invisible selection boxes are
+          // still raycastable and (being whole-model-sized, overlapping
+          // neighbours) would repaint whichever box the ray meets first
+          // rather than the model the user actually clicked.
+          const paintRoot = findModelRootFromIntersects(
+            filterOutSelectionHelpers(intersects),
+            'isPaintable',
           );
-          if (filteredIntersects.length > 0) {
-            const paintObject = filteredIntersects[0].object;
-            if (paintObject.isPaintable) {
-              hideWireframe(paintObject);
-              selectedObject.current = paintObject;
-              paintObject.material.color.set(new THREE.Color(parseInt(color, 16)));
-              showWireframe(paintObject);
-              updateSceneState();
+          if (paintRoot) {
+            const paintColor = new THREE.Color(parseInt(color, 16));
+            paintRoot.userData.color = color;
+            paintRoot.traverse((child) => {
+              if (child.name === 'transparentBox' || child.name === 'wireframe') {
+                return;
+              }
+              if (child.isMesh && child.isPaintable && child.material?.color) {
+                child.material.color.set(paintColor);
+              }
+            });
+            const box = paintRoot.userData?.transparentBox;
+            if (box) {
+              showSelectionOutline(box);
+              window.setTimeout(() => hideSelectionOutline(box), 350);
             }
-          }
-          break;
-        }
-        case Modes.DELETING:
-          if (intersectedObject?.isDeletable) {
-            scene.remove(intersectedObject.parent);
-            disposeObject3D(intersectedObject.parent);
             updateSceneState();
           }
           break;
+        }
+        case Modes.DELETING: {
+          const deletable = findModelRootFromIntersects(intersects, 'isDeletable');
+          if (deletable) {
+            const driveId = deletable.userData?.driveId;
+            if (driveId) {
+              core.cameraController.unregisterSubject(driveId);
+            }
+            scene.remove(deletable);
+            disposeModelInstance(deletable);
+            updateSceneState();
+          }
+          break;
+        }
         case Modes.DRIVING: {
           const driveId = findDriveIdFromIntersects(intersects);
           if (driveId) {
@@ -345,19 +380,27 @@ const GameEngine = forwardRef(({
       event.preventDefault();
       setMouseFromEvent(event);
       raycaster.current.setFromCamera(mouse.current, camera);
-      const intersects = raycaster.current.intersectObjects(scene.children, true);
-      if (intersects.length === 0) {
-        return;
-      }
-
-      const intersectionPoint = intersects[0].point;
       const modelRoot = moveRoot.current;
       if (!modelRoot) {
         return;
       }
 
-      modelRoot.position.x += (intersectionPoint.x - modelRoot.position.x) * DRAG_SMOOTHING;
-      modelRoot.position.z += (intersectionPoint.z - modelRoot.position.z) * DRAG_SMOOTHING;
+      // Follow real surfaces only: ignore the dragged model itself (else it
+      // chases a point on its own geometry and creeps toward the camera)
+      // and every selection helper (raycastable despite being invisible --
+      // dragging across a neighbour's box would pop the model onto it).
+      const intersects = filterOutSelectionHelpers(
+        raycaster.current.intersectObjects(scene.children, true),
+      );
+      const groundHit = intersects.find(
+        (intersect) => !isInSubtree(intersect.object, modelRoot),
+      );
+      if (!groundHit) {
+        return;
+      }
+
+      modelRoot.position.x += (groundHit.point.x - modelRoot.position.x) * DRAG_SMOOTHING;
+      modelRoot.position.z += (groundHit.point.z - modelRoot.position.z) * DRAG_SMOOTHING;
     };
 
     const endDrag = () => {

@@ -11,6 +11,7 @@ import React, {
 import { WorkshopModes } from '../WorkshopEngine/workshopModes';
 import { extractBrickId } from '../WorkshopEngine/brickCatalog';
 import { initialWorkshopState, workshopReducer } from './workshopReducer';
+import { resolveGameSettings } from '@/lib/gameSettings';
 
 const WorkshopContext = createContext(null);
 
@@ -25,6 +26,9 @@ export const WorkshopProvider = ({
 }) => {
   const [state, dispatch] = useReducer(workshopReducer, initialWorkshopState);
   const engineRef = useRef(null);
+
+  // Same profile-options resolution the main game uses (lib/gameSettings.js).
+  const settings = useMemo(() => resolveGameSettings(currentProfile), [currentProfile]);
 
   const resetModes = useCallback(() => {
     dispatch({ type: 'RESET_MODES' });
@@ -140,8 +144,19 @@ export const WorkshopProvider = ({
     navigateToMainGame,
   ]);
 
+  // The door button: keep the work (draft persists and re-hydrates on the
+  // next visit) but do NOT export a creation -- exporting is the save
+  // button's job, and it's what pops the creations bucket open back in the
+  // main game. The door used to alias handleSave, so every exit exported
+  // and the bucket appeared on every return.
+  const handleLeave = useCallback(() => {
+    persistDraft();
+    navigateToMainGame?.(mapData);
+  }, [persistDraft, navigateToMainGame, mapData]);
+
   const value = useMemo(() => ({
     state,
+    settings,
     engineRef,
     mapData,
     workshopDraft,
@@ -156,9 +171,11 @@ export const WorkshopProvider = ({
     handleColor,
     handleSweep,
     handleSave,
+    handleLeave,
     persistDraft,
   }), [
     state,
+    settings,
     mapData,
     workshopDraft,
     resetModes,
@@ -172,6 +189,7 @@ export const WorkshopProvider = ({
     handleColor,
     handleSweep,
     handleSave,
+    handleLeave,
     persistDraft,
   ]);
 

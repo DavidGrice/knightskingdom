@@ -7,15 +7,26 @@ import { disposeObject3D, removeSceneChildrenExcept } from './sceneDispose';
 import { CameraController } from './CameraController';
 
 export class GameEngineCore {
-  constructor() {
+  /** @param {object} [settings] resolved profile settings (lib/gameSettings.js) */
+  constructor(settings = {}) {
+    this.settings = settings;
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.frontCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.backCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // near=0.3 (was 0.1): depth precision scales with the near plane, and
+    // 0.1 left the far half of a ~200-unit map with less resolution than
+    // the gap between the terrain's stacked base planes (z-fighting at
+    // distance). Nothing legitimately approaches the camera within 0.3.
+    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.3, 1000);
+    this.frontCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.3, 1000);
+    this.backCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.3, 1000);
     this.renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true,
       alpha: false,
+      antialias: settings.antialias ?? false,
     });
+    if (settings.shadows) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
     this.controls = null;
     this.mountNode = null;
     this.animationFrameId = null;
@@ -42,18 +53,39 @@ export class GameEngineCore {
 
   mount(mountNode) {
     this.mountNode = mountNode;
+    this.renderer.setPixelRatio(
+      this.settings.useDevicePixelRatio ? window.devicePixelRatio : 1,
+    );
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     mountNode.appendChild(this.renderer.domElement);
     // Dev/test-only: lets testing/ scripts and manual debugging inspect the
     // live scene graph without a bespoke introspection API.
     window.__gameScene = this.scene;
+    window.__gameCamera = this.camera;
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
     this.controls.enablePan = true;
     this.controls.enableDamping = false;
-    this.controls.enableRotate = false;
+    // Orbit/look-around enabled so the whole map -- including the castle
+    // across the water -- is reachable (previously rotate was off, which is
+    // what "the camera won't let me reach the far side" was). Capability
+    // map, chosen so nothing is lost and LEFT stays free for the game tools
+    // (move/rotate/paint/delete all use left-mousedown; their handler
+    // disables controls mid-drag):
+    //   LEFT   -> game tools (OrbitControls ignores it)
+    //   RIGHT  -> orbit/look-around (new)
+    //   MIDDLE -> pan (moved off RIGHT)
+    //   wheel  -> zoom (unchanged)
+    this.controls.enableRotate = true;
+    this.controls.mouseButtons = {
+      LEFT: null,
+      MIDDLE: THREE.MOUSE.PAN,
+      RIGHT: THREE.MOUSE.ROTATE,
+    };
+    this.controls.maxPolarAngle = Math.PI * 0.495; // stay above the ground plane
     this.camera.position.set(0, 5, 10);
+    window.__gameControls = this.controls;
 
     window.addEventListener('resize', this.handleResize);
     this.unregisterWeatherCallback = this.registerFrameCallback(() => {
@@ -115,7 +147,9 @@ export class GameEngineCore {
     this.mapData = mapData;
 
     MapLoader(mapData, this.scene, (_loaded, transform) => {
-      MapPlacementsLoader(mapData, transform, this.scene);
+      MapPlacementsLoader(mapData, transform, this.scene, {
+        includeBulk: this.settings.fullPlacements ?? true,
+      });
       ModelLoader(
         'preload',
         null,

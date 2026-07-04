@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { disposeObject3D } from '../../MainGame/GameEngine/sceneDispose';
 import {
+  createBrick,
   createBrickSync,
   paintBrick,
   preloadGlbBricks,
@@ -25,17 +26,22 @@ import {
   STUD,
 } from './studGrid';
 
-const VALIDATED_BRICK_RECIPES = Object.values(BRICK_CATALOG)
-  .filter((recipe) => recipe.shape === 'GLB');
-const OBJ_MTL_BRICK_ENTRIES = VALIDATED_BRICK_RECIPES
+const ALL_BRICK_RECIPES = Object.values(BRICK_CATALOG);
+// Warm every brick that has real OBJ geometry (all of them now) so
+// createBrickSync cache-hits on the first click instead of flashing the
+// parametric fallback.
+const OBJ_MTL_BRICK_ENTRIES = ALL_BRICK_RECIPES
   .filter((recipe) => recipe.objUrl && recipe.mtlUrl)
   .map((recipe) => ({ objUrl: recipe.objUrl, mtlUrl: recipe.mtlUrl }));
-const GLB_BRICK_URLS = VALIDATED_BRICK_RECIPES
+const GLB_BRICK_URLS = ALL_BRICK_RECIPES
   .filter((recipe) => recipe.glbUrl)
   .map((recipe) => recipe.glbUrl);
 
 export class WorkshopEngineCore {
-  constructor() {
+  /** @param {object} [settings] resolved profile settings (lib/gameSettings.js);
+   *  workshop defaults stay at its historical quality (AA + shadows) when absent. */
+  constructor(settings = {}) {
+    this.settings = settings;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x111111);
 
@@ -44,11 +50,11 @@ export class WorkshopEngineCore {
     this.camera.lookAt(0, 0, 0);
 
     this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: settings.antialias ?? true,
       alpha: false,
       preserveDrawingBuffer: true,
     });
-    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.enabled = settings.shadows ?? true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     this.mountNode = null;
@@ -56,7 +62,7 @@ export class WorkshopEngineCore {
     this.bricksGroup = new THREE.Group();
     this.bricksGroup.name = 'WorkshopBricks';
     this.buildPlate = null;
-    this.defaultColor = 'c91a09';
+    this.defaultColor = 'eac000'; // authentic LEGO yellow (palette glit018)
 
     this.handleResize = this.handleResize.bind(this);
     this.animate = this.animate.bind(this);
@@ -72,6 +78,10 @@ export class WorkshopEngineCore {
 
   mount(mountNode) {
     this.mountNode = mountNode;
+    // Dev/test-only hooks, mirroring GameEngineCore's __gameScene/__gameCamera.
+    window.__workshopScene = this.scene;
+    window.__workshopCamera = this.camera;
+    window.__workshopCore = this;
     this.scene.add(this.bricksGroup);
     this.#buildEnvironment();
     this.handleResize();
@@ -133,6 +143,9 @@ export class WorkshopEngineCore {
     const height = this.mountNode.clientHeight || 600;
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
+    this.renderer.setPixelRatio(
+      (this.settings.useDevicePixelRatio ?? true) ? window.devicePixelRatio : 1,
+    );
     this.renderer.setSize(width, height);
   }
 
@@ -380,13 +393,26 @@ export class WorkshopEngineCore {
       }));
   }
 
-  loadBrickInstances(instances = []) {
+  /**
+   * Hydrate a saved draft. Awaits real geometry per brick (createBrick)
+   * instead of createBrickSync: at mount the OBJ cache is still cold, so
+   * the sync path used to hand EVERY draft brick the parametric red
+   * fallback, permanently. Draft hydration isn't click-latency sensitive.
+   * A load token guards against overlapping hydrations (dispose/reload).
+   */
+  async loadBrickInstances(instances = []) {
     this.clearAllBricks();
-    instances.forEach((entry) => {
+    this.hydrationToken = (this.hydrationToken || 0) + 1;
+    const token = this.hydrationToken;
+    for (const entry of instances) {
       if (!entry?.brickId) {
-        return;
+        continue;
       }
-      const brick = createBrickSync(entry.brickId, { color: entry.color || this.defaultColor });
+      // eslint-disable-next-line no-await-in-loop -- sequential keeps draft order deterministic; cache dedupes fetches
+      const brick = await createBrick(entry.brickId, { color: entry.color || this.defaultColor });
+      if (token !== this.hydrationToken || !this.mountNode) {
+        return; // superseded by a newer hydration or disposed mid-flight
+      }
       if (entry.rotation) {
         brick.rotation.set(entry.rotation.x, entry.rotation.y, entry.rotation.z);
       }
@@ -403,7 +429,7 @@ export class WorkshopEngineCore {
         || this.defaultColor;
       this.bricksGroup.add(brick);
       updateSelectionBox(brick);
-    });
+    }
   }
 
   captureFrame() {

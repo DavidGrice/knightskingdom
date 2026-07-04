@@ -33,6 +33,29 @@ const cache = new Map(); // `${objUrl}|${mtlUrl}` -> Object3D template (resolved
 
 const cacheKey = (objUrl, mtlUrl) => `${objUrl}|${mtlUrl}`;
 
+/**
+ * Object3D.clone(true) shares materials between every clone and the cached
+ * template, so painting one spawned model used to recolor all of its
+ * siblings (and poison the template for future spawns). Give each instance
+ * its own material objects -- textures stay shared (material.clone() keeps
+ * texture references), so the extra memory is negligible. Geometry also
+ * stays shared, which sceneDispose's instance path must respect.
+ */
+const makeInstanceFromTemplate = (template) => {
+  const instance = template.clone(true);
+  instance.traverse((child) => {
+    if (!child.isMesh || !child.material) {
+      return;
+    }
+    child.material = Array.isArray(child.material)
+      ? child.material.map((m) => m.clone())
+      : child.material.clone();
+  });
+  instance.userData.ownsMaterials = true;
+  instance.userData.sharedGeometry = true;
+  return instance;
+};
+
 const splitUrl = (url) => {
   const i = url.lastIndexOf('/');
   return { dir: url.slice(0, i + 1), file: url.slice(i + 1) };
@@ -60,7 +83,7 @@ export function loadObjMtl(objUrl, mtlUrl, options = {}) {
   // each other's changes).
   const cached = cache.get(key);
   if (cached) {
-    return Promise.resolve(cached).then((template) => template.clone(true));
+    return Promise.resolve(cached).then(makeInstanceFromTemplate);
   }
 
   const promise = new Promise((resolve, reject) => {
@@ -81,9 +104,34 @@ export function loadObjMtl(objUrl, mtlUrl, options = {}) {
           (root) => {
             root.scale.set(scale, scale * -1, scale);
             root.traverse((child) => {
-              if (child.isMesh) {
-                child.frustumCulled = false;
+              if (!child.isMesh) {
+                return;
               }
+              child.frustumCulled = false;
+              const mats = Array.isArray(child.material) ? child.material : [child.material];
+              mats.forEach((mat) => {
+                if (!mat) {
+                  return;
+                }
+                // Superscape drew facets double-sided (per-facet FacAtt);
+                // with default front-side culling, open shells like
+                // helmets lose their inner surface and the head "bleeds
+                // through". Blender previews look right because its
+                // viewport shows backfaces.
+                mat.side = THREE.DoubleSide;
+                // Decal faces (textured) often sit exactly coplanar with
+                // the colored base face beneath them -- the source engine
+                // drew them by facet priority, three.js z-fights them. A
+                // small constant depth bias breaks the tie in the decal's
+                // favour. IMPORTANT: factor must stay 0 -- it scales with
+                // depth slope, so any nonzero value makes textured faces
+                // punch through occluders at glancing angles.
+                if (mat.map) {
+                  mat.polygonOffset = true;
+                  mat.polygonOffsetFactor = 0;
+                  mat.polygonOffsetUnits = -2;
+                }
+              });
             });
             root.updateMatrixWorld(true);
             resolve(root);
@@ -102,13 +150,24 @@ export function loadObjMtl(objUrl, mtlUrl, options = {}) {
     (template) => cache.set(key, template),
     () => cache.delete(key),
   );
-  return promise.then((template) => template.clone(true));
+  return promise.then(makeInstanceFromTemplate);
 }
 
 /** Already-resolved cached template, or null if not loaded (or still loading). */
 export function getCachedObjMtlTemplate(objUrl, mtlUrl) {
   const cached = cache.get(cacheKey(objUrl, mtlUrl));
   return cached && !(cached instanceof Promise) ? cached : null;
+}
+
+/**
+ * Synchronous instance off the cache (null when cold): same per-instance
+ * materials as the async path. Callers that used to clone(true) the raw
+ * template shared materials with it, so recoloring one instance poisoned
+ * the cache and every sibling.
+ */
+export function cloneCachedObjMtlInstance(objUrl, mtlUrl) {
+  const template = getCachedObjMtlTemplate(objUrl, mtlUrl);
+  return template ? makeInstanceFromTemplate(template) : null;
 }
 
 /**

@@ -3,7 +3,7 @@ import { WorkshopModes } from '../WorkshopEngine/workshopModes';
 export const initialWorkshopState = {
   mode: WorkshopModes.NONE,
   selectedBrickId: null,
-  color: 'c91a09',
+  color: 'eac000', // authentic LEGO yellow (palette glit018) -- the default brick colour
   showBucket: false,
   isPaletteOpen: false,
 };

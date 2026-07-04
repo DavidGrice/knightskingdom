@@ -27,6 +27,7 @@ const WorkshopEngine = forwardRef(({
   showBucket,
   color,
   workshopDraft,
+  settings,
 }, ref) => {
   const mountRef = useRef(null);
   const coreRef = useRef(null);
@@ -64,7 +65,10 @@ const WorkshopEngine = forwardRef(({
       return undefined;
     }
 
-    const core = new WorkshopEngineCore();
+    // Renderer-construction settings apply via remount (host keys this
+    // component off settings.rendererKey), so reading them once here is
+    // correct.
+    const core = new WorkshopEngineCore(settings ?? {});
     coreRef.current = core;
     canvasRef.current = core.mount(mountNode);
     setEngineReady(true);
@@ -76,6 +80,7 @@ const WorkshopEngine = forwardRef(({
       hasHydratedRef.current = false;
       setEngineReady(false);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- settings applied via remount, not re-run
   }, []);
 
   useEffect(() => {

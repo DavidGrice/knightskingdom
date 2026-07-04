@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {
-  alignObjMtlBottomToOrigin,
-  getCachedObjMtlTemplate,
   loadObjMtl,
   preloadObjMtlAssets,
 } from '../../shared/objMtlLoader';
+import { getGameModelSync, loadGameModel } from '../../shared/gameModelLoader';
 import { resolveBrickRecipe, recipeHeight } from './brickCatalog';
 import {
   attachSelectionBox,
@@ -20,24 +19,55 @@ export { attachSelectionBox, updateSelectionBox };
 const gltfLoader = new GLTFLoader();
 const glbCache = new Map();
 
-const DEFAULT_COLOR = 0xc91a09;
+// Authentic LEGO yellow (palette glit018 = 0.9176,0.7529,0 -> #EAC000), the
+// colour the real brick OBJs carry in their own MTL and the bucket previews
+// show. Was 0xc91a09 (red), which the old force-recolour applied to every
+// placed brick.
+const DEFAULT_COLOR = 0xeac000;
 
 const studRadius = STUD * 0.18;
 const studHeight = PLATE_HEIGHT * 0.85;
 
+// Colours flow through the workshop as bare 6-hex strings ('eac000') from
+// the palette + saved drafts. THREE.Color parses those as WHITE (it needs a
+// '#' or a number), which silently broke every non-default paint. Normalise
+// once here.
+const toThreeColor = (colorHex) => {
+  if (colorHex == null) {
+    return new THREE.Color(DEFAULT_COLOR);
+  }
+  if (typeof colorHex === 'number') {
+    return new THREE.Color(colorHex);
+  }
+  const s = String(colorHex).trim();
+  return new THREE.Color(s.startsWith('#') ? s : `#${s}`);
+};
+
 const createMaterial = (colorHex) => new THREE.MeshStandardMaterial({
-  color: colorHex ?? DEFAULT_COLOR,
+  color: toThreeColor(colorHex),
   roughness: 0.45,
   metalness: 0.05,
 });
 
 const applyColor = (root, colorHex) => {
-  const color = new THREE.Color(colorHex ?? DEFAULT_COLOR);
+  const color = toThreeColor(colorHex);
   root.traverse((child) => {
-    if (child.isMesh && child.material?.color) {
-      child.material = child.material.clone();
-      child.material.color.set(color);
+    if (!child.isMesh || !child.material) {
+      return;
     }
+    // OBJ meshes often carry material ARRAYS (one per MTL group); the old
+    // `material?.color` guard silently skipped those, so OBJ brick bodies
+    // never took the chosen colour (studs did -> mismatched bricks).
+    const isArray = Array.isArray(child.material);
+    const mats = (isArray ? child.material : [child.material]).map((mat) => {
+      if (!mat?.color) {
+        return mat;
+      }
+      const cloned = mat.clone();
+      cloned.color.set(color);
+      return cloned;
+    });
+    child.material = isArray ? mats : mats[0];
   });
 };
 
@@ -47,6 +77,21 @@ const createStud = (material) => {
   stud.position.y = studHeight / 2;
   stud.castShadow = true;
   return stud;
+};
+
+/**
+ * Finish an OBJ/MTL brick prepared by gameModelLoader ('brick' policy:
+ * neutral wrapper, footprint-centred, feet at y=0): tint it to the chosen
+ * colour. NO parametric studs are added -- the real brick OBJs already
+ * carry LEGO stud tops via a UV-mapped texture (spr001, the embossed "LEGO"
+ * circle). The old code added 3D cylinder studs on top of that texture,
+ * which never lined up with the textured stud positions (the "studs not
+ * aligned with the LEGO texture" report). applyColor tints the textured
+ * stud material along with the body, so studs match the brick colour.
+ */
+const finishObjBrick = (root, recipe, colorHex) => {
+  applyColor(root, colorHex);
+  return root;
 };
 
 const addStudsToBody = (group, recipe, bodyHeight, material) => {
@@ -313,14 +358,18 @@ export const createBrick = async (brickId, options = {}) => {
 
   let root;
 
-  if (recipe.shape === 'GLB' && recipe.objUrl && recipe.mtlUrl) {
-    // OBJ/MTL is the live path -- see the "Wire real 3D models" plan's
-    // OBJ/MTL pivot. Sidesteps whatever the obj2gltf GLB conversion below
-    // was doing to orientation/winding.
+  if (recipe.objUrl && recipe.mtlUrl) {
+    // OBJ/MTL is the live path for every brick that has real LCA geometry
+    // (independent of the recipe's parametric `shape`, which is now only
+    // the cold-cache fallback). gameModelLoader's 'brick' policy centres
+    // the part on its footprint and puts feet at y=0, matching the
+    // parametric origin convention the stud-grid stacking math assumes.
     try {
-      root = await loadObjMtl(recipe.objUrl, recipe.mtlUrl);
-      applyColor(root, colorHex);
-      alignObjMtlBottomToOrigin(root);
+      root = finishObjBrick(
+        await loadGameModel('brick', { objUrl: recipe.objUrl, mtlUrl: recipe.mtlUrl }),
+        recipe,
+        colorHex,
+      );
     } catch (error) {
       console.warn(`OBJ/MTL load failed for ${brickId}, using parametric fallback:`, error);
       root = createParametricBrick(recipe, colorHex);
@@ -339,7 +388,11 @@ export const createBrick = async (brickId, options = {}) => {
   }
 
   configureBrickRoot(root, brickId, recipe);
-  attachSelectionBox(root, { visible: true, wireframeVisible: false });
+  // Hidden at rest: raycast picking still works (three.js raycasts ignore
+  // visibility), and the box only shows as selection feedback. It used to
+  // be visible:true but rendered 10x too small (pre selection-box scale
+  // fix), i.e. effectively invisible -- keep that established look.
+  attachSelectionBox(root, { visible: false, wireframeVisible: false });
   return root;
 };
 
@@ -354,13 +407,11 @@ export const createBrickSync = (brickId, options = {}) => {
     : (options.color ?? DEFAULT_COLOR);
 
   let root = null;
-  if (recipe.shape === 'GLB' && recipe.objUrl && recipe.mtlUrl) {
+  if (recipe.objUrl && recipe.mtlUrl) {
     // OBJ/MTL is the live path -- see createBrick above.
-    const cached = getCachedObjMtlTemplate(recipe.objUrl, recipe.mtlUrl);
-    if (cached) {
-      root = cached.clone(true);
-      applyColor(root, colorHex);
-      alignObjMtlBottomToOrigin(root);
+    const prepared = getGameModelSync('brick', { objUrl: recipe.objUrl, mtlUrl: recipe.mtlUrl });
+    if (prepared) {
+      root = finishObjBrick(prepared, recipe, colorHex);
     } else {
       // not warmed yet -- kick off a load for next time and fall back to
       // parametric for this placement so the click still feels instant
@@ -388,7 +439,11 @@ export const createBrickSync = (brickId, options = {}) => {
   }
 
   configureBrickRoot(root, brickId, recipe);
-  attachSelectionBox(root, { visible: true, wireframeVisible: false });
+  // Hidden at rest: raycast picking still works (three.js raycasts ignore
+  // visibility), and the box only shows as selection feedback. It used to
+  // be visible:true but rendered 10x too small (pre selection-box scale
+  // fix), i.e. effectively invisible -- keep that established look.
+  attachSelectionBox(root, { visible: false, wireframeVisible: false });
   return root;
 };
 

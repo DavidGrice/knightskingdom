@@ -4,9 +4,9 @@ import { EdgesGeometry, LineBasicMaterial, LineSegments } from 'three';
 
 import Archer from '../GameEngineResourceStack/models/archer_with_box2.glb';
 import { resolveDriveCameraProfile } from '../driveCameraProfiles';
-import { updateSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
+import { attachSelectionBox, updateSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
 import { WAREHOUSE_MODEL_CATALOG } from './warehouseModelCatalog.generated';
-import { loadObjMtl } from '../../../shared/objMtlLoader';
+import { loadGameModel } from '../../../shared/gameModelLoader';
 
 const SelectedModels = {
     NONE: 'NONE',
@@ -74,6 +74,19 @@ const registerDriveSubject = (gltf, cameraController, { driveId, isDefault = fal
     cameraController.registerSubject(gltf.scene, driveId, { isDefault, profileId });
 };
 
+/**
+ * GLB models (Archer) carry a hand-authored transparentBox mesh that
+ * configureGltfMeshNodes rigs up; warehouse OBJ/MTL models have no such
+ * mesh, so without this they could never show a selection box (and MOVING
+ * mode, which requires one, silently did nothing). Attach the standard
+ * workshop box, hidden until a grab shows it.
+ */
+const ensureSelectionBox = (root) => {
+    if (!root.userData.transparentBox) {
+        attachSelectionBox(root, { visible: false, wireframeVisible: false });
+    }
+};
+
 const placementBox = new THREE.Box3();
 
 /** GLB roots are not centered at the origin — align hitbox feet to the requested world Y. */
@@ -105,6 +118,7 @@ const setupMapGltfScene = (gltf, mapModel) => {
     gltf.scene.userData.modelId = mapModel.name;
 
     configureGltfMeshNodes(gltf);
+    ensureSelectionBox(gltf.scene);
     attachDriveCameraProfile(gltf, null, mapModel.name);
     alignPlayableRootToWorldPosition(gltf.scene, mapModel.position);
     updateSelectionBox(gltf.scene);
@@ -117,12 +131,18 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, ski
     }
 
     gltf.scene.name = modelConfig.name;
-    gltf.scene.isMovable = false;
-    gltf.scene.isDeletable = true;
+    // Interaction flags come from the catalog entry -- every warehouse
+    // entry ships isMovable/isRotatable/isPaintable/isDeletable.
+    gltf.scene.isMovable = modelConfig.isMovable ?? true;
+    gltf.scene.isRotatable = modelConfig.isRotatable ?? true;
+    gltf.scene.isPaintable = modelConfig.isPaintable ?? true;
+    gltf.scene.isDeletable = modelConfig.isDeletable ?? true;
+    gltf.scene.isDriveable = modelConfig.isDriveable ?? false;
     gltf.scene.isModel = modelConfig.isModel;
     gltf.scene.userData.modelId = modelKey;
 
     configureGltfMeshNodes(gltf);
+    ensureSelectionBox(gltf.scene);
     attachDriveCameraProfile(gltf, modelKey, modelConfig.name);
 
     if (position) {
@@ -132,8 +152,6 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, ski
             } else {
                 gltf.scene.position.set(position.x, position.y, position.z);
             }
-        } else if (position.isVector3) {
-            alignPlayableRootToWorldPosition(gltf.scene, position);
         } else {
             alignPlayableRootToWorldPosition(gltf.scene, position);
         }
@@ -164,7 +182,7 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, ski
  */
 const loadModelEntry = (entry) => {
     if (entry.objUrl && entry.mtlUrl) {
-        return loadObjMtl(entry.objUrl, entry.mtlUrl).then((root) => ({ scene: root }));
+        return loadGameModel('warehouse', entry).then((root) => ({ scene: root }));
     }
     return new Promise((resolve, reject) => {
         new GLTFLoader().load(entry.model, resolve, undefined, reject);

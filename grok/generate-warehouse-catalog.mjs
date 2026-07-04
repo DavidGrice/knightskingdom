@@ -112,10 +112,10 @@ const alreadyWiredVars = new Set(
 //    that has a matching PNG-imported bucket entry and isn't already wired.
 //    modelImports only gets entries not already imported in index.js
 //    (idempotent re-runs must not duplicate import statements).
-const existingModelImportVars = new Set(
-  [...indexSrc.matchAll(/^import\s+(\w+)\s+from\s+'\.\/[^']+\.glb';/gm)].map((x) => x[1]),
-);
-const modelImports = [];
+// GLB imports are no longer emitted anywhere: the OBJ/MTL path is the live
+// loader for every warehouse entry (ModelLoader's loadModelEntry), and the
+// bundled .glb assets were dead weight. The .glb files stay on disk as a
+// non-bundled reference.
 const catalogEntries = [];
 const usedImportVars = new Set();
 
@@ -126,9 +126,6 @@ for (const [varName, relPath] of varToRelPath.entries()) {
   const importVar = `${varName}Model`;
   if (usedImportVars.has(importVar)) continue;
   usedImportVars.add(importVar);
-  if (!existingModelImportVars.has(importVar)) {
-    modelImports.push(`import ${importVar} from './${relPath}.glb';`);
-  }
   catalogEntries.push({ varName, importVar, key, category, id, relPath });
 }
 
@@ -167,7 +164,6 @@ function transformDataArrays(source) {
       out.push(`        name: '${nameMatch[1]}',`);
       out.push(`        image: ${imageMatch[1]},`);
       if (info) {
-        out.push(`        model: ${info.importVar},`);
         out.push(`        SelectedModel: '${info.key}',`);
         transformed += 1;
       }
@@ -182,29 +178,18 @@ function transformDataArrays(source) {
 
 const { text: rewrittenBody, transformed } = transformDataArrays(indexSrc);
 
-// insert any NEW model imports right after the last existing png/gltf
-// import so they sit with the rest of the file's imports
-let finalIndex = rewrittenBody;
-if (modelImports.length) {
-  const importInsertion = `${modelImports.join('\n')}\n`;
-  const lastImportMatch = [...rewrittenBody.matchAll(/^import .+;\r?\n/gm)].pop();
-  const insertAt = lastImportMatch.index + lastImportMatch[0].length;
-  finalIndex = rewrittenBody.slice(0, insertAt) + importInsertion + rewrittenBody.slice(insertAt);
-}
+// drop the now-dead GLB import statements from earlier generator runs
+// (idempotent: matches only the `<var>Model from './...glb'` lines this
+// script used to add)
+const finalIndex = rewrittenBody.replace(/^import \w+Model from '\.\/[^']+\.glb';\r?\n/gm, '');
 
 fs.writeFileSync(INDEX, finalIndex);
-console.log(`Rewrote ${INDEX}: ${transformed} entries wired to a model, ${modelImports.length} model imports added.`);
+console.log(`Rewrote ${INDEX}: ${transformed} entries wired to a model id, glb imports removed.`);
 
 // 4) write the generated catalog (flags consumed by ModelLoader.jsx) --
-//    re-imports each glb directly so this file is self-contained and
-//    doesn't depend on index.js re-exporting anything.
-const directImports = catalogEntries
-  .map((e) => `import ${e.varName}Model from '../../ComponentTop/Bucket/BucketBottom/BucketBottomResourceStack/${e.relPath}.glb';`)
-  .join('\n');
-
+//    OBJ/MTL urls only; no bundled assets.
 const entriesSrc = catalogEntries
   .map((e) => `  ${e.key}: {
-    model: ${e.varName}Model,
     objUrl: '/models/warehouse/${e.relPath}.obj',
     mtlUrl: '/models/warehouse/${e.relPath}.mtl',
     name: '${e.category} ${e.id}',
@@ -222,8 +207,6 @@ const catalogSrc = `/**
  * Regenerate: node grok/generate-warehouse-catalog.mjs
  * Entries: ${catalogEntries.length}
  */
-${directImports}
-
 export const WAREHOUSE_MODEL_CATALOG = {
 ${entriesSrc}
 };
