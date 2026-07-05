@@ -1,13 +1,12 @@
 """
 Apply a retail .smo clip to the King Leo armature (pose bones).
 
-Uses SMO rotation semantics from smo_pose_test / io_import_lca:
-  brees_x = -rot[4], brees_y = -rot[3], brees_z = +rot[5]
-applied as bone-local Euler deltas from frame 0.
+VRT (+Y up, −Z forward) → phase2 Blender (−Y up, +Z forward).
+Leg stride uses local Y rotation (probed: swings foot along ±Z).
+Pelvis gets a small vertical bob only; torso stays upright on run clips.
 
 Run:
-  python grok/run_blender_script.py grok/apply_smo_to_rig.py SMO_PATH=...
-Default SMO: game install anim_c_run.smo
+  python grok/run_blender_script.py grok/apply_smo_to_rig.py
 """
 
 from __future__ import annotations
@@ -18,12 +17,14 @@ import os
 import sys
 
 import bpy
+from mathutils import Matrix, Vector
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOOLS = os.path.join(ROOT, "resources", "model_files", "tools")
 sys.path.insert(0, TOOLS)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from export_obj import rot_from_brees  # noqa: E402
 from smo_parser import parse_smo  # noqa: E402
 from kingleo_blender_utils import ARMATURE_NAME, blend_path
 
@@ -37,7 +38,7 @@ RIGGED = blend_path("minifigkingleo00_rigged.blend")
 OUT_BLEND = blend_path("minifigkingleo00_run_anim.blend")
 
 TICKS_PER_SEC = 20.0
-VRT_TO_M = 1e-3  # 1000 VRT units = 1 mm → metres
+VRT_TO_M = 1e-6  # 1000 VRT units = 1 mm
 
 TRACK_TO_BONE = {
     "hips": "pelvis",
@@ -52,6 +53,13 @@ TRACK_TO_BONE = {
     "leftfoot": "foot.L",
     "rightfoot": "foot.R",
 }
+
+# VRT (+Y, −Z) → world (−Y, +Z)
+S_SCENE = Matrix(((1.0, 0.0, 0.0), (0.0, -1.0, 0.0), (0.0, 0.0, -1.0)))
+DEG2BREE = 65536.0 / 360.0
+
+LEG_TRACKS = frozenset({"leftleg", "rightleg"})
+UPRIGHT_TRACKS = frozenset({"hips", "body"})  # no smo tilt — stay standing
 
 
 def _smo_path() -> str:
@@ -78,31 +86,70 @@ def _arm_override(arm: bpy.types.Object):
     )
 
 
-def _rot_delta_to_euler(track: str, delta: list[float]) -> tuple[float, float, float]:
-    """SMO rot degrees delta [r3,r4,r5] → bone XYZ euler radians."""
-    r3, r4, r5 = delta
-    # Leg swing lives in SMO rot[1] (r4). Our leg bones run +Y with roll π:
-    # forward/back stride maps to local Z rotation.
-    if track in ("leftleg", "rightleg"):
-        # Forward/back stride: rotate about local X (matches leg_lift test).
-        return (math.radians(-r4), 0.0, math.radians(r5))
+def _smo_rot_matrix(r3: float, r4: float, r5: float) -> Matrix:
+    brees = [-r4 * DEG2BREE, -r3 * DEG2BREE, r5 * DEG2BREE]
+    return Matrix(rot_from_brees(brees))
+
+
+def _scene_delta_rot(rot: list[float], rest_rot: list[float]) -> Matrix:
+    rvrt = _smo_rot_matrix(rot[0], rot[1], rot[2])
+    r0 = _smo_rot_matrix(rest_rot[0], rest_rot[1], rest_rot[2])
+    dvrt = rvrt @ r0.inverted()
+    return S_SCENE @ dvrt @ S_SCENE.transposed()
+
+
+def _bone_local_delta(scene_delta: Matrix, bone_name: str, arm: bpy.types.Object) -> Matrix:
+    rest = arm.pose.bones[bone_name].bone.matrix_local.to_3x3()
+    return rest.inverted() @ scene_delta @ rest
+
+
+def _scene_pos_delta(delta_vrt: list[float]) -> Vector:
+    v = Vector([delta_vrt[i] * VRT_TO_M for i in range(3)])
+    return S_SCENE @ v
+
+
+def _leg_euler(fr_rot: list[float], rest_rot: list[float]) -> tuple[float, float, float]:
+    """SMO pitch r4 → local Y rotation (stride along ±Z in world)."""
+    d4 = fr_rot[1] - rest_rot[1]
+    d5 = fr_rot[2] - rest_rot[2]
+    return (0.0, math.radians(-d4), math.radians(d5))
+
+
+def _apply_track_pose(
+    pb: bpy.types.Object,
+    track: str,
+    bone_name: str,
+    arm: bpy.types.Object,
+    fr_rot: list[float],
+    rest_rot: list[float],
+    dpos: list[float],
+) -> None:
+    if track in LEG_TRACKS:
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = _leg_euler(fr_rot, rest_rot)
+        pb.location = Vector((0.0, 0.0, 0.0))
+        return
+
+    if track in UPRIGHT_TRACKS:
+        pb.rotation_mode = "QUATERNION"
+        pb.rotation_quaternion = (1.0, 0.0, 0.0, 0.0)
+        if track == "hips":
+            pb.location = _scene_pos_delta(dpos)
+        else:
+            pb.location = Vector((0.0, 0.0, 0.0))
+        return
+
     if track in ("leftfoot", "rightfoot"):
-        return (math.radians(-r4), 0.0, math.radians(r5))
-    if track in ("leftarm", "rightarm"):
-        return (math.radians(-r3), math.radians(-r4), math.radians(r5))
-    if track in ("lefthand", "righthand"):
-        return (0.0, 0.0, math.radians(r5))
-    # hips / body / head — bearing + pitch from SMO
-    return (math.radians(-r4), math.radians(-r3), math.radians(r5))
+        pb.rotation_mode = "QUATERNION"
+        pb.rotation_quaternion = (1.0, 0.0, 0.0, 0.0)
+        pb.location = Vector((0.0, 0.0, 0.0))
+        return
 
-
-def _pos_delta_to_loc(track: str, delta: list[float]) -> tuple[float, float, float]:
-    """SMO position delta (VRT) → pose bone location metres in our scene."""
-    dx, dy, dz = (delta[0] * VRT_TO_M, delta[1] * VRT_TO_M, delta[2] * VRT_TO_M)
-    if track == "hips":
-        # LCA +Y up → phase2 scene: vertical bob mostly on world Y.
-        return (dx, -dy, dz)
-    return (dx, -dy, dz)
+    pb.rotation_mode = "QUATERNION"
+    scene_d = _scene_delta_rot(fr_rot, rest_rot)
+    local_d = _bone_local_delta(scene_d, bone_name, arm)
+    pb.rotation_quaternion = local_d.to_quaternion()
+    pb.location = Vector((0.0, 0.0, 0.0))
 
 
 def main() -> None:
@@ -130,7 +177,6 @@ def main() -> None:
     step = fps / TICKS_PER_SEC
     bpy.context.scene.frame_start = 1
     bpy.context.scene.frame_end = int(1 + (nframes - 1) * step) + 1
-    bpy.context.scene.render.fps = fps
 
     mapped = []
     missing = []
@@ -146,23 +192,19 @@ def main() -> None:
             continue
 
         pb = arm.pose.bones[bone_name]
-        pb.rotation_mode = "XYZ"
         rest_rot = tr["frames"][0]["rot"]
         rest_pos = tr["frames"][0]["pos"]
 
         for i, fr in enumerate(tr["frames"]):
             frame = 1 + i * step
-            drot = [fr["rot"][j] - rest_rot[j] for j in range(3)]
             dpos = [fr["pos"][j] - rest_pos[j] for j in range(3)]
+            _apply_track_pose(pb, track, bone_name, arm, fr["rot"], rest_rot, dpos)
 
-            pb.rotation_euler = _rot_delta_to_euler(track, drot)
-            if track in ("hips", "body"):
-                pb.location = _pos_delta_to_loc(track, dpos)
+            if pb.rotation_mode == "QUATERNION":
+                pb.keyframe_insert(data_path="rotation_quaternion", frame=frame)
             else:
-                pb.location = (0.0, 0.0, 0.0)
-
-            pb.keyframe_insert(data_path="rotation_euler", frame=frame)
-            if track in ("hips", "body"):
+                pb.keyframe_insert(data_path="rotation_euler", frame=frame)
+            if track == "hips":
                 pb.keyframe_insert(data_path="location", frame=frame)
 
         mapped.append({"track": track, "bone": bone_name, "keys": len(tr["frames"])})
@@ -176,14 +218,11 @@ def main() -> None:
 
     report = {
         "clip": clip_name,
-        "smo_path": smo_path,
         "frames": nframes,
-        "fps": fps,
-        "step": step,
+        "space_fix": "legs: local Y from SMO r4; torso upright; hips bob 1e-6",
         "mapped": mapped,
         "missing_tracks": missing,
         "saved": OUT_BLEND,
-        "note": "Open timeline and play — legs should swing ±76° on run cycle",
     }
     print(json.dumps(report, indent=2))
 
