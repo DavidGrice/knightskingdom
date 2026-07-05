@@ -29,10 +29,18 @@ export const MENU_CORNERS = {
 export const MENU_SCREEN_METRICS = {
   AUTHENTICATION: {
     archetype: 'PROFILE_LIST',
-    /** Full rank row sprites (page_2.png etc.) are 528×99 */
-    profileList: { x: 262, y: 118, rowWidth: 528, rowHeight: 99 },
+    scaleMode: 'modern',
+    /** Native rank sprites are 528×99; modern layout uses slightly shorter display + gaps */
+    profileList: {
+      x: 248,
+      anchorY: 0.40,
+      rowWidth: 528,
+      rowHeight: 92,
+      rowGap: 14,
+      maxRows: 5,
+    },
     nameOverlay: { left: 200, width: 280 },
-    enterNameBanner: { x: 526, y: 82 },
+    enterNameBanner: { x: 512, anchorY: 0.18 },
     corners: { checkmark: true, trash: true, leave: false },
   },
   START_WORLD: {
@@ -106,11 +114,16 @@ export const menuStageToCssVars = (screenKey) => {
   }
 
   if (screen?.profileList) {
-    const { x, y, rowWidth, rowHeight } = screen.profileList;
+    const { x, rowWidth, rowHeight, rowGap, anchorY } = screen.profileList;
     vars['--auth-list-x'] = `${x}px`;
-    vars['--auth-list-y'] = `${y}px`;
     vars['--auth-row-w'] = `${rowWidth}px`;
     vars['--auth-row-h'] = `${rowHeight}px`;
+    if (rowGap != null) {
+      vars['--auth-row-gap'] = `${rowGap}px`;
+    }
+    if (anchorY != null) {
+      vars['--auth-list-anchor-y'] = String(anchorY);
+    }
   }
   if (screen?.nameOverlay) {
     vars['--auth-name-left'] = `${screen.nameOverlay.left}px`;
@@ -118,7 +131,11 @@ export const menuStageToCssVars = (screenKey) => {
   }
   if (screen?.enterNameBanner) {
     vars['--auth-banner-x'] = `${screen.enterNameBanner.x}px`;
-    vars['--auth-banner-y'] = `${screen.enterNameBanner.y}px`;
+    if (screen.enterNameBanner.anchorY != null) {
+      vars['--auth-banner-anchor-y'] = String(screen.enterNameBanner.anchorY);
+    } else if (screen.enterNameBanner.y != null) {
+      vars['--auth-banner-y'] = `${screen.enterNameBanner.y}px`;
+    }
   }
 
   return vars;

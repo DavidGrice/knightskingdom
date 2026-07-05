@@ -2,13 +2,15 @@
 
 import React, { useMemo, useRef } from 'react';
 import styles from './MenuStageLayout.module.css';
-import { menuStageToCssVars } from './menuStageMetrics';
+import { menuStageToCssVars, MENU_SCREEN_METRICS } from './menuStageMetrics';
+import { MENU_SCALE_MODES } from './menuScaleModes';
 import useMenuCanvasScale from './useMenuCanvasScale';
 
 /**
  * Fixed 800×600 letterboxed stage for all bitmap menu screens.
  * @param {object} props
  * @param {string} [props.screenKey] — key into MENU_SCREEN_METRICS (sets CSS vars)
+ * @param {'vanilla' | 'modern'} [props.scaleMode] — viewport scale strategy
  * @param {string|import('react').StaticImageData} props.backgroundImage
  * @param {React.ReactNode} props.children
  * @param {string} [props.contentClassName]
@@ -18,6 +20,7 @@ import useMenuCanvasScale from './useMenuCanvasScale';
  */
 const MenuStageLayout = ({
   screenKey = null,
+  scaleMode: scaleModeProp = null,
   backgroundImage,
   children,
   contentClassName = '',
@@ -26,7 +29,12 @@ const MenuStageLayout = ({
   topRight = null,
 }) => {
   const scalerRef = useRef(null);
-  useMenuCanvasScale(scalerRef);
+  const screenMetrics = screenKey ? MENU_SCREEN_METRICS[screenKey] : null;
+  const scaleMode = scaleModeProp
+    || screenMetrics?.scaleMode
+    || MENU_SCALE_MODES.VANILLA;
+
+  useMenuCanvasScale(scalerRef, scaleMode);
 
   const stageStyle = useMemo(() => {
     const bgUrl = typeof backgroundImage === 'string'
@@ -39,8 +47,13 @@ const MenuStageLayout = ({
     };
   }, [backgroundImage, screenKey]);
 
+  const rootClass = [
+    styles.menuRoot,
+    scaleMode === MENU_SCALE_MODES.MODERN ? styles.menuRootModern : '',
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className={styles.menuRoot} data-testid="menu-root">
+    <div className={rootClass} data-testid="menu-root" data-scale-mode={scaleMode}>
       <div ref={scalerRef} className={styles.menuScaler} data-testid="menu-scaler">
         <div
           className={styles.stage}

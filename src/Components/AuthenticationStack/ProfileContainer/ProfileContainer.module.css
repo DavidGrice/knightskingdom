@@ -37,9 +37,11 @@
 
 .enterNameImage {
   position: absolute;
-  left: var(--auth-banner-x, 400px);
-  top: var(--auth-banner-y, 82px);
-  transform: translateX(-50%);
+  left: var(--auth-banner-x, 512px);
+  top: calc(var(--auth-banner-anchor-y, 0.18) * 100%);
+  transform: translate(-50%, -50%);
   z-index: 4;
   pointer-events: none;
+  max-width: 42%;
+  height: auto;
 }

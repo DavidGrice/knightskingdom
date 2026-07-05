@@ -3,7 +3,7 @@ import { gotoAuthentication } from './lib/menuDriver.mjs';
 import { assertMenuStagePresent, captureScreenshot } from './lib/menuLayoutAssert.mjs';
 
 const ROW_W = 528;
-const ROW_H = 99;
+const ROW_H = 92;
 
 const main = async () => {
   const { browser, page, errors } = await launch();
@@ -56,6 +56,16 @@ const main = async () => {
     const listX = (rowBox.x - stageBox.x) / scale;
     if (listX < 180 || listX > 340) {
       throw new Error(`Profile list X drift: ${listX.toFixed(0)}px on 800×600 canvas (want 220–320)`);
+    }
+
+    const scaleMode = await page.$eval('[data-testid="menu-root"]', (el) => el.getAttribute('data-scale-mode'));
+    if (scaleMode !== 'modern') {
+      throw new Error(`Expected modern scale mode on auth, got "${scaleMode}"`);
+    }
+
+    const stackCenterY = (rowBox.y + rowBox.height / 2 - stageBox.y) / scale;
+    if (stackCenterY > 300) {
+      throw new Error(`Profile stack too low: center Y=${stackCenterY.toFixed(0)} (want < 300 on 600px canvas)`);
     }
 
     const checkmark = await page.$('[data-testid="menu-corner-checkmark"]');

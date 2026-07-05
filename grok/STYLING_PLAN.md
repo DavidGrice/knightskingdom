@@ -19,6 +19,7 @@
 | `MenuScreenLayout` → delegates to `MenuStageLayout` | ✅ Wired |
 | Auth + Start use `screenKey` + stage corners | ✅ Done |
 | Auth profile rows (528×99 sprites + name overlay) | ✅ A3 done (2026-07-05) |
+| Auth `modern` scale mode (centered stack, row gaps) | ✅ (2026-07-05) |
 | World dual-header active tab sprites | ✅ A2 done (2026-07-05) |
 | `grok/analyze-menu-images.mjs` | ✅ |
 | `/testing` regression suite + `run-regression.mjs` | ✅ |

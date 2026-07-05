@@ -1,9 +1,12 @@
 .profileScene {
   position: absolute;
-  left: var(--auth-list-x, 262px);
-  top: var(--auth-list-y, 118px);
+  left: var(--auth-list-x, 248px);
+  top: calc(var(--auth-list-anchor-y, 0.44) * 100%);
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: var(--auth-row-gap, 14px);
   z-index: 3;
+  max-height: 78%;
 }

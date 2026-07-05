@@ -1,11 +1,12 @@
 import { useLayoutEffect } from 'react';
-import { MENU_CANVAS } from './menuStageMetrics';
+import { computeMenuScale, MENU_SCALE_MODES } from './menuScaleModes';
 
 /**
- * Scale the fixed 800×600 menu canvas to fit the viewport (letterboxed via transform).
+ * Scale the fixed 800×600 menu canvas to fit the viewport.
  * @param {React.RefObject<HTMLElement>} scalerRef
+ * @param {'vanilla' | 'modern'} [scaleMode]
  */
-const useMenuCanvasScale = (scalerRef) => {
+const useMenuCanvasScale = (scalerRef, scaleMode = MENU_SCALE_MODES.VANILLA) => {
   useLayoutEffect(() => {
     const node = scalerRef.current;
     if (!node) {
@@ -13,17 +14,19 @@ const useMenuCanvasScale = (scalerRef) => {
     }
 
     const updateScale = () => {
-      const scale = Math.min(
-        window.innerWidth / MENU_CANVAS.width,
-        window.innerHeight / MENU_CANVAS.height,
+      const scale = computeMenuScale(
+        scaleMode,
+        window.innerWidth,
+        window.innerHeight,
       );
       node.style.setProperty('--msl-scale', String(scale));
+      node.dataset.scaleMode = scaleMode;
     };
 
     updateScale();
     window.addEventListener('resize', updateScale);
     return () => window.removeEventListener('resize', updateScale);
-  }, [scalerRef]);
+  }, [scalerRef, scaleMode]);
 };
 
 export default useMenuCanvasScale;

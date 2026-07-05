@@ -9,6 +9,16 @@
   justify-content: center;
 }
 
+/* Modern scale: subtle edge vignette, background fills a touch more naturally */
+.menuRootModern {
+  background: radial-gradient(ellipse at center, #0a0a14 0%, #000 72%);
+}
+
+.menuRootModern .stage {
+  background-size: cover;
+  background-position: center top;
+}
+
 .menuScaler {
   width: var(--msl-canvas-w, 800px);
   height: var(--msl-canvas-h, 600px);

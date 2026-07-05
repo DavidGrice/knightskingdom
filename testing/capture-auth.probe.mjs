@@ -35,7 +35,7 @@ const main = async () => {
       JSON.stringify({ stageRect, profileRows }, null, 2),
     );
 
-    const shot = await captureScreenshot(page, 'auth-fixed');
+    const shot = await captureScreenshot(page, 'auth-modern-scale');
     console.log('Screenshot:', shot);
     console.log('Layout debug:', path.join(outDir, 'auth-layout-debug.json'));
     console.log(JSON.stringify(profileRows, null, 2));
