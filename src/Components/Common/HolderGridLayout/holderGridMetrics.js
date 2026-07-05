@@ -31,20 +31,24 @@ export const HOLDER_VARIANTS = {
     upArrow: { x: 260, y: 20 },
     downArrow: { x: 260, y: 386 },
     help: { x: 445, y: 424 },
-    footer: { left: 62, bottom: 42, width: 285, height: 71, gap: 8 },
+    /** Oval tray at bottom of dark_drop_down.png — icons sit in recess */
+    footer: { left: 62, bottom: 35, width: 285, height: 71, gap: 8 },
     ...CELL,
     ...GRID_GAP,
   },
   SNAPSHOT: {
     className: 'variantSnapshot',
+    /** Native snapshot_holder.png — was 530, asset is 516×541 */
     bodyWidth: 516,
-    bodyHeight: 530,
+    bodyHeight: 541,
     gridLeft: 70,
     gridTop: 59,
     upArrow: { x: 258, y: 22 },
-    downArrow: { x: 258, y: 372 },
-    help: { x: 473, y: 433 },
-    footer: { left: 4, bottom: 44, width: 388, height: 72, gap: 37 },
+    downArrow: { x: 258, y: 380 },
+    /** Align with world / MyModels Richard — prior x:473 sat too far right */
+    help: { x: 445, y: 418 },
+    /** Oval tray — MyModels-style top anchor, shorter icons (see SnapShotBody.module.css) */
+    footer: { left: 53, top: 436, width: 300, height: 58, gap: 10 },
     ...CELL,
     ...GRID_GAP,
   },

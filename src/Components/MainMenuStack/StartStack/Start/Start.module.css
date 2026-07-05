@@ -1,38 +1,10 @@
-.backgroundImage {
-    background-image: url('./StartResourceStack/background.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 100vw;
-    position: fixed;
-    z-index: 1;
-  }
-
-  .centeredContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; /* Ensure the container takes the full height of its parent */
-}
-
-.bottomLeftCorner {
+.centeredContainer {
   position: absolute;
-  bottom: 10px;
-  left: 15%;
-}
-
-.topRightCorner {
-  position: absolute;
-  top: 0%;
-  right: 13%;
-  height: 87px;
-  width: 80px;
-  z-index: 10;
+  inset: 0;
 }
 
 .leaveIconHolder {
-  width: 100%;
-  height: 100%;
+  width: 80px;
+  height: 87px;
   display: block;
 }

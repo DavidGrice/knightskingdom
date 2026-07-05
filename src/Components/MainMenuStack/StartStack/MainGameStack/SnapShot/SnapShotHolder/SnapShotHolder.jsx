@@ -1,19 +1,24 @@
 import React from 'react';
-import styles from './SnapShotHolder.module.css';
+import { MenuPanelShell } from '../../../../../Common';
 import SnapShotBody from './SnapShotBody/SnapShotBody';
+import holderFrame from './SnapShotHolderResourceStack/snapshot_holder.png';
 
 const SnapShotHolder = ({
   selectedProfile,
   mapData,
   onRemoveSnapshot,
 }) => (
-  <div className={styles.componentHolder}>
+  <MenuPanelShell
+    archetype="SINGLE_HEADER"
+    screenKey="SNAPSHOT"
+    holderBackground={holderFrame.src ?? holderFrame}
+  >
     <SnapShotBody
       selectedProfile={selectedProfile}
       mapData={mapData}
       onRemoveSnapshot={onRemoveSnapshot}
     />
-  </div>
+  </MenuPanelShell>
 );
 
 export default SnapShotHolder;

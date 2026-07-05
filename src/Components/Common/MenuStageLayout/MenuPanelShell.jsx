@@ -28,6 +28,7 @@ const MenuPanelShell = ({
   const shellStyle = holder
     ? {
         width: `${holder.bodyWidth}px`,
+        height: `${holder.bodyHeight}px`,
         ...(holderBackground ? { backgroundImage: `url(${holderBackground})` } : {}),
       }
     : undefined;

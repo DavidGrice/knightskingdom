@@ -41,6 +41,7 @@ const Options = ({ navigateToMenu, selectedProfile, onUpdateOptions }) => {
 
   return (
     <MenuScreenLayout
+      screenKey="OPTIONS"
       backgroundImage={castleBackground}
       contentClassName={styles.centeredContainer}
       bottomLeft={<BackCheckmarkButton onClick={navigateToMenu} />}
@@ -49,10 +50,12 @@ const Options = ({ navigateToMenu, selectedProfile, onUpdateOptions }) => {
           backgroundImage={RichardPlaceholder}
           placeholderImage={DarkHelp2}
           frames={frames}
+          wrapperClassName={styles.optionsHelpBin}
+          frameClassName={styles.optionsHelpFrame}
         />
       }
     >
-      <div className={styles.divSeparators}>
+      <div className={styles.optionRow}>
         <OptionsMenuPlaceholder
           isTop={true}
           ring={OvalTrans1}
@@ -66,7 +69,7 @@ const Options = ({ navigateToMenu, selectedProfile, onUpdateOptions }) => {
           onSelect={(side) => onUpdateOptions?.({ brickQuality: sideToBrickQuality[side] })}
         />
       </div>
-      <div className={styles.divSeparators}>
+      <div className={styles.optionRow}>
         <OptionsMenuPlaceholder
           isTop={false}
           ring={OvalTrans2}
@@ -78,7 +81,7 @@ const Options = ({ navigateToMenu, selectedProfile, onUpdateOptions }) => {
           onSelect={(side) => onUpdateOptions?.({ renderer: sideToRenderer[side] })}
         />
       </div>
-      <div className={styles.divSeparators}>
+      <div className={styles.optionRow}>
         <OptionsMenuPlaceholder
           isTop={false}
           ring={OvalTrans3}
@@ -90,7 +93,7 @@ const Options = ({ navigateToMenu, selectedProfile, onUpdateOptions }) => {
           onSelect={(side) => onUpdateOptions?.({ dialogue: sideToToggle[side] })}
         />
       </div>
-      <div className={styles.divSeparators}>
+      <div className={styles.optionRow}>
         <OptionsMenuPlaceholder
           isTop={false}
           ring={OvalTrans4}

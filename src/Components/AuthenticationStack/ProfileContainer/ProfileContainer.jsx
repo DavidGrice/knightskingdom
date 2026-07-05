@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import { ProfileInput } from '..';
 import { defaultProfileOptions } from '../../../api';
 import EnterNameHereImage from '../AuthStackResources/text-updated.png';
+import { getAuthRankSprite } from '../AuthStackResources/authRankAssets';
+import { AUTH_HD_BASE, hiDpiImgProps } from '../../Common/hiDpiAsset';
 import styles from './ProfileContainer.module.css';
 
-import Page2 from '../AuthStackResources/page_2.png';
-import Page4 from '../AuthStackResources/page_4.png';
-import Knight2 from '../AuthStackResources/knight_2.png';
-import Knight4 from '../AuthStackResources/knight_4.png';
-import Baronet2 from '../AuthStackResources/baronet_2.png';
-import Baronet4 from '../AuthStackResources/baronet_4.png';
+const enterNameHd = hiDpiImgProps(EnterNameHereImage, `${AUTH_HD_BASE}/text-updated.png`);
 
 const ProfileContainer = ({
   name,
@@ -45,28 +42,15 @@ const ProfileContainer = ({
     handleProfileSelect(newProfile);
   };
 
-  const getProfileImage = (profileLevel, selected) => {
-    switch (profileLevel) {
-      case 'page':
-        return selected ? Page4 : Page2;
-      case 'knight':
-        return selected ? Knight4 : Knight2;
-      case 'baronet':
-        return selected ? Baronet4 : Baronet2;
-      default:
-        return selected ? Page4 : Page2;
-    }
-  };
-
-  const profileImage = getProfileImage(level, isSelected);
+  const rankSprite = getAuthRankSprite(level, isSelected);
 
   return (
     <>
       {isNewProfile && showEnterNameImage ? (
-        <img className={styles.enterNameImage} src={EnterNameHereImage} alt="Enter Name" />
+        <img className={styles.enterNameImage} alt="Enter Name" {...enterNameHd} />
       ) : null}
       <div className={styles.profileRow} onClick={onClick} data-testid="profile-row">
-        <img className={styles.profileSprite} src={profileImage} alt="" />
+        <img className={styles.profileSprite} alt="" {...rankSprite} />
         <div className={styles.nameOverlay}>
           {isNewProfile ? (
             <ProfileInput
@@ -76,7 +60,7 @@ const ProfileContainer = ({
               handleAddProfile={handleAddProfile}
             />
           ) : (
-            <div className={styles.profileDiv}>{text}</div>
+            <div className={`${styles.nameText} ${styles.profileDiv}`}>{text}</div>
           )}
         </div>
       </div>

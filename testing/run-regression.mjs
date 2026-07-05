@@ -19,6 +19,7 @@ const ROOT = path.join(__dirname, '..');
 const SUITES = {
   menu: [
     'testing/menu-auth.layout.test.mjs',
+    'testing/menu-auth.scale-matrix.test.mjs',
     'testing/menu-start.layout.test.mjs',
     'testing/menu-mymodels.layout.test.mjs',
     'testing/menu-snapshot.layout.test.mjs',

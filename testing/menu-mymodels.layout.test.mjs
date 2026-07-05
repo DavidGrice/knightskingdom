@@ -6,18 +6,28 @@ const main = async () => {
   const { browser, page, errors } = await launch();
   try {
     await gotoMyModels(page);
+    await assertMenuStagePresent(page, { screenKey: 'MY_MODELS' });
 
-    // MyModels not yet on MenuStageLayout — test grid + holder until migrated
-    const holder = await page.$('[class*="MyModelsHolder_componentHolder"]');
+    const panelShell = await page.$('[data-testid="menu-panel-shell"]');
+    if (!panelShell) {
+      throw new Error('MyModels MenuPanelShell not found');
+    }
+
+    const holder = await page.$('[data-testid="menu-panel-holder"]');
     if (!holder) {
-      throw new Error('MyModels holder not found');
+      throw new Error('MyModels panel holder not found');
+    }
+
+    const box = await holder.boundingBox();
+    if (!box || box.width < 400) {
+      throw new Error(`MyModels holder too small or unpositioned: ${JSON.stringify(box)}`);
     }
 
     await assertPaginatedGrid(page, { minItems: 1, maxItems: 9 });
 
-    const checkmark = await page.$('img[alt="Checkmark"]');
+    const checkmark = await page.$('[data-testid="menu-corner-checkmark"]');
     if (!checkmark) {
-      throw new Error('MyModels checkmark not found');
+      throw new Error('MyModels checkmark corner slot missing');
     }
 
     if (process.env.TEST_CAPTURE) {

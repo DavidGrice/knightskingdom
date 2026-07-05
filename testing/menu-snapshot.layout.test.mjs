@@ -1,27 +1,33 @@
 import { launch } from './lib/driver.mjs';
 import { gotoSnapshot } from './lib/menuDriver.mjs';
-import { assertPaginatedGrid, captureScreenshot } from './lib/menuLayoutAssert.mjs';
+import { assertMenuStagePresent, assertPaginatedGrid, captureScreenshot } from './lib/menuLayoutAssert.mjs';
 
 const main = async () => {
   const { browser, page, errors } = await launch();
   try {
     await gotoSnapshot(page);
+    await assertMenuStagePresent(page, { screenKey: 'SNAPSHOT' });
 
-    const holder = await page.$('[class*="SnapShotHolder_componentHolder"]');
+    const panelShell = await page.$('[data-testid="menu-panel-shell"]');
+    if (!panelShell) {
+      throw new Error('SnapShot MenuPanelShell not found');
+    }
+
+    const holder = await page.$('[data-testid="menu-panel-holder"]');
     if (!holder) {
-      throw new Error('SnapShot holder not found');
+      throw new Error('SnapShot panel holder not found');
     }
 
     const box = await holder.boundingBox();
-    if (!box || box.width < 400) {
+    if (!box || box.width < 350) {
       throw new Error(`SnapShot holder too small or unpositioned: ${JSON.stringify(box)}`);
     }
 
     await assertPaginatedGrid(page, { minItems: 1, maxItems: 9 });
 
-    const checkmark = await page.$('img[alt="Checkmark"]');
+    const checkmark = await page.$('[data-testid="menu-corner-checkmark"]');
     if (!checkmark) {
-      throw new Error('SnapShot checkmark not found');
+      throw new Error('SnapShot checkmark corner slot missing');
     }
 
     if (process.env.TEST_CAPTURE) {

@@ -4,6 +4,7 @@ import React, { useMemo, useRef } from 'react';
 import styles from './MenuStageLayout.module.css';
 import { menuStageToCssVars, MENU_SCREEN_METRICS } from './menuStageMetrics';
 import { MENU_SCALE_MODES } from './menuScaleModes';
+import { hiDpiBackgroundImage } from '../hiDpiAsset';
 import useMenuCanvasScale from './useMenuCanvasScale';
 
 /**
@@ -37,15 +38,20 @@ const MenuStageLayout = ({
   useMenuCanvasScale(scalerRef, scaleMode);
 
   const stageStyle = useMemo(() => {
-    const bgUrl = typeof backgroundImage === 'string'
-      ? backgroundImage
-      : backgroundImage?.src;
-    const vars = screenKey ? menuStageToCssVars(screenKey) : menuStageToCssVars('START_WORLD');
+    const vars = menuStageToCssVars(screenKey ?? 'MAIN_MENU');
+    const hdBg = screenMetrics?.hdAssets?.background;
+    const bg = hdBg
+      ? hiDpiBackgroundImage(backgroundImage, hdBg)
+      : (typeof backgroundImage === 'string'
+        ? `url(${backgroundImage})`
+        : backgroundImage?.src
+          ? `url(${backgroundImage.src})`
+          : undefined);
     return {
       ...vars,
-      backgroundImage: bgUrl ? `url(${bgUrl})` : undefined,
+      backgroundImage: bg,
     };
-  }, [backgroundImage, screenKey]);
+  }, [backgroundImage, screenKey, screenMetrics]);
 
   const rootClass = [
     styles.menuRoot,

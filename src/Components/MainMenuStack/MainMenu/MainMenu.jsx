@@ -20,14 +20,18 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
   const router = useRouter();
 
   return (
-    <MenuScreenLayout backgroundImage={castleBackground} contentClassName={styles.centeredContainer}>
-      <div>
-        {selectedProfile && <h1>Welcome, {selectedProfile.name}!</h1>}
-      </div>
-      <div className={styles.divSeparators}>
+    <MenuScreenLayout
+      screenKey="MAIN_MENU"
+      backgroundImage={castleBackground}
+      contentClassName={styles.centeredContainer}
+    >
+      {selectedProfile ? (
+        <h1 className={styles.welcomeTitle}>Welcome, {selectedProfile.name}!</h1>
+      ) : null}
+      <div className={styles.menuButton}>
         <CommonComponent initialImage={Start2} hoverImage={Start4} altText="Start" onClick={navigateToStart} />
       </div>
-      <div className={styles.divSeparators}>
+      <div className={styles.menuButton}>
         <CommonComponent
           initialImage={ChangePlayer2}
           hoverImage={ChangePlayer4}
@@ -35,7 +39,7 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
           onClick={navigateToAuthentication}
         />
       </div>
-      <div className={styles.divSeparators}>
+      <div className={styles.menuButton}>
         <CommonComponent
           initialImage={Options2}
           hoverImage={Options4}
@@ -46,7 +50,7 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
           }}
         />
       </div>
-      <div className={styles.divSeparators}>
+      <div className={styles.menuButton}>
         <CommonComponent
           initialImage={Credits2}
           hoverImage={Credits4}
@@ -57,7 +61,7 @@ const MainMenu = ({ navigateToAuthentication, selectedProfile, navigateToStart }
           }}
         />
       </div>
-      <div className={styles.divSeparators}>
+      <div className={styles.menuButton}>
         <CommonComponent
           initialImage={Quit2}
           hoverImage={Quit4}

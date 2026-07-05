@@ -1,15 +1,18 @@
 .helpComponent {
     position: relative;
-    width: 169px;
-    height: 123px;
-    background-size: cover;
-    background-position: center;
+    width: var(--help-bin-w, 169px);
+    height: var(--help-bin-h, 123px);
+    background-repeat: no-repeat;
+    background-position: var(--help-bin-bg-x, center) var(--help-bin-bg-y, bottom);
+    background-size: var(--help-bin-bg-w, 100%) var(--help-bin-bg-h, 100%);
 }
-  
+
 .frameDiv {
     position: absolute;
-    bottom: 0;
-    left: 9%;
-    width: 120px;
-    height: 103px;
+    top: var(--help-frame-top, auto);
+    bottom: var(--help-frame-bottom, 0px);
+    left: var(--help-frame-left, 50%);
+    transform: var(--help-frame-transform, translateX(-50%));
+    width: var(--help-frame-w, 120px);
+    height: var(--help-frame-h, 103px);
 }

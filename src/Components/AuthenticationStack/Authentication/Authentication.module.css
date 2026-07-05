@@ -1,11 +1,10 @@
 .profileScene {
   position: absolute;
-  left: var(--auth-list-x, 168px);
-  top: calc(var(--auth-list-anchor-y, 0.36) * 100%);
-  transform: translateY(-50%);
+  left: var(--auth-list-x, 260px);
+  top: var(--auth-list-y, 103px);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--auth-row-gap, 10px);
+  align-items: center;
+  gap: var(--auth-row-gap, 8px);
   z-index: 3;
 }

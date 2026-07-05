@@ -1,8 +1,9 @@
 .panelRoot {
   position: absolute;
   left: var(--msl-holder-cx, 400px);
-  top: var(--msl-holder-cy, 300px);
-  transform: translate(-50%, -50%);
+  top: var(--msl-holder-cy, 310px);
+  transform: translate(-50%, -50%) scale(var(--single-header-layout-scale, 1));
+  transform-origin: center center;
   display: flex;
   flex-direction: column;
   align-items: center;

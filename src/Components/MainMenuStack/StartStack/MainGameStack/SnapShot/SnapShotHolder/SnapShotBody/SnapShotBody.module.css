@@ -7,8 +7,13 @@
 }
 
 .iconComponentHolder {
-    height: 72px;
-    width: 71px;
+    /* Match world-picker oval tray — prior 72px was too tall for recess */
+    height: 58px;
+    width: 66px;
+}
+
+.footerTray {
+    align-items: flex-end;
 }
 
 .emptyMessage {

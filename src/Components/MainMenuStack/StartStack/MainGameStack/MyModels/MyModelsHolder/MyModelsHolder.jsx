@@ -1,14 +1,19 @@
 import React from 'react';
-import styles from './MyModelsHolder.module.css';
+import { MenuPanelShell } from '../../../../../Common';
 import MyModelsBody from '../MyModelsBody/MyModelsBody';
+import holderFrame from '../MyModelsResourceStack/drop_down.png';
 
 const MyModelsHolder = ({ selectedProfile, onDeleteSavedWorld }) => (
-  <div className={styles.componentHolder}>
+  <MenuPanelShell
+    archetype="SINGLE_HEADER"
+    screenKey="MY_MODELS"
+    holderBackground={holderFrame.src ?? holderFrame}
+  >
     <MyModelsBody
       selectedProfile={selectedProfile}
       onDeleteSavedWorld={onDeleteSavedWorld}
     />
-  </div>
+  </MenuPanelShell>
 );
 
 export default MyModelsHolder;

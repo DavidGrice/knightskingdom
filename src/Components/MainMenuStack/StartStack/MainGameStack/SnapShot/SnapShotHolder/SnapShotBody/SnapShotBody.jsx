@@ -12,6 +12,7 @@ const paginatedStyles = createHolderGridStyles(HOLDER_VARIANTS.SNAPSHOT, {
   item: styles.item,
   itemInteractive: styles.itemInteractive,
   iconComponentHolder: styles.iconComponentHolder,
+  lowerContent: styles.footerTray,
 });
 
 const footerStyle = footerPositionStyle(HOLDER_VARIANTS.SNAPSHOT);
@@ -21,8 +22,18 @@ const SnapShotBody = ({
   mapData,
   onRemoveSnapshot,
 }) => {
+  const resolvedWorldId = useMemo(() => {
+    if (mapData?.id != null) {
+      return mapData.id;
+    }
+    const savedKeys = Object.keys(selectedProfile?.savedWorlds || {});
+    return savedKeys.length ? savedKeys[0] : null;
+  }, [mapData?.id, selectedProfile?.savedWorlds]);
+
   const snapshotItems = useMemo(() => {
-    const profileSnapshots = selectedProfile?.savedWorlds?.[String(mapData?.id)]?.snapshots || [];
+    const profileSnapshots = resolvedWorldId != null
+      ? selectedProfile?.savedWorlds?.[String(resolvedWorldId)]?.snapshots || []
+      : [];
     const sessionSnapshots = mapData?.snapshots || [];
     const latestSnapshot = mapData?.sceneSnapshot ? [mapData.sceneSnapshot] : [];
     const merged = mergeSnapshotLists(
@@ -34,7 +45,7 @@ const SnapShotBody = ({
     return merged
       .map((entry) => normalizeSnapshotEntry(entry))
       .filter(Boolean);
-  }, [selectedProfile, mapData?.id, mapData?.snapshots, mapData?.sceneSnapshot]);
+  }, [selectedProfile, resolvedWorldId, mapData?.snapshots, mapData?.sceneSnapshot]);
 
   const {
     displayedItems,
@@ -75,10 +86,10 @@ const SnapShotBody = ({
   };
 
   const handleDelete = () => {
-    if (!selectedItem || !mapData?.id || !onRemoveSnapshot) {
+    if (!selectedItem || resolvedWorldId == null || !onRemoveSnapshot) {
       return;
     }
-    onRemoveSnapshot(mapData.id, selectedItem.id);
+    onRemoveSnapshot(resolvedWorldId, selectedItem.id);
     setSelectedItem(null);
   };
 

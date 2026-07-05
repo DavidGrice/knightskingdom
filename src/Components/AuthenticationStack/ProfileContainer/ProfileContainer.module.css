@@ -1,45 +1,52 @@
 .profileRow {
   position: relative;
-  width: var(--auth-row-w, 528px);
-  height: var(--auth-row-h, 90px);
+  width: var(--auth-row-w, 280px);
+  height: var(--auth-row-h, 56px);
   flex-shrink: 0;
   cursor: pointer;
 }
 
 .profileSprite {
   display: block;
-  width: var(--auth-row-w, 528px);
-  height: var(--auth-row-h, 90px);
+  width: var(--auth-row-w, 280px);
+  height: var(--auth-row-h, 56px);
   pointer-events: none;
   user-select: none;
+  image-rendering: auto;
 }
 
 .nameOverlay {
   position: absolute;
-  left: var(--auth-name-left, 200px);
+  left: var(--auth-name-left, 106px);
   top: 50%;
   transform: translateY(-50%);
-  width: var(--auth-name-w, 280px);
+  width: var(--auth-name-w, 149px);
   display: flex;
   align-items: center;
 }
 
+.nameText,
 .profileDiv {
-  color: #ffffc6;
-  font-size: 24px;
-  font-weight: 300;
+  color: var(--auth-name-color, #ffffc6);
+  font-size: var(--auth-name-font-size, 14px);
+  font-weight: var(--auth-name-font-weight, 300);
   font-family: Arial, Helvetica, sans-serif;
+  line-height: var(--auth-name-line-height, 1);
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.profileDiv {
+  width: 100%;
+}
+
 .enterNameImage {
   position: absolute;
   left: var(--auth-banner-x, 512px);
-  top: calc(var(--auth-banner-anchor-y, 0.18) * 100%);
-  transform: translate(-50%, -50%);
+  top: var(--auth-banner-y, 28px);
+  transform: translateX(-50%);
   z-index: 4;
   pointer-events: none;
   max-width: 42%;

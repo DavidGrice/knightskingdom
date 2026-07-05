@@ -1,25 +1,28 @@
 .headerHolder {
     display: flex;
     flex-direction: row;
-    width: 519px;
-    height: 57px;
+    gap: var(--start-tab-gap, 8px);
+    width: var(--start-header-w, 519px);
+    height: var(--start-header-h, 57px);
 }
 
 .localWorldsHeader {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    width: 141px;
-    height: 57px;
-    margin-left: 9.7%;
+    width: var(--start-tab-w, 141px);
+    height: var(--start-header-h, 57px);
+    margin-left: var(--start-tab-inset, 50px);
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .sharedWorldsHeader {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    width: 141px;
-    height: 57px;
+    width: var(--start-tab-w, 141px);
+    height: var(--start-header-h, 57px);
     cursor: pointer;
+    flex-shrink: 0;
 }

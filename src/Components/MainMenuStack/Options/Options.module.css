@@ -1,44 +1,38 @@
-.backgroundImage {
-  background-image: url('../MainMenu/MainMenuResources/castle.png');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  z-index: 1;
-}
+/* 800×600 canvas layout — no vw/vh */
 
 .centeredContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh; /* Full viewport height */
-  width: 100vw;  /* Full viewport width */
-  padding-top: 5%; /* Adjust this value to add padding from the top */
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding-top: var(--options-stack-pt, 52px);
+  box-sizing: border-box;
+  gap: var(--options-stack-gap, 10px);
 }
 
-.divSeparators {
-  margin-top: 3%;
-  width: 40%;
-  height: 12%;
+.optionRow {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
 }
 
-.bottomRightCorner {
-  position: absolute; /* Ensure it is positioned correctly */
-  bottom: 0; /* Adjust as needed */
-  right: 12.75%; /* Adjust as needed */
-  width: 169px;
-  height: 123px;
-  z-index: 2; /* Ensure it is above the background */
+/** Richard help — native blob + hole-centered frame (optionsLayoutMath.js) */
+.optionsHelpBin {
+  --help-bin-w: var(--options-help-w, 139px);
+  --help-bin-h: var(--options-help-h, 101px);
+  --help-frame-fit: cover;
+  --help-frame-object-position: center center;
 }
 
-.bottomLeftCorner {
-  position: absolute;
-  bottom: 10px; /* Adjust as needed */
-  left: 15%; /* Adjust as needed */
+.optionsHelpFrame {
+  --help-frame-w: var(--options-help-frame-w, 98px);
+  --help-frame-h: var(--options-help-frame-h, 84px);
+  --help-frame-left: var(--options-help-frame-left, 67px);
+  --help-frame-top: var(--options-help-frame-top, 57px);
+  --help-frame-bottom: auto;
+  --help-frame-transform: translate(-50%, -50%);
 }

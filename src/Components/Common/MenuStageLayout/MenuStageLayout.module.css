@@ -38,12 +38,22 @@
   z-index: 2;
 }
 
+.cornerCheckmark,
+.cornerTrash {
+  z-index: 10;
+}
+
 .cornerCheckmark {
   position: absolute;
   left: var(--msl-check-x);
   bottom: var(--msl-check-bottom, 10px);
   transform: translateX(-50%);
-  z-index: 10;
+}
+
+.cornerCheckmark > img {
+  display: block;
+  width: var(--msl-corner-btn-size, 72px);
+  height: var(--msl-corner-btn-size, 72px);
 }
 
 .cornerTrash {
@@ -51,7 +61,12 @@
   left: var(--msl-trash-x);
   bottom: var(--msl-trash-bottom, 10px);
   transform: translateX(-50%);
-  z-index: 10;
+}
+
+.cornerTrash > img {
+  display: block;
+  width: var(--msl-corner-btn-size, 72px);
+  height: var(--msl-corner-btn-size, 72px);
 }
 
 .cornerLeave {

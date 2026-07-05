@@ -1,8 +1,7 @@
 import React from 'react';
-import styles from './MyModels.module.css';
 import MyModelsHolder from './MyModelsHolder/MyModelsHolder';
-import { CommonComponent } from '../../../../Common';
-import { myModelsData } from './MyModelsResourceStack';
+import { BackCheckmarkButton, MenuScreenLayout } from '../../../../Common';
+import backgroundImage from './MyModelsResourceStack/background.png';
 
 const MyModels = ({ selectedProfile, onDeleteSavedWorld, navigateBackToGame }) => {
   const handleCheckmarkClick = () => {
@@ -10,20 +9,21 @@ const MyModels = ({ selectedProfile, onDeleteSavedWorld, navigateBackToGame }) =
   };
 
   return (
-    <div className={styles.myModelsDiv}>
+    <MenuScreenLayout
+      screenKey="MY_MODELS"
+      backgroundImage={backgroundImage}
+      bottomLeft={(
+        <BackCheckmarkButton
+          onClick={handleCheckmarkClick}
+          altText="Checkmark"
+        />
+      )}
+    >
       <MyModelsHolder
         selectedProfile={selectedProfile}
         onDeleteSavedWorld={onDeleteSavedWorld}
       />
-      <div className={styles.bottomLeftCorner}>
-        <CommonComponent
-          initialImage={myModelsData.checkmarks.passive}
-          hoverImage={myModelsData.checkmarks.active}
-          altText="Checkmark"
-          onClick={handleCheckmarkClick}
-        />
-      </div>
-    </div>
+    </MenuScreenLayout>
   );
 };
 

@@ -1,8 +1,7 @@
 import React from 'react';
-import styles from './SnapShot.module.css';
 import { SnapShotHolder } from './index';
-import { checkmarks } from './SnapShotResourceStack/index';
-import { CommonComponent } from '../../../../Common';
+import { BackCheckmarkButton, MenuScreenLayout } from '../../../../Common';
+import backgroundImage from './SnapShotResourceStack/background.png';
 
 const SnapShot = ({
   navigateToMainGame,
@@ -15,21 +14,22 @@ const SnapShot = ({
   };
 
   return (
-    <div className={styles.snapShotDiv}>
+    <MenuScreenLayout
+      screenKey="SNAPSHOT"
+      backgroundImage={backgroundImage}
+      bottomLeft={(
+        <BackCheckmarkButton
+          onClick={handleCheckmarkClick}
+          altText="Checkmark"
+        />
+      )}
+    >
       <SnapShotHolder
         selectedProfile={selectedProfile}
         mapData={mapData}
         onRemoveSnapshot={onRemoveSnapshot}
       />
-      <div className={styles.bottomLeftCorner}>
-        <CommonComponent
-          initialImage={checkmarks.checkMark2}
-          hoverImage={checkmarks.checkMark4}
-          altText="Checkmark"
-          onClick={handleCheckmarkClick}
-        />
-      </div>
-    </div>
+    </MenuScreenLayout>
   );
 };
 

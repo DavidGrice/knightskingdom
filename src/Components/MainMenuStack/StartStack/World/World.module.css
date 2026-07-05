@@ -5,7 +5,8 @@
     position: absolute;
     left: var(--msl-holder-cx, 400px);
     top: var(--msl-holder-cy, 310px);
-    transform: translate(-50%, -50%);
-    width: 660px;
+    width: var(--start-header-w, 519px);
+    transform: translate(-50%, -50%) scale(var(--start-world-layout-scale, 0.72));
+    transform-origin: center center;
     z-index: 3;
 }
