@@ -42,3 +42,37 @@ public/models/**/*.obj
 public/models/**/*.mtl
 public/models/textures/
 public/sounds/*.wav
+
+# ---------------------------------------------------------------------------
+# Media assets (images, audio, video, 3D meshes)
+# grok-dev-vanilla: keep binaries local; regenerate or copy from your install.
+# Already-tracked files stay in git until removed with: git rm --cached <path>
+# ---------------------------------------------------------------------------
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.webp
+*.ico
+*.svg
+*.tif
+*.tiff
+*.avif
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.aac
+*.m4a
+*.mp4
+*.webm
+*.avi
+*.mov
+*.mkv
+*.glb
+*.gltf
+*.obj
+*.mtl
+*.fbx
+*.dae
