@@ -10,6 +10,8 @@ import {
   SINGLE_HEADER_LAYOUT_SCALE,
   SINGLE_HEADER_HOLDER_CENTER,
 } from '../../../src/Components/Common/MenuStageLayout/singleHeaderLayoutMath.js';
+import { buildOptionsLayoutContract } from '../../../src/Components/Common/MenuStageLayout/optionsLayoutMath.js';
+import { buildCreditsLayoutContract } from '../../../src/Components/Common/MenuStageLayout/creditsLayoutMath.js';
 import { MENU_SCREEN_METRICS } from '../../../src/Components/Common/MenuStageLayout/menuStageMetrics.js';
 
 const MY_MODELS_CONTRACT = buildSingleHeaderLayoutContract('MY_MODELS', 'MY_MODELS');
@@ -68,6 +70,33 @@ await runUnitSuite('menu.unit.layout-contracts', [
       assert(AUTH_CONTRACT.profileList.rowWidth > 0, 'row width');
       assert(AUTH_CONTRACT.nameField.maxLength >= 4, 'max length');
       assertEqual(AUTH_CONTRACT.screenKey, 'AUTHENTICATION');
+    },
+  },
+  {
+    name: 'OPTIONS contract exposes help bin and corner anchor',
+    fn: () => {
+      const c = buildOptionsLayoutContract();
+      assertEqual(c.corner.x, 662);
+      assert(c.bin.width > 0 && c.bin.height > 0, 'help bin size');
+      assertEqual(MENU_SCREEN_METRICS.OPTIONS.optionStack.rowCount, 4);
+    },
+  },
+  {
+    name: 'CREDITS scroll panel computed rect',
+    fn: () => {
+      const c = buildCreditsLayoutContract();
+      assertEqual(c.scrollPanel.left, 108);
+      assertEqual(c.scrollPanel.top, 99);
+      assertEqual(c.scrollPanel.width, 232);
+      assertEqual(c.scrollPanel.height, 310);
+    },
+  },
+  {
+    name: 'MAIN_MENU button stack metrics',
+    fn: () => {
+      const m = MENU_SCREEN_METRICS.MAIN_MENU.buttonStack;
+      assertEqual(m.centerX, 400);
+      assertEqual(m.gap, 8);
     },
   },
   {

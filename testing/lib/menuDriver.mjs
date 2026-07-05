@@ -38,6 +38,21 @@ export const gotoAuthenticationWithProfiles = async (page) => {
 };
 
 /** Seed auth + land on world picker */
+export const gotoMainMenu = async (page) => {
+  await seedAuth(page);
+  await page.goto(`${BASE_URL}/main-menu`, { waitUntil: 'networkidle0' });
+};
+
+export const gotoOptions = async (page) => {
+  await seedAuth(page);
+  await page.goto(`${BASE_URL}/options`, { waitUntil: 'networkidle0' });
+};
+
+export const gotoCredits = async (page) => {
+  await seedAuth(page);
+  await page.goto(`${BASE_URL}/credits`, { waitUntil: 'networkidle0' });
+};
+
 export const gotoWorldPicker = async (page) => {
   await seedAuth(page);
   await page.goto(`${BASE_URL}/start-stack/start`, { waitUntil: 'networkidle0' });

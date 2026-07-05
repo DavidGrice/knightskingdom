@@ -25,6 +25,9 @@ const UNIT_SUITES = [
 const LAYOUT_SUITES = [
   'testing/menu/layout/menu-auth.layout.test.mjs',
   'testing/menu/layout/menu-auth.scale-matrix.test.mjs',
+  'testing/menu/layout/menu-mainmenu.layout.test.mjs',
+  'testing/menu/layout/menu-options.layout.test.mjs',
+  'testing/menu/layout/menu-credits.layout.test.mjs',
   'testing/menu/layout/menu-start.layout.test.mjs',
   'testing/menu/layout/menu-mymodels.layout.test.mjs',
   'testing/menu/layout/menu-snapshot.layout.test.mjs',
