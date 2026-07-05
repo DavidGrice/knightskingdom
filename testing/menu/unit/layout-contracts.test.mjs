@@ -13,6 +13,10 @@ import {
 import { buildOptionsLayoutContract } from '../../../src/Components/Common/MenuStageLayout/optionsLayoutMath.js';
 import { buildCreditsLayoutContract } from '../../../src/Components/Common/MenuStageLayout/creditsLayoutMath.js';
 import { MENU_SCREEN_METRICS } from '../../../src/Components/Common/MenuStageLayout/menuStageMetrics.js';
+import {
+  SCALE_MATRIX_SCREENS,
+  SCALE_MATRIX_VIEWPORTS,
+} from '../../lib/menuScaleMatrix.mjs';
 
 const MY_MODELS_CONTRACT = buildSingleHeaderLayoutContract('MY_MODELS', 'MY_MODELS');
 const SNAPSHOT_CONTRACT = buildSingleHeaderLayoutContract('SNAPSHOT', 'SNAPSHOT');
@@ -97,6 +101,17 @@ await runUnitSuite('menu.unit.layout-contracts', [
       const m = MENU_SCREEN_METRICS.MAIN_MENU.buttonStack;
       assertEqual(m.centerX, 400);
       assertEqual(m.gap, 8);
+    },
+  },
+  {
+    name: 'scale matrix covers every MENU_SCREEN_METRICS screenKey',
+    fn: () => {
+      const metricKeys = Object.keys(MENU_SCREEN_METRICS);
+      for (const { screenKey } of SCALE_MATRIX_SCREENS) {
+        assert(metricKeys.includes(screenKey), `missing metrics for ${screenKey}`);
+      }
+      assertEqual(SCALE_MATRIX_SCREENS.length, metricKeys.length, 'screen count');
+      assertEqual(SCALE_MATRIX_VIEWPORTS.length, 3);
     },
   },
   {

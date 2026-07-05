@@ -29,6 +29,7 @@ const SUITES = {
     'testing/menu/layout/menu-start.layout.test.mjs',
     'testing/menu/layout/menu-mymodels.layout.test.mjs',
     'testing/menu/layout/menu-snapshot.layout.test.mjs',
+    'testing/menu/layout/menu-scale-matrix.test.mjs',
   ],
   engine: [
     'testing/world-load.test.mjs',
