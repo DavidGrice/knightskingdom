@@ -3,7 +3,7 @@
   top: 110px;
   right: 12px;
   width: 220px;
-  max-height: 280px;
+  max-height: 340px;
   z-index: 6;
   pointer-events: auto;
   background: rgba(0, 0, 0, 0.72);
@@ -24,13 +24,88 @@
   color: #ffe566;
 }
 
-.steps {
-  margin: 0 0 10px;
-  padding-left: 18px;
+.stepViewer {
+  margin-bottom: 10px;
 }
 
-.steps li {
-  margin-bottom: 6px;
+.stepText {
+  margin: 8px 0 6px;
+}
+
+.preview {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.previewPlate,
+.previewPlateRow,
+.previewPlateStack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  width: 100%;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(234, 192, 0, 0.35) 0%, rgba(180, 140, 0, 0.25) 100%);
+  border: 1px solid rgba(234, 192, 0, 0.5);
+  padding: 6px;
+}
+
+.previewPlateRow {
+  flex-direction: row;
+  gap: 6px;
+}
+
+.previewPlateStack {
+  flex-direction: column-reverse;
+  gap: 2px;
+}
+
+.previewBrickSingle,
+.previewBrick {
+  width: 52px;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45));
+}
+
+.previewBrick {
+  width: 44px;
+}
+
+.stepNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.stepCounter {
+  font-size: 11px;
+  color: #d8d8a0;
+  min-width: 48px;
+  text-align: center;
+}
+
+.stepButton {
+  border: 1px solid #666;
+  background: rgba(30, 30, 30, 0.9);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.stepButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepButton:not(:disabled):hover {
+  background: rgba(60, 60, 60, 0.95);
 }
 
 .progress {
@@ -40,6 +115,8 @@
 }
 
 .progressComplete {
+  margin: 0 0 8px;
+  font-size: 12px;
   color: #90ff90;
   font-weight: bold;
 }

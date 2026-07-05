@@ -21,7 +21,9 @@ await runUnitSuite('workshop.unit.challenges', [
       const c = getWorkshopChallengeById('c5-stacked-wall');
       assert(c, 'challenge missing');
       assertEqual(c.targetInstances.length, 2);
-      assert(c.instructions.length >= 2, 'instructions');
+      assertEqual(c.steps.length, 3);
+      assert(c.steps[0].focusBrickId === 'c5_2x4', 'first step focus brick');
+      assertEqual(c.steps[2].previewCount, 2);
     },
   },
   {
