@@ -7,7 +7,7 @@ This is an ongoing project which covers two-fold:
 
 # Current Progress (right click + open in new tab)
 
-[![Watch the video](https://img.youtube.com/vi/7e8UlNaXLN0/maxresdefault.jpg)](https://youtu.be/7e8UlNaXLN0)
+[![Watch the video](https://img.youtube.com/vi/MqafvPi-EtE/maxresdefault.jpg)](https://www.youtube.com/watch?v=MqafvPi-EtE)
 
 # Video Overview (right click + open in new tab)
 
