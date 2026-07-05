@@ -2,7 +2,7 @@
  * P4 — Menu route smoke: every screen mounts MenuStageLayout with correct data-screen,
  * URLs match canonical routes, and click-through navigation works without console errors.
  */
-import { launch } from '../../lib/driver.mjs';
+import { assertDevServerReady, launch } from '../../lib/driver.mjs';
 import { gotoAuthenticationWithProfiles } from '../../lib/menuDriver.mjs';
 import { assertMenuStagePresent } from '../../lib/menuLayoutAssert.mjs';
 import { filterConsoleErrors } from '../../lib/holderLayoutAssert.mjs';
@@ -92,6 +92,7 @@ const clickBackCheckmark = async (page) => {
 };
 
 const main = async () => {
+  await assertDevServerReady();
   const { browser, page, errors } = await launch();
 
   try {

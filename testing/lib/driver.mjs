@@ -9,6 +9,27 @@ import puppeteer from 'puppeteer';
 
 export const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
 
+/** Fail fast when layout/smoke tests run without `npm run dev`. */
+export const assertDevServerReady = async () => {
+    const url = `${BASE_URL}/authentication`;
+    try {
+        const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        if (!res.ok) {
+            throw new Error(`Dev server returned ${res.status} for ${url}`);
+        }
+    } catch (e) {
+        const refused = e?.cause?.code === 'ECONNREFUSED'
+            || e?.code === 'ECONNREFUSED'
+            || String(e?.message || e).includes('fetch failed');
+        if (e?.name === 'TimeoutError' || refused) {
+            throw new Error(
+                `Dev server not reachable at ${BASE_URL} — start it with: npm run dev`,
+            );
+        }
+        throw e;
+    }
+};
+
 /** Launch a browser + page with console/response error capture wired up. */
 export const launch = async () => {
     const browser = await puppeteer.launch({ headless: 'new' });

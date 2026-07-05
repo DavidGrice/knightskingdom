@@ -12,6 +12,7 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { assertDevServerReady } from './lib/driver.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -69,6 +70,10 @@ const runNode = (rel) => new Promise((resolve, reject) => {
 });
 
 const main = async () => {
+  if (!unitOnly) {
+    await assertDevServerReady();
+  }
+
   const phase = unitOnly
     ? 'unit'
     : layoutOnly
