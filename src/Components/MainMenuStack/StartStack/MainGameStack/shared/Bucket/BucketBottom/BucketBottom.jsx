@@ -91,6 +91,10 @@ const BucketBottom = ({ variant = 'game', activeBucket, resetKey, tabData, arrow
                 onDownArrowClick={handleDownArrowClick}
                 onItemClick={handleItemClick}
                 getItemKey={(item, index) => item.name ?? index}
+                getItemDataAttributes={(item) => ({
+                    'data-testid': 'workshop-bucket-item',
+                    ...(item.challengeId ? { 'data-challenge-id': item.challengeId } : {}),
+                })}
             />
         );
     }

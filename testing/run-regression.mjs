@@ -36,11 +36,13 @@ const SUITES = {
   workshop: [
     'testing/workshop/unit/workshop-metrics.test.mjs',
     'testing/workshop/unit/workshop-css-vars.test.mjs',
+    'testing/workshop/unit/workshop-challenges.test.mjs',
     'testing/workshop/layout/workshop-default.layout.test.mjs',
     'testing/workshop/layout/workshop-bucket.layout.test.mjs',
     'testing/workshop/layout/workshop-palette.layout.test.mjs',
     'testing/workshop/visual/workshop-baselines.visual.test.mjs',
     'testing/workshop/smoke/workshop-routes.smoke.test.mjs',
+    'testing/workshop/smoke/workshop-challenges.smoke.test.mjs',
   ],
   engine: [
     'testing/world-load.test.mjs',

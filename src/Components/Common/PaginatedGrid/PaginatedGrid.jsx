@@ -14,6 +14,7 @@ const PaginatedGrid = ({
   onDownArrowClick,
   onItemClick,
   getItemKey = (item, index) => index,
+  getItemDataAttributes = () => ({}),
   isItemDisabled = () => false,
   isItemInteractive = (item) => Boolean(item?.image),
   renderItemOverlay = null,
@@ -42,10 +43,13 @@ const PaginatedGrid = ({
           isSelected && styles.itemSelected,
         ].filter(Boolean).join(' ');
 
+        const itemDataAttrs = getItemDataAttributes(item, index);
+
         return (
         <div
           key={getItemKey(item, index)}
           className={itemClassName}
+          {...itemDataAttrs}
           style={{
             ...(!useThumbnail && item.image ? {
               backgroundImage: `url(${JSON.stringify(item.image)})`,

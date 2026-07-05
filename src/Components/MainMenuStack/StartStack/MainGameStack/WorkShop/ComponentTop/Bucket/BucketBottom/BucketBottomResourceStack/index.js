@@ -253,11 +253,17 @@ export const castleComponentsData = [
     { name: 'Castle Component 13', image: CastleComponent13, modelPath: './castle_components/24_l607200' },
 ];
 
+const CHALLENGE_THUMBS = {
+    'c5-stacked-wall': Challenges1,
+    'c5-door-frame': Challenges2,
+    'c5-door-and-window': Challenges3,
+};
+
+/** D5 challenge tutorials — selecting a tile loads instructions + target build. */
 export const challengesData = [
-    { name: 'Challenges 1', image: Challenges1, modelPath: './challenges/c5_bricks1/c5_2x4' },
-    { name: 'Challenges 2', image: Challenges2, modelPath: './challenges/c5_bricks2/c5_door' },
-    { name: 'Challenges 3', image: Challenges3, modelPath: './challenges/c5_bricks2/c5_window' },
-    { name: 'Challenges 4', image: Challenges4, modelPath: './challenges/c5_bricks3/c5_roof' },
+    { name: 'Stacked 2×4 Wall', image: CHALLENGE_THUMBS['c5-stacked-wall'], challengeId: 'c5-stacked-wall' },
+    { name: 'Challenge Door', image: CHALLENGE_THUMBS['c5-door-frame'], challengeId: 'c5-door-frame' },
+    { name: 'Door + Window', image: CHALLENGE_THUMBS['c5-door-and-window'], challengeId: 'c5-door-and-window' },
 ];
 
 export const cylindricalData = [

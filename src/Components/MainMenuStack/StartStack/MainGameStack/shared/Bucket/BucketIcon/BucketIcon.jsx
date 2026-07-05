@@ -1,13 +1,14 @@
 import React from 'react';
 import styles from './BucketIcon.module.css';
 
-const BucketIcon = ({ bucketIconPassive, bucketIconActive, isActive, onClick }) => {
+const BucketIcon = ({ bucketIconPassive, bucketIconActive, isActive, onClick, testId }) => {
     const icon = isActive ? bucketIconActive : bucketIconPassive;
 
     return (
         <div
             className={styles.bucketIcon}
             onClick={onClick}
+            data-testid={testId}
             style={{ backgroundImage: `url(${icon})` }}
         >
             <img src={icon} alt="bucket" />

@@ -20,10 +20,12 @@ const ROOT = path.join(__dirname, '..');
 const UNIT_SUITES = [
   'testing/workshop/unit/workshop-metrics.test.mjs',
   'testing/workshop/unit/workshop-css-vars.test.mjs',
+  'testing/workshop/unit/workshop-challenges.test.mjs',
 ];
 
 const SMOKE_SUITES = [
   'testing/workshop/smoke/workshop-routes.smoke.test.mjs',
+  'testing/workshop/smoke/workshop-challenges.smoke.test.mjs',
 ];
 
 const LAYOUT_SUITES = [

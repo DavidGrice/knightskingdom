@@ -65,3 +65,45 @@ export const gotoWorkshopWithPalette = async (page) => {
   await gotoWorkshop(page);
   await openWorkshopPalette(page);
 };
+
+/** Workshop bucket tab index for D5 challenge tutorials. */
+export const WORKSHOP_CHALLENGES_TAB = 9;
+
+/** @param {import('puppeteer').Page} page @param {number} tabIndex */
+export const selectWorkshopBucketTab = async (page, tabIndex) => {
+  const tab = await page.$(`[data-testid="workshop-bucket-tab-${tabIndex}"]`);
+  if (!tab) {
+    throw new Error(`workshop-bucket-tab-${tabIndex} not found`);
+  }
+  await tab.click();
+  await page.waitForFunction(
+    (index) => {
+      const tabEl = document.querySelector(`[data-testid="workshop-bucket-tab-${index}"]`);
+      if (!tabEl) {
+        return false;
+      }
+      const items = document.querySelectorAll('[data-testid="workshop-bucket-item"]');
+      return items.length > 0;
+    },
+    { timeout: 5000 },
+    tabIndex,
+  );
+};
+
+/** @param {import('puppeteer').Page} page @param {string} challengeId */
+export const selectWorkshopChallenge = async (page, challengeId) => {
+  const item = await page.$(`[data-testid="workshop-bucket-item"][data-challenge-id="${challengeId}"]`);
+  if (!item) {
+    throw new Error(`workshop challenge tile "${challengeId}" not found`);
+  }
+  await item.click();
+  await page.waitForSelector('[data-testid="workshop-instructions-panel"]', { timeout: 10000 });
+};
+
+/** @param {import('puppeteer').Page} page @param {string} challengeId */
+export const openWorkshopChallenge = async (page, challengeId) => {
+  await gotoWorkshop(page);
+  await openWorkshopBucket(page);
+  await selectWorkshopBucketTab(page, WORKSHOP_CHALLENGES_TAB);
+  await selectWorkshopChallenge(page, challengeId);
+};

@@ -16,6 +16,8 @@ import WorkShopWedge2 from './workshop_wedge_2.png';
 import WorkShopWedge5 from './workshop_wedge_5.png';
 import WorkShopWindowsDoorsFences2 from './workshop_windows_doors_fences_2.png';
 import WorkShopWindowsDoorsFences5 from './workshop_windows_doors_fences_5.png';
+import Challenges2 from '../../../../../MainGame/ComponentTop/Bucket/BucketTop/BucketTopResourceStack/challenges_2.png';
+import Challenges5 from '../../../../../MainGame/ComponentTop/Bucket/BucketTop/BucketTopResourceStack/challenges_5.png';
 
 const images = {
     WorkShopArches2,
@@ -36,6 +38,8 @@ const images = {
     WorkShopWedge5,
     WorkShopWindowsDoorsFences2,
     WorkShopWindowsDoorsFences5,
+    Challenges2,
+    Challenges5,
 };
 
 const icons = [
@@ -48,6 +52,7 @@ const icons = [
     { passive: images.WorkShopWindowsDoorsFences2, active: images.WorkShopWindowsDoorsFences5 },
     { passive: images.WorkShopCastleAccessories2, active: images.WorkShopCastleAccessories5 },
     { passive: images.WorkShopTiles2, active: images.WorkShopTiles5 },
+    { passive: images.Challenges2, active: images.Challenges5 },
 ];
 
 export default icons;

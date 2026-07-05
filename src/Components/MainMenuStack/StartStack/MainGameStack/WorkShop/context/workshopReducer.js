@@ -6,6 +6,8 @@ export const initialWorkshopState = {
   color: 'eac000', // authentic LEGO yellow (palette glit018) -- the default brick colour
   showBucket: false,
   isPaletteOpen: false,
+  activeChallenge: null,
+  challengeMatch: { matched: 0, total: 0, complete: false },
 };
 
 export const workshopReducer = (state, action) => {
@@ -48,6 +50,24 @@ export const workshopReducer = (state, action) => {
       }
       return next;
     }
+    case 'SET_ACTIVE_CHALLENGE':
+      return {
+        ...state,
+        activeChallenge: action.payload,
+        challengeMatch: {
+          matched: 0,
+          total: action.payload?.targetInstances?.length ?? 0,
+          complete: (action.payload?.targetInstances?.length ?? 0) === 0,
+        },
+      };
+    case 'SET_CHALLENGE_MATCH':
+      return { ...state, challengeMatch: action.payload };
+    case 'CLEAR_ACTIVE_CHALLENGE':
+      return {
+        ...state,
+        activeChallenge: null,
+        challengeMatch: { matched: 0, total: 0, complete: false },
+      };
     default:
       return state;
   }

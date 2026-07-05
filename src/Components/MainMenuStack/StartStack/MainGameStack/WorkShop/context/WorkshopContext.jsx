@@ -12,6 +12,8 @@ import { WorkshopModes } from '../WorkshopEngine/workshopModes';
 import { extractBrickId } from '../WorkshopEngine/brickCatalog';
 import { initialWorkshopState, workshopReducer } from './workshopReducer';
 import { resolveGameSettings } from '@/lib/gameSettings';
+import { getWorkshopChallengeById } from '@/data/workshop/workshopChallenges';
+import { evaluateChallengeMatch } from '@/data/workshop/workshopChallengeMatch';
 
 const WorkshopContext = createContext(null);
 
@@ -51,13 +53,44 @@ export const WorkshopProvider = ({
     dispatch({ type: 'CLOSE_BUCKET' });
   }, [state.showBucket, resetModes]);
 
+  const handleChallengeSelect = useCallback(async (challenge) => {
+    if (!challenge) {
+      return;
+    }
+    dispatch({ type: 'SET_ACTIVE_CHALLENGE', payload: challenge });
+    dispatch({ type: 'CLOSE_BUCKET' });
+    resetModes();
+    await engineRef.current?.loadBrickInstances(challenge.starterInstances ?? []);
+  }, [resetModes]);
+
   const handleBrickSelect = useCallback((item) => {
     if (!item) {
       dispatch({ type: 'SELECT_BRICK', payload: null });
       return;
     }
+    if (item.challengeId) {
+      const challenge = getWorkshopChallengeById(item.challengeId);
+      if (challenge) {
+        handleChallengeSelect(challenge);
+      }
+      return;
+    }
     const brickId = extractBrickId(item.modelPath);
     dispatch({ type: 'SELECT_BRICK', payload: brickId });
+  }, [handleChallengeSelect]);
+
+  const checkActiveChallenge = useCallback(() => {
+    const challenge = state.activeChallenge;
+    if (!challenge) {
+      return;
+    }
+    const player = engineRef.current?.getBrickInstances?.() ?? [];
+    const match = evaluateChallengeMatch(player, challenge.targetInstances);
+    dispatch({ type: 'SET_CHALLENGE_MATCH', payload: match });
+  }, [state.activeChallenge]);
+
+  const dismissActiveChallenge = useCallback(() => {
+    dispatch({ type: 'CLEAR_ACTIVE_CHALLENGE' });
   }, []);
 
   const handleMove = useCallback(() => {
@@ -166,6 +199,9 @@ export const WorkshopProvider = ({
     resetModes,
     handleBucket,
     handleBrickSelect,
+    handleChallengeSelect,
+    checkActiveChallenge,
+    dismissActiveChallenge,
     handleMove,
     handleRotate,
     handleDelete,
@@ -184,6 +220,9 @@ export const WorkshopProvider = ({
     resetModes,
     handleBucket,
     handleBrickSelect,
+    handleChallengeSelect,
+    checkActiveChallenge,
+    dismissActiveChallenge,
     handleMove,
     handleRotate,
     handleDelete,

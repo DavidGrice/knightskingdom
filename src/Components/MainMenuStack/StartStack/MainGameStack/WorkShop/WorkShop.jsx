@@ -10,6 +10,7 @@ import {
 import { GameShell, ComponentTop, ComponentBottom, Bucket, Palette } from '../shared';
 import { WorkshopProvider, useWorkshopContext } from './context';
 import { WorkshopEngine } from './WorkshopEngine';
+import WorkshopInstructionsPanel from './WorkshopInstructionsPanel/WorkshopInstructionsPanel';
 
 const WorkShopContent = () => {
   const scalerRef = useRef(null);
@@ -31,8 +32,12 @@ const WorkShopContent = () => {
     handleSweep,
     handleSave,
     handleLeave,
+    checkActiveChallenge,
+    dismissActiveChallenge,
     mapData,
   } = useWorkshopContext();
+
+  const { activeChallenge, challengeMatch } = state;
 
   const {
     mode,
@@ -110,6 +115,12 @@ const WorkShopContent = () => {
           <Bucket dataSource="bricks" onBrickSelect={handleBrickSelect} />
         </div>
       )}
+      <WorkshopInstructionsPanel
+        challenge={activeChallenge}
+        match={challengeMatch}
+        onCheck={checkActiveChallenge}
+        onDismiss={dismissActiveChallenge}
+      />
     </div>
   );
 };
