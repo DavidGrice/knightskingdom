@@ -60,6 +60,8 @@ DEG2BREE = 65536.0 / 360.0
 
 LEG_TRACKS = frozenset({"leftleg", "rightleg"})
 UPRIGHT_TRACKS = frozenset({"hips", "body"})  # no smo tilt — stay standing
+# SMO run cycle sweeps ~152° in r4 between extremes; minifig hinge ≈ ±76°
+LEG_SWING_SCALE = 0.5
 
 
 def _smo_path() -> str:
@@ -109,10 +111,14 @@ def _scene_pos_delta(delta_vrt: list[float]) -> Vector:
 
 
 def _leg_euler(fr_rot: list[float], rest_rot: list[float]) -> tuple[float, float, float]:
-    """SMO pitch r4 → local Y rotation (stride along ±Z in world)."""
-    d4 = fr_rot[1] - rest_rot[1]
+    """SMO pitch r4 → local X (sagittal ±Z stride).
+
+    Local Y splays legs sideways into a <-- /\\ --> wedge; X swings
+    forward/back. Scale 0.5: SMO 152° peak delta → ~76° hinge.
+    """
+    d4 = (fr_rot[1] - rest_rot[1]) * LEG_SWING_SCALE
     d5 = fr_rot[2] - rest_rot[2]
-    return (0.0, math.radians(-d4), math.radians(d5))
+    return (math.radians(-d4), 0.0, math.radians(d5))
 
 
 def _apply_track_pose(
@@ -219,7 +225,7 @@ def main() -> None:
     report = {
         "clip": clip_name,
         "frames": nframes,
-        "space_fix": "legs: local Y from SMO r4; torso upright; hips bob 1e-6",
+        "space_fix": "legs: local X sagittal (not Y splay); scale 0.5; torso upright",
         "mapped": mapped,
         "missing_tracks": missing,
         "saved": OUT_BLEND,
