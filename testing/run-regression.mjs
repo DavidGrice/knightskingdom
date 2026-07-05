@@ -31,6 +31,7 @@ const SUITES = {
     'testing/menu/layout/menu-snapshot.layout.test.mjs',
     'testing/menu/layout/menu-scale-matrix.test.mjs',
     'testing/menu/smoke/menu-routes.smoke.test.mjs',
+    'testing/menu/visual/menu-baselines.visual.test.mjs',
   ],
   engine: [
     'testing/world-load.test.mjs',
