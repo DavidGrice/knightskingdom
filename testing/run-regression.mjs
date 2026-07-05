@@ -33,6 +33,14 @@ const SUITES = {
     'testing/menu/smoke/menu-routes.smoke.test.mjs',
     'testing/menu/visual/menu-baselines.visual.test.mjs',
   ],
+  workshop: [
+    'testing/workshop/unit/workshop-metrics.test.mjs',
+    'testing/workshop/unit/workshop-css-vars.test.mjs',
+    'testing/workshop/layout/workshop-default.layout.test.mjs',
+    'testing/workshop/layout/workshop-bucket.layout.test.mjs',
+    'testing/workshop/layout/workshop-palette.layout.test.mjs',
+    'testing/workshop/visual/workshop-baselines.visual.test.mjs',
+  ],
   engine: [
     'testing/world-load.test.mjs',
     'testing/placements.test.mjs',
@@ -46,9 +54,9 @@ const args = process.argv.slice(2);
 const menuOnly = args.includes('--menu-only');
 const engineOnly = args.includes('--engine-only');
 
-let selected = [...SUITES.menu, ...SUITES.engine];
+let selected = [...SUITES.menu, ...SUITES.workshop, ...SUITES.engine];
 if (menuOnly) {
-  selected = SUITES.menu;
+  selected = [...SUITES.menu, ...SUITES.workshop];
 } else if (engineOnly) {
   selected = SUITES.engine;
 }

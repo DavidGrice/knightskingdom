@@ -49,7 +49,7 @@ const WorkShopContent = () => {
   const showWorldTitle = worldTitle.visible && mapData?.name;
 
   return (
-    <div className={styles.workshopRoot} style={stageStyle}>
+    <div className={styles.workshopRoot} style={stageStyle} data-testid="workshop-root">
       <GameShell
         mode="workshop"
         top={(
@@ -77,9 +77,9 @@ const WorkShopContent = () => {
           />
         )}
       >
-        <div ref={scalerRef} className={styles.workshopScaler}>
-          <div className={styles.canvas}>
-            <div className={styles.stage}>
+        <div ref={scalerRef} className={styles.workshopScaler} data-testid="workshop-scaler">
+          <div className={styles.canvas} data-testid="workshop-canvas">
+            <div className={styles.stage} data-testid="workshop-stage">
               <WorkshopEngine
                 key={settings.rendererKey}
                 ref={engineRef}
@@ -106,7 +106,7 @@ const WorkShopContent = () => {
         </div>
       </GameShell>
       {showBucket && (
-        <div className={styles.bucketLayer}>
+        <div className={styles.bucketLayer} data-testid="workshop-bucket-layer">
           <Bucket dataSource="bricks" onBrickSelect={handleBrickSelect} />
         </div>
       )}

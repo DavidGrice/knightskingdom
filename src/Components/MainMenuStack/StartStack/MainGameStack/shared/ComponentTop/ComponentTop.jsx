@@ -142,7 +142,11 @@ const ComponentTop = ({
     };
 
     const renderSaveButton = () => (
-        <div className={styles.saveButton} onClick={handleSave}>
+        <div
+            className={styles.saveButton}
+            onClick={handleSave}
+            data-testid={mode === 'workshop' ? 'workshop-toolbar-save' : undefined}
+        >
             <TopIconComponent
                 passiveIcon={leaveIcon.iconData.savePassive}
                 activeIcon={leaveIcon.iconData.saveActive}
@@ -152,7 +156,7 @@ const ComponentTop = ({
     );
 
     const renderBucketButton = () => (
-        <div className={styles.bucketButton}>
+        <div className={styles.bucketButton} data-testid={mode === 'workshop' ? 'workshop-toolbar-bucket' : undefined}>
             <TopIconComponent
                 passiveIcon={leaveIcon.iconData.bucketPassive}
                 activeIcon={leaveIcon.iconData.bucketActive}
@@ -166,7 +170,11 @@ const ComponentTop = ({
     const renderMiddleIcons = () => (
         <div className={styles.middleDiv}>
             {middleIcons.map((icon, index) => (
-                <div key={index} className={styles[icon.className]}>
+                <div
+                    key={index}
+                    className={styles[icon.className]}
+                    data-testid={mode === 'workshop' && icon.type === 'repaint' ? 'workshop-toolbar-palette' : undefined}
+                >
                     <TopIconComponent
                         passiveIcon={icon.passiveIcon}
                         activeIcon={icon.activeIcon}
@@ -208,7 +216,7 @@ const ComponentTop = ({
     };
 
     return (
-        <div className={styles.mainDiv}>
+        <div className={styles.mainDiv} data-testid={mode === 'workshop' ? 'workshop-toolbar-top' : undefined}>
             {buttonOrder.map((section) => {
                 const renderer = sectionRenderers[section];
                 return renderer ? <React.Fragment key={section}>{renderer()}</React.Fragment> : null;

@@ -16,7 +16,7 @@ const Palette = ({ variant = 'game', onColorSelect }) => {
     };
 
     return (
-        <div className={styles.paletteDiv}>
+        <div className={styles.paletteDiv} data-testid={variant === 'workshop' ? 'workshop-palette-panel' : undefined}>
             {icons.map((icon, index) => (
                 <img
                     key={index}

@@ -55,7 +55,11 @@ const ComponentBottom = ({
     };
 
     const renderButton = (button) => (
-        <div key={button.type} className={styles[button.className]}>
+        <div
+            key={button.type}
+            className={styles[button.className]}
+            data-testid={mode === 'game' && button.type === 'hammer' ? 'game-enter-workshop' : undefined}
+        >
             <BottomIconComponent
                 passiveIcon={button.passive}
                 activeIcon={button.active}

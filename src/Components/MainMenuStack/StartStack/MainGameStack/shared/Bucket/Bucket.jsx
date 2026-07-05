@@ -59,7 +59,11 @@ const Bucket = ({
     };
 
     return (
-        <div className={styles.bucketDiv} style={bucketLayoutStyle}>
+        <div
+            className={styles.bucketDiv}
+            style={bucketLayoutStyle}
+            data-testid={isWorkshop ? 'workshop-bucket-panel' : undefined}
+        >
             <BucketTop
                 variant={variant}
                 tabIcons={tabIcons}
