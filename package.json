@@ -12,7 +12,10 @@
     "generate:brick-catalog": "node grok/generate-brick-catalog.mjs",
     "test:worlds": "node testing/world-load.test.mjs",
     "test:placements": "node testing/placements.test.mjs",
-    "test:menu": "node testing/run-regression.mjs --menu-only",
+    "test:menu:unit": "node testing/run-menu-pipeline.mjs --unit-only",
+    "test:menu:layout": "node testing/run-menu-pipeline.mjs --layout-only",
+    "test:menu": "node testing/run-menu-pipeline.mjs",
+    "test:gui": "node testing/run-menu-pipeline.mjs",
     "test:regression": "node testing/run-regression.mjs",
     "analyze:menu": "node grok/analyze-menu-images.mjs",
     "analyze:workshop": "node grok/analyze-workshop-images.mjs"

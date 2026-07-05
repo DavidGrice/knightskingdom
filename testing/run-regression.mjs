@@ -18,11 +18,14 @@ const ROOT = path.join(__dirname, '..');
 
 const SUITES = {
   menu: [
-    'testing/menu-auth.layout.test.mjs',
-    'testing/menu-auth.scale-matrix.test.mjs',
-    'testing/menu-start.layout.test.mjs',
-    'testing/menu-mymodels.layout.test.mjs',
-    'testing/menu-snapshot.layout.test.mjs',
+    'testing/menu/unit/layout-contracts.test.mjs',
+    'testing/menu/unit/holder-metrics.test.mjs',
+    'testing/menu/unit/css-vars.test.mjs',
+    'testing/menu/layout/menu-auth.layout.test.mjs',
+    'testing/menu/layout/menu-auth.scale-matrix.test.mjs',
+    'testing/menu/layout/menu-start.layout.test.mjs',
+    'testing/menu/layout/menu-mymodels.layout.test.mjs',
+    'testing/menu/layout/menu-snapshot.layout.test.mjs',
   ],
   engine: [
     'testing/world-load.test.mjs',

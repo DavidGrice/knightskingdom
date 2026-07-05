@@ -1,12 +1,13 @@
-import { launch } from './lib/driver.mjs';
-import { gotoAuthenticationWithProfiles } from './lib/menuDriver.mjs';
-import { assertMenuStagePresent, captureScreenshot } from './lib/menuLayoutAssert.mjs';
+import { launch } from '../../lib/driver.mjs';
+import { gotoAuthenticationWithProfiles } from '../../lib/menuDriver.mjs';
+import { assertMenuStagePresent, captureScreenshot } from '../../lib/menuLayoutAssert.mjs';
 import {
   measureAuthLayout,
   assertAuthLayoutContract,
   writeAuthLayoutArtifact,
-} from './lib/authLayoutAssert.mjs';
-import { buildAuthLayoutContract } from '../src/Components/Common/MenuStageLayout/authLayoutContract.js';
+} from '../../lib/authLayoutAssert.mjs';
+import { filterConsoleErrors } from '../../lib/holderLayoutAssert.mjs';
+import { buildAuthLayoutContract } from '../../../src/Components/Common/MenuStageLayout/authLayoutContract.js';
 
 const CONTRACT = buildAuthLayoutContract();
 
@@ -63,9 +64,11 @@ const main = async () => {
       capturedAt: new Date().toISOString(),
     });
 
-    await captureScreenshot(page, 'auth-contract');
+    if (process.env.TEST_CAPTURE) {
+      await captureScreenshot(page, 'auth-contract');
+    }
 
-    const realErrors = errors.filter((e) => !e.includes('favicon.ico'));
+    const realErrors = filterConsoleErrors(errors);
     if (realErrors.length > 0) {
       throw new Error(`Console errors: ${realErrors.join('; ')}`);
     }
