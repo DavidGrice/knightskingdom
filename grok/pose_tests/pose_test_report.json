@@ -1,0 +1,63 @@
+{
+  "source": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\minifigkingleo00_rigged.blend",
+  "pose_count": 8,
+  "poses": [
+    {
+      "pose": "rest",
+      "head_body_gap_y": 0.020798,
+      "max_center_drift_m": 0.003678,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_rest.blend"
+    },
+    {
+      "pose": "wave_right",
+      "head_body_gap_y": 0.020798,
+      "max_center_drift_m": 0.002313,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_wave_right.blend"
+    },
+    {
+      "pose": "wave_left",
+      "head_body_gap_y": 0.020798,
+      "max_center_drift_m": 0.004806,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_wave_left.blend"
+    },
+    {
+      "pose": "head_look",
+      "head_body_gap_y": 0.021633,
+      "max_center_drift_m": 0.003678,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_head_look.blend"
+    },
+    {
+      "pose": "leg_lift_left",
+      "head_body_gap_y": 0.020798,
+      "max_center_drift_m": 0.005869,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_leg_lift_left.blend"
+    },
+    {
+      "pose": "leg_lift_right",
+      "head_body_gap_y": 0.020798,
+      "max_center_drift_m": 0.00587,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_leg_lift_right.blend"
+    },
+    {
+      "pose": "walk_mid",
+      "head_body_gap_y": 0.020798,
+      "max_center_drift_m": 0.005104,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_walk_mid.blend"
+    },
+    {
+      "pose": "bow",
+      "head_body_gap_y": 0.022725,
+      "max_center_drift_m": 0.009367,
+      "parts_connected": true,
+      "saved": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\pose_tests\\minifigkingleo00_pose_bow.blend"
+    }
+  ],
+  "all_connected": true
+}

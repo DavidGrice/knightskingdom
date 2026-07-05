@@ -1,0 +1,1796 @@
+{
+  "phase": 3,
+  "id": "minifigkingleo00",
+  "sources": {
+    "lca": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\resources\\model_files\\extracted\\pak\\warehouse\\main_interface\\minifigures_animals\\minifigkingleo00.lca",
+    "obj": "resources/model_files/extracted/models/minifigkingleo00.obj",
+    "rig_reference": "D:\\CODING\\THREEJS\\knightskingdom\\knightskingdom\\grok\\kingleo00_rig_data.json"
+  },
+  "blender": {
+    "blender_scene": {
+      "root": {
+        "name": "minifigkingleo00",
+        "location": [
+          0.0,
+          0.0,
+          0.01999512128531933
+        ],
+        "rotation_euler": [
+          1.5707963705062866,
+          0.0,
+          3.1415927410125732
+        ]
+      },
+      "mesh_count": 12,
+      "parts": [
+        {
+          "name": "008_Minifig_2_-_Hips_BK_Belt",
+          "lca_object_number": 8,
+          "parent": "minifigkingleo00",
+          "vertex_count": 30,
+          "face_count": 18,
+          "world_bounds": {
+            "min": [
+              -0.0232,
+              -0.016001,
+              0.003995
+            ],
+            "max": [
+              -0.008803,
+              -0.008,
+              0.011995
+            ],
+            "center": [
+              -0.016001,
+              -0.012,
+              0.007995
+            ],
+            "size": [
+              0.014397,
+              0.008001,
+              0.008
+            ]
+          },
+          "materials": [
+            {
+              "name": "tex133_s50t0.003",
+              "texture": "spr133_128x32.png"
+            },
+            {
+              "name": "glit038_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "011_Minifig_2_-_Leg_Lt_All_tex_GY",
+          "lca_object_number": 11,
+          "parent": "minifigkingleo00",
+          "vertex_count": 26,
+          "face_count": 17,
+          "world_bounds": {
+            "min": [
+              -0.02353,
+              -0.015207,
+              0.004395
+            ],
+            "max": [
+              -0.016399,
+              -0.0032,
+              0.011595
+            ],
+            "center": [
+              -0.019965,
+              -0.009203,
+              0.007995
+            ],
+            "size": [
+              0.007131,
+              0.012007,
+              0.0072
+            ]
+          },
+          "materials": [
+            {
+              "name": "tex138_s50t0.003",
+              "texture": "spr138_64x128.png"
+            },
+            {
+              "name": "glit042_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "013_Minifig_2_-_Foot_Left_GY",
+          "lca_object_number": 13,
+          "parent": "minifigkingleo00",
+          "vertex_count": 8,
+          "face_count": 6,
+          "world_bounds": {
+            "min": [
+              -0.02359,
+              -0.00321,
+              0.004395
+            ],
+            "max": [
+              -0.0164,
+              -0.0,
+              0.012395
+            ],
+            "center": [
+              -0.019995,
+              -0.001605,
+              0.008395
+            ],
+            "size": [
+              0.00719,
+              0.00321,
+              0.008
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit042_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "015_Minifig_2_-_Leg_Rt_All_tex_GY",
+          "lca_object_number": 15,
+          "parent": "minifigkingleo00",
+          "vertex_count": 26,
+          "face_count": 17,
+          "world_bounds": {
+            "min": [
+              -0.015609,
+              -0.015207,
+              0.004395
+            ],
+            "max": [
+              -0.00847,
+              -0.0032,
+              0.011595
+            ],
+            "center": [
+              -0.01204,
+              -0.009203,
+              0.007995
+            ],
+            "size": [
+              0.00714,
+              0.012007,
+              0.0072
+            ]
+          },
+          "materials": [
+            {
+              "name": "tex138_s50t0.003",
+              "texture": "spr138_64x128.png"
+            },
+            {
+              "name": "glit042_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "017_Minifig_2_-_Foot_Right_GY",
+          "lca_object_number": 17,
+          "parent": "minifigkingleo00",
+          "vertex_count": 8,
+          "face_count": 6,
+          "world_bounds": {
+            "min": [
+              -0.015609,
+              -0.00321,
+              0.004395
+            ],
+            "max": [
+              -0.00841,
+              -0.0,
+              0.012395
+            ],
+            "center": [
+              -0.01201,
+              -0.001605,
+              0.008395
+            ],
+            "size": [
+              0.0072,
+              0.00321,
+              0.008
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit042_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "018_Minifig_2_-_Body_No_code_GY",
+          "lca_object_number": 18,
+          "parent": "minifigkingleo00",
+          "vertex_count": 12,
+          "face_count": 8,
+          "world_bounds": {
+            "min": [
+              -0.024,
+              -0.0288,
+              0.003995
+            ],
+            "max": [
+              -0.008,
+              -0.016,
+              0.011995
+            ],
+            "center": [
+              -0.016,
+              -0.0224,
+              0.007995
+            ],
+            "size": [
+              0.016,
+              0.0128,
+              0.008
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit042_s50t0.003",
+              "texture": null
+            },
+            {
+              "name": "tex073_s50t0.003",
+              "texture": "spr073_64x64.png"
+            }
+          ]
+        },
+        {
+          "name": "020_Minifig_2_-_Head_Leo",
+          "lca_object_number": 20,
+          "parent": "minifigkingleo00",
+          "vertex_count": 46,
+          "face_count": 36,
+          "world_bounds": {
+            "min": [
+              -0.021,
+              -0.036798,
+              0.002995
+            ],
+            "max": [
+              -0.011,
+              -0.026109,
+              0.012988
+            ],
+            "center": [
+              -0.016,
+              -0.031453,
+              0.007992
+            ],
+            "size": [
+              0.01,
+              0.010689,
+              0.009993
+            ]
+          },
+          "materials": [
+            {
+              "name": "tex115_s50t0.003",
+              "texture": "spr115_64x64.png"
+            },
+            {
+              "name": "glit018_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "023_L_7101500",
+          "lca_object_number": 23,
+          "parent": "minifigkingleo00",
+          "vertex_count": 162,
+          "face_count": 138,
+          "world_bounds": {
+            "min": [
+              -0.023609,
+              -0.0447,
+              0.0
+            ],
+            "max": [
+              -0.008392,
+              -0.0289,
+              0.014899
+            ],
+            "center": [
+              -0.016,
+              -0.0368,
+              0.00745
+            ],
+            "size": [
+              0.015218,
+              0.0158,
+              0.014899
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit034_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "027_Minifig_2_-_Arm_Rt_BL",
+          "lca_object_number": 27,
+          "parent": "minifigkingleo00",
+          "vertex_count": 41,
+          "face_count": 31,
+          "world_bounds": {
+            "min": [
+              -0.009943,
+              -0.030192,
+              0.005468
+            ],
+            "max": [
+              -0.005183,
+              -0.023309,
+              0.017193
+            ],
+            "center": [
+              -0.007563,
+              -0.026751,
+              0.011331
+            ],
+            "size": [
+              0.00476,
+              0.006882,
+              0.011725
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit026_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "030_Minifig_2_-_Hand_YE",
+          "lca_object_number": 30,
+          "parent": "minifigkingleo00",
+          "vertex_count": 56,
+          "face_count": 40,
+          "world_bounds": {
+            "min": [
+              -0.009144,
+              -0.035131,
+              0.013995
+            ],
+            "max": [
+              -0.004209,
+              -0.027325,
+              0.019653
+            ],
+            "center": [
+              -0.006676,
+              -0.031228,
+              0.016824
+            ],
+            "size": [
+              0.004935,
+              0.007806,
+              0.005658
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit018_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "032_Minifig_2_-_Arm_Lt_BL",
+          "lca_object_number": 32,
+          "parent": "minifigkingleo00",
+          "vertex_count": 41,
+          "face_count": 31,
+          "world_bounds": {
+            "min": [
+              -0.026958,
+              -0.030284,
+              0.005128
+            ],
+            "max": [
+              -0.022188,
+              -0.023402,
+              0.016853
+            ],
+            "center": [
+              -0.024573,
+              -0.026843,
+              0.010991
+            ],
+            "size": [
+              0.00477,
+              0.006882,
+              0.011725
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit026_s50t0.003",
+              "texture": null
+            }
+          ]
+        },
+        {
+          "name": "035_Minifig_2_-_Hand_YE",
+          "lca_object_number": 35,
+          "parent": "minifigkingleo00",
+          "vertex_count": 56,
+          "face_count": 40,
+          "world_bounds": {
+            "min": [
+              -0.027841,
+              -0.034998,
+              0.013575
+            ],
+            "max": [
+              -0.022907,
+              -0.027193,
+              0.019236
+            ],
+            "center": [
+              -0.025374,
+              -0.031096,
+              0.016405
+            ],
+            "size": [
+              0.004935,
+              0.007805,
+              0.005661
+            ]
+          },
+          "materials": [
+            {
+              "name": "glit018_s50t0.003",
+              "texture": null
+            }
+          ]
+        }
+      ],
+      "assembly_checks": {
+        "head_to_body_gap_z": -0.009,
+        "hips_to_body_gap_z": -0.008,
+        "left_leg_center_x": -0.019965,
+        "right_leg_center_x": -0.01204,
+        "assembled_ok": true
+      }
+    }
+  },
+  "lca_objects": [
+    {
+      "number": 1,
+      "type": "group",
+      "pos": [
+        2773696,
+        0,
+        3008320
+      ],
+      "size": [
+        32000,
+        46400,
+        24000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        16000,
+        0,
+        12000
+      ],
+      "child_count": 1
+    },
+    {
+      "number": 2,
+      "type": "group",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        32000,
+        46400,
+        24000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        16000,
+        12000,
+        12000
+      ],
+      "child_count": 1
+    },
+    {
+      "number": 3,
+      "type": "group",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        32000,
+        46400,
+        24000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        8000,
+        4000,
+        4000
+      ],
+      "child_count": 4
+    },
+    {
+      "number": 4,
+      "type": "group",
+      "pos": [
+        4480,
+        0,
+        -72192
+      ],
+      "size": [
+        200000,
+        1,
+        200000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        100000,
+        0,
+        100000
+      ],
+      "child_count": 0
+    },
+    {
+      "number": 5,
+      "type": "group",
+      "pos": [
+        15000,
+        45000,
+        0
+      ],
+      "size": [
+        2000,
+        2000,
+        2000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 6,
+      "type": "mesh",
+      "pos": [
+        4000,
+        0,
+        8000
+      ],
+      "size": [
+        22515,
+        40400,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 7,
+      "type": "group",
+      "pos": [
+        8000,
+        8000,
+        8000
+      ],
+      "size": [
+        16000,
+        8000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        7998,
+        3998,
+        3998
+      ],
+      "child_count": 5
+    },
+    {
+      "number": 8,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        16000,
+        8000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 9,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        16000,
+        8000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 10,
+      "type": "group",
+      "pos": [
+        8000,
+        -4800,
+        -400
+      ],
+      "size": [
+        8000,
+        12000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        3840,
+        8439,
+        4391
+      ],
+      "child_count": 3
+    },
+    {
+      "number": 11,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        8000,
+        12000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 12,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        8000,
+        12000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 13,
+      "type": "mesh",
+      "pos": [
+        0,
+        -3200,
+        0
+      ],
+      "size": [
+        8000,
+        3200,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        4001,
+        3200,
+        7001
+      ],
+      "child_count": 0
+    },
+    {
+      "number": 14,
+      "type": "group",
+      "pos": [
+        0,
+        -4800,
+        -400
+      ],
+      "size": [
+        8000,
+        12000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        4151,
+        8439,
+        4391
+      ],
+      "child_count": 3
+    },
+    {
+      "number": 15,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        8000,
+        12000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 16,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        8000,
+        12000,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 17,
+      "type": "mesh",
+      "pos": [
+        0,
+        -3200,
+        0
+      ],
+      "size": [
+        8000,
+        3200,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        4001,
+        3200,
+        7001
+      ],
+      "child_count": 0
+    },
+    {
+      "number": 18,
+      "type": "mesh",
+      "pos": [
+        0,
+        8000,
+        0
+      ],
+      "size": [
+        16000,
+        12800,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        7997,
+        999,
+        4531
+      ],
+      "child_count": 3
+    },
+    {
+      "number": 19,
+      "type": "group",
+      "pos": [
+        0,
+        12800,
+        -4000
+      ],
+      "size": [
+        16000,
+        9600,
+        16000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [
+        8000,
+        500,
+        8000
+      ],
+      "child_count": 3
+    },
+    {
+      "number": 20,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        16000,
+        9600,
+        16000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 21,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        16000,
+        9600,
+        16000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 22,
+      "type": "group",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        16000,
+        15900,
+        16000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 3
+    },
+    {
+      "number": 23,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        16000,
+        15900,
+        16000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 24,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        16000,
+        15900,
+        16000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 25,
+      "type": "group",
+      "pos": [
+        7000,
+        7000,
+        7000
+      ],
+      "size": [
+        2000,
+        2000,
+        2000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 26,
+      "type": "group",
+      "pos": [
+        -2386,
+        4136,
+        -3604
+      ],
+      "size": [
+        3898,
+        7898,
+        10400
+      ],
+      "brees": [
+        8192,
+        1820,
+        2730
+      ],
+      "rot_center": [
+        3900,
+        5770,
+        8262
+      ],
+      "child_count": 2
+    },
+    {
+      "number": 27,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        3898,
+        7898,
+        10400
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 28,
+      "type": "group",
+      "pos": [
+        -2078,
+        -807,
+        -7463
+      ],
+      "size": [
+        7999,
+        6398,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        -1821
+      ],
+      "rot_center": [
+        4000,
+        2899,
+        8002
+      ],
+      "child_count": 2
+    },
+    {
+      "number": 29,
+      "type": "mesh",
+      "pos": [
+        6,
+        0,
+        0
+      ],
+      "size": [
+        7999,
+        6398,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 30,
+      "type": "mesh",
+      "pos": [
+        6,
+        0,
+        0
+      ],
+      "size": [
+        7999,
+        6398,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 31,
+      "type": "group",
+      "pos": [
+        14619,
+        4230,
+        -3264
+      ],
+      "size": [
+        3898,
+        7898,
+        10400
+      ],
+      "brees": [
+        8192,
+        -1821,
+        -2731
+      ],
+      "rot_center": [
+        0,
+        5770,
+        8262
+      ],
+      "child_count": 2
+    },
+    {
+      "number": 32,
+      "type": "mesh",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        3898,
+        7898,
+        10400
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 33,
+      "type": "group",
+      "pos": [
+        -2072,
+        -921,
+        -7241
+      ],
+      "size": [
+        7999,
+        6398,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        1820
+      ],
+      "rot_center": [
+        3998,
+        2899,
+        8002
+      ],
+      "child_count": 2
+    },
+    {
+      "number": 34,
+      "type": "mesh",
+      "pos": [
+        5,
+        1,
+        2
+      ],
+      "size": [
+        7999,
+        6398,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    },
+    {
+      "number": 35,
+      "type": "mesh",
+      "pos": [
+        5,
+        1,
+        2
+      ],
+      "size": [
+        7999,
+        6398,
+        8000
+      ],
+      "brees": [
+        0,
+        0,
+        0
+      ],
+      "rot_center": [],
+      "child_count": 0
+    }
+  ],
+  "manifest_shapes": [
+    {
+      "symbolName": "Minifig 2  Max dist Leo 1",
+      "usedByObjectNumbers": [
+        6
+      ],
+      "size_vrt": [
+        2240,
+        4040,
+        800
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "Minifig 2 - Hips BK Belt",
+      "usedByObjectNumbers": [
+        8
+      ],
+      "size_vrt": [
+        1600,
+        800,
+        800
+      ],
+      "textureRefs": [
+        133
+      ]
+    },
+    {
+      "symbolName": "Minifig 2 - Hips BK Belt D1",
+      "usedByObjectNumbers": [
+        9
+      ],
+      "size_vrt": [
+        1600,
+        800,
+        800
+      ],
+      "textureRefs": [
+        133
+      ]
+    },
+    {
+      "symbolName": "Minifig 2 - Leg Lt All tex GY",
+      "usedByObjectNumbers": [
+        11
+      ],
+      "size_vrt": [
+        800,
+        1200,
+        800
+      ],
+      "textureRefs": [
+        138
+      ]
+    },
+    {
+      "symbolName": "Minifig 2 - Leg  All tex GY D1",
+      "usedByObjectNumbers": [
+        12,
+        16
+      ],
+      "size_vrt": [
+        800,
+        1200,
+        800
+      ],
+      "textureRefs": [
+        138
+      ]
+    },
+    {
+      "symbolName": "Minifig 2 - Foot Left GY",
+      "usedByObjectNumbers": [
+        13
+      ],
+      "size_vrt": [
+        800,
+        320,
+        800
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "Minifig 2 - Leg Rt All tex GY",
+      "usedByObjectNumbers": [
+        15
+      ],
+      "size_vrt": [
+        800,
+        1200,
+        800
+      ],
+      "textureRefs": [
+        138
+      ]
+    },
+    {
+      "symbolName": "Minifig 2 - Foot Right GY",
+      "usedByObjectNumbers": [
+        17
+      ],
+      "size_vrt": [
+        800,
+        320,
+        800
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "Minifig 2 - Body No code GY",
+      "usedByObjectNumbers": [
+        18
+      ],
+      "size_vrt": [
+        1600,
+        1280,
+        800
+      ],
+      "textureRefs": [
+        73
+      ]
+    },
+    {
+      "symbolName": "Minifig 2 - Head Leo",
+      "usedByObjectNumbers": [
+        20
+      ],
+      "size_vrt": [
+        1600,
+        960,
+        1600
+      ],
+      "textureRefs": [
+        115
+      ]
+    },
+    {
+      "symbolName": "Minifig 2 - Head Leo D1",
+      "usedByObjectNumbers": [
+        21
+      ],
+      "size_vrt": [
+        1600,
+        960,
+        1600
+      ],
+      "textureRefs": [
+        115
+      ]
+    },
+    {
+      "symbolName": "L 7101500",
+      "usedByObjectNumbers": [
+        23
+      ],
+      "size_vrt": [
+        1600,
+        1600,
+        1600
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "L 7101500 D1",
+      "usedByObjectNumbers": [
+        24
+      ],
+      "size_vrt": [
+        1600,
+        1600,
+        1600
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "Minifig 2 - Arm Rt BL",
+      "usedByObjectNumbers": [
+        27
+      ],
+      "size_vrt": [
+        390,
+        790,
+        1040
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "Minifig 2 - Hand YE D1",
+      "usedByObjectNumbers": [
+        29,
+        34
+      ],
+      "size_vrt": [
+        800,
+        640,
+        800
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "Minifig 2 - Hand YE",
+      "usedByObjectNumbers": [
+        30,
+        35
+      ],
+      "size_vrt": [
+        800,
+        640,
+        800
+      ],
+      "textureRefs": []
+    },
+    {
+      "symbolName": "Minifig 2 - Arm Lt BL",
+      "usedByObjectNumbers": [
+        32
+      ],
+      "size_vrt": [
+        390,
+        790,
+        1040
+      ],
+      "textureRefs": []
+    }
+  ],
+  "model_metadata": {
+    "bbox": {
+      "min": [
+        2.07318,
+        -44.7,
+        -3.46119
+      ],
+      "max": [
+        29.97808,
+        0,
+        20
+      ],
+      "size": [
+        27.904899999999998,
+        44.7,
+        23.461190000000002
+      ],
+      "maxDimension": 44.7
+    },
+    "objectCount": 12,
+    "materials": [
+      {
+        "name": "glit018_s50t0",
+        "Kd": [
+          0.9176,
+          0.7529,
+          0
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": null,
+        "usageCount": 3,
+        "flags": []
+      },
+      {
+        "name": "glit026_s50t0",
+        "Kd": [
+          0,
+          0.0863,
+          0.6196
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": null,
+        "usageCount": 2,
+        "flags": []
+      },
+      {
+        "name": "glit034_s50t0",
+        "Kd": [
+          0.8157,
+          0.8157,
+          0.8157
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": null,
+        "usageCount": 1,
+        "flags": []
+      },
+      {
+        "name": "glit038_s50t0",
+        "Kd": [
+          0.0627,
+          0.0627,
+          0.0627
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": null,
+        "usageCount": 1,
+        "flags": []
+      },
+      {
+        "name": "glit042_s50t0",
+        "Kd": [
+          0.502,
+          0.498,
+          0.498
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": null,
+        "usageCount": 7,
+        "flags": []
+      },
+      {
+        "name": "tex073_s50t0",
+        "Kd": [
+          1,
+          1,
+          1
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": "textures/spr073_64x64.png",
+        "usageCount": 1,
+        "flags": []
+      },
+      {
+        "name": "tex115_s50t0",
+        "Kd": [
+          1,
+          1,
+          1
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": "textures/spr115_64x64.png",
+        "usageCount": 1,
+        "flags": []
+      },
+      {
+        "name": "tex133_s50t0",
+        "Kd": [
+          1,
+          1,
+          1
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": "textures/spr133_128x32.png",
+        "usageCount": 1,
+        "flags": []
+      },
+      {
+        "name": "tex138_s50t0",
+        "Kd": [
+          1,
+          1,
+          1
+        ],
+        "Ka": null,
+        "Ks": [
+          0.227,
+          0.227,
+          0.227
+        ],
+        "Ns": 224,
+        "d": 1,
+        "illum": null,
+        "map_Kd": "textures/spr138_64x128.png",
+        "usageCount": 4,
+        "flags": []
+      }
+    ],
+    "vertexCount": 618,
+    "faceCount": 388
+  },
+  "rig_part_map": {
+    "008": {
+      "bone": "pelvis",
+      "lca": 8,
+      "name": "Hips BK Belt"
+    },
+    "011": {
+      "bone": "leg.L",
+      "lca": 11,
+      "parent_group": 10,
+      "name": "Leg Lt"
+    },
+    "013": {
+      "bone": "foot.L",
+      "lca": 13,
+      "parent_group": 10,
+      "name": "Foot Left"
+    },
+    "015": {
+      "bone": "leg.R",
+      "lca": 15,
+      "parent_group": 14,
+      "name": "Leg Rt"
+    },
+    "017": {
+      "bone": "foot.R",
+      "lca": 17,
+      "parent_group": 14,
+      "name": "Foot Right"
+    },
+    "018": {
+      "bone": "spine",
+      "lca": 18,
+      "name": "Body"
+    },
+    "020": {
+      "bone": "head",
+      "lca": 20,
+      "parent_group": 19,
+      "name": "Head Leo"
+    },
+    "023": {
+      "bone": "head_acc",
+      "lca": 23,
+      "parent_group": 22,
+      "name": "Crown L_7101500"
+    },
+    "027": {
+      "bone": "arm.R",
+      "lca": 27,
+      "parent_group": 26,
+      "arm_brees": [
+        8192,
+        1820,
+        2730
+      ]
+    },
+    "030": {
+      "bone": "hand.R",
+      "lca": 30,
+      "parent_group": 28,
+      "name": "Hand R"
+    },
+    "032": {
+      "bone": "arm.L",
+      "lca": 32,
+      "parent_group": 31,
+      "arm_brees": [
+        8192,
+        -1821,
+        -2731
+      ]
+    },
+    "035": {
+      "bone": "hand.L",
+      "lca": 35,
+      "parent_group": 33,
+      "name": "Hand L"
+    }
+  },
+  "smo_track_names": [
+    "hips",
+    "body",
+    "head",
+    "leftarm",
+    "rightarm",
+    "lefthand",
+    "righthand",
+    "leftleg",
+    "rightleg",
+    "leftfoot",
+    "rightfoot"
+  ]
+}

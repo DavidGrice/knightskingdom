@@ -125,6 +125,82 @@ version of what was reverse-engineered:
 Full byte-level detail, including the traps that cost us real debugging
 time, lives in [`docs/FORMAT_SPEC.md`](docs/FORMAT_SPEC.md).
 
+## Importing OBJ models — orientation (read before Blender rigging)
+
+The frozen `export_obj.py` / `export_textured.py` output is **not**
+already upright in Blender Z-up. Model-up sits at **negative OBJ Y**;
+the live game compensates in `src/.../shared/objMtlLoader.js`
+(`rotation.x = π` after `MM_TO_WORLD_SCALE`). Do **not** change the
+exporter — fix orientation only in consumer paths (Blender scripts, game
+loader, thumbnails). See `tools/PATCH_README.md` §2.
+
+### LCA / VRT source space
+
+| Axis | Meaning |
+|------|---------|
+| +Y | Up (KK content is authored +Y-up in WLD space) |
+| −Z | Forward (character facing at rest) |
+| +X | Right |
+
+Rotations use **brees** `[bx, by, bz]` applied as **RY · RX · RZ**
+(bearing, pitch, roll). Joint pivots are `rot.center` on each group.
+
+### OBJ file space (all `extracted/models/*.obj`)
+
+| Property | Value |
+|----------|-------|
+| Units | Millimetres |
+| Model-up | **−Y** (exporter Y-flip from VRT) |
+| Forward | Same sign as VRT Z (not re-flipped in export) |
+| Import scale | `global_scale=0.001` → Blender metres |
+
+### Blender — upright minifigs / rigged characters
+
+Raw OBJ import leaves meshes Y-up-ish but not on the ground. The
+Knights Kingdom Blender pipeline (`grok/phase2_import_kingleo.py`) uses a
+root empty:
+
+```
+rotation_euler XYZ = (90°, 0°, 180°)
+then translate root Z so feet sit on Z = 0
+```
+
+**After that root transform, world axes are:**
+
+| World axis | Role |
+|------------|------|
+| **−Y** | Up (head at more negative Y) |
+| **+Y** | Down toward feet |
+| **+Z** | Forward (LCA −Z became +Z after the 180° yaw) |
+| **−X** | Left |
+
+Rigging **must not** treat Blender native +Z as “up” for these imports.
+Use `grok/kingleo_rig_coords.py` (or the same rules) for bone placement:
+
+1. Derive joint head/tail from mesh **world** bounds along **−Y** (torso)
+   and limb attachment points — not from raw LCA Z-up assumptions.
+2. Convert world points to **armature-local** with
+   `arm.matrix_world.inverted() @ point` before setting `edit_bones`.
+3. Apply **roll += π** on each bone (or equivalent) so twist matches the
+   −Z → +Z facing flip; parent meshes with keep-transform.
+
+Analysis helper: `python grok/kingleo_coord_analysis.py`  
+Incremental rig: `python grok/run_phase5_step.py <1-12>`
+
+### Three.js game (warehouse / bricks / minifigs)
+
+`objMtlLoader.js` scales by `MM_TO_WORLD_SCALE` (0.1) and sets
+`root.rotation.x = Math.PI` to stand models up **without** mirroring.
+That path does **not** apply the Blender phase2 `(90°, 0°, 180°)` root;
+do not copy Blender euler values directly into the game.
+
+### Direct LCA import (alternative)
+
+`resources/model_files/blender/io_import_lca.py` maps VRT → Blender as
+`(x, z, y) × 1e-6` with winding reversed — different from the OBJ
+pipeline above. Use one path consistently per asset; do not mix OBJ
+import orientation with LCA-import bone math.
+
 ## Acknowledgements
 
 - Richard Hill, an original developer of the game generously provided the Superscape
