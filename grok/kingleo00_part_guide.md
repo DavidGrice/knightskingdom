@@ -130,7 +130,8 @@ See [resources/model_files/tools/smo_pose_test.py](../resources/model_files/tool
 | 12 | `hand.R` | `030_` |
 
 **Final rig:** `grok/minifigkingleo00_rigged.blend`  
-**Pose tests:** `python grok/run_blender_script.py grok/test_minifig_poses.py` → `grok/pose_tests/`
+**Pose tests:** `python grok/run_blender_script.py grok/test_minifig_poses.py` → `grok/pose_tests/`  
+**SMO run clip:** `python grok/run_blender_script.py grok/apply_smo_to_rig.py` → `grok/minifigkingleo00_run_anim.blend`
 
 ---
 
