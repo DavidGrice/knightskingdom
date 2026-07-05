@@ -7,17 +7,17 @@ import { gotoAuthenticationWithProfiles } from '../../lib/menuDriver.mjs';
 import { assertMenuStagePresent } from '../../lib/menuLayoutAssert.mjs';
 import { filterConsoleErrors } from '../../lib/holderLayoutAssert.mjs';
 import { SCALE_MATRIX_SCREENS } from '../../lib/menuScaleMatrix.mjs';
-import { ROUTES } from '../../../src/lib/routes.js';
+import { TEST_ROUTES } from '../../lib/testRoutes.mjs';
 
-/** Expected pathname suffix per screenKey (from routes.js). */
+/** Expected pathname suffix per screenKey. */
 const ROUTE_PATHS = {
-  AUTHENTICATION: ROUTES.authentication,
-  MAIN_MENU: ROUTES.mainMenu,
-  OPTIONS: ROUTES.options,
-  CREDITS: ROUTES.credits,
-  START_WORLD: ROUTES.startStack.start,
-  MY_MODELS: ROUTES.startStack.myModels,
-  SNAPSHOT: ROUTES.startStack.snapshot,
+  AUTHENTICATION: TEST_ROUTES.authentication,
+  MAIN_MENU: TEST_ROUTES.mainMenu,
+  OPTIONS: TEST_ROUTES.options,
+  CREDITS: TEST_ROUTES.credits,
+  START_WORLD: TEST_ROUTES.startStack.start,
+  MY_MODELS: TEST_ROUTES.startStack.myModels,
+  SNAPSHOT: TEST_ROUTES.startStack.snapshot,
 };
 
 const WAIT_MS = 12000;

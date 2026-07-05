@@ -1,7 +1,7 @@
 import { BASE_URL, seedAuth, selectWorld, waitForMapLoad } from './driver.mjs';
-import { ROUTES } from '../../src/lib/routes.js';
+import { TEST_ROUTES } from './testRoutes.mjs';
 
-const WORKSHOP_PATH = ROUTES.startStack.workshop;
+const WORKSHOP_PATH = TEST_ROUTES.startStack.workshop;
 const WORKSHOP_WAIT_MS = 15000;
 
 /** @param {import('puppeteer').Page} page */
