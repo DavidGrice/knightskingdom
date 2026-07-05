@@ -1,0 +1,57 @@
+.menuRoot {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuScaler {
+  width: var(--msl-canvas-w, 800px);
+  height: var(--msl-canvas-h, 600px);
+  flex-shrink: 0;
+  transform: scale(var(--msl-scale, 1));
+  transform-origin: center center;
+}
+
+.stage {
+  position: relative;
+  width: var(--msl-canvas-w, 800px);
+  height: var(--msl-canvas-h, 600px);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: visible;
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.cornerCheckmark {
+  position: absolute;
+  left: var(--msl-check-x);
+  top: var(--msl-check-y);
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.cornerTrash {
+  position: absolute;
+  left: var(--msl-trash-x);
+  top: var(--msl-trash-y);
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.cornerLeave {
+  position: absolute;
+  left: var(--msl-leave-x);
+  top: var(--msl-leave-y);
+  z-index: 10;
+}

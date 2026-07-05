@@ -17,19 +17,20 @@ const Start = ({ navigateToMenu, navigateToMainGame }) => {
 
   return (
     <MenuScreenLayout
+      screenKey="START_WORLD"
       backgroundImage={startBackground}
       contentClassName={styles.centeredContainer}
       bottomLeft={<BackCheckmarkButton onClick={handleCheckmarkClick} />}
-    >
-      <div className={styles.topRightCorner} onClick={navigateToMenu}>
-        <div className={styles.leaveIconHolder}>
+      topRight={(
+        <div className={styles.leaveIconHolder} onClick={navigateToMenu}>
           <IconComponent
             type="leave"
             placeholderImage={leaveIcon.placeholderIcon}
             frames={leaveIcon.startFrames}
           />
         </div>
-      </div>
+      )}
+    >
       <World setWorldData={setWorldData} />
     </MenuScreenLayout>
   );

@@ -1,0 +1,34 @@
+.panelRoot {
+  position: absolute;
+  left: var(--msl-holder-cx, 400px);
+  top: var(--msl-holder-cy, 300px);
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+
+.dualHeader {
+  display: flex;
+  flex-direction: row;
+  width: 519px;
+  height: 57px;
+  margin-bottom: 0;
+}
+
+.holder {
+  position: relative;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: visible;
+}
+
+.holderSingle {
+  /* SnapShot / MyModels — holder includes its own top chrome */
+}
+
+.holderDual {
+  /* World picker — body sits below tab strip */
+}

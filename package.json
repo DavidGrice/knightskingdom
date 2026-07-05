@@ -11,7 +11,11 @@
     "lint": "next lint",
     "generate:brick-catalog": "node grok/generate-brick-catalog.mjs",
     "test:worlds": "node testing/world-load.test.mjs",
-    "test:placements": "node testing/placements.test.mjs"
+    "test:placements": "node testing/placements.test.mjs",
+    "test:menu": "node testing/run-regression.mjs --menu-only",
+    "test:regression": "node testing/run-regression.mjs",
+    "analyze:menu": "node grok/analyze-menu-images.mjs",
+    "analyze:workshop": "node grok/analyze-workshop-images.mjs"
   },
   "dependencies": {
     "next": "^15.5.19",

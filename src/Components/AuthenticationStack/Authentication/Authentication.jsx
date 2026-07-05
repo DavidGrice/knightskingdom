@@ -50,6 +50,7 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
 
   return (
     <MenuScreenLayout
+      screenKey="AUTHENTICATION"
       backgroundImage={backgroundImage}
       contentClassName={styles.centeredContainer}
       bottomLeft={<BackCheckmarkButton onClick={handleCheckmarkClick} />}

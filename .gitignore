@@ -5,9 +5,10 @@
 /.pnp
 .pnp.js
 
-# testing
+# testing — commit test scripts; ignore captures and probe output
 /coverage
-/testing
+/testing/output/
+/testing/**/*.png
 
 # production
 /build
@@ -46,9 +47,11 @@ public/sounds/*.wav
 # ---------------------------------------------------------------------------
 # Media assets (images, audio, video, 3D meshes)
 # grok-dev-vanilla: keep binaries local; regenerate or copy from your install.
-# Already-tracked files stay in git until removed with: git rm --cached <path>
+# Exception: resources/research/*.png are RE reference diagrams (tracked).
 # ---------------------------------------------------------------------------
 *.png
+!resources/research/
+!resources/research/**
 *.jpg
 *.jpeg
 *.gif
