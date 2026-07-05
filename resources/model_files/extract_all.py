@@ -11,6 +11,8 @@ open-format asset set under ./extracted/ :
     extracted/textures/    all 300+ textures as PNG
     extracted/sounds/      the 92 named world sounds as WAV
     extracted/models/      every .lca as textured OBJ + MTL (+ GLB)
+    extracted/pak_models/  those same models re-laid-out by PAK warehouse
+                           section (workshop/, scenery, templates, ...)
     extracted/animations/  every .smo character animation as JSON
     extracted/templates/*/parts/  per-shape template parts (OBJ+MTL+GLB)
     extracted/catalog/     browsable catalog.html + model_catalog.json
@@ -252,6 +254,16 @@ def main():
         else:
             for i in range(0, len(all_lcas), 25):
                 run('ldraw_bridge.py', ldraw_out, *all_lcas[i:i + 25])
+
+    # 10) categorized "mimicked PAK" of the exported models -- the same
+    #     OBJ/MTL/GLB (+ icon PNG + per-section textures) the flat models/
+    #     folder holds, but laid out by warehouse section the way the game's
+    #     PAK groups them (workshop/, main_interface/scenery, worlds/templates,
+    #     ...). Additive: leaves models/ untouched so nothing downstream moves.
+    #     Incremental: only re-copies models whose source changed.
+    if os.path.isdir(os.path.join(pak_out, 'warehouse')) and \
+            os.path.isdir(models):
+        run('mirror_pak_models.py', out)
 
     print(f'\nDone. Everything is under {out}')
 

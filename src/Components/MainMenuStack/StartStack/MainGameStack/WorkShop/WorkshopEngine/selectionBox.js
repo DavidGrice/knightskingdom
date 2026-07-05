@@ -79,7 +79,9 @@ export const attachSelectionBox = (root, options = {}) => {
     hitbox.name = 'transparentBox';
     hitbox.isMovable = true;
     hitbox.isRotatable = true;
-    hitbox.isPaintable = true;
+    // Selection helpers are never paintable -- otherwise painting a creation
+    // tints its white selection box/wireframe instead of a brick.
+    hitbox.isPaintable = false;
     hitbox.isDeletable = true;
 
     const lineMaterial = new LineBasicMaterial({ color: 0xffffff });
@@ -87,7 +89,7 @@ export const attachSelectionBox = (root, options = {}) => {
     wireframe.name = 'wireframe';
     wireframe.isMovable = true;
     wireframe.isRotatable = true;
-    wireframe.isPaintable = true;
+    wireframe.isPaintable = false;
     wireframe.isDeletable = true;
     wireframe.visible = false;
     wireframe.position.set(0, 0, 0);

@@ -11,6 +11,8 @@ import { updateSelectionBox } from '../../WorkShop/WorkshopEngine/BrickFactory';
 import { computeContentBounds } from '../../WorkShop/WorkshopEngine/selectionBox';
 import { STUD } from '../../WorkShop/WorkshopEngine/studGrid';
 import { ambientSoundsForModel } from '../../shared/characterSounds';
+import { playSfx } from '../../shared/audioManager';
+import { isPaintTarget, paintMesh, paintableMeshIndex } from '../../shared/paintTargets';
 import {
   filterOutSelectionHelpers,
   findModelRoot,
@@ -25,6 +27,9 @@ const DRAG_SMOOTHING = 0.35;
 // Vertical (shift-drag) sensitivity: world units of Y per pixel of mouse
 // travel, mirroring the workshop's shift+drag lift.
 const VERTICAL_WORLD_PER_PIXEL = 0.03;
+// Collision tolerance so face-touching (stacked bricks, edge-tiled plates)
+// isn't a false collision -- matches the workshop's overlap epsilon idea.
+const COLLISION_EPS = 0.05;
 // Grid models snap to on release/placement (the workshop stud grid).
 const snapToGrid = (v) => Math.round(v / STUD) * STUD;
 
@@ -255,34 +260,45 @@ const GameEngine = forwardRef(({
       }
     };
 
-    // Capture the dragged model's content box + every OTHER movable model's
-    // box once at grab time. `wasOverlapping` lets characters that spawned
-    // shoulder-to-shoulder still be separated (only NEW overlaps block).
+    // Capture the dragged model's content box (== the white wireframe box:
+    // both come from computeContentBounds) + every OTHER movable model's
+    // box once at grab time. `wasOverlapping` lets objects that spawned
+    // already touching still separate (only NEW overlaps block). Full 3D
+    // AABB: a character above a plate (disjoint in Y) never blocks, so
+    // plates collide with plates while characters still move freely over
+    // them -- no ground-plate special-casing needed. COLLISION_EPS shrinks
+    // the box so face-touching (stacked/edge-tiled) isn't a false collision.
     const captureCollisionState = (root) => {
       dragContentBox.current.copy(computeContentBounds(root));
       dragStartRootPos.current.copy(root.position);
+      const shrunk = dragContentBox.current.clone().expandByScalar(-COLLISION_EPS);
+      // Ground plates collide only with other ground plates; everything else
+      // (characters, props, buildings) collides only among itself. This is
+      // what lets plates stop each other while a character standing on a
+      // plate is never blocked by it.
+      const draggedIsPlate = Boolean(root.userData?.isGroundPlate);
       const others = [];
       scene.children.forEach((child) => {
         if (child === root || !child.isModel || !child.isMovable) {
           return;
         }
-        // Ground plates are walkable surfaces, not obstacles -- never block.
-        if (child.userData?.isGroundPlate) {
+        if (Boolean(child.userData?.isGroundPlate) !== draggedIsPlate) {
           return;
         }
         const box = computeContentBounds(child).clone();
-        others.push({ box, wasOverlapping: dragContentBox.current.intersectsBox(box) });
+        others.push({ box, wasOverlapping: shrunk.intersectsBox(box) });
       });
       otherModelBounds.current = others;
     };
 
     // Would the dragged model at absolute position (x,y,z) create a NEW
     // overlap? Translates the grab-time content box by the total delta from
-    // the grab position.
+    // the grab position (shrunk by the epsilon).
     const wouldCollideAt = (x, y, z) => {
       const start = dragStartRootPos.current;
       candidateBox.copy(dragContentBox.current)
-        .translate(dragDelta.set(x - start.x, y - start.y, z - start.z));
+        .translate(dragDelta.set(x - start.x, y - start.y, z - start.z))
+        .expandByScalar(-COLLISION_EPS);
       return otherModelBounds.current.some(
         (entry) => !entry.wasOverlapping && candidateBox.intersectsBox(entry.box),
       );
@@ -388,28 +404,25 @@ const GameEngine = forwardRef(({
           break;
         }
         case Modes.PAINTING: {
-          // Paint the whole model -- arms, helmet, every part -- exactly
-          // like restore-time color application (sceneSchema), and record
-          // the color so it persists through save/restore. Resolve from
-          // real geometry hits only: the invisible selection boxes are
-          // still raycastable and (being whole-model-sized, overlapping
-          // neighbours) would repaint whichever box the ray meets first
-          // rather than the model the user actually clicked.
-          const paintRoot = findModelRootFromIntersects(
-            filterOutSelectionHelpers(intersects),
-            'isPaintable',
-          );
-          if (paintRoot) {
-            const paintColor = new THREE.Color(parseInt(color, 16));
-            paintRoot.userData.color = color;
-            paintRoot.traverse((child) => {
-              if (child.name === 'transparentBox' || child.name === 'wireframe') {
-                return;
-              }
-              if (child.isMesh && child.isPaintable && child.material?.color) {
-                child.material.color.set(paintColor);
-              }
-            });
+          // Paint only the ONE piece the user clicked (an arm, a helmet, one
+          // brick), not the whole model. Resolve from real geometry hits only:
+          // the invisible selection boxes are still raycastable and would
+          // otherwise swallow the click. The painted piece is recorded by its
+          // stable mesh index so it survives save/restore (see paintTargets).
+          const filtered = filterOutSelectionHelpers(intersects);
+          const hitMesh = filtered.find((i) => isPaintTarget(i.object))?.object;
+          const paintRoot = hitMesh
+            ? findModelRootFromIntersects(filtered, 'isPaintable')
+            : null;
+          if (hitMesh && paintRoot) {
+            paintMesh(hitMesh, color);
+            const index = paintableMeshIndex(paintRoot, hitMesh);
+            if (index >= 0) {
+              paintRoot.userData.paintedMeshes = {
+                ...(paintRoot.userData.paintedMeshes || {}),
+                [index]: color,
+              };
+            }
             const box = paintRoot.userData?.transparentBox;
             if (box) {
               showSelectionOutline(box);
@@ -618,16 +631,10 @@ const GameEngine = forwardRef(({
       const root = speakers[Math.floor(Math.random() * speakers.length)];
       const sounds = ambientSoundsForModel(root);
       const url = sounds[Math.floor(Math.random() * sounds.length)];
-      try {
-        audio?.pause();
-        audio = new Audio(url);
-        audio.volume = 0.6;
-        // Blocked autoplay (before any gesture) rejects -- ignore; the next
-        // tick after the user interacts will succeed.
-        audio.play().catch(() => {});
-      } catch {
-        // Audio construction can throw in rare environments; skip this tick.
-      }
+      // Through the shared audioManager as fire-and-forget SFX: it never
+      // touches the music element, so a voice clip can't stop the music.
+      audio?.pause();
+      audio = playSfx(url, { volume: 0.6 });
     };
 
     const scheduleNext = () => {

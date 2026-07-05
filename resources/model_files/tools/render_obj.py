@@ -67,7 +67,10 @@ def render(path, out_png, views=((20, -60), (30, 120), (75, -90))):
             cols.append(tuple(min(1, c * lam) for c in base))
         pc = Poly3DCollection(polys, facecolors=cols, edgecolors='k',
                               linewidths=0.15)
-        ax.add_collection3d(pc)
+        # autolim=False: the manual set_[xyz]lim below already frames the
+        # model; mplot3d's own autoscale overflows to Inf/NaN on some
+        # matplotlib/numpy builds ("Axis limits cannot be NaN or Inf").
+        ax.add_collection3d(pc, autolim=False)
         for setl, c, s in ((ax.set_xlim, center[0], span),
                            (ax.set_ylim, center[1], span),
                            (ax.set_zlim, center[2], span)):

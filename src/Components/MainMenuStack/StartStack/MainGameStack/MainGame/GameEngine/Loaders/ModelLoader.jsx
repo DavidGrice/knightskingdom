@@ -7,6 +7,7 @@ import { resolveDriveCameraProfile } from '../driveCameraProfiles';
 import { attachSelectionBox, updateSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
 import { WAREHOUSE_MODEL_CATALOG } from './warehouseModelCatalog.generated';
 import { loadGameModel } from '../../../shared/gameModelLoader';
+import { applyPaintedMeshes } from '../../../shared/paintTargets';
 
 const SelectedModels = {
     NONE: 'NONE',
@@ -41,7 +42,9 @@ const configureGltfMeshNodes = (gltf) => {
 
             wireframe.isMovable = true;
             wireframe.isRotatable = true;
-            wireframe.isPaintable = true;
+            // Selection helpers are NEVER paintable -- otherwise a paint click
+            // (or restore) tints the white selection box/wireframe.
+            wireframe.isPaintable = false;
             wireframe.isDeletable = true;
             wireframe.isDriveable = true;
             wireframe.visible = true;
@@ -50,14 +53,17 @@ const configureGltfMeshNodes = (gltf) => {
 
             child.isMovable = true;
             child.isRotatable = true;
-            child.isPaintable = true;
+            child.isPaintable = false;
             child.isDeletable = true;
             child.visible = false;
             child.isDriveable = true;
             gltf.scene.userData.transparentBox = child;
         }
 
-        child.isPaintable = true;
+        // Real geometry is paintable; the selection helpers are not.
+        if (child.name !== 'transparentBox' && child.name !== 'wireframe') {
+            child.isPaintable = true;
+        }
     });
 };
 
@@ -124,7 +130,7 @@ const setupMapGltfScene = (gltf, mapModel) => {
     updateSelectionBox(gltf.scene);
 };
 
-const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, skipGroundAlign = false }) => {
+const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, paintedMeshes, skipGroundAlign = false }) => {
     const modelConfig = SelectedModels[modelKey];
     if (!modelConfig) {
         return;
@@ -169,6 +175,11 @@ const setupPlayableGltfScene = (gltf, modelKey, { position, rotation, color, ski
                 child.material.color.set(paintColor);
             }
         });
+    }
+    // Restore per-piece paint (the single meshes the player recolored).
+    if (paintedMeshes) {
+        gltf.scene.userData.paintedMeshes = paintedMeshes;
+        applyPaintedMeshes(gltf.scene, paintedMeshes);
     }
     updateSelectionBox(gltf.scene);
 };
@@ -233,6 +244,7 @@ const ModelLoader = (type, modelData, position, mapData, scene, onComplete, came
                         position: position?.position,
                         rotation: position?.rotation,
                         color: position?.color,
+                        paintedMeshes: position?.paintedMeshes,
                         skipGroundAlign: true,
                     });
                     scene.add(gltf.scene);

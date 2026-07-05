@@ -135,8 +135,13 @@ def thumb_png(obj_path, px=280):
         lam = 0.55 + 0.45 * abs(n @ light / ln) if ln > 0 else 0.7
         polys.append(tri)
         cols.append(tuple(min(1, c * lam) for c in base))
+    # autolim=False: skip mplot3d's own auto_scale_xyz -- it's redundant with
+    # the manual set_[xyz]lim below, and on some matplotlib/numpy builds its
+    # float32 margin math overflows to Inf/NaN and raises "Axis limits cannot
+    # be NaN or Inf" for otherwise-fine models (mc005, mc008, ...).
     ax.add_collection3d(Poly3DCollection(polys, facecolors=cols,
-                                         edgecolors='k', linewidths=0.1))
+                                         edgecolors='k', linewidths=0.1),
+                        autolim=False)
     for setl, c in ((ax.set_xlim, center[0]), (ax.set_ylim, center[1]),
                     (ax.set_zlim, center[2])):
         setl(c - span, c + span)

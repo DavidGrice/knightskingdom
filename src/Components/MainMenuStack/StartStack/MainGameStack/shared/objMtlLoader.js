@@ -102,7 +102,17 @@ export function loadObjMtl(objUrl, mtlUrl, options = {}) {
         objLoader.load(
           objParts.file,
           (root) => {
-            root.scale.set(scale, scale * -1, scale);
+            // Upright the model WITHOUT mirroring it. The OBJ carries
+            // model-up at -Y (the exporter's `(x,-y,z)` mapping, which is
+            // the single flip that converts VRT's left-handed space to
+            // three.js's right-handed one). The old `scale.y = -1` added a
+            // SECOND flip -- a reflection -- which cancelled that handedness
+            // correction and left the whole scene mirrored left/right vs the
+            // Blender import. A 180deg rotation about X uprights instead
+            // (flips Y and Z, determinant +1, no mirror). Culling is a
+            // non-issue since every material is forced DoubleSide below.
+            root.scale.set(scale, scale, scale);
+            root.rotation.x = Math.PI;
             root.traverse((child) => {
               if (!child.isMesh) {
                 return;

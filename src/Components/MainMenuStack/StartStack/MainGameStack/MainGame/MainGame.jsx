@@ -120,6 +120,8 @@ const MainGameContent = ({
           resetModes={resetModes}
           setCameraNeedsReset={setCameraNeedsReset}
           handleMusicChange={handleMusicChange}
+          activeToolbarIcon={activeIcon}
+          setActiveToolbarIcon={setActiveIcon}
         />
       }
       bottom={

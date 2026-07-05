@@ -22,206 +22,6 @@
       ]
     },
     {
-      "number": 12,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0003",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3121.157,
-        -3.201,
-        4004.846
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        16000,
-        19200,
-        16000
-      ]
-    },
-    {
-      "number": 13,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0004",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3121.157,
-        -22.401,
-        4004.846
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        16000,
-        12800,
-        8000
-      ]
-    },
-    {
-      "number": 15,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0005",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3121.157,
-        -35.201,
-        4008.846
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        16000,
-        22400,
-        16000
-      ]
-    },
-    {
-      "number": 18,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0007",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3123.6889134001785,
-        -33.53848617014557,
-        4010.7265489752463
-      ],
-      "yawDegrees": -172.88197207170145,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 22,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0009",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3127.1318791580456,
-        -37.18055038034647,
-        4017.1384033683225
-      ],
-      "yawDegrees": -172.94397051172632,
-      "size": [
-        8000,
-        16000,
-        8000
-      ]
-    },
-    {
-      "number": 25,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0012",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3127.073511424438,
-        -38.30761812315302,
-        4016.0042466283617
-      ],
-      "yawDegrees": -172.94397051172632,
-      "size": [
-        7999,
-        6398,
-        8000
-      ]
-    },
-    {
-      "number": 28,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0014",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3106.309939642708,
-        -34.2520654502085,
-        4010.677810318955
-      ],
-      "yawDegrees": 172.88197207170145,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 31,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0012",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3107.1227430712493,
-        -38.580245088366034,
-        4016.824393751152
-      ],
-      "yawDegrees": 172.94440346450705,
-      "size": [
-        7999,
-        6398,
-        8000
-      ]
-    },
-    {
       "number": 40,
       "name": null,
       "kind": "prop",
@@ -402,7 +202,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0027",
       "instanceScale": [
         1.0,
@@ -752,7 +552,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0043",
       "instanceScale": [
         1.0,
@@ -1352,7 +1152,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0076",
       "instanceScale": [
         1.0,
@@ -1402,7 +1202,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0076",
       "instanceScale": [
         1.0,
@@ -1427,7 +1227,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0078",
       "instanceScale": [
         1.0,
@@ -1477,7 +1277,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0078",
       "instanceScale": [
         1.0,
@@ -1627,7 +1427,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0094",
       "instanceScale": [
         1.0,
@@ -1677,7 +1477,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0094",
       "instanceScale": [
         1.0,
@@ -1702,7 +1502,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0096",
       "instanceScale": [
         1.0,
@@ -1752,7 +1552,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0096",
       "instanceScale": [
         1.0,
@@ -2152,7 +1952,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0130",
       "instanceScale": [
         1.0,
@@ -2202,7 +2002,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0130",
       "instanceScale": [
         1.0,
@@ -2426,10 +2226,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "50_l420400",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0141",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3100.16,
         -192.001,
@@ -2472,10 +2276,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l614100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0143",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3148.16,
         -96.001,
@@ -2544,7 +2352,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0149",
       "instanceScale": [
         1.0,
@@ -2568,10 +2376,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l614100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0143",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3172.16,
         -96.001,
@@ -2614,10 +2426,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "40_l303000",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0152",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3228.16,
         -118.401,
@@ -2660,10 +2476,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "40_l303000",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0152",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3068.16,
         -118.401,
@@ -3106,10 +2926,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "44_l395800",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0187",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3132.16,
         -259.201,
@@ -3203,7 +3027,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0193",
       "instanceScale": [
         1.0,
@@ -3228,7 +3052,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0193",
       "instanceScale": [
         1.0,
@@ -3278,8 +3102,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109612",
       "instanceScale": null,
       "position": [
         3039.313,
@@ -3299,8 +3123,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109612",
       "instanceScale": null,
       "position": [
         3039.313,
@@ -3320,8 +3144,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109612",
       "instanceScale": null,
       "position": [
         3039.313,
@@ -3534,631 +3358,6 @@
       ]
     },
     {
-      "number": 14,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0003",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3291.5840000000003,
-        -33.601,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        16000,
-        8000,
-        8000
-      ]
-    },
-    {
-      "number": 17,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0005",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3291.984,
-        -28.801000000000002,
-        3743.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 19,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0007",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3291.984,
-        -25.601,
-        3743.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 21,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0008",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3291.984,
-        -28.801000000000002,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 23,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0009",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3291.984,
-        -25.601,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 24,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0010",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3291.5840000000003,
-        -41.601,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        16000,
-        12800,
-        8000
-      ]
-    },
-    {
-      "number": 27,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0011",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3289.395609557353,
-        -46.65533850706209,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        16000,
-        24300,
-        21700
-      ]
-    },
-    {
-      "number": 29,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0013",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3295.5840000000003,
-        -54.401,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        16000,
-        16000,
-        16000
-      ]
-    },
-    {
-      "number": 32,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0015",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3297.043084504415,
-        -50.28995836370814,
-        3733.0605925424165
-      ],
-      "yawDegrees": -90.95303846344657,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 35,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0017",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3310.3002215557044,
-        -57.020437277038155,
-        3731.2072105175603
-      ],
-      "yawDegrees": -103.83744391823576,
-      "size": [
-        12000,
-        72000,
-        8000
-      ]
-    },
-    {
-      "number": 36,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0018",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3300.1782625015985,
-        -59.079055980657635,
-        3730.474904238364
-      ],
-      "yawDegrees": -58.13179930992518,
-      "size": [
-        8000,
-        6400,
-        8000
-      ]
-    },
-    {
-      "number": 39,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0020",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3296.4797815282905,
-        -53.502166685300935,
-        3749.98946510711
-      ],
-      "yawDegrees": -88.97395256984748,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 43,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0022",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3308.482000965674,
-        -57.2736524098755,
-        3756.4154020275837
-      ],
-      "yawDegrees": -179.16314125520003,
-      "size": [
-        16000,
-        19200,
-        12000
-      ]
-    },
-    {
-      "number": 45,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0018",
-      "instanceScale": [
-        0.999875,
-        0.9996875,
-        1.0
-      ],
-      "position": [
-        3302.630669469901,
-        -57.82530161992829,
-        3749.1823306563906
-      ],
-      "yawDegrees": -99.16069984895002,
-      "size": [
-        7999,
-        6398,
-        8000
-      ]
-    },
-    {
-      "number": 47,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0024",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3311.5840000000003,
-        -6.401,
-        3727.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        32000,
-        36700,
-        56000
-      ]
-    },
-    {
-      "number": 51,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0027",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3306.5840000000003,
-        -11.201,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        20000,
-        8000
-      ]
-    },
-    {
-      "number": 54,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0029",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3306.5840000000003,
-        -0.001,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        18600,
-        8000
-      ]
-    },
-    {
-      "number": 57,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0027",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3306.5840000000003,
-        -11.201,
-        3743.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        20000,
-        8000
-      ]
-    },
-    {
-      "number": 60,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0029",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3306.5840000000003,
-        -0.001,
-        3743.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        18600,
-        8000
-      ]
-    },
-    {
-      "number": 63,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0031",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3276.784,
-        -11.101,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        22700,
-        14200
-      ]
-    },
-    {
-      "number": 66,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0033",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3270.5840000000003,
-        -0.001,
-        3735.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        18200,
-        8000
-      ]
-    },
-    {
-      "number": 69,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0031",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3276.784,
-        -11.101,
-        3743.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        22700,
-        14200
-      ]
-    },
-    {
-      "number": 72,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0033",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3270.5840000000003,
-        -0.001,
-        3743.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        18200,
-        8000
-      ]
-    },
-    {
-      "number": 75,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0035",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3326.0840000000003,
-        -22.401,
-        3739.1420000000003
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        8000,
-        36800,
-        32000
-      ]
-    },
-    {
-      "number": 78,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0037",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3270.585,
-        -18.299,
-        3739.89
-      ],
-      "yawDegrees": -90.0,
-      "size": [
-        6498,
-        17599,
-        15998
-      ]
-    },
-    {
       "number": 93,
       "name": null,
       "kind": "prop",
@@ -4339,7 +3538,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0047",
       "instanceScale": [
         1.0,
@@ -4564,7 +3763,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0063",
       "instanceScale": [
         1.0,
@@ -4614,7 +3813,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0063",
       "instanceScale": [
         1.0,
@@ -4639,7 +3838,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0065",
       "instanceScale": [
         1.0,
@@ -4689,7 +3888,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0065",
       "instanceScale": [
         1.0,
@@ -5013,10 +4212,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "16_l302100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0101",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3475.933,
         -0.001,
@@ -5035,7 +4238,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0103",
       "instanceScale": [
         1.0,
@@ -5060,7 +4263,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0104",
       "instanceScale": [
         1.0,
@@ -5085,7 +4288,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0103",
       "instanceScale": [
         1.0,
@@ -5110,7 +4313,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0104",
       "instanceScale": [
         1.0,
@@ -5235,7 +4438,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0117",
       "instanceScale": [
         1.0,
@@ -5260,7 +4463,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0117",
       "instanceScale": [
         1.0,
@@ -5384,10 +4587,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l614100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0129",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3519.933,
         -35.201,
@@ -5430,10 +4637,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "34_l300100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0134",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3515.933,
         -9.601,
@@ -5626,10 +4837,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact",
-      "matchedModelId": "14_l257700",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0150",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3491.933,
         -76.801,
@@ -7041,331 +6256,6 @@
       ]
     },
     {
-      "number": 13,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0003",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3769.934,
-        -108.74000000000001,
-        3315.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        16000,
-        8000,
-        8000
-      ]
-    },
-    {
-      "number": 16,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0005",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3769.534,
-        -103.94,
-        3307.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 18,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0007",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3769.534,
-        -100.74000000000001,
-        3307.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 20,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0008",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3769.534,
-        -103.94,
-        3315.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 22,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0009",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3769.534,
-        -100.74000000000001,
-        3315.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 23,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0010",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3769.934,
-        -116.74000000000001,
-        3315.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        16000,
-        12800,
-        8000
-      ]
-    },
-    {
-      "number": 26,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0011",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3772.122390442647,
-        -121.7943385070621,
-        3315.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        16000,
-        24300,
-        21700
-      ]
-    },
-    {
-      "number": 28,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0013",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3765.934,
-        -129.54,
-        3315.725
-      ],
-      "yawDegrees": 90.0,
-      "size": [
-        16000,
-        16000,
-        16000
-      ]
-    },
-    {
-      "number": 31,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0015",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3764.649451024754,
-        -127.83348617014556,
-        3318.2729134001784
-      ],
-      "yawDegrees": 88.97187661684741,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 35,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0017",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3766.5943505703194,
-        -122.99051258637657,
-        3320.243195357287
-      ],
-      "yawDegrees": -170.83617770425516,
-      "size": [
-        16000,
-        32000,
-        8000
-      ]
-    },
-    {
-      "number": 37,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0019",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3759.372056422393,
-        -132.60287114962037,
-        3321.657773065461
-      ],
-      "yawDegrees": 99.16382229574485,
-      "size": [
-        8000,
-        6400,
-        8000
-      ]
-    },
-    {
-      "number": 40,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0021",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3765.0382184717096,
-        -128.64116668530093,
-        3300.8775348928903
-      ],
-      "yawDegrees": 91.02604743015252,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 43,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0019",
-      "instanceScale": [
-        0.999875,
-        0.9996875,
-        1.0
-      ],
-      "position": [
-        3758.887330530099,
-        -132.9643016199283,
-        3301.6846693436096
-      ],
-      "yawDegrees": 80.83930015104997,
-      "size": [
-        7999,
-        6398,
-        8000
-      ]
-    },
-    {
       "number": 56,
       "name": null,
       "kind": "prop",
@@ -7571,7 +6461,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0035",
       "instanceScale": [
         1.0,
@@ -7771,7 +6661,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0045",
       "instanceScale": [
         1.0,
@@ -7796,7 +6686,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0048",
       "instanceScale": [
         1.0,
@@ -7871,7 +6761,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0045",
       "instanceScale": [
         1.0,
@@ -8196,8 +7086,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109612",
       "instanceScale": null,
       "position": [
         2782.63,
@@ -8217,8 +7107,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109612",
       "instanceScale": null,
       "position": [
         3713.607,
@@ -8238,8 +7128,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109612",
       "instanceScale": null,
       "position": [
         3713.607,
@@ -8259,8 +7149,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109612",
       "instanceScale": null,
       "position": [
         3294.63,
@@ -8280,8 +7170,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109611",
       "instanceScale": null,
       "position": [
         3038.63,
@@ -8301,8 +7191,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109611",
       "instanceScale": null,
       "position": [
         3713.607,
@@ -8322,8 +7212,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "l4109610",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4109611",
       "instanceScale": null,
       "position": [
         3294.63,
@@ -9561,331 +8451,6 @@
       ]
     },
     {
-      "number": 13,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0003",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3250.306,
-        -8.001,
-        3448.445
-      ],
-      "yawDegrees": 0.0,
-      "size": [
-        16000,
-        8000,
-        8000
-      ]
-    },
-    {
-      "number": 16,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0005",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3258.306,
-        -3.201,
-        3448.045
-      ],
-      "yawDegrees": 0.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 18,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0007",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3258.306,
-        -0.001,
-        3448.045
-      ],
-      "yawDegrees": 0.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 20,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0008",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3250.306,
-        -3.201,
-        3448.045
-      ],
-      "yawDegrees": 0.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 22,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0009",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3250.306,
-        -0.001,
-        3448.045
-      ],
-      "yawDegrees": 0.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 23,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0010",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3250.306,
-        -16.001,
-        3448.445
-      ],
-      "yawDegrees": 0.0,
-      "size": [
-        16000,
-        12800,
-        8000
-      ]
-    },
-    {
-      "number": 26,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0012",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3250.306,
-        -28.801000000000002,
-        3444.445
-      ],
-      "yawDegrees": 0.0,
-      "size": [
-        16000,
-        17600,
-        16000
-      ]
-    },
-    {
-      "number": 28,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0013",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3247.7580865998216,
-        -27.094486170145565,
-        3443.160451024754
-      ],
-      "yawDegrees": 7.118027928298547,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 31,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0015",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3244.373226934539,
-        -31.86387114962035,
-        3437.883056422393
-      ],
-      "yawDegrees": 7.056054152707735,
-      "size": [
-        8000,
-        6400,
-        8000
-      ]
-    },
-    {
-      "number": 34,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0017",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3251.8140334564837,
-        -31.882275989366704,
-        3453.70740704303
-      ],
-      "yawDegrees": -172.94394584729227,
-      "size": [
-        3200,
-        1600,
-        16000
-      ]
-    },
-    {
-      "number": 36,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0019",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3266.2936124129997,
-        -24.035480681455475,
-        3449.046076585129
-      ],
-      "yawDegrees": -172.94394584729227,
-      "size": [
-        32004,
-        8302,
-        32000
-      ]
-    },
-    {
-      "number": 38,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0020",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3265.15346510711,
-        -27.90216668530094,
-        3443.5492184717095
-      ],
-      "yawDegrees": -7.121944478414773,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 41,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0015",
-      "instanceScale": [
-        0.999875,
-        0.9996875,
-        1.0
-      ],
-      "position": [
-        3264.346330656391,
-        -32.22530161992829,
-        3437.398330530099
-      ],
-      "yawDegrees": -7.059879474718923,
-      "size": [
-        7999,
-        6398,
-        8000
-      ]
-    },
-    {
       "number": 54,
       "name": null,
       "kind": "prop",
@@ -10091,7 +8656,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0031",
       "instanceScale": [
         1.0,
@@ -10391,7 +8956,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0040",
       "instanceScale": [
         1.0,
@@ -10441,7 +9006,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0031",
       "instanceScale": [
         1.0,
@@ -11016,7 +9581,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0077",
       "instanceScale": [
         1.0,
@@ -11041,7 +9606,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0078",
       "instanceScale": [
         1.0,
@@ -11216,7 +9781,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0098",
       "instanceScale": [
         1.0,
@@ -11241,8 +9806,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "28_l3014500",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4105278",
       "instanceScale": null,
       "position": [
         2774.976,
@@ -11612,7 +10177,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0120",
       "instanceScale": [
         1.0,
@@ -11662,7 +10227,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0124",
       "instanceScale": [
         1.0,
@@ -12262,7 +10827,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0171",
       "instanceScale": [
         1.0,
@@ -12287,7 +10852,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0171",
       "instanceScale": [
         1.0,
@@ -12637,7 +11202,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0214",
       "instanceScale": [
         1.0,
@@ -12661,10 +11226,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "46_l303600",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0215",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2581.5,
         -0.001,
@@ -12808,7 +11377,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0098",
       "instanceScale": [
         1.0,
@@ -12883,7 +11452,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0230",
       "instanceScale": [
         1.0,
@@ -13083,7 +11652,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0234",
       "instanceScale": [
         1.0,
@@ -14931,8 +13500,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "02_l302300",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4105278",
       "instanceScale": null,
       "position": [
         3824.515,
@@ -15294,7 +13863,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0035",
       "instanceScale": [
         1.0,
@@ -15344,7 +13913,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0035",
       "instanceScale": [
         1.0,
@@ -15568,10 +14137,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "50_l420400",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0046",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2949.888,
         -192.001,
@@ -15614,10 +14187,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l614100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0048",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2997.888,
         -96.001,
@@ -15686,7 +14263,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0054",
       "instanceScale": [
         1.0,
@@ -15710,10 +14287,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l614100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0048",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3021.888,
         -96.001,
@@ -15756,10 +14337,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "40_l303000",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0057",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3077.888,
         -118.401,
@@ -15802,10 +14387,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "40_l303000",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0057",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2917.888,
         -118.401,
@@ -16248,10 +14837,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "44_l395800",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0092",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2981.888,
         -259.201,
@@ -16345,7 +14938,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0098",
       "instanceScale": [
         1.0,
@@ -16370,7 +14963,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0098",
       "instanceScale": [
         1.0,
@@ -16470,7 +15063,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0111",
       "instanceScale": [
         1.0,
@@ -16495,8 +15088,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "28_l3014500",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4105278",
       "instanceScale": null,
       "position": [
         2861.888,
@@ -16616,7 +15209,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0128",
       "instanceScale": [
         1.0,
@@ -16641,8 +15234,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "02_l302300",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4105278",
       "instanceScale": null,
       "position": [
         2893.888,
@@ -16737,7 +15330,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0140",
       "instanceScale": [
         1.0,
@@ -16986,10 +15579,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "48_l420100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0144",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2853.888,
         -51.201,
@@ -17008,7 +15605,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0146",
       "instanceScale": [
         1.0,
@@ -17058,7 +15655,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0098",
       "instanceScale": [
         1.0,
@@ -17083,7 +15680,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0098",
       "instanceScale": [
         1.0,
@@ -17257,10 +15854,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "48_l420100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0144",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3109.888,
         -51.201,
@@ -17304,7 +15905,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0170",
       "instanceScale": [
         1.0,
@@ -17329,7 +15930,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0171",
       "instanceScale": [
         1.0,
@@ -17354,7 +15955,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0171",
       "instanceScale": [
         1.0,
@@ -17379,7 +15980,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0173",
       "instanceScale": [
         1.0,
@@ -17403,10 +16004,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "48_l420100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0144",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3109.888,
         -51.201,
@@ -17449,10 +16054,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l3005500",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0180",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3109.888,
         -60.801,
@@ -17496,8 +16105,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "02_l302300",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4105278",
       "instanceScale": null,
       "position": [
         3149.888,
@@ -17667,7 +16276,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0196",
       "instanceScale": [
         1.0,
@@ -17717,7 +16326,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0196",
       "instanceScale": [
         1.0,
@@ -19699,7 +18308,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0002",
       "instanceScale": [
         1.0,
@@ -19724,7 +18333,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0003",
       "instanceScale": [
         1.0,
@@ -19899,7 +18508,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0023",
       "instanceScale": [
         1.0,
@@ -19924,8 +18533,8 @@
       "kind": "prop",
       "tier": 2,
       "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "28_l3014500",
+      "matchConfidence": "exact",
+      "matchedModelId": "l4105278",
       "instanceScale": null,
       "position": [
         3784.219,
@@ -20495,7 +19104,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0058",
       "instanceScale": [
         1.0,
@@ -20820,7 +19429,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0074",
       "instanceScale": [
         1.0,
@@ -20945,7 +19554,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0083",
       "instanceScale": [
         1.0,
@@ -21295,7 +19904,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0098",
       "instanceScale": [
         1.0,
@@ -21970,7 +20579,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0121",
       "instanceScale": [
         1.0,
@@ -22670,7 +21279,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0058",
       "instanceScale": [
         1.0,
@@ -22970,7 +21579,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0141",
       "instanceScale": [
         1.0,
@@ -23245,7 +21854,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0163",
       "instanceScale": [
         1.0,
@@ -23870,7 +22479,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0207",
       "instanceScale": [
         1.0,
@@ -23920,7 +22529,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0207",
       "instanceScale": [
         1.0,
@@ -24144,10 +22753,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "50_l420400",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0214",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2939.52,
         -289.54,
@@ -24190,10 +22803,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l614100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0216",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2987.52,
         -193.54,
@@ -24262,7 +22879,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0222",
       "instanceScale": [
         1.0,
@@ -24286,10 +22903,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "04_l614100",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0216",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3011.52,
         -193.54,
@@ -24332,10 +22953,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "40_l303000",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0225",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3067.52,
         -215.94,
@@ -24378,10 +23003,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "40_l303000",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0225",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2907.52,
         -215.94,
@@ -24824,10 +23453,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "44_l395800",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "texture-mismatch",
+      "matchedModelId": "shape0259",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         2971.52,
         -356.74,
@@ -24921,7 +23554,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0264",
       "instanceScale": [
         1.0,
@@ -24946,7 +23579,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0264",
       "instanceScale": [
         1.0,
@@ -25096,7 +23729,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0271",
       "instanceScale": [
         1.0,
@@ -25246,7 +23879,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0282",
       "instanceScale": [
         1.0,
@@ -25746,7 +24379,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0312",
       "instanceScale": [
         1.0,
@@ -25771,7 +24404,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0312",
       "instanceScale": [
         1.0,
@@ -26121,7 +24754,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0352",
       "instanceScale": [
         1.0,
@@ -26464,331 +25097,6 @@
       ]
     },
     {
-      "number": 13,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0003",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3720.5480000000002,
-        -8.001,
-        4173.37
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        16000,
-        8000,
-        8000
-      ]
-    },
-    {
-      "number": 16,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0005",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3712.5480000000002,
-        -3.201,
-        4173.77
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 18,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0007",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3712.5480000000002,
-        -0.001,
-        4173.77
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 20,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0008",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3720.5480000000002,
-        -3.201,
-        4173.77
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        8000,
-        12000,
-        8000
-      ]
-    },
-    {
-      "number": 22,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0009",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3720.5480000000002,
-        -0.001,
-        4173.77
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        8000,
-        3200,
-        8000
-      ]
-    },
-    {
-      "number": 23,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0010",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3720.5480000000002,
-        -16.001,
-        4173.37
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        16000,
-        12800,
-        8000
-      ]
-    },
-    {
-      "number": 26,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0012",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3724.5480000000002,
-        -28.801000000000002,
-        4181.37
-      ],
-      "yawDegrees": -180.0,
-      "size": [
-        24000,
-        16000,
-        24000
-      ]
-    },
-    {
-      "number": 29,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0014",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3723.0959134001782,
-        -27.094486170145565,
-        4178.654548975246
-      ],
-      "yawDegrees": -172.88197207170145,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 32,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0016",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3726.480773065461,
-        -31.86387114962035,
-        4183.931943577607
-      ],
-      "yawDegrees": -172.94394584729227,
-      "size": [
-        7999,
-        6398,
-        8000
-      ]
-    },
-    {
-      "number": 34,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "approximate",
-      "matchedModelId": "shape0017",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3725.0661953572867,
-        -22.251512586376563,
-        4176.709649429681
-      ],
-      "yawDegrees": -82.94394584729227,
-      "size": [
-        16000,
-        32000,
-        8000
-      ]
-    },
-    {
-      "number": 38,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0020",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3705.70053489289,
-        -27.90216668530094,
-        4178.26578152829
-      ],
-      "yawDegrees": 172.87805552158525,
-      "size": [
-        3898,
-        7898,
-        10400
-      ]
-    },
-    {
-      "number": 41,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0016",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3706.5076693436095,
-        -32.22530161992829,
-        4184.416669469901
-      ],
-      "yawDegrees": 172.9401205252811,
-      "size": [
-        7999,
-        6398,
-        8000
-      ]
-    },
-    {
-      "number": 43,
-      "name": null,
-      "kind": "prop",
-      "tier": 2,
-      "source": "local-part",
-      "matchConfidence": "none",
-      "matchedModelId": "shape0021",
-      "instanceScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "position": [
-        3710.2997309879147,
-        -29.090850536378717,
-        4188.268355450173
-      ],
-      "yawDegrees": 172.9401205252811,
-      "size": [
-        16000,
-        19200,
-        12000
-      ]
-    },
-    {
       "number": 52,
       "name": null,
       "kind": "prop",
@@ -27069,7 +25377,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0037",
       "instanceScale": [
         1.0,
@@ -27093,10 +25401,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact-ambiguous",
-      "matchedModelId": "00_l306200",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0042",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3898.947,
         -9.601,
@@ -27164,10 +25476,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact",
-      "matchedModelId": "20_l606600",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0053",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3842.947,
         -147.201,
@@ -27586,7 +25902,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0093",
       "instanceScale": [
         1.0,
@@ -27611,7 +25927,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0093",
       "instanceScale": [
         1.0,
@@ -27636,7 +25952,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0095",
       "instanceScale": [
         1.0,
@@ -27685,10 +26001,14 @@
       "name": null,
       "kind": "prop",
       "tier": 2,
-      "source": "catalog",
-      "matchConfidence": "exact",
-      "matchedModelId": "20_l606600",
-      "instanceScale": null,
+      "source": "local-part",
+      "matchConfidence": "none",
+      "matchedModelId": "shape0053",
+      "instanceScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
       "position": [
         3691.667,
         -76.801,
@@ -28032,7 +26352,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0117",
       "instanceScale": [
         1.0,
@@ -28082,7 +26402,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0124",
       "instanceScale": [
         1.0,
@@ -28107,7 +26427,7 @@
       "kind": "prop",
       "tier": 2,
       "source": "local-part",
-      "matchConfidence": "approximate",
+      "matchConfidence": "none",
       "matchedModelId": "shape0124",
       "instanceScale": [
         1.0,

@@ -82,6 +82,29 @@ export const gameReducer = (state, action) => {
         activeIcon: null,
         selectedModelMode: 'NONE',
       };
+    // Mutual exclusion: opening any top/bottom toolbar panel closes every
+    // other panel (bucket, palette, climate, music, action) so at most one is
+    // ever open. Also stops Drive unless the caller is Drive itself
+    // (keepDrive), triggering the camera reset Drive-off normally does.
+    case 'OPEN_EXCLUSIVE_PANEL': {
+      const { panel, open, keepDrive } = action.payload || {};
+      const next = {
+        ...state,
+        showBucket: false,
+        isPaletteOpen: false,
+        isClimateOpen: false,
+        isMusicOpen: false,
+        isActionOpen: false,
+      };
+      if (!keepDrive && state.isFollowing) {
+        next.isFollowing = false;
+        next.cameraNeedsReset = true;
+      }
+      if (panel) {
+        next[panel] = Boolean(open);
+      }
+      return next;
+    }
     case 'CLOSE_PALETTE_AND_BUCKET':
       return { ...state, isPaletteOpen: false, showBucket: false };
     case 'HYDRATE_SCENE':

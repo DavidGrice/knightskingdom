@@ -45,6 +45,7 @@ def tally(out):
     animations = count(os.path.join(out, 'animations', '*.json'))
     glbs = count(os.path.join(out, 'models', '*.glb')) + \
         count(os.path.join(out, 'templates', '**', '*.glb'))
+    categorized = count(os.path.join(out, 'pak_models', '**', '*.obj'))
     pak = os.path.join(out, 'pak')
     voices = count(os.path.join(pak, '**', '*.wav'))
     images = count(os.path.join(pak, '**', '*.png')) + \
@@ -60,6 +61,7 @@ def tally(out):
     banner('EXTRACTION TALLY')
     print(f'  Models (textured OBJ+MTL) : {models}')
     print(f'  Models as GLB             : {glbs}')
+    print(f'  Models by PAK category    : {categorized}')
     print(f'  Textures (PNG)            : {textures}')
     print(f'  World sounds (WAV)        : {sounds}')
     print(f'  Character animations      : {animations}')
@@ -154,6 +156,9 @@ def main():
         print('  models/    textured OBJ+MTL (Blender: File > Import >')
         print('             Wavefront, viewport to Material Preview)')
         print('             + self-contained .glb next to each (glTF)')
+        print('  pak_models/ the same models grouped by PAK warehouse')
+        print('             section (workshop/, scenery, worlds/templates,')
+        print('             ...), each with its icon PNG + section textures')
         print('  textures/  the texture bank as PNG')
         print('  sounds/    the 92 named world sounds as WAV')
         print('  animations/  character animations (.smo) as JSON')

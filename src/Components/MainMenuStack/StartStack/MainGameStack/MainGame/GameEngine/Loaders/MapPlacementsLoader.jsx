@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { MM_TO_WORLD_SCALE } from '../../../shared/objMtlLoader';
 import { loadGameModel } from '../../../shared/gameModelLoader';
 import { attachSelectionBox } from '../../../WorkShop/WorkshopEngine/BrickFactory';
+import { disposeObject3D } from '../sceneDispose';
 import { WAREHOUSE_MODEL_CATALOG } from './warehouseModelCatalog.generated';
 import { applyMapFitTransform } from './MapLoader';
 import templatePlacements from './templatePlacements.generated.json';
@@ -209,9 +210,9 @@ const recordForTesting = (templateId, placement) => {
 const spawnPlacement = (templateId, placement, transform, scene, fallbackCorrection) => {
     const urls = resolveUrls(templateId, placement);
     if (!urls) {
-        return;
+        return Promise.resolve(null);
     }
-    loadGameModel('map-part', urls)
+    return loadGameModel('map-part', urls)
         .then((root) => {
             if (placement.instanceScale) {
                 const [sx, sy, sz] = placement.instanceScale;
@@ -252,10 +253,52 @@ const spawnPlacement = (templateId, placement, transform, scene, fallbackCorrect
             }
             scene.add(root);
             recordForTesting(templateId, placement);
+            return { root, placement };
         })
         .catch((error) => {
             console.error(`Failed to spawn placement "${placement.name}":`, error);
+            return null;
         });
+};
+
+const partBox = new THREE.Box3();
+const partCenterPt = new THREE.Vector3();
+
+/**
+ * The template export historically emits a catalog character's child
+ * body-part objects as separate local-parts too, which reassemble a
+ * duplicate character right on top of the whole catalog minifig (the "two
+ * queens"). After all placements spawn, drop any local-part reconstruction
+ * whose center lies inside a spawned catalog character's world bounds --
+ * geometric containment cleanly distinguishes body parts (inside) from
+ * distinct nearby props (outside). (The generator now also stops recursing
+ * at character roots; this runtime pass fixes the already-shipped data.)
+ */
+const dedupeCharacterParts = (spawned, scene) => {
+    const charBoxes = spawned
+        .filter((s) => s && s.placement.kind === 'character')
+        .map((s) => {
+            s.root.updateMatrixWorld(true);
+            // Expand the tight catalog box by a margin so body parts that
+            // sit just outside it -- the base plate under the feet, an
+            // extended arm -- are still caught. 1.2 world units stays well
+            // inside the ~5+ unit gap to the nearest distinct prop.
+            return new THREE.Box3().setFromObject(s.root).expandByScalar(1.2);
+        });
+    if (charBoxes.length === 0) {
+        return;
+    }
+    spawned.forEach((s) => {
+        if (!s || s.placement.kind === 'character' || s.placement.source === 'catalog') {
+            return;
+        }
+        s.root.updateMatrixWorld(true);
+        partBox.setFromObject(s.root).getCenter(partCenterPt);
+        if (charBoxes.some((box) => box.containsPoint(partCenterPt))) {
+            scene.remove(s.root);
+            disposeObject3D(s.root);
+        }
+    });
 };
 
 const MapPlacementsLoader = (mapData, transform, scene, { includeBulk = true } = {}) => {
@@ -276,7 +319,12 @@ const MapPlacementsLoader = (mapData, transform, scene, { includeBulk = true } =
     // One correction for the whole template, derived from twin-matched
     // placements (computed before spawning; the baked map is already loaded).
     const fallbackCorrection = computeFallbackCorrection(active, scene, transform);
-    active.forEach((placement) => spawnPlacement(templateId, placement, transform, scene, fallbackCorrection));
+    const spawns = active.map(
+        (placement) => spawnPlacement(templateId, placement, transform, scene, fallbackCorrection),
+    );
+    // After every placement has spawned, remove the duplicate character
+    // body-part reconstructions that sit inside a catalog character.
+    Promise.all(spawns).then((results) => dedupeCharacterParts(results, scene));
 };
 
 export default MapPlacementsLoader;

@@ -34,15 +34,17 @@ export const WorkshopProvider = ({
     dispatch({ type: 'RESET_MODES' });
   }, []);
 
-  const closeBucket = useCallback(() => {
-    dispatch({ type: 'TOGGLE_BUCKET', payload: false });
+  // Closes BOTH toolbar panels (bucket + palette) and clears the pending
+  // brick pick -- selecting any tool leaves at most one panel open.
+  const closePanels = useCallback(() => {
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: {} });
     dispatch({ type: 'CLEAR_SELECTED_BRICK' });
   }, []);
 
   const handleBucket = useCallback(() => {
     const next = !state.showBucket;
     if (next) {
-      dispatch({ type: 'TOGGLE_BUCKET', payload: true });
+      dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { panel: 'showBucket', open: true } });
       resetModes();
       return;
     }
@@ -59,30 +61,31 @@ export const WorkshopProvider = ({
   }, []);
 
   const handleMove = useCallback(() => {
-    closeBucket();
+    closePanels();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.MOVING });
-  }, [closeBucket]);
+  }, [closePanels]);
 
   const handleRotate = useCallback(() => {
-    closeBucket();
+    closePanels();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.ROTATING });
-  }, [closeBucket]);
+  }, [closePanels]);
 
   const handleDelete = useCallback(() => {
-    closeBucket();
+    closePanels();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.DELETING });
-  }, [closeBucket]);
+  }, [closePanels]);
 
   const handleDuplicate = useCallback(() => {
-    closeBucket();
+    closePanels();
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.DUPLICATING });
-  }, [closeBucket]);
+  }, [closePanels]);
 
   const handlePalette = useCallback(() => {
-    closeBucket();
+    const next = !state.isPaletteOpen;
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { panel: 'isPaletteOpen', open: next } });
+    dispatch({ type: 'CLEAR_SELECTED_BRICK' });
     dispatch({ type: 'SET_MODE', payload: WorkshopModes.PAINTING });
-    dispatch({ type: 'TOGGLE_PALETTE', payload: !state.isPaletteOpen });
-  }, [closeBucket, state.isPaletteOpen]);
+  }, [state.isPaletteOpen]);
 
   const handleColor = useCallback((color) => {
     dispatch({ type: 'SET_COLOR', payload: color });

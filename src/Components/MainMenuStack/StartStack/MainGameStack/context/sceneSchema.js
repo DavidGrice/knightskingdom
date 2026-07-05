@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { isCreationModelId } from '@/api/customCreations';
 import { WAREHOUSE_MODEL_IDS } from '../MainGame/GameEngine/Loaders/warehouseModelCatalog.generated';
+import { applyPaintedMeshes, forEachPaintableMesh } from '../shared/paintTargets';
 
 const vector3ToPlain = (v) => ({ x: v.x, y: v.y, z: v.z });
 
@@ -33,6 +34,9 @@ export const applyCameraFromState = (camera, cameraState) => {
   }
 };
 
+// Legacy whole-model tint (a base color applied to the entire model). Kept
+// for back-compat with saves made before per-piece painting; excludes the
+// selection helpers via forEachPaintableMesh so it can't tint the wireframe.
 const applyColorToModel = (root, colorHex) => {
   if (!colorHex || !root) {
     return;
@@ -40,10 +44,13 @@ const applyColorToModel = (root, colorHex) => {
 
   root.userData.color = colorHex;
   const color = new THREE.Color(parseInt(colorHex, 16));
-  root.traverse((child) => {
-    if (child.isMesh && child.isPaintable && child.material?.color) {
-      child.material.color.set(color);
-    }
+  forEachPaintableMesh(root, (mesh) => {
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach((m) => {
+      if (m?.color) {
+        m.color.set(color);
+      }
+    });
   });
 };
 
@@ -88,6 +95,10 @@ export const applySavedSceneToThree = (scene, camera, savedScene, { restorePlaya
       target.rotation.set(entry.rotation.x, entry.rotation.y, entry.rotation.z);
     }
     applyColorToModel(target, entry.color);
+    if (entry.paintedMeshes) {
+      target.userData.paintedMeshes = entry.paintedMeshes;
+      applyPaintedMeshes(target, entry.paintedMeshes);
+    }
   });
 
   playableEntries.forEach((entry) => {
@@ -124,6 +135,7 @@ export const serializeSceneFromThree = (scene, camera, climate) => {
       position: vector3ToPlain(child.position),
       rotation: eulerToPlain(child.rotation),
       color: child.userData?.color || null,
+      paintedMeshes: child.userData?.paintedMeshes || null,
     });
   });
 

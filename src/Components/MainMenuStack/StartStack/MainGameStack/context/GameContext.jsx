@@ -4,6 +4,7 @@ import { musicTracks } from '../MainGame/MainGameResourceStack/index';
 import { createEmptySceneState, createSnapshotEntry } from './sceneSchema';
 import { gameReducer, initialGameState } from './gameReducer';
 import { resolveGameSettings } from '@/lib/gameSettings';
+import { playMusic, stopMusic } from '../shared/audioManager';
 
 const GameContext = createContext(null);
 
@@ -34,8 +35,6 @@ export const GameProvider = ({
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   const [hydrationScene, setHydrationScene] = useState(null);
   const gameEngineRef = useRef(null);
-  const audioRef = useRef(null);
-  const audioPlayTokenRef = useRef(0);
 
   // Engine + UI settings resolved from the profile's Options-menu choices.
   const settings = useMemo(() => resolveGameSettings(selectedProfile), [selectedProfile]);
@@ -43,12 +42,7 @@ export const GameProvider = ({
   musicEnabledRef.current = settings.musicEnabled;
 
   const stopMusicPlayback = useCallback(() => {
-    audioPlayTokenRef.current += 1;
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current = null;
-    }
+    stopMusic();
   }, []);
 
   const startMusicPlayback = useCallback((track) => {
@@ -56,28 +50,14 @@ export const GameProvider = ({
     // Profile option "music: off" (Options menu) silences playback while
     // leaving the in-game music selector usable -- the choice still saves.
     if (!source || !musicEnabledRef.current) {
-      stopMusicPlayback();
+      stopMusic();
       return;
     }
-
-    stopMusicPlayback();
-    const playToken = audioPlayTokenRef.current;
-    const newAudio = new Audio(source);
-    newAudio.loop = true;
-    audioRef.current = newAudio;
-
-    const playAttempt = newAudio.play();
-    if (playAttempt?.catch) {
-      playAttempt.catch((error) => {
-        if (playToken !== audioPlayTokenRef.current) {
-          return;
-        }
-        if (error?.name !== 'AbortError') {
-          console.warn('Music playback failed:', error);
-        }
-      });
-    }
-  }, [stopMusicPlayback]);
+    // Routed through the shared audioManager: it owns a single looping
+    // element that self-heals if a character-voice SFX (or the browser media
+    // session) pauses it, which is what used to make music "stop working".
+    playMusic(source);
+  }, []);
 
   useEffect(() => () => {
     stopMusicPlayback();
@@ -137,8 +117,8 @@ export const GameProvider = ({
 
   const handleBucket = useCallback(() => {
     const next = !state.showBucket;
-    dispatch({ type: 'TOGGLE_BUCKET', payload: next });
-    if (!state.showBucket) {
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { panel: 'showBucket', open: next } });
+    if (next) {
       resetModes();
     }
   }, [state.showBucket, resetModes]);
@@ -148,58 +128,44 @@ export const GameProvider = ({
     dispatch({ type: 'SET_MODE', payload: Modes.ADDING });
   }, []);
 
-  const closeBucket = useCallback(() => {
-    if (state.showBucket) {
-      dispatch({ type: 'TOGGLE_BUCKET', payload: false });
-    }
-  }, [state.showBucket]);
-
   const handleMove = useCallback(() => {
-    closeBucket();
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: {} });
     dispatch({ type: 'SET_MODE', payload: Modes.MOVING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [closeBucket]);
+  }, []);
 
   const handleRotate = useCallback(() => {
-    closeBucket();
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: {} });
     dispatch({ type: 'SET_MODE', payload: Modes.ROTATING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [closeBucket]);
+  }, []);
 
   const handlePalette = useCallback(() => {
-    closeBucket();
+    const next = !state.isPaletteOpen;
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { panel: 'isPaletteOpen', open: next } });
     dispatch({ type: 'SET_MODE', payload: Modes.PAINTING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-    if (state.isFollowing) {
-      dispatch({ type: 'SET_FOLLOWING', payload: false });
-    }
-    dispatch({ type: 'TOGGLE_PALETTE', payload: !state.isPaletteOpen });
-  }, [closeBucket, state.isFollowing, state.isPaletteOpen]);
+  }, [state.isPaletteOpen]);
 
   const handleColor = useCallback((color) => {
     dispatch({ type: 'SET_COLOR', payload: color });
   }, []);
 
   const handleDelete = useCallback(() => {
-    closeBucket();
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: {} });
     dispatch({ type: 'SET_MODE', payload: Modes.DELETING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [closeBucket]);
+  }, []);
 
   const handleAction = useCallback(() => {
-    closeBucket();
-    dispatch({ type: 'SET_ACTION_OPEN', payload: !state.isActionOpen });
+    const next = !state.isActionOpen;
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { panel: 'isActionOpen', open: next } });
     dispatch({ type: 'SET_MODE', payload: Modes.ACTION });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [closeBucket, state.isActionOpen]);
+  }, [state.isActionOpen]);
 
   const handleDrive = useCallback(() => {
-    if (state.isPaletteOpen) {
-      dispatch({ type: 'TOGGLE_PALETTE', payload: false });
-    }
-    if (state.showBucket) {
-      dispatch({ type: 'TOGGLE_BUCKET', payload: false });
-    }
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { keepDrive: true } });
     dispatch({ type: 'SET_MODE', payload: Modes.DRIVING });
     if (state.isFollowing) {
       dispatch({ type: 'SET_FOLLOWING', payload: false });
@@ -210,38 +176,28 @@ export const GameProvider = ({
       dispatch({ type: 'SET_CAMERA_NEEDS_RESET', payload: false });
     }
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);
+  }, [state.isFollowing]);
 
   const handleDriveViewSwitch = useCallback((view) => {
     dispatch({ type: 'SET_DRIVE_VIEW', payload: view });
   }, []);
 
   const handlePaintAndDrive = useCallback(() => {
-    if (state.isPaletteOpen) {
-      dispatch({ type: 'TOGGLE_PALETTE', payload: false });
-    }
-    if (state.isFollowing) {
-      dispatch({ type: 'SET_FOLLOWING', payload: false });
-    }
-    if (state.showBucket) {
-      dispatch({ type: 'TOGGLE_BUCKET', payload: false });
-    }
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: {} });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [state.isFollowing, state.isPaletteOpen, state.showBucket]);
+  }, []);
 
   const handlePlay = useCallback(() => {
-    closeBucket();
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: {} });
     dispatch({ type: 'SET_MODE', payload: Modes.PLAYING });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [closeBucket]);
+  }, []);
 
   const handleClimate = useCallback(() => {
-    if (state.isMusicOpen) {
-      dispatch({ type: 'TOGGLE_MUSIC', payload: false });
-    }
-    dispatch({ type: 'TOGGLE_CLIMATE', payload: !state.isClimateOpen });
+    const next = !state.isClimateOpen;
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { panel: 'isClimateOpen', open: next } });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [state.isClimateOpen, state.isMusicOpen]);
+  }, [state.isClimateOpen]);
 
   const handleWeatherChange = useCallback((index) => {
     dispatch({
@@ -263,12 +219,10 @@ export const GameProvider = ({
   }, [startMusicPlayback, stopMusicPlayback]);
 
   const handleMusic = useCallback(() => {
-    if (state.isClimateOpen) {
-      dispatch({ type: 'TOGGLE_CLIMATE', payload: false });
-    }
-    dispatch({ type: 'TOGGLE_MUSIC', payload: !state.isMusicOpen });
+    const next = !state.isMusicOpen;
+    dispatch({ type: 'OPEN_EXCLUSIVE_PANEL', payload: { panel: 'isMusicOpen', open: next } });
     dispatch({ type: 'SET_SELECTED_MODEL_MODE', payload: 'NONE' });
-  }, [state.isClimateOpen, state.isMusicOpen]);
+  }, [state.isMusicOpen]);
 
   const closeClimate = useCallback(() => {
     dispatch({ type: 'TOGGLE_CLIMATE', payload: false });

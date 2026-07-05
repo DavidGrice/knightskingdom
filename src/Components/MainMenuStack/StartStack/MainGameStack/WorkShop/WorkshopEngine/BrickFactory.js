@@ -71,6 +71,14 @@ const applyColor = (root, colorHex) => {
   });
 };
 
+// Recolour a brick ONLY when the player picked a paint colour different from
+// the native default -- otherwise the brick keeps its authentic MTL colours.
+const maybeApplyColor = (root, colorHex) => {
+  if (colorHex != null && colorHex !== DEFAULT_COLOR) {
+    applyColor(root, colorHex);
+  }
+};
+
 const createStud = (material) => {
   const geometry = new THREE.CylinderGeometry(studRadius, studRadius, studHeight, 12);
   const stud = new THREE.Mesh(geometry, material);
@@ -90,7 +98,12 @@ const createStud = (material) => {
  * stud material along with the body, so studs match the brick colour.
  */
 const finishObjBrick = (root, recipe, colorHex) => {
-  applyColor(root, colorHex);
+  // Authentic per-brick colour: leave the brick in the colours its own MTL
+  // carries (the two-tone yellow body/tubes + the textured LEGO studs) unless
+  // the player explicitly picked a DIFFERENT paint colour. Force-recolouring
+  // every placed brick to one flat tone is what flattened the shading and,
+  // via the parametric fallbacks, produced off-colour (blue) starts.
+  maybeApplyColor(root, colorHex);
   return root;
 };
 
@@ -217,7 +230,15 @@ const createCompositeBrick = (recipe, colorHex) => {
   group.add(frame);
 
   if (height > PLATE_HEIGHT * 3) {
-    const insetMat = createMaterial(0x223355);
+    // A recessed detail block: a darker shade of the brick's OWN colour, not a
+    // hardcoded blue (which made tall composite bricks start blue instead of
+    // matching the brick).
+    const insetColor = toThreeColor(colorHex).multiplyScalar(0.6);
+    const insetMat = new THREE.MeshStandardMaterial({
+      color: insetColor,
+      roughness: 0.45,
+      metalness: 0.05,
+    });
     const inset = new THREE.Mesh(
       new THREE.BoxGeometry(width * 0.55, height * 0.45, depth * 0.4),
       insetMat,
@@ -377,7 +398,7 @@ export const createBrick = async (brickId, options = {}) => {
   } else if (recipe.shape === 'GLB' && recipe.glbUrl) {
     try {
       root = await loadGlbBrick(recipe.glbUrl);
-      applyColor(root, colorHex);
+      maybeApplyColor(root, colorHex);
       alignBrickBottomToOrigin(root);
     } catch (error) {
       console.warn(`GLB load failed for ${brickId}, using parametric fallback:`, error);
@@ -421,7 +442,7 @@ export const createBrickSync = (brickId, options = {}) => {
     const cached = getCachedGlbScene(recipe.glbUrl);
     if (cached) {
       root = cached.clone(true);
-      applyColor(root, colorHex);
+      maybeApplyColor(root, colorHex);
       alignBrickBottomToOrigin(root);
       root.traverse((child) => {
         if (child.isMesh) {
