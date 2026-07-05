@@ -40,10 +40,12 @@ const SUITES = {
     'testing/workshop/layout/workshop-bucket.layout.test.mjs',
     'testing/workshop/layout/workshop-palette.layout.test.mjs',
     'testing/workshop/visual/workshop-baselines.visual.test.mjs',
+    'testing/workshop/smoke/workshop-routes.smoke.test.mjs',
   ],
   engine: [
     'testing/world-load.test.mjs',
     'testing/placements.test.mjs',
+    'testing/template-map-render.test.mjs',
   ],
   extraction: [
     'testing/extraction_fixtures_test.py',

@@ -22,6 +22,10 @@ const UNIT_SUITES = [
   'testing/workshop/unit/workshop-css-vars.test.mjs',
 ];
 
+const SMOKE_SUITES = [
+  'testing/workshop/smoke/workshop-routes.smoke.test.mjs',
+];
+
 const LAYOUT_SUITES = [
   'testing/workshop/layout/workshop-default.layout.test.mjs',
   'testing/workshop/layout/workshop-bucket.layout.test.mjs',
@@ -36,12 +40,15 @@ const args = process.argv.slice(2);
 const unitOnly = args.includes('--unit-only');
 const layoutOnly = args.includes('--layout-only');
 const visualOnly = args.includes('--visual-only');
+const smokeOnly = args.includes('--smoke-only');
 
-let selected = [...UNIT_SUITES, ...LAYOUT_SUITES, ...VISUAL_SUITES];
+let selected = [...UNIT_SUITES, ...LAYOUT_SUITES, ...SMOKE_SUITES, ...VISUAL_SUITES];
 if (unitOnly) {
   selected = UNIT_SUITES;
 } else if (layoutOnly) {
   selected = LAYOUT_SUITES;
+} else if (smokeOnly) {
+  selected = SMOKE_SUITES;
 } else if (visualOnly) {
   selected = VISUAL_SUITES;
 }
@@ -71,9 +78,11 @@ const main = async () => {
     ? 'unit'
     : layoutOnly
       ? 'layout'
-      : visualOnly
-        ? 'visual'
-        : 'unit + layout + visual';
+      : smokeOnly
+        ? 'smoke'
+        : visualOnly
+          ? 'visual'
+          : 'unit + layout + smoke + visual';
 
   console.log(`Workshop GUI pipeline (${phase}) — ${selected.length} suite(s)`);
   if (!unitOnly) {
