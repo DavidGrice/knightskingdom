@@ -1,7 +1,7 @@
 .profileRow {
   position: relative;
   width: var(--auth-row-w, 528px);
-  height: var(--auth-row-h, 99px);
+  height: var(--auth-row-h, 90px);
   flex-shrink: 0;
   cursor: pointer;
 }
@@ -9,7 +9,7 @@
 .profileSprite {
   display: block;
   width: var(--auth-row-w, 528px);
-  height: var(--auth-row-h, 99px);
+  height: var(--auth-row-h, 90px);
   pointer-events: none;
   user-select: none;
 }

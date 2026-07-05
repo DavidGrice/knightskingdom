@@ -13,11 +13,11 @@ import { HOLDER_VARIANTS } from '../HolderGridLayout/holderGridMetrics.js';
 
 export const MENU_CANVAS = { width: 800, height: 600 };
 
-/** Shared corner controls (measured from background art, 800×600) */
+/** Shared corner controls (measured from background art, 800×600) — bottom-anchored */
 export const MENU_CORNERS = {
-  checkmark: { x: 120, y: 560, width: 169, height: 123 },
-  trash: { x: 631, y: 560, width: 169, height: 123 },
-  leave: { x: 696, y: 0, width: 80, height: 87 },
+  checkmark: { x: 120, bottom: 10 },
+  trash: { x: 614, bottom: 10 },
+  leave: { x: 696, y: 0 },
 };
 
 /** @typedef {'SINGLE_HEADER' | 'DUAL_HEADER' | 'PROFILE_LIST'} PanelArchetype */
@@ -32,11 +32,11 @@ export const MENU_SCREEN_METRICS = {
     scaleMode: 'modern',
     /** Native rank sprites are 528×99; modern layout uses slightly shorter display + gaps */
     profileList: {
-      x: 248,
-      anchorY: 0.40,
+      x: 168,
+      anchorY: 0.36,
       rowWidth: 528,
-      rowHeight: 92,
-      rowGap: 14,
+      rowHeight: 90,
+      rowGap: 10,
       maxRows: 5,
     },
     nameOverlay: { left: 200, width: 280 },
@@ -101,9 +101,9 @@ export const menuStageToCssVars = (screenKey) => {
     '--msl-canvas-w': `${MENU_CANVAS.width}px`,
     '--msl-canvas-h': `${MENU_CANVAS.height}px`,
     '--msl-check-x': `${MENU_CORNERS.checkmark.x}px`,
-    '--msl-check-y': `${MENU_CORNERS.checkmark.y}px`,
+    '--msl-check-bottom': `${MENU_CORNERS.checkmark.bottom}px`,
     '--msl-trash-x': `${MENU_CORNERS.trash.x}px`,
-    '--msl-trash-y': `${MENU_CORNERS.trash.y}px`,
+    '--msl-trash-bottom': `${MENU_CORNERS.trash.bottom}px`,
     '--msl-leave-x': `${MENU_CORNERS.leave.x}px`,
     '--msl-leave-y': `${MENU_CORNERS.leave.y}px`,
   };

@@ -3,7 +3,7 @@ import { gotoAuthentication } from './lib/menuDriver.mjs';
 import { assertMenuStagePresent, captureScreenshot } from './lib/menuLayoutAssert.mjs';
 
 const ROW_W = 528;
-const ROW_H = 92;
+const ROW_H = 90;
 
 const main = async () => {
   const { browser, page, errors } = await launch();
@@ -54,8 +54,8 @@ const main = async () => {
     const stageBox = await stageHandle.boundingBox();
     const rowBox = await firstRowHandle.boundingBox();
     const listX = (rowBox.x - stageBox.x) / scale;
-    if (listX < 180 || listX > 340) {
-      throw new Error(`Profile list X drift: ${listX.toFixed(0)}px on 800×600 canvas (want 220–320)`);
+    if (listX < 130 || listX > 220) {
+      throw new Error(`Profile list X drift: ${listX.toFixed(0)}px on 800×600 canvas (want 150–210)`);
     }
 
     const scaleMode = await page.$eval('[data-testid="menu-root"]', (el) => el.getAttribute('data-scale-mode'));
@@ -64,8 +64,16 @@ const main = async () => {
     }
 
     const stackCenterY = (rowBox.y + rowBox.height / 2 - stageBox.y) / scale;
-    if (stackCenterY > 300) {
-      throw new Error(`Profile stack too low: center Y=${stackCenterY.toFixed(0)} (want < 300 on 600px canvas)`);
+    if (stackCenterY > 280) {
+      throw new Error(`Profile stack too low: center Y=${stackCenterY.toFixed(0)} (want < 280 on 600px canvas)`);
+    }
+
+    const rows = await page.$$('[data-testid="profile-row"]');
+    const lastRow = rows[rows.length - 1];
+    const lastBox = await lastRow.boundingBox();
+    const stageBottom = stageBox.y + stageBox.height;
+    if (lastBox.y + lastBox.height > stageBottom + 2) {
+      throw new Error('Last profile row extends below stage (Emma clip)');
     }
 
     const checkmark = await page.$('[data-testid="menu-corner-checkmark"]');
