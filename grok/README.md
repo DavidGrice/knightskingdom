@@ -266,3 +266,4 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | [CHANGELOG.md](./CHANGELOG.md) | Detailed completed changes |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Deeper codebase breakdown |
 | [WORKSHOP_3D.md](./WORKSHOP_3D.md) | Phase 11 — workshop 3D editor plan & handoff |
+| [BLENDER_MCP.md](./BLENDER_MCP.md) | Grok ↔ Blender MCP setup (uvx, addon, export paths) |
