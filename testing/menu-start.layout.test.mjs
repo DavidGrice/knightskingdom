@@ -25,8 +25,17 @@ const main = async () => {
     }
 
     // Toggle to shared worlds tab
-    const sharedTab = await page.$('[class*="sharedWorldsHeader"]');
+    const localTab = await page.$('[data-testid="world-tab-local"]');
+    const sharedTab = await page.$('[data-testid="world-tab-shared"]');
+    const localActiveBefore = await localTab.evaluate((el) => el.getAttribute('data-active'));
+    if (localActiveBefore !== 'true') {
+      throw new Error('Local tab should be active on load');
+    }
     await sharedTab.click();
+    const sharedActive = await sharedTab.evaluate((el) => el.getAttribute('data-active'));
+    if (sharedActive !== 'true') {
+      throw new Error('Shared tab should be active after click');
+    }
     await new Promise((r) => setTimeout(r, 500));
 
     if (process.env.TEST_CAPTURE) {

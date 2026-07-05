@@ -29,8 +29,10 @@ export const MENU_CORNERS = {
 export const MENU_SCREEN_METRICS = {
   AUTHENTICATION: {
     archetype: 'PROFILE_LIST',
-    profileColumn: { x: 400, y: 200, width: 320, slotHeight: 56 },
-    enterNameBanner: { x: 400, y: 120, width: 280, height: 48 },
+    /** Full rank row sprites (page_2.png etc.) are 528×99 */
+    profileList: { x: 262, y: 118, rowWidth: 528, rowHeight: 99 },
+    nameOverlay: { left: 200, width: 280 },
+    enterNameBanner: { x: 526, y: 82 },
     corners: { checkmark: true, trash: true, leave: false },
   },
   START_WORLD: {
@@ -103,12 +105,20 @@ export const menuStageToCssVars = (screenKey) => {
     vars['--msl-holder-cy'] = `${screen.holderCenter.y}px`;
   }
 
-  if (screen?.profileColumn) {
-    const { x, y, width, slotHeight } = screen.profileColumn;
-    vars['--msl-profile-x'] = `${x}px`;
-    vars['--msl-profile-y'] = `${y}px`;
-    vars['--msl-profile-w'] = `${width}px`;
-    vars['--msl-profile-slot'] = `${slotHeight}px`;
+  if (screen?.profileList) {
+    const { x, y, rowWidth, rowHeight } = screen.profileList;
+    vars['--auth-list-x'] = `${x}px`;
+    vars['--auth-list-y'] = `${y}px`;
+    vars['--auth-row-w'] = `${rowWidth}px`;
+    vars['--auth-row-h'] = `${rowHeight}px`;
+  }
+  if (screen?.nameOverlay) {
+    vars['--auth-name-left'] = `${screen.nameOverlay.left}px`;
+    vars['--auth-name-w'] = `${screen.nameOverlay.width}px`;
+  }
+  if (screen?.enterNameBanner) {
+    vars['--auth-banner-x'] = `${screen.enterNameBanner.x}px`;
+    vars['--auth-banner-y'] = `${screen.enterNameBanner.y}px`;
   }
 
   return vars;

@@ -1,32 +1,45 @@
-.profileContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-
-.enterNameImage {
-    position: absolute;
-    top: 10%; /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
+.profileRow {
+  position: relative;
+  width: var(--auth-row-w, 528px);
+  height: var(--auth-row-h, 99px);
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
-.profileInput {
+.profileSprite {
+  display: block;
+  width: var(--auth-row-w, 528px);
+  height: var(--auth-row-h, 99px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.nameOverlay {
+  position: absolute;
+  left: var(--auth-name-left, 200px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--auth-name-w, 280px);
   display: flex;
   align-items: center;
 }
 
 .profileDiv {
-  position: fixed;
-  text-align: left;
-  margin-top: 1.5%;
-  left: 52%; 
-  width: 20%;
-  transform: translate(-50%, -50%);
-  color: #FFFFC6;
+  color: #ffffc6;
   font-size: 24px;
-  font-weight: lighter;
+  font-weight: 300;
   font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.enterNameImage {
+  position: absolute;
+  left: var(--auth-banner-x, 400px);
+  top: var(--auth-banner-y, 82px);
+  transform: translateX(-50%);
+  z-index: 4;
+  pointer-events: none;
 }

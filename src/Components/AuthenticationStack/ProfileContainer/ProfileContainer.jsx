@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ProfileIcon, ProfileInput } from '..';
+import { ProfileInput } from '..';
 import { defaultProfileOptions } from '../../../api';
 import EnterNameHereImage from '../AuthStackResources/text-updated.png';
 import styles from './ProfileContainer.module.css';
@@ -61,24 +61,26 @@ const ProfileContainer = ({
   const profileImage = getProfileImage(level, isSelected);
 
   return (
-    <div className={styles.profileContainer} onClick={onClick}>
-      <div className={styles.profileInput}>
-        <ProfileIcon image={profileImage} />
-        {isNewProfile ? (
-          <ProfileInput
-            text={text}
-            setText={setText}
-            setShowEnterNameImage={setShowEnterNameImage}
-            handleAddProfile={handleAddProfile}
-          />
-        ) : (
-          <div className={styles.profileDiv}>{text}</div>
-        )}
-      </div>
-      {showEnterNameImage ? (
+    <>
+      {isNewProfile && showEnterNameImage ? (
         <img className={styles.enterNameImage} src={EnterNameHereImage} alt="Enter Name" />
       ) : null}
-    </div>
+      <div className={styles.profileRow} onClick={onClick} data-testid="profile-row">
+        <img className={styles.profileSprite} src={profileImage} alt="" />
+        <div className={styles.nameOverlay}>
+          {isNewProfile ? (
+            <ProfileInput
+              text={text}
+              setText={setText}
+              setShowEnterNameImage={setShowEnterNameImage}
+              handleAddProfile={handleAddProfile}
+            />
+          ) : (
+            <div className={styles.profileDiv}>{text}</div>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

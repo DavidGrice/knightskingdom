@@ -5,7 +5,6 @@ import { useManagedLoading } from '@/lib/context/GameLoadingProvider';
 
 const World = ({ setWorldData }) => {
   const [isLocalWorlds, setIsLocalWorlds] = useState(true);
-  const [isSharedWorlds, setIsSharedWorlds] = useState(false);
   const [didUpdate, setDidUpdate] = useState(false);
   const [isSwitchingPanel, setIsSwitchingPanel] = useState(false);
 
@@ -19,21 +18,23 @@ const World = ({ setWorldData }) => {
     return () => window.clearTimeout(timer);
   }, [didUpdate, isSwitchingPanel]);
 
-  const changeWorld = () => {
-    setIsSwitchingPanel(true);
-    if (isLocalWorlds) {
-      setIsLocalWorlds(false);
-      setIsSharedWorlds(true);
-    } else {
-      setIsSharedWorlds(false);
-      setIsLocalWorlds(true);
+  const switchPanel = (local) => {
+    if (local === isLocalWorlds) {
+      return;
     }
+    setIsSwitchingPanel(true);
+    setIsLocalWorlds(local);
     setDidUpdate((prev) => !prev);
+    setWorldData(null);
   };
 
   return (
-    <div className={styles.componentHolder}>
-      <WorldHeader changeWorld={changeWorld} />
+    <div className={styles.componentHolder} data-testid="world-panel-shell">
+      <WorldHeader
+        isLocalWorlds={isLocalWorlds}
+        onSelectLocal={() => switchPanel(true)}
+        onSelectShared={() => switchPanel(false)}
+      />
       <WorldBody
         isLocalWorlds={isLocalWorlds}
         didUpdate={didUpdate}

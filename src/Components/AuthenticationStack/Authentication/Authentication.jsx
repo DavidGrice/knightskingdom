@@ -33,8 +33,6 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
   const handleCheckmarkClick = () => {
     if (selectedProfile) {
       navigateToMainMenu(selectedProfile);
-    } else {
-      alert('Please select a profile first.');
     }
   };
 
@@ -43,8 +41,6 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
       const updatedData = newData.filter((profile) => profile.id !== selectedProfile.id);
       updateProfiles(updatedData);
       setSelectedProfile(null);
-    } else {
-      alert('Please select a profile first.');
     }
   };
 
@@ -52,24 +48,26 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
     <MenuScreenLayout
       screenKey="AUTHENTICATION"
       backgroundImage={backgroundImage}
-      contentClassName={styles.centeredContainer}
-      bottomLeft={<BackCheckmarkButton onClick={handleCheckmarkClick} />}
-      bottomRight={
+      bottomLeft={(
+        <BackCheckmarkButton onClick={handleCheckmarkClick} />
+      )}
+      bottomRight={(
         <CommonComponent
           initialImage={Trashcan2}
           hoverImage={Trashcan4}
           altText="Trashcan"
           onClick={handleTrashcanClick}
         />
-      }
+      )}
     >
+      <div className={styles.profileScene} data-testid="auth-profile-list">
       {newData.length < 5 && (
         <ProfileContainer
           key="empty-input"
           name=""
           level="page"
           onClick={() => setSelectedProfile(null)}
-          isNewProfile={true}
+          isNewProfile
           isSelected={false}
           handleProfileSelect={handleProfileSelect}
           newData={newData}
@@ -88,6 +86,7 @@ const Authentication = ({ userData, updateUserData, navigateToMainMenu }) => {
           isSelected={selectedProfile && selectedProfile.id === profile.id}
         />
       ))}
+      </div>
     </MenuScreenLayout>
   );
 };

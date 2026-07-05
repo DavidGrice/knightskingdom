@@ -17,7 +17,9 @@
 | Untrack ~1,000 PNGs from git index (9 research PNGs remain) | ✅ |
 | `MenuStageLayout` + `MenuPanelShell` + `menuStageMetrics.js` | ✅ Built |
 | `MenuScreenLayout` → delegates to `MenuStageLayout` | ✅ Wired |
-| Auth + Start use `screenKey` + stage corners | ✅ Partial |
+| Auth + Start use `screenKey` + stage corners | ✅ Done |
+| Auth profile rows (528×99 sprites + name overlay) | ✅ A3 done (2026-07-05) |
+| World dual-header active tab sprites | ✅ A2 done (2026-07-05) |
 | `grok/analyze-menu-images.mjs` | ✅ |
 | `/testing` regression suite + `run-regression.mjs` | ✅ |
 | MyModels / SnapShot on `MenuStageLayout` | ⬜ Next PR |

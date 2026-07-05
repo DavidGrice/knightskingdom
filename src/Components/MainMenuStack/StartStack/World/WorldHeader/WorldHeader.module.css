@@ -6,19 +6,20 @@
 }
 
 .localWorldsHeader {
-    background-image: url('./WorldHeaderResourceStack/local_worlds_2.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     width: 141px;
     height: 57px;
     margin-left: 9.7%;
+    cursor: pointer;
 }
+
 .sharedWorldsHeader {
-    background-image: url('./WorldHeaderResourceStack/shared_worlds_2.png');
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
     width: 141px;
     height: 57px;
-    /* margin-left: 0.5%; */
+    cursor: pointer;
 }

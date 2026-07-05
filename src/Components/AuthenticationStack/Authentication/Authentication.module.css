@@ -1,31 +1,9 @@
-.backgroundImage {
-  background-image: url('../AuthStackResources/background.png');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  z-index: 1;
-}
-
-.centeredContainer {
+.profileScene {
+  position: absolute;
+  left: var(--auth-list-x, 262px);
+  top: var(--auth-list-y, 118px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Full viewport height */
-  width: 100vw;  /* Full viewport width */
-}
-
-.bottomLeftCorner {
-  position: absolute;
-  bottom: 10px; /* Adjust as needed */
-  left: 15%; /* Adjust as needed */
-}
-
-.bottomRightCorner {
-  position: absolute;
-  bottom: 10px; /* Adjust as needed */
-  right: 15%; /* Adjust as needed */
+  align-items: flex-start;
+  z-index: 3;
 }

@@ -2,11 +2,61 @@ import { launch } from './lib/driver.mjs';
 import { gotoAuthentication } from './lib/menuDriver.mjs';
 import { assertMenuStagePresent, captureScreenshot } from './lib/menuLayoutAssert.mjs';
 
+const ROW_W = 528;
+const ROW_H = 99;
+
 const main = async () => {
   const { browser, page, errors } = await launch();
   try {
     await gotoAuthentication(page);
-    await assertMenuStagePresent(page, { screenKey: 'AUTHENTICATION' });
+    const { scale, rect: stageRect } = await assertMenuStagePresent(page, {
+      screenKey: 'AUTHENTICATION',
+    });
+
+    const layout = await page.evaluate(() => {
+      const stage = document.querySelector('[data-testid="menu-stage"]');
+      const rows = [...document.querySelectorAll('[data-testid="profile-row"]')];
+      const stageR = stage?.getBoundingClientRect();
+      return rows.map((row) => {
+        const r = row.getBoundingClientRect();
+        const sprite = row.querySelector('img');
+        const name = row.querySelector('[class*="profileDiv"], input');
+        const sr = sprite?.getBoundingClientRect();
+        const nr = name?.getBoundingClientRect();
+        return {
+          row: { w: r.width, h: r.height, x: r.x - stageR.x, y: r.y - stageR.y },
+          sprite: sr ? { w: sr.width, h: sr.height } : null,
+          name: nr ? { text: name.value ?? name.textContent, x: nr.x - r.x } : null,
+        };
+      });
+    });
+
+    if (layout.length < 1) {
+      throw new Error('No profile rows found');
+    }
+
+    for (const row of layout) {
+      const w = row.sprite?.w ?? row.row.w;
+      const h = row.sprite?.h ?? row.row.h;
+      if (Math.abs(w - ROW_W * scale) > 6 || Math.abs(h - ROW_H * scale) > 6) {
+        throw new Error(
+          `Profile sprite size drift: ${w.toFixed(0)}×${h.toFixed(0)} `
+          + `(expected ~${(ROW_W * scale).toFixed(0)}×${(ROW_H * scale).toFixed(0)})`,
+        );
+      }
+      if (row.name && row.name.x < 80 * scale) {
+        throw new Error(`Name "${row.name.text}" too far left (x=${row.name.x.toFixed(0)} within row)`);
+      }
+    }
+
+    const stageHandle = await page.$('[data-testid="menu-stage"]');
+    const firstRowHandle = await page.$('[data-testid="profile-row"]');
+    const stageBox = await stageHandle.boundingBox();
+    const rowBox = await firstRowHandle.boundingBox();
+    const listX = (rowBox.x - stageBox.x) / scale;
+    if (listX < 180 || listX > 340) {
+      throw new Error(`Profile list X drift: ${listX.toFixed(0)}px on 800×600 canvas (want 220–320)`);
+    }
 
     const checkmark = await page.$('[data-testid="menu-corner-checkmark"]');
     const trash = await page.$('[data-testid="menu-corner-trash"]');
@@ -14,16 +64,14 @@ const main = async () => {
       throw new Error('Auth corners: checkmark or trash slot missing');
     }
 
-    if (process.env.TEST_CAPTURE) {
-      await captureScreenshot(page, 'menu-auth');
-    }
+    await captureScreenshot(page, 'auth-fixed');
 
     const realErrors = errors.filter((e) => !e.includes('favicon.ico'));
     if (realErrors.length > 0) {
       throw new Error(`Console errors: ${realErrors.join('; ')}`);
     }
 
-    console.log('PASS menu-auth.layout');
+    console.log('PASS menu-auth.layout', { rows: layout.length, scale, stageRect });
   } finally {
     await browser.close();
   }
