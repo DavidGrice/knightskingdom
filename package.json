@@ -15,6 +15,7 @@
     "test:menu:unit": "node testing/run-menu-pipeline.mjs --unit-only",
     "test:menu:layout": "node testing/run-menu-pipeline.mjs --layout-only",
     "test:menu:scale-matrix": "node testing/menu/layout/menu-scale-matrix.test.mjs",
+    "test:menu:smoke": "node testing/run-menu-pipeline.mjs --smoke-only",
     "test:menu": "node testing/run-menu-pipeline.mjs",
     "test:gui": "node testing/run-menu-pipeline.mjs",
     "test:regression": "node testing/run-regression.mjs",

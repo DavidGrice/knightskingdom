@@ -13,27 +13,28 @@ export const gotoAuthentication = async (page) => {
   await page.goto(`${BASE_URL}/authentication`, { waitUntil: 'networkidle0' });
 };
 
+const AUTH_FIXTURE_PROFILES = [
+  {
+    id: 1,
+    name: 'David',
+    level: 'knight',
+    options: { brickQuality: 'high', renderer: 'hardware', dialogue: 'off', music: 'off' },
+  },
+  {
+    id: 2,
+    name: 'Alice',
+    level: 'page',
+    options: { brickQuality: 'high', renderer: 'hardware', dialogue: 'off', music: 'off' },
+  },
+];
+
 /** Auth with seeded profiles — empty row + named rows for typography/layout tests */
 export const gotoAuthenticationWithProfiles = async (page) => {
-  await page.goto(`${BASE_URL}/authentication`, { waitUntil: 'networkidle0' });
-  await page.evaluate(() => {
-    const profiles = [
-      {
-        id: 1,
-        name: 'David',
-        level: 'knight',
-        options: { brickQuality: 'high', renderer: 'hardware', dialogue: 'off', music: 'off' },
-      },
-      {
-        id: 2,
-        name: 'Alice',
-        level: 'page',
-        options: { brickQuality: 'high', renderer: 'hardware', dialogue: 'off', music: 'off' },
-      },
-    ];
+  await page.goto(`${BASE_URL}/authentication`, { waitUntil: 'domcontentloaded' });
+  await page.evaluate((profiles) => {
     localStorage.setItem('knights-kingdom-user-data', JSON.stringify(profiles));
     sessionStorage.removeItem('knights-kingdom-auth');
-  });
+  }, AUTH_FIXTURE_PROFILES);
   await page.reload({ waitUntil: 'networkidle0' });
 };
 

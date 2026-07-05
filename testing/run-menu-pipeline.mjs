@@ -34,15 +34,22 @@ const LAYOUT_SUITES = [
   'testing/menu/layout/menu-scale-matrix.test.mjs',
 ];
 
+const SMOKE_SUITES = [
+  'testing/menu/smoke/menu-routes.smoke.test.mjs',
+];
+
 const args = process.argv.slice(2);
 const unitOnly = args.includes('--unit-only');
 const layoutOnly = args.includes('--layout-only');
+const smokeOnly = args.includes('--smoke-only');
 
-let selected = [...UNIT_SUITES, ...LAYOUT_SUITES];
+let selected = [...UNIT_SUITES, ...LAYOUT_SUITES, ...SMOKE_SUITES];
 if (unitOnly) {
   selected = UNIT_SUITES;
 } else if (layoutOnly) {
   selected = LAYOUT_SUITES;
+} else if (smokeOnly) {
+  selected = SMOKE_SUITES;
 }
 
 const runNode = (rel) => new Promise((resolve, reject) => {
@@ -62,7 +69,13 @@ const runNode = (rel) => new Promise((resolve, reject) => {
 });
 
 const main = async () => {
-  const phase = unitOnly ? 'unit' : layoutOnly ? 'layout' : 'unit + layout';
+  const phase = unitOnly
+    ? 'unit'
+    : layoutOnly
+      ? 'layout'
+      : smokeOnly
+        ? 'smoke'
+        : 'unit + layout + smoke';
   console.log(`Menu GUI pipeline (${phase}) — ${selected.length} suite(s)`);
   if (!unitOnly) {
     console.log(`Base URL: ${process.env.TEST_BASE_URL || 'http://localhost:3000'}\n`);
