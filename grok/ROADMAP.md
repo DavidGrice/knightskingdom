@@ -3,8 +3,8 @@
 Phased cleanup and modernization plan for **`src/` game code only**.  
 RE work (`resources/`, `tools/`) is out of scope unless requested.
 
-**Branch:** `grok-dev`  
-**Last updated:** 2026-07-02
+**Branch:** `grok-dev-vanilla` (2026-07-05) / `grok-dev`  
+**Last updated:** 2026-07-05
 
 ---
 
@@ -49,7 +49,7 @@ flowchart LR
 | 8 | ✅ Done | Engine hardening (Core, hydrate, cleanup) |
 | 9 | ✅ Done | Snapshot gallery, workshop, dark weather, worlds |
 | 10 | ✅ Done | `userService`, code splitting, ESLint |
-| 11 | ⬜ Active | Workshop 3D brick editor (see `grok/WORKSHOP_3D.md`) |
+| 11 | ✅ Core done | Workshop 3D brick editor — D1–D5 (see `grok/WORKSHOP_3D.md`) |
 
 ### Deferred / user-owned
 
@@ -59,10 +59,14 @@ flowchart LR
 | Screenshot menu (SnapShot) | ✅ Done | Restored original CRA grid layout (90px gap, holder frame) |
 | Workshop menu (WorkShop) | ✅ Done | `WorkshopStageLayout`, pixel-anchored metrics, holder grid |
 | MainGame warehouse bucket real models | ✅ Done (2026-07-02) | 108/108 items — was 100% non-functional; see `grok/CHANGELOG.md` |
-| Workshop 3D brick editor | 🔄 D1–D4 done, D5 optional | Parametric bricks by default; **42/141 now use real geometry** (2026-07-02, reverses the D3-era LCA→GLB abandonment for those 42 — see `WORKSHOP_3D.md`) |
+| Workshop 3D brick editor | ✅ D1–D5 done | Parametric default; **42/141 real geometry**; challenge tutorials + visual instructions viewer (2026-07-05) |
+| Menu GUI regression tests | ✅ Done | P0–P5 pyramid: unit, layout, smoke, visual baselines (`npm run test:menu`) |
+| Workshop GUI regression tests | ✅ Done | unit, layout, smoke, visual (`npm run test:workshop`) |
+| Template map render regression | ✅ Passing locally | `npm run test:template-maps` — 9/9 worlds PASS on dev machine (2026-07-05) |
+| Part item modernized look | 🔄 User-owned | Bucket brick/part tile styling integration |
 | Save game menu styling (MyModels) | ✅ Done | `wh_selection` frame, holder fit, snapshot thumbnails |
 | R3F migration | ⬜ Deferred | Plain Three.js retained; `GameEngineCore` instead |
-| Unique models per world 2–10 | 🔄 Started, blocked | `template-01`…`09` identified in the extraction toolchain; renders black through the OBJ/MTL loader for reasons not yet found — see `grok/CHANGELOG.md` 2026-07-02 |
+| Unique models per world 2–10 | 🔄 Unblocked locally | Template render test passes here; original black-render issue not reproducing on 2026-07-05 machine — see `grok/CHANGELOG.md` |
 | Shared worlds playability | ⬜ Deferred | No `filePath` on shared catalog yet |
 
 ---
@@ -218,7 +222,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail. All Phase 1 tasks comp
 
 ---
 
-## Phase 11 — Workshop 3D Brick Editor ⬜
+## Phase 11 — Workshop 3D Brick Editor ✅
 
 **Goal:** Build custom LEGO creations in the workshop viewport; save and place them in the main world as grouped models (original game behavior).
 
@@ -247,7 +251,7 @@ part, not because the mesh itself is bad. See `WORKSHOP_3D.md` and
 | D2b | ✅ | Bucket stay-open; straight camera; export bounds; tools; duplicate-above; selector box |
 | D3 | ✅ | `brickCatalog.generated.js` — 141 bucket entries → parametric shape recipes (`generate-brick-catalog.mjs`) |
 | D4 | ✅ | `customCreations` + workshop screenshot → My Creations main-game bucket tab → `CreationLoader` |
-| D5 | ⬜ | Challenges + instructions + optional hand-authored GLBs (optional) |
+| D5 | ✅ | Challenge tutorials + instructions panel + visual step viewer (3 challenges); optional GLB hero parts remain |
 
 See [`grok/WORKSHOP_3D.md`](./WORKSHOP_3D.md) for D1 file checklist and data model.
 

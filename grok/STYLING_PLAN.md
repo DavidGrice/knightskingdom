@@ -23,7 +23,11 @@
 | World dual-header active tab sprites | ✅ A2 done (2026-07-05) |
 | `grok/analyze-menu-images.mjs` | ✅ |
 | `/testing` regression suite + `run-regression.mjs` | ✅ |
+| Menu test pyramid P0–P5 (unit/layout/smoke/visual) | ✅ (2026-07-05) |
+| Workshop test pyramid (unit/layout/smoke/visual) | ✅ (2026-07-05) |
+| Phase 11 D5 challenge instructions panel | ✅ (2026-07-05) |
 | MyModels / SnapShot on `MenuStageLayout` | ⬜ Next PR |
+| Part item modernized look (bucket brick tiles) | 🔄 User-owned |
 
 ---
 
@@ -108,10 +112,17 @@ Run `npm run analyze:menu` (+ optional `sharp`) and `TEST_CAPTURE=1 npm run test
 ### Run commands
 
 ```bash
-npm run dev                    # required
-npm run test:menu              # layout only (4 tests)
-npm run test:regression        # menu + world-load + placements
-TEST_CAPTURE=1 npm run test:menu   # saves testing/output/*.png
+npm run dev                         # required for layout/smoke/visual
+npm run test:menu                   # full menu pyramid (unit+layout+smoke+visual)
+npm run test:menu:unit              # frozen metrics only (no server)
+npm run test:menu:layout            # 7 screens + scale matrix
+npm run test:menu:smoke             # 7 route click-through paths
+npm run test:menu:visual            # 8 desktop-1280 baselines
+npm run test:workshop               # workshop pyramid (unit+layout+smoke+visual)
+npm run test:workshop:smoke         # route nav + challenge flow
+npm run test:template-maps          # 9-world canvas luminance probe
+npm run test:regression             # menu + workshop + engine suites
+TEST_CAPTURE=1 npm run test:menu    # saves testing/output/*.png
 ```
 
 ### What each test asserts
@@ -125,10 +136,13 @@ TEST_CAPTURE=1 npm run test:menu   # saves testing/output/*.png
 
 ### Extending tests (backlog)
 
-- [ ] Pixel diff against golden `testing/output/baseline/` (optional, local only)
+- [x] Pixel diff against golden `testing/menu/baselines/desktop-1280/` (P5, 8 screens)
+- [x] Workshop visual baselines (3 states: default, bucket, palette)
+- [x] Workshop challenge smoke (select → preview → step nav → dismiss)
 - [ ] Assert `MenuPanelShell data-archetype` after migration
 - [ ] Assert active tab `background-image` contains `_4.png`
 - [ ] Assert SnapShot Destroy button has click handler
+- [ ] Refresh workshop baselines after instructions panel layout shift
 - [ ] CI job: `test:menu` on PR (no engine tests in vanilla branch)
 
 ---

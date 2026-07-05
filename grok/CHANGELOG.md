@@ -1,8 +1,75 @@
 # Grok Changelog
 
-All changes made on branch `grok-dev` via Grok sessions.
+All changes made on branch `grok-dev` / `grok-dev-vanilla` via Grok sessions.
 
-**Sync:** Grok pushes to `origin/grok-dev` after commits — see `grok/WORKFLOW.md`.
+**Sync:** Grok pushes to `origin/grok-dev` after commits — see `grok/WORKFLOW.md`.  
+**Active branch (2026-07-05 session):** `grok-dev-vanilla` — menu/workshop GUI tests + Phase 11 D5.
+
+---
+
+## 2026-07-05 — Menu/workshop GUI test pyramids + Phase 11 D5 challenges
+
+### Menu GUI test pipeline (P0–P5) — complete
+
+| Layer | Suites | npm script |
+|-------|--------|------------|
+| Unit | layout contracts, holder metrics, CSS vars | `npm run test:menu:unit` |
+| Layout | 7 screens + scale matrix | `npm run test:menu:layout` |
+| Smoke | 7 route click-through paths | `npm run test:menu:smoke` |
+| Visual | 8 desktop-1280 baselines (pixel diff) | `npm run test:menu:visual` |
+| Orchestrator | all of the above | `npm run test:menu` |
+
+Key infra: `MenuStageLayout`, frozen metrics in `menuStageMetrics.js`, `testing/lib/driver.mjs`, `testing/lib/testRoutes.mjs` (avoids importing `src/lib/routes.js` — PowerShell stderr warnings).
+
+### Workshop GUI test pipeline — complete
+
+| Layer | Suites | npm script |
+|-------|--------|------------|
+| Unit | workshop metrics, CSS vars, challenges (16 cases) | `npm run test:workshop:unit` |
+| Layout | default, bucket-open, palette-open | `npm run test:workshop:layout` |
+| Smoke | route nav + challenge flow | `npm run test:workshop:smoke` |
+| Visual | 3 baselines (default, bucket, palette) | `npm run test:workshop:visual` |
+| Orchestrator | all of the above | `npm run test:workshop` |
+
+Key infra: `testing/lib/workshopDriver.mjs`, `workshopLayoutAssert.mjs`, `workshopVisualCapture.mjs` (hides WebGL canvas for stable screenshots).
+
+### Template map render regression
+
+| File | Change |
+|------|--------|
+| `testing/template-map-render.test.mjs` | **New** — samples canvas luminance for worlds 1–9 |
+| `testing/lib/canvasSample.mjs` | **New** — avgLum + darkRatio probe |
+| `package.json` | `npm run test:template-maps` |
+| `testing/run-regression.mjs` | Wired into engine suites |
+
+**Result (2026-07-05):** all 9 template worlds PASS on dev machine (avgLum 69–151, darkRatio 0–18%). The old "black render" bug does **not** reproduce here — templates load with color.
+
+### Phase 11 D5 — workshop challenge tutorials (mostly done)
+
+| File | Change |
+|------|--------|
+| `src/data/workshop/workshopChallenges.js` | 3 challenges with `steps[]`, `starterInstances`, `targetInstances` |
+| `src/data/workshop/workshopChallengeMatch.js` | Position-tolerant `evaluateChallengeMatch` |
+| `src/data/workshop/challengeBrickThumbs.js` | Bucket PNG map for instruction previews |
+| `WorkshopInstructionsPanel/` | Overlay: progress, paginated steps, Check/Dismiss |
+| `InstructionStepPreview.jsx` | Mini plate preview (brick thumb / stack / row layout) |
+| `WorkshopContext.jsx` | `handleChallengeSelect`, `checkActiveChallenge`, `dismissActiveChallenge` |
+| `workshopReducer.js` | `activeChallenge`, `challengeMatch` state |
+| `BucketBottomResourceStack/index.js` | Tab 9 shows 3 tutorial tiles (`challengeId`) not individual c5 parts |
+| `BucketTopResourceStack/index.js` | **Fix:** added missing 10th tab icon (challenges) — tab 9 was unreachable |
+| `shared/Bucket/*` | Test hooks: `workshop-bucket-tab-N`, `workshop-bucket-item`, `data-challenge-id` |
+| `testing/workshop/unit/workshop-challenges.test.mjs` | 5 unit cases |
+| `testing/workshop/smoke/workshop-challenges.smoke.test.mjs` | Select challenge → preview → step nav → dismiss |
+
+**Challenges:** `c5-stacked-wall`, `c5-door-frame`, `c5-door-and-window`
+
+**Commits:** `dc6b74b` (smoke + template maps), `e2adcec` (D5 core), `9ce888c` (visual step viewer)
+
+### D5 still optional / user-owned
+
+- Hand-authored GLB hero parts (manual asset work, not pipeline)
+- Workshop visual baseline refresh if instructions panel shifts frozen layout
+- **User next:** integrate **part item** UI in the modernized look (bucket brick tiles / part picker styling)
 
 ---
 

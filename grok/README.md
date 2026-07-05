@@ -2,7 +2,7 @@
 
 Use this folder to resume work on **LEGO Creator: Knight's Kingdom** modernization after a new Grok session or token reset.
 
-**Active branch:** `grok-dev` (all Grok changes; `main` stays stable)
+**Active branch:** `grok-dev-vanilla` (2026-07-05 session — GUI tests + D5); also `grok-dev` (all Grok changes; `main` stays stable)
 
 **Project path (VS Code):** `D:\CODING\THREEJS\knightskingdom\knightskingdom`
 
@@ -38,24 +38,28 @@ npm run build
 
 ---
 
-## Current Status (2026-07-02)
+## Current Status (2026-07-05)
 
 | Area | State |
 |------|-------|
 | **Phases 0–10** | ✅ Complete |
-| **Phase 11** | 🔄 Workshop 3D — **D2b done**, D5 optional next |
+| **Phase 11** | ✅ D1–D4 + D2b done; **D5 mostly done** (challenges + visual instructions viewer) |
+| **Menu GUI tests** | ✅ P0–P5 pyramid (`npm run test:menu`) |
+| **Workshop GUI tests** | ✅ unit/layout/smoke/visual (`npm run test:workshop`) |
+| **Template map render** | ✅ 9/9 worlds PASS on dev machine (`npm run test:template-maps`) — black-render bug not reproducing here |
 | **MainGame warehouse bucket** | ✅ Real models (108/108), was non-functional |
 | **WorkShop bricks** | 🔄 42/141 real geometry, rest parametric (bad catalog metadata, not mesh defects) |
-| **World selector templates** | 🔄 Started — blocked, see `grok/CHANGELOG.md` 2026-07-02 |
-| **Constraint (revised)** | LCA→GLB is viable again for the reworked toolchain — see `grok/CHANGELOG.md` / `WORKSHOP_3D.md` 2026-07-02 entries. Live rendering path is now direct OBJ/MTL loading (`shared/objMtlLoader.js`), not GLB conversion. |
+| **User next** | Integrate **part item** styling in the modernized look (bucket brick tiles / part picker) |
+| **Constraint (revised)** | LCA→GLB viable for reworked toolchain subset; live path is OBJ/MTL (`shared/objMtlLoader.js`). |
 
-**Recent commits:**
+**Recent commits (`grok-dev-vanilla`):**
 ```
-cbb5ed0 Move this session's new tooling out of resources/model_files/
-5d116bf Remove chroma-key green background from warehouse bucket thumbnails
-a369c9c Load OBJ/MTL directly at runtime instead of the GLB conversion
-8b42b9b Stop tracking extraction-derived 3D model assets in git
-5ab8feb Fix WorkShop GLB bricks: never loaded, and sank below the plate
+9ce888c D5: visual step-by-step challenge instructions viewer
+e2adcec Phase 11 D5: workshop challenge tutorials with instructions panel
+dc6b74b Add workshop route smoke + template map render regression tests
+7b7eba2 Add workshop GUI test pipeline (unit, layout, visual baselines)
+11738df Add P5 menu visual baselines with pixel diff (8 screens, desktop-1280)
+df551c5 Add P4 menu route smoke tests
 ```
 
 ---
@@ -167,12 +171,15 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 - [x] **Lego Clock loading modal** — global overlay via `GameLoadingProvider` (navigation, lazy chunks, world assets)
 - [x] **Fix screenshot menu** — SnapShot gallery UI/layout polish
 - [x] **Fix workshop menu** — WorkShop toolbar/panel UI/layout polish (`WorkshopStageLayout`, pixel-anchored metrics)
-- [ ] **Workshop 3D brick editor** — Phase 11; [`WORKSHOP_3D.md`](./WORKSHOP_3D.md)
+- [x] **Workshop 3D brick editor** — Phase 11 core; [`WORKSHOP_3D.md`](./WORKSHOP_3D.md)
   - D1 ✅: `WorkshopEngineCore` + `BrickFactory` + basic tools
   - D2 ✅: `workshopSave.js` + `brickInstances[]` persistence on save/leave
   - D2b ✅: bucket stay-open on select; straight camera; 16×16 export bounds; tools + selector boxes; duplicate-above
-  - D3 ✅: full parametric catalog (141 bucket entries via `generate-brick-catalog.mjs`) — **not LCA-derived**
-  - D4 ✅: workshop save → `customCreations` with camera screenshot → **My Creations** tab in main-game bucket → place in world (runtime Group)
+  - D3 ✅: full parametric catalog (141 bucket entries via `generate-brick-catalog.mjs`)
+  - D4 ✅: workshop save → `customCreations` → **My Creations** main-game bucket tab
+  - D5 ✅: challenge tutorials + instructions panel + visual step viewer (3 challenges)
+  - D5 optional: hand-authored GLB hero parts; workshop visual baseline refresh
+- [ ] **Part item modernized look** — user integrating bucket brick/part tile styling
 - [ ] Fix save game menu styling (MyModels — further polish, optional)
 
 ### Deferred
@@ -194,7 +201,8 @@ See [CHANGELOG.md](./CHANGELOG.md) for file-level detail.
 | Shared worlds | No `filePath` / engine assets |
 | Worlds 2–10 | Reuse `map1` GLB until unique maps added |
 | ESLint | Minor unused-vars in some components (non-blocking) |
-| Workshop 3D editor | No engine in workshop viewport yet; brick tools are UI-only |
+| Workshop 3D editor | ✅ Engine + tools shipped (D1–D4); D5 challenges done |
+| Workshop visual baselines | May need refresh after instructions panel (optional) |
 
 ### Resolved (was open)
 

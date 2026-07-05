@@ -1,8 +1,8 @@
 # Workshop 3D Brick Editor — Plan & Session Handoff
 
-**Branch:** `grok-dev`  
-**Last updated:** 2026-07-02  
-**Status:** **D4 implemented** (2026-06-30), D2b backlog done. 42/141 bricks now use real geometry (2026-07-02) — D5 optional remains next.
+**Branch:** `grok-dev-vanilla` / `grok-dev`  
+**Last updated:** 2026-07-05  
+**Status:** **D1–D5 implemented.** 42/141 bricks use real geometry. Challenge tutorials + visual step-by-step instructions viewer shipped. Optional: hand-authored GLB hero parts.
 **Prior work:** Workshop UI/layout ✅ complete (`WorkshopStageLayout`, `workshopStageMetrics.js`, `HolderGridLayout`)
 
 ---
@@ -336,11 +336,16 @@ MainGame (D4):
 
 ---
 
-## Phase D5 — Optional
+## Phase D5 — Optional (mostly done 2026-07-05)
 
-- Challenge brick tutorials (predefined `brickInstances` targets)
-- Building instructions viewer
-- Hand-authored GLBs for select hero parts (manual, not pipeline)
+- [x] Challenge brick tutorials (3 challenges: stacked wall, door, door+window)
+- [x] Building instructions viewer — paginated steps + mini plate preview (`InstructionStepPreview`)
+- [x] Bucket tab 9 challenges icon fix (10th tab was missing — tab unreachable)
+- [x] Unit + smoke tests (`workshop-challenges.test.mjs`, `workshop-challenges.smoke.test.mjs`)
+- [ ] Hand-authored GLBs for select hero parts (manual, not pipeline)
+- [ ] Workshop visual baseline refresh if instructions panel shifts layout
+
+**User next:** integrate **part item** styling in the modernized look (bucket brick tiles).
 
 ---
 
@@ -392,6 +397,7 @@ Do not invest further Grok sessions in LCA parsing unless user explicitly reques
 | 2026-06-30 | **D4 shipped:** `customCreations.js`, `CreationLoader`, My Creations bucket tab, workshop save exports to main world. **Next: D2b** backlog. |
 | 2026-07-02 | **User reversed the LCA→GLB verdict** for the reworked `resources/model_files/` toolchain (also wired real GLB models into the MainGame warehouse bucket, previously non-functional). Pilot-verified conversion + a per-brick stud-footprint validation gate enabled `shape:'GLB'` for 42/141 bricks; the other 99 keep their parametric shape unchanged (bad catalog metadata, not bad meshes). See `resources/model_pipeline/convert_bricks.mjs`. |
 | 2026-07-02 | **Switched live rendering to direct OBJ/MTL loading** (`shared/objMtlLoader.js`) after finding the `obj2gltf` GLB conversion had an inverted Y axis and, from the resulting handedness flip, back faces three.js was culling as missing. Same 42/141 validated set; GLB pipeline stays generated but unused. Also fixed two real bugs found by driving the app live: `createBrickSync` never checked `recipe.shape` at all (always parametric regardless of catalog data), and the ground-alignment offset was silently discarded by the placement caller's absolute `position.set(...)`, sinking bricks below the plate. Also de-chromakeyed the MainGame warehouse thumbnails (solid green background → transparent) and moved this session's tooling out of `resources/model_files/` into `resources/model_pipeline/`. **Started, blocked:** wiring the `/start-stack/start` world selector to `template-01`…`09` (all 9 exist in the toolchain) — piloting one through the same OBJ/MTL loader renders solid black; ruled out winding/culling and pure-ambient lighting, cause not yet found. |
+| 2026-07-05 | **D5 shipped:** `workshopChallenges.js`, `WorkshopInstructionsPanel`, visual step viewer, bucket tab 9 fix. Menu + workshop GUI test pyramids complete. Template map render regression: 9/9 PASS on dev machine. Commits `e2adcec`, `9ce888c`. |
 
 ---
 
